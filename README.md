@@ -175,14 +175,6 @@ See [SIEM-IMPORT-GUIDE.md](SIEM-IMPORT-GUIDE.md) for general SIEM import guidanc
 
 We welcome contributions from the Wazuh community. See [CONTRIBUTING.md](CONTRIBUTING.md).
 
-## About PookaSec
-
-We're a small security team that learned everything we know from the open source community. Wazuh, Sigma, MITRE ATT&CK, and countless blog posts and GitHub repos taught us how to defend networks.
-
-Fomorian is our way of giving back. Use it, share it, improve it.
-
-*"Your detections are only as good as your last test."*
-
 **License:** MIT
 
 ---

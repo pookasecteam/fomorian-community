@@ -1,0 +1,82 @@
+{
+  "_metadata": {
+    "attack_id": "T1135",
+    "variation": "001",
+    "name": "Network Share Discovery - net view",
+    "description": "Enumerate network shares using net view command",
+    "expected_detection": "MEDIUM",
+    "kill_chain_phase": "discovery",
+    "format": "wazuh-native",
+    "format_version": "1.0",
+    "campaign": "27"
+  },
+  "logs": [
+    {
+      "_comment": "Sysmon Event 1 - net view command execution",
+      "sequence": 1,
+      "timestamp": "2026-02-10T16:16:00.000Z",
+      "log": {
+        "timestamp": "2026-02-10T16:16:00.000+0000",
+        "rule": {
+          "level": 5,
+          "description": "Sysmon - Event 1: Process Creation",
+          "id": "61603",
+          "mitre": {
+            "id": ["T1135"],
+            "tactic": ["Discovery"],
+            "technique": ["Network Share Discovery"]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": ["sysmon", "sysmon_event1", "windows"]
+        },
+        "agent": {
+          "id": "014",
+          "name": "WS01",
+          "ip": "10.1.0.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1707582960.000001",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.yourcompany.local",
+              "level": "4",
+              "task": "1",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-10 16:16:00.000",
+              "processGuid": "{8df8f34e-2710-65c7-0016-000000000400}",
+              "processId": "6124",
+              "image": "C:\\Windows\\System32\\net.exe",
+              "commandLine": "net view \\\\DC01 /all",
+              "currentDirectory": "C:\\Users\\admin2\\",
+              "user": "YOURCOMPANY\\admin2",
+              "integrityLevel": "Medium",
+              "hashes": "SHA256=C9B4E36F8D2A1B7C5E3F4D6A8B9C0E1F2A3B4C5D6E7F8A9B0C1D2E3F4A5B6C7",
+              "parentProcessGuid": "{8df8f34e-2710-65c7-0000-000000000400}",
+              "parentProcessId": "3344",
+              "parentImage": "C:\\Windows\\System32\\cmd.exe",
+              "parentCommandLine": "cmd.exe"
+            }
+          }
+        },
+        "_fomorian_test": true,
+        "fomorian_batch": 8,
+        "fomorian_campaign": 27,
+        "fomorian_technique": "T1135",
+        "fomorian_technique_name": "Network Share Discovery - net view"
+      }
+    }
+  ]
+}

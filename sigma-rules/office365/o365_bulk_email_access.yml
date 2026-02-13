@@ -1,0 +1,30 @@
+title: Office 365 Bulk Email Access
+id: 5b6a8c90-1234-4abc-def0-123456789007
+status: experimental
+description: Detects bulk access to mailbox items, indicating potential data collection
+author: PookaSec
+date: 2026/01/29
+references:
+    - https://attack.mitre.org/techniques/T1114/002/
+    - https://docs.microsoft.com/en-us/microsoft-365/compliance/mailitemsaccessed-forensics-investigations
+tags:
+    - attack.collection
+    - attack.t1114.002
+logsource:
+    product: m365
+    service: exchange
+detection:
+    selection:
+        office365.operation: 'MailItemsAccessed'
+    high_volume:
+        office365.operation_count|gte: 20
+    condition: selection and high_volume
+fields:
+    - office365.user_id
+    - office365.client_ip
+    - office365.operation_count
+    - office365.folder_name
+falsepositives:
+    - Email client synchronization
+    - Legitimate mailbox access
+level: medium

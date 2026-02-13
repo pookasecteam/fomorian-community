@@ -1,0 +1,156 @@
+{
+  "_metadata": {
+    "attack_id": "T1560.001",
+    "variation": "001",
+    "name": "Archive Collection via 7-Zip",
+    "description": "Attacker using 7-Zip to archive sensitive data for exfiltration",
+    "expected_detection": "MEDIUM",
+    "expected_soar": "collection-detection",
+    "kill_chain_phase": "collection",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Sysmon Event 1 - 7z archiving documents",
+      "sequence": 1,
+      "timestamp": "2026-01-29T15:30:00.000Z",
+      "log": {
+        "timestamp": "",
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 1: Archive Collection via 7-Zip",
+          "id": "100100",
+          "mitre": {
+            "id": [
+              "T1560.001"
+            ],
+            "tactic": [
+              "Collection"
+            ],
+            "technique": [
+              "Archive Collection via 7-Zip"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "007",
+          "name": "WS01",
+          "ip": "10.1.0.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000000.796636350",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "opcode": "0",
+              "keywords": "0x8000000000000000",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-01-29 15:30:00.000",
+              "processGuid": "{A1B2C3D4-7001-7001-7001-000000000001}",
+              "processId": "22000",
+              "image": "C:\\Program Files\\7-Zip\\7z.exe",
+              "commandLine": "7z.exe a -p\"infected\" C:\\Users\\Public\\data.7z C:\\Users\\john.doe\\Documents\\*.docx C:\\Users\\john.doe\\Documents\\*.xlsx C:\\Users\\john.doe\\Documents\\*.pdf",
+              "currentDirectory": "C:\\Users\\john.doe\\",
+              "user": "CORP\\john.doe",
+              "integrityLevel": "Medium",
+              "parentProcessGuid": "{A1B2C3D4-7001-7001-7001-000000000000}",
+              "parentProcessId": "21800",
+              "parentImage": "C:\\Windows\\System32\\cmd.exe",
+              "parentCommandLine": "cmd.exe"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Sysmon Event 11 - Archive file created",
+      "sequence": 2,
+      "timestamp": "2026-01-29T15:30:15.000Z",
+      "log": {
+        "timestamp": "",
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 11: Archive Collection via 7-Zip",
+          "id": "100100",
+          "mitre": {
+            "id": [
+              "T1560.001"
+            ],
+            "tactic": [
+              "Collection"
+            ],
+            "technique": [
+              "Archive Collection via 7-Zip"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event11",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "007",
+          "name": "WS01",
+          "ip": "10.1.0.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000000.442067839",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "11",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "opcode": "0",
+              "keywords": "0x8000000000000000",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-01-29 15:30:15.000",
+              "processGuid": "{A1B2C3D4-7001-7001-7001-000000000001}",
+              "processId": "22000",
+              "image": "C:\\Program Files\\7-Zip\\7z.exe",
+              "targetFilename": "C:\\Users\\Public\\data.7z",
+              "creationUtcTime": "2026-01-29 15:30:15.000",
+              "user": "CORP\\john.doe"
+            }
+          }
+        }
+      }
+    }
+  ]
+}

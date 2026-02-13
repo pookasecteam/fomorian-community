@@ -1,0 +1,30 @@
+title: Command History Cleared
+id: e5f6a7b8-c9d0-1234-ef01-567890123456
+status: experimental
+description: Detects clearing of command history to hide attacker activities
+author: PookaSec
+date: 2026/01/29
+references:
+    - https://attack.mitre.org/techniques/T1070/003/
+tags:
+    - attack.defense_evasion
+    - attack.t1070.003
+logsource:
+    category: process_creation
+    product: windows
+detection:
+    selection_powershell_clear:
+        CommandLine|contains:
+            - 'Clear-History'
+            - 'Remove-Item *ConsoleHost_history*'
+            - 'Remove-Item *PSReadLine*'
+            - 'del *ConsoleHost_history*'
+            - 'Set-PSReadlineOption -HistorySaveStyle SaveNothing'
+    selection_cmd_doskey:
+        CommandLine|contains:
+            - 'doskey /reinstall'
+    condition: selection_powershell_clear or selection_cmd_doskey
+falsepositives:
+    - Privacy-conscious users
+    - Security hardening scripts
+level: high

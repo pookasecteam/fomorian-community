@@ -1,0 +1,28 @@
+title: Office 365 Suspicious OAuth Application Consent
+id: 5b6a8c90-1234-4abc-def0-123456789001
+status: experimental
+description: Detects when a user consents to an OAuth application, which may indicate OAuth consent phishing attack
+author: PookaSec
+date: 2026/01/29
+references:
+    - https://attack.mitre.org/techniques/T1566/002/
+    - https://docs.microsoft.com/en-us/azure/active-directory/manage-apps/protect-against-consent-phishing
+tags:
+    - attack.initial_access
+    - attack.t1566.002
+logsource:
+    product: azure
+    service: auditlogs
+detection:
+    selection:
+        azure_ad.activity_display_name: 'Consent to application'
+    condition: selection
+fields:
+    - azure_ad.initiated_by.user.user_principal_name
+    - azure_ad.initiated_by.user.ip_address
+    - azure_ad.target_resources.display_name
+    - azure_ad.additional_details
+falsepositives:
+    - Legitimate application consent by users
+    - IT approved applications
+level: medium

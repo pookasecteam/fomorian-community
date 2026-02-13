@@ -1,0 +1,40 @@
+title: Domain Account Discovery
+id: c3d4e5f6-a7b8-9012-cdef-345678901234
+status: experimental
+description: Detects enumeration of domain accounts and users
+author: PookaSec
+date: 2026/01/29
+references:
+    - https://attack.mitre.org/techniques/T1087/002/
+tags:
+    - attack.discovery
+    - attack.t1087.002
+logsource:
+    category: process_creation
+    product: windows
+detection:
+    selection_net:
+        Image|endswith: '\net.exe'
+        CommandLine|contains:
+            - 'user /domain'
+            - 'group /domain'
+            - 'localgroup /domain'
+    selection_net1:
+        Image|endswith: '\net1.exe'
+        CommandLine|contains:
+            - 'user /domain'
+            - 'group /domain'
+    selection_powershell:
+        CommandLine|contains:
+            - 'Get-ADUser'
+            - 'Get-ADGroup'
+            - 'Get-ADComputer'
+            - 'Get-DomainUser'
+            - 'Get-NetUser'
+    selection_dsquery:
+        Image|endswith: '\dsquery.exe'
+    condition: selection_net or selection_net1 or selection_powershell or selection_dsquery
+falsepositives:
+    - IT administration
+    - Active Directory management scripts
+level: medium

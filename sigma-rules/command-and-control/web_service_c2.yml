@@ -1,0 +1,47 @@
+title: Web Service C2 Communication
+id: c9d0e1f2-a3b4-5678-2345-901234567890
+status: experimental
+description: Detects suspicious processes communicating with legitimate web services commonly abused for C2
+author: PookaSec
+date: 2026/01/29
+references:
+    - https://attack.mitre.org/techniques/T1102/002/
+tags:
+    - attack.command_and_control
+    - attack.t1102.002
+logsource:
+    category: network_connection
+    product: windows
+detection:
+    selection_c2_services:
+        DestinationHostname|contains:
+            - 'discord.com'
+            - 'discordapp.com'
+            - 'api.telegram.org'
+            - 'hooks.slack.com'
+            - 'pastebin.com'
+            - 'paste.ee'
+            - 'hastebin.com'
+            - 'githubusercontent.com'
+            - 'gist.github.com'
+            - 'docs.google.com'
+            - 'drive.google.com'
+            - 'dropbox.com'
+            - 'onedrive.live.com'
+            - 'notion.so'
+            - 'airtable.com'
+    filter_legitimate:
+        Image|endswith:
+            - '\Discord.exe'
+            - '\Telegram.exe'
+            - '\slack.exe'
+            - '\chrome.exe'
+            - '\firefox.exe'
+            - '\msedge.exe'
+            - '\Teams.exe'
+            - '\Outlook.exe'
+    condition: selection_c2_services and not filter_legitimate
+falsepositives:
+    - Legitimate automation scripts
+    - Developer tools using APIs
+level: high

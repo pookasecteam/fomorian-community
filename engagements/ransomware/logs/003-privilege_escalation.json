@@ -1,0 +1,227 @@
+{
+  "_metadata": {
+    "engagement": "ransomware",
+    "phase": "privilege-escalation",
+    "phase_number": 3,
+    "description": "Privilege Escalation phase of Ransomware - example-corp",
+    "techniques": [
+      "T1134.001",
+      "T1574.001",
+      "T1548.002"
+    ],
+    "timespan": "T+0:32:30 to T+0:43:00",
+    "attacker_logic": "Attacker executes privilege-escalation techniques",
+    "format": "wazuh-native",
+    "format_version": "2.0"
+  },
+  "attacker_profile": {
+    "c2_server": "185.141.27.98",
+    "initial_target": "WS01.corp.local",
+    "compromised_user": "CORP\\jsmith"
+  },
+  "logs": [
+    {
+      "_comment": "UAC bypass via fodhelper.exe",
+      "sequence": 1,
+      "relative_time": "T+0:32:30",
+      "timestamp": "2026-01-30T08:32:30Z",
+      "log": {
+        "winlog": {
+          "channel": "Microsoft-Windows-Sysmon/Operational",
+          "event_id": 1,
+          "provider_name": "Microsoft-Windows-Sysmon",
+          "computer_name": "WORKSTATION01.example.local",
+          "event_data": {
+            "UtcTime": "2026-01-30 11:47:58.778",
+            "ProcessGuid": "{C257A465-WS01-0013-92FB2F9CE2D6}",
+            "ProcessId": "2329",
+            "Image": "C:\\Windows\\System32\\fodhelper.exe",
+            "CommandLine": "fodhelper.exe",
+            "CurrentDirectory": "C:\\Windows\\System32\\",
+            "User": "EXAMPLE\\mjones",
+            "IntegrityLevel": "High",
+            "ParentProcessGuid": "{C257A465-WS01-0012-3E5E2BF140B0}",
+            "ParentProcessId": "2238",
+            "ParentImage": "C:\\Windows\\explorer.exe"
+          }
+        },
+        "agent": {
+          "name": "WS01",
+          "id": "007"
+        },
+        "timestamp": "2026-01-30T08:32:30.000+0000",
+        "_fomorian_test": true,
+        "_fomorian_engagement": "ransomware",
+        "_fomorian_phase": "privilege-escalation"
+      }
+    },
+    {
+      "_comment": "UAC bypass registry modification",
+      "sequence": 2,
+      "relative_time": "T+0:33:30",
+      "timestamp": "2026-01-30T08:33:30Z",
+      "log": {
+        "winlog": {
+          "channel": "Microsoft-Windows-Sysmon/Operational",
+          "event_id": 13,
+          "provider_name": "Microsoft-Windows-Sysmon",
+          "computer_name": "WORKSTATION01.example.local",
+          "event_data": {
+            "EventType": "SetValue",
+            "UtcTime": "2026-01-30 11:48:02.393",
+            "ProcessGuid": "{C257A465-WS01-0012-3E5E2BF140B0}",
+            "ProcessId": "2238",
+            "Image": "C:\\Windows\\System32\\reg.exe",
+            "TargetObject": "HKCU\\Software\\Classes\\ms-settings\\shell\\open\\command\\(Default)",
+            "Details": "C:\\Windows\\System32\\cmd.exe",
+            "User": "EXAMPLE\\mjones"
+          }
+        },
+        "agent": {
+          "name": "WS01",
+          "id": "007"
+        },
+        "timestamp": "2026-01-30T08:33:30.000+0000",
+        "_fomorian_test": true,
+        "_fomorian_engagement": "ransomware",
+        "_fomorian_phase": "privilege-escalation"
+      }
+    },
+    {
+      "_comment": "DLL hijack - malicious DLL dropped",
+      "sequence": 3,
+      "relative_time": "T+0:35:00",
+      "timestamp": "2026-01-30T08:35:00Z",
+      "log": {
+        "winlog": {
+          "channel": "Microsoft-Windows-Sysmon/Operational",
+          "event_id": 11,
+          "provider_name": "Microsoft-Windows-Sysmon",
+          "computer_name": "WORKSTATION01.example.local",
+          "event_data": {
+            "UtcTime": "2026-01-30 11:48:11.781",
+            "ProcessGuid": "{C257A465-WS01-0015-A142411AFE06}",
+            "ProcessId": "2509",
+            "Image": "C:\\Windows\\System32\\cmd.exe",
+            "TargetFilename": "C:\\Windows\\System32\\version.dll",
+            "CreationUtcTime": "2026-01-30 11:48:11.781",
+            "User": "EXAMPLE\\jsmith"
+          }
+        },
+        "agent": {
+          "name": "WS01",
+          "id": "007"
+        },
+        "timestamp": "2026-01-30T08:35:00.000+0000",
+        "_fomorian_test": true,
+        "_fomorian_engagement": "ransomware",
+        "_fomorian_phase": "privilege-escalation"
+      }
+    },
+    {
+      "_comment": "DLL hijack - malicious DLL loaded",
+      "sequence": 4,
+      "relative_time": "T+0:37:00",
+      "timestamp": "2026-01-30T08:37:00Z",
+      "log": {
+        "winlog": {
+          "channel": "Microsoft-Windows-Sysmon/Operational",
+          "event_id": 7,
+          "provider_name": "Microsoft-Windows-Sysmon",
+          "computer_name": "WORKSTATION01.example.local",
+          "event_data": {
+            "UtcTime": "2026-01-30 11:48:19.504",
+            "ProcessGuid": "{C257A465-WS01-0016-331574C51D92}",
+            "ProcessId": "2618",
+            "Image": "C:\\Windows\\System32\\svchost.exe",
+            "ImageLoaded": "C:\\Windows\\System32\\version.dll",
+            "FileVersion": "6.1.7600.16385",
+            "Description": "Malicious DLL",
+            "Product": "Microsoft Windows Operating System",
+            "Company": "",
+            "OriginalFileName": "version.dll",
+            "Hashes": "SHA256=MALICIOUS1234567890ABCDEF1234567890ABCDEF1234567890ABCDEF1234",
+            "Signed": "false",
+            "SignatureStatus": "Unsigned",
+            "User": "NT AUTHORITY\\SYSTEM"
+          }
+        },
+        "agent": {
+          "name": "WS01",
+          "id": "007"
+        },
+        "timestamp": "2026-01-30T08:37:00.000+0000",
+        "_fomorian_test": true,
+        "_fomorian_engagement": "ransomware",
+        "_fomorian_phase": "privilege-escalation"
+      }
+    },
+    {
+      "_comment": "Named pipe created for impersonation",
+      "sequence": 5,
+      "relative_time": "T+0:39:30",
+      "timestamp": "2026-01-30T08:39:30Z",
+      "log": {
+        "winlog": {
+          "channel": "Microsoft-Windows-Sysmon/Operational",
+          "event_id": 17,
+          "provider_name": "Microsoft-Windows-Sysmon",
+          "computer_name": "WORKSTATION01.example.local",
+          "event_data": {
+            "RuleName": "technique_id=T1134,technique_name=Token Impersonation",
+            "EventType": "CreatePipe",
+            "UtcTime": "2026-01-30 11:48:26.954",
+            "ProcessGuid": "{C257A465-WS01-0017-ED753A9B03B1}",
+            "ProcessId": "2747",
+            "PipeName": "\\\\?\\pipe\\spoolss_exploit",
+            "Image": "C:\\Users\\Public\\priv_esc.exe",
+            "User": "EXAMPLE\\jsmith"
+          }
+        },
+        "agent": {
+          "name": "WS01",
+          "id": "007"
+        },
+        "timestamp": "2026-01-30T08:39:30.000+0000",
+        "_fomorian_test": true,
+        "_fomorian_engagement": "ransomware",
+        "_fomorian_phase": "privilege-escalation"
+      }
+    },
+    {
+      "_comment": "SYSTEM shell via token impersonation",
+      "sequence": 6,
+      "relative_time": "T+0:42:30",
+      "timestamp": "2026-01-30T08:42:30Z",
+      "log": {
+        "winlog": {
+          "channel": "Microsoft-Windows-Sysmon/Operational",
+          "event_id": 1,
+          "provider_name": "Microsoft-Windows-Sysmon",
+          "computer_name": "WORKSTATION01.example.local",
+          "event_data": {
+            "UtcTime": "2026-01-30 11:48:32.835",
+            "ProcessGuid": "{C257A465-WS01-0018-976E64BF95A6}",
+            "ProcessId": "2874",
+            "Image": "C:\\Windows\\System32\\cmd.exe",
+            "CommandLine": "cmd.exe /c whoami",
+            "CurrentDirectory": "C:\\Windows\\System32\\",
+            "User": "NT AUTHORITY\\SYSTEM",
+            "IntegrityLevel": "System",
+            "ParentProcessGuid": "{C257A465-WS01-0017-ED753A9B03B1}",
+            "ParentProcessId": "2747",
+            "ParentImage": "C:\\Users\\Public\\priv_esc.exe"
+          }
+        },
+        "agent": {
+          "name": "WS01",
+          "id": "007"
+        },
+        "timestamp": "2026-01-30T08:42:30.000+0000",
+        "_fomorian_test": true,
+        "_fomorian_engagement": "ransomware",
+        "_fomorian_phase": "privilege-escalation"
+      }
+    }
+  ]
+}

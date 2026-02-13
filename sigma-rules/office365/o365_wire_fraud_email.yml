@@ -1,0 +1,36 @@
+title: Office 365 Potential Wire Fraud Email Sent
+id: 5b6a8c90-1234-4abc-def0-123456789010
+status: experimental
+description: Detects emails sent with subjects indicating potential wire fraud or BEC
+author: PookaSec
+date: 2026/01/29
+references:
+    - https://attack.mitre.org/techniques/T1534/
+    - https://www.fbi.gov/scams-and-safety/common-scams-and-crimes/business-email-compromise
+tags:
+    - attack.exfiltration
+    - attack.t1534
+logsource:
+    product: m365
+    service: exchange
+detection:
+    selection:
+        office365.operation: 'Send'
+    fraud_keywords:
+        office365.item.Subject|contains:
+            - 'Wire Transfer'
+            - 'wire instructions'
+            - 'bank account'
+            - 'Updated Wire'
+            - 'payment required'
+            - 'urgent payment'
+            - 'ACH transfer'
+    condition: selection and fraud_keywords
+fields:
+    - office365.user_id
+    - office365.client_ip
+    - office365.item.Subject
+    - office365.item.Recipients
+falsepositives:
+    - Legitimate financial communications
+level: high

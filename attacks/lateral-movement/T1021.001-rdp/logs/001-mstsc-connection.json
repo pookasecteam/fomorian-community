@@ -1,0 +1,123 @@
+{
+  "_metadata": {
+    "attack_id": "T1021.001",
+    "variation": "001",
+    "name": "Remote Desktop Protocol Lateral Movement",
+    "description": "Attempt lateral movement via RDP using mstsc",
+    "expected_detection": "MEDIUM",
+    "kill_chain_phase": "lateral-movement",
+    "format": "wazuh-native",
+    "format_version": "1.0",
+    "campaign": "Campaign 25",
+    "date_executed": "2026-02-09"
+  },
+  "logs": [
+    {
+      "_comment": "Sysmon Event 1 - Process Creation: mstsc.exe",
+      "sequence": 1,
+      "timestamp": "2026-02-09T14:14:00.000Z",
+      "log": {
+        "timestamp": "",
+        "rule": {
+          "level": 8,
+          "description": "Sysmon - Event 1: Process creation",
+          "id": "200151",
+          "mitre": {
+            "id": ["T1021.001"],
+            "tactic": ["Lateral Movement"],
+            "technique": ["Remote Services: Remote Desktop Protocol"]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": ["sysmon", "sysmon_event1", "windows"]
+        },
+        "agent": {"id": "014", "name": "WS01", "ip": "10.1.0.20"},
+        "manager": {"name": "wazuh.manager"},
+        "id": "1709000207.000001",
+        "decoder": {"name": "windows_eventchannel"},
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.yourcompany.local",
+              "level": "4",
+              "task": "1",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-09 14:14:00.000",
+              "processGuid": "{12345678-1234-1234-1234-000000207001}",
+              "processId": "13024",
+              "image": "C:\\Windows\\System32\\mstsc.exe",
+              "commandLine": "mstsc  /v:DC01",
+              "currentDirectory": "C:\\Users\\Administrator\\",
+              "user": "YOURCOMPANY\\Administrator",
+              "integrityLevel": "High",
+              "hashes": "SHA256=B8C9D0E1F2A3B4C5D6E7F8A9B0C1D2E3F4A5B6C7D8E9F0A1B2C3D4E5F6A7B8C9",
+              "parentProcessGuid": "{12345678-1234-1234-1234-000000207000}",
+              "parentProcessId": "1234",
+              "parentImage": "C:\\Windows\\System32\\cmd.exe",
+              "parentCommandLine": "C:\\Windows\\System32\\cmd.exe"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Sysmon Event 3 - Network Connection: RDP port 3389",
+      "sequence": 2,
+      "timestamp": "2026-02-09T14:14:01.000Z",
+      "log": {
+        "timestamp": "",
+        "rule": {
+          "level": 8,
+          "description": "Sysmon - Event 3: Network connection",
+          "id": "200152",
+          "mitre": {
+            "id": ["T1021.001"],
+            "tactic": ["Lateral Movement"],
+            "technique": ["Remote Services: Remote Desktop Protocol"]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": ["sysmon", "sysmon_event3", "windows"]
+        },
+        "agent": {"id": "014", "name": "WS01", "ip": "10.1.0.20"},
+        "manager": {"name": "wazuh.manager"},
+        "id": "1709000207.000002",
+        "decoder": {"name": "windows_eventchannel"},
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "3",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.yourcompany.local",
+              "level": "4",
+              "task": "3",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-09 14:14:01.000",
+              "processGuid": "{12345678-1234-1234-1234-000000207001}",
+              "processId": "13024",
+              "image": "C:\\Windows\\System32\\mstsc.exe",
+              "user": "YOURCOMPANY\\Administrator",
+              "protocol": "tcp",
+              "initiated": "true",
+              "sourceIp": "10.1.0.20",
+              "sourcePort": "50124",
+              "destinationIp": "10.1.0.10",
+              "destinationPort": "3389",
+              "destinationPortName": "ms-wbt-server"
+            }
+          }
+        }
+      }
+    }
+  ]
+}

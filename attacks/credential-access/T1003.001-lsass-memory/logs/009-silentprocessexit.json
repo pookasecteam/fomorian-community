@@ -1,0 +1,298 @@
+{
+  "_metadata": {
+    "attack_id": "T1003.001",
+    "variation": "009",
+    "name": "SilentProcessExit LSASS Dump",
+    "description": "LSASS memory dump via SilentProcessExit registry technique - triggers automatic dump on process exit",
+    "expected_detection": "HIGH",
+    "kill_chain_phase": "credential-access",
+    "references": ["https://github.com/yo-yo-yo-jbo/dumping_lsass"],
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Sysmon Event 13 - Registry key created for SilentProcessExit monitoring",
+      "sequence": 1,
+      "timestamp": "2026-02-02T16:00:00.000Z",
+      "log": {
+        "timestamp": "2026-02-02T16:00:00.000+0000",
+        "rule": {
+          "level": 14,
+          "description": "Sysmon - Event 13: SilentProcessExit registry modification",
+          "id": "92130",
+          "mitre": {
+            "id": ["T1003.001"],
+            "tactic": ["Credential Access"],
+            "technique": ["LSASS Memory"]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": ["sysmon", "sysmon_event_13", "windows", "credential_access"]
+        },
+        "agent": {"id": "007", "name": "WS01", "ip": "10.1.0.20"},
+        "manager": {"name": "wazuh.manager"},
+        "id": "1706886000.100001",
+        "decoder": {"name": "windows_eventchannel"},
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "13",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "13",
+              "severityValue": "INFORMATION",
+              "systemTime": "2026-02-02T16:00:00.000Z"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-02 16:00:00.000",
+              "eventType": "SetValue",
+              "processGuid": "{12345678-1234-1234-1234-123456789030}",
+              "processId": "7744",
+              "image": "C:\\Windows\\System32\\reg.exe",
+              "targetObject": "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Image File Execution Options\\lsass.exe\\GlobalFlag",
+              "details": "DWORD (0x00000200)",
+              "user": "CORP\\attacker"
+            }
+          }
+        },
+        "_fomorian_batch": "lsass-dump-techniques",
+        "_fomorian_test": true,
+        "_fomorian_attack_id": "T1003.001",
+        "_fomorian_technique": "silentprocessexit"
+      }
+    },
+    {
+      "_comment": "Sysmon Event 13 - Registry key for SilentProcessExit dump settings",
+      "sequence": 2,
+      "timestamp": "2026-02-02T16:00:01.000Z",
+      "log": {
+        "timestamp": "2026-02-02T16:00:01.000+0000",
+        "rule": {
+          "level": 14,
+          "description": "Sysmon - Event 13: SilentProcessExit registry modification",
+          "id": "92130",
+          "mitre": {
+            "id": ["T1003.001"],
+            "tactic": ["Credential Access"],
+            "technique": ["LSASS Memory"]
+          },
+          "firedtimes": 2,
+          "mail": false,
+          "groups": ["sysmon", "sysmon_event_13", "windows", "credential_access"]
+        },
+        "agent": {"id": "007", "name": "WS01", "ip": "10.1.0.20"},
+        "manager": {"name": "wazuh.manager"},
+        "id": "1706886001.100002",
+        "decoder": {"name": "windows_eventchannel"},
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "13",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "13",
+              "severityValue": "INFORMATION",
+              "systemTime": "2026-02-02T16:00:01.000Z"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-02 16:00:01.000",
+              "eventType": "SetValue",
+              "processGuid": "{12345678-1234-1234-1234-123456789030}",
+              "processId": "7744",
+              "image": "C:\\Windows\\System32\\reg.exe",
+              "targetObject": "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\SilentProcessExit\\lsass.exe\\ReportingMode",
+              "details": "DWORD (0x00000002)",
+              "user": "CORP\\attacker"
+            }
+          }
+        },
+        "_fomorian_batch": "lsass-dump-techniques",
+        "_fomorian_test": true,
+        "_fomorian_attack_id": "T1003.001",
+        "_fomorian_technique": "silentprocessexit"
+      }
+    },
+    {
+      "_comment": "Sysmon Event 13 - Set LocalDumpFolder for SilentProcessExit",
+      "sequence": 3,
+      "timestamp": "2026-02-02T16:00:02.000Z",
+      "log": {
+        "timestamp": "2026-02-02T16:00:02.000+0000",
+        "rule": {
+          "level": 14,
+          "description": "Sysmon - Event 13: SilentProcessExit LocalDumpFolder set",
+          "id": "92130",
+          "mitre": {
+            "id": ["T1003.001"],
+            "tactic": ["Credential Access"],
+            "technique": ["LSASS Memory"]
+          },
+          "firedtimes": 3,
+          "mail": false,
+          "groups": ["sysmon", "sysmon_event_13", "windows", "credential_access"]
+        },
+        "agent": {"id": "007", "name": "WS01", "ip": "10.1.0.20"},
+        "manager": {"name": "wazuh.manager"},
+        "id": "1706886002.100003",
+        "decoder": {"name": "windows_eventchannel"},
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "13",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "13",
+              "severityValue": "INFORMATION",
+              "systemTime": "2026-02-02T16:00:02.000Z"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-02 16:00:02.000",
+              "eventType": "SetValue",
+              "processGuid": "{12345678-1234-1234-1234-123456789030}",
+              "processId": "7744",
+              "image": "C:\\Windows\\System32\\reg.exe",
+              "targetObject": "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\SilentProcessExit\\lsass.exe\\LocalDumpFolder",
+              "details": "C:\\Temp",
+              "user": "CORP\\attacker"
+            }
+          }
+        },
+        "_fomorian_batch": "lsass-dump-techniques",
+        "_fomorian_test": true,
+        "_fomorian_attack_id": "T1003.001",
+        "_fomorian_technique": "silentprocessexit"
+      }
+    },
+    {
+      "_comment": "Sysmon Event 1 - RtlReportSilentProcessExit trigger tool",
+      "sequence": 4,
+      "timestamp": "2026-02-02T16:00:05.000Z",
+      "log": {
+        "timestamp": "2026-02-02T16:00:05.000+0000",
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 1: SilentProcessExit trigger execution",
+          "id": "92151",
+          "mitre": {
+            "id": ["T1003.001"],
+            "tactic": ["Credential Access"],
+            "technique": ["LSASS Memory"]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": ["sysmon", "sysmon_event1", "windows"]
+        },
+        "agent": {"id": "007", "name": "WS01", "ip": "10.1.0.20"},
+        "manager": {"name": "wazuh.manager"},
+        "id": "1706886005.100004",
+        "decoder": {"name": "windows_eventchannel"},
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "severityValue": "INFORMATION",
+              "systemTime": "2026-02-02T16:00:05.000Z"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-02 16:00:05.000",
+              "processGuid": "{12345678-1234-1234-1234-123456789031}",
+              "processId": "10112",
+              "image": "C:\\Users\\attacker\\Tools\\silent_exit_trigger.exe",
+              "fileVersion": "-",
+              "description": "-",
+              "product": "-",
+              "company": "-",
+              "originalFileName": "-",
+              "commandLine": "silent_exit_trigger.exe lsass.exe",
+              "currentDirectory": "C:\\Users\\attacker\\Tools\\",
+              "user": "CORP\\attacker",
+              "logonGuid": "{12345678-aaaa-bbbb-cccc-ddddeeeeaaaa}",
+              "logonId": "0x3e7",
+              "terminalSessionId": "1",
+              "integrityLevel": "High",
+              "hashes": "SHA256=C3D4E5F6A1B2C3D4E5F6A1B2C3D4E5F6A1B2C3D4E5F6A1B2C3D4E5F6A1B2C3D4",
+              "parentProcessGuid": "{12345678-1234-1234-1234-123456789009}",
+              "parentProcessId": "5544",
+              "parentImage": "C:\\Windows\\System32\\cmd.exe",
+              "parentCommandLine": "cmd.exe",
+              "parentUser": "CORP\\attacker"
+            }
+          }
+        },
+        "_fomorian_batch": "lsass-dump-techniques",
+        "_fomorian_test": true,
+        "_fomorian_attack_id": "T1003.001",
+        "_fomorian_technique": "silentprocessexit"
+      }
+    },
+    {
+      "_comment": "Sysmon Event 11 - WerFault creates LSASS dump",
+      "sequence": 5,
+      "timestamp": "2026-02-02T16:00:06.000Z",
+      "log": {
+        "timestamp": "2026-02-02T16:00:06.000+0000",
+        "rule": {
+          "level": 14,
+          "description": "Sysmon - Event 11: WerFault LSASS dump file created",
+          "id": "92101",
+          "mitre": {
+            "id": ["T1003.001"],
+            "tactic": ["Credential Access"],
+            "technique": ["LSASS Memory"]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": ["sysmon", "sysmon_event_11", "windows", "credential_access"]
+        },
+        "agent": {"id": "007", "name": "WS01", "ip": "10.1.0.20"},
+        "manager": {"name": "wazuh.manager"},
+        "id": "1706886006.100005",
+        "decoder": {"name": "windows_eventchannel"},
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "11",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "11",
+              "severityValue": "INFORMATION",
+              "systemTime": "2026-02-02T16:00:06.000Z"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-02 16:00:06.000",
+              "processGuid": "{12345678-1234-1234-1234-123456789032}",
+              "processId": "10240",
+              "image": "C:\\Windows\\System32\\WerFault.exe",
+              "targetFilename": "C:\\Temp\\lsass.exe.672.dmp",
+              "creationUtcTime": "2026-02-02 16:00:06.000",
+              "user": "NT AUTHORITY\\SYSTEM"
+            }
+          }
+        },
+        "_fomorian_batch": "lsass-dump-techniques",
+        "_fomorian_test": true,
+        "_fomorian_attack_id": "T1003.001",
+        "_fomorian_technique": "silentprocessexit"
+      }
+    }
+  ]
+}

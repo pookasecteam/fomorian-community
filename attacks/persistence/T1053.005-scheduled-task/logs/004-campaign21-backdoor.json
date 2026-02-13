@@ -1,0 +1,70 @@
+{
+  "_metadata": {
+    "attack_id": "T1053.005",
+    "variation": "004",
+    "name": "Scheduled Task Persistence - Campaign 21",
+    "description": "Create scheduled task for persistence using schtasks.exe (Campaign 21)",
+    "expected_detection": "HIGH",
+    "kill_chain_phase": "persistence",
+    "format": "wazuh-native",
+    "format_version": "1.0",
+    "campaign": "Campaign 21",
+    "date_executed": "2026-02-09"
+  },
+  "logs": [
+    {
+      "_comment": "Sysmon Event 1 - Process Creation: schtasks /create",
+      "sequence": 1,
+      "timestamp": "2026-02-09T10:40:00.000Z",
+      "log": {
+        "timestamp": "",
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 1: Process creation",
+          "id": "200151",
+          "mitre": {
+            "id": ["T1053.005"],
+            "tactic": ["Persistence", "Privilege Escalation"],
+            "technique": ["Scheduled Task/Job: Scheduled Task"]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": ["sysmon", "sysmon_event1", "windows"]
+        },
+        "agent": {"id": "013", "name": "FS01", "ip": "10.1.0.11"},
+        "manager": {"name": "wazuh.manager"},
+        "id": "1709000105.000001",
+        "decoder": {"name": "windows_eventchannel"},
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "FS01.yourcompany.local",
+              "level": "4",
+              "task": "1",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-09 10:40:00.000",
+              "processGuid": "{12345678-1234-1234-1234-000000105001}",
+              "processId": "8128",
+              "image": "C:\\Windows\\System32\\schtasks.exe",
+              "commandLine": "schtasks  /create /tn Campaign21Backdoor /tr \"C:\\Windows\\System32\\cmd.exe /c echo backdoor\" /sc daily /st 00:00",
+              "currentDirectory": "C:\\Windows\\System32\\",
+              "user": "YOURCOMPANY\\Administrator",
+              "integrityLevel": "High",
+              "hashes": "SHA256=A7B8C9D0E1F2A3B4C5D6E7F8A9B0C1D2E3F4A5B6C7D8E9F0A1B2C3D4E5F6A7B8",
+              "parentProcessGuid": "{12345678-1234-1234-1234-000000105000}",
+              "parentProcessId": "1234",
+              "parentImage": "C:\\Windows\\System32\\cmd.exe",
+              "parentCommandLine": "C:\\Windows\\System32\\cmd.exe"
+            }
+          }
+        }
+      }
+    }
+  ]
+}

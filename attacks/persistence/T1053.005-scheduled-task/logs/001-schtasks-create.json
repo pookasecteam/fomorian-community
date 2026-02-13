@@ -1,0 +1,155 @@
+{
+  "_metadata": {
+    "attack_id": "T1053.005",
+    "variation": "001",
+    "name": "Scheduled Task Creation",
+    "description": "schtasks.exe creating persistence task to execute PowerShell",
+    "expected_detection": "HIGH",
+    "expected_soar": "persistence-detection",
+    "kill_chain_phase": "persistence",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Sysmon Event 1 - schtasks.exe creating task",
+      "sequence": 1,
+      "timestamp": "2026-01-29T12:30:00.000Z",
+      "log": {
+        "timestamp": "",
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 1: Scheduled Task Creation",
+          "id": "100100",
+          "mitre": {
+            "id": [
+              "T1053.005"
+            ],
+            "tactic": [
+              "Persistence"
+            ],
+            "technique": [
+              "Scheduled Task Creation"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "007",
+          "name": "WS01",
+          "ip": "10.1.0.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000000.532467186",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "opcode": "0",
+              "keywords": "0x8000000000000000",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-01-29 12:30:00.000",
+              "processGuid": "{A1B2C3D4-1003-1003-1003-000000000001}",
+              "processId": "14000",
+              "image": "C:\\Windows\\System32\\schtasks.exe",
+              "commandLine": "schtasks /create /tn \"WindowsUpdateCheck\" /tr \"powershell.exe -ep bypass -windowstyle hidden -file C:\\Users\\Public\\update.ps1\" /sc hourly /mo 1 /f",
+              "currentDirectory": "C:\\Users\\john.doe\\",
+              "user": "CORP\\john.doe",
+              "integrityLevel": "Medium",
+              "parentProcessGuid": "{A1B2C3D4-1003-1003-1003-000000000000}",
+              "parentProcessId": "13800",
+              "parentImage": "C:\\Windows\\System32\\cmd.exe",
+              "parentCommandLine": "cmd.exe"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Windows Security Event 4698 - Scheduled task created",
+      "sequence": 2,
+      "timestamp": "2026-01-29T12:30:01.000Z",
+      "log": {
+        "timestamp": "",
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 4698: Scheduled Task Creation",
+          "id": "100100",
+          "mitre": {
+            "id": [
+              "T1053.005"
+            ],
+            "tactic": [
+              "Persistence"
+            ],
+            "technique": [
+              "Scheduled Task Creation"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event4698",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "007",
+          "name": "WS01",
+          "ip": "10.1.0.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000000.483818604",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "4698",
+              "channel": "Security",
+              "providerName": "Microsoft-Windows-Security-Auditing",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "opcode": "0",
+              "keywords": "0x8000000000000000",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "subjectUserSid": "S-1-5-21-1234567890-1234567890-1234567890-1001",
+              "subjectUserName": "john.doe",
+              "subjectDomainName": "CORP",
+              "subjectLogonId": "0x8A4C2",
+              "taskName": "\\WindowsUpdateCheck",
+              "taskContent": "<?xml version=\"1.0\" encoding=\"UTF-16\"?><Task><RegistrationInfo><URI>\\WindowsUpdateCheck</URI></RegistrationInfo><Triggers><CalendarTrigger><Repetition><Interval>PT1H</Interval></Repetition></CalendarTrigger></Triggers><Actions><Exec><Command>powershell.exe</Command><Arguments>-ep bypass -windowstyle hidden -file C:\\Users\\Public\\update.ps1</Arguments></Exec></Actions></Task>"
+            }
+          }
+        }
+      }
+    }
+  ]
+}

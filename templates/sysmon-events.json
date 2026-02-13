@@ -1,0 +1,253 @@
+{
+  "_description": "Sysmon Event Templates for Purple Team Log Generation",
+  "_usage": "Copy relevant template and modify fields for attack simulation",
+  "_note": "These match the format Wazuh receives via Winlogbeat/Filebeat",
+
+  "event_1_process_creation": {
+    "_description": "Process Create - Most common for attack detection",
+    "_fields": {
+      "required": ["Image", "CommandLine", "User", "ProcessId", "ParentImage", "ParentCommandLine"],
+      "optional": ["Hashes", "OriginalFileName", "CurrentDirectory", "IntegrityLevel"]
+    },
+    "template": {
+      "winlog": {
+        "channel": "Microsoft-Windows-Sysmon/Operational",
+        "event_id": 1,
+        "provider_name": "Microsoft-Windows-Sysmon",
+        "computer_name": "{{hostname}}",
+        "event_data": {
+          "RuleName": "",
+          "UtcTime": "{{timestamp}}",
+          "ProcessGuid": "{{guid}}",
+          "ProcessId": "{{pid}}",
+          "Image": "{{image_path}}",
+          "FileVersion": "{{file_version}}",
+          "Description": "{{description}}",
+          "Product": "{{product}}",
+          "Company": "{{company}}",
+          "OriginalFileName": "{{original_filename}}",
+          "CommandLine": "{{command_line}}",
+          "CurrentDirectory": "{{current_directory}}",
+          "User": "{{domain}}\\{{username}}",
+          "LogonGuid": "{{logon_guid}}",
+          "LogonId": "{{logon_id}}",
+          "TerminalSessionId": "{{session_id}}",
+          "IntegrityLevel": "{{integrity_level}}",
+          "Hashes": "SHA256={{sha256}}",
+          "ParentProcessGuid": "{{parent_guid}}",
+          "ParentProcessId": "{{parent_pid}}",
+          "ParentImage": "{{parent_image}}",
+          "ParentCommandLine": "{{parent_command_line}}",
+          "ParentUser": "{{parent_user}}"
+        }
+      },
+      "agent": {
+        "name": "{{agent_name}}",
+        "id": "{{agent_id}}"
+      }
+    }
+  },
+
+  "event_3_network_connection": {
+    "_description": "Network connection detected - C2, lateral movement",
+    "_fields": {
+      "required": ["Image", "User", "DestinationIp", "DestinationPort", "DestinationHostname"],
+      "optional": ["SourceIp", "SourcePort", "Protocol"]
+    },
+    "template": {
+      "winlog": {
+        "channel": "Microsoft-Windows-Sysmon/Operational",
+        "event_id": 3,
+        "provider_name": "Microsoft-Windows-Sysmon",
+        "computer_name": "{{hostname}}",
+        "event_data": {
+          "RuleName": "",
+          "UtcTime": "{{timestamp}}",
+          "ProcessGuid": "{{guid}}",
+          "ProcessId": "{{pid}}",
+          "Image": "{{image_path}}",
+          "User": "{{domain}}\\{{username}}",
+          "Protocol": "{{protocol}}",
+          "Initiated": "{{initiated}}",
+          "SourceIsIpv6": "false",
+          "SourceIp": "{{source_ip}}",
+          "SourceHostname": "{{source_hostname}}",
+          "SourcePort": "{{source_port}}",
+          "DestinationIsIpv6": "false",
+          "DestinationIp": "{{dest_ip}}",
+          "DestinationHostname": "{{dest_hostname}}",
+          "DestinationPort": "{{dest_port}}"
+        }
+      },
+      "agent": {
+        "name": "{{agent_name}}",
+        "id": "{{agent_id}}"
+      }
+    }
+  },
+
+  "event_7_image_load": {
+    "_description": "DLL/Image loaded - DLL injection, sideloading",
+    "_fields": {
+      "required": ["Image", "ImageLoaded", "Hashes"],
+      "optional": ["Signed", "Signature", "SignatureStatus"]
+    },
+    "template": {
+      "winlog": {
+        "channel": "Microsoft-Windows-Sysmon/Operational",
+        "event_id": 7,
+        "provider_name": "Microsoft-Windows-Sysmon",
+        "computer_name": "{{hostname}}",
+        "event_data": {
+          "RuleName": "",
+          "UtcTime": "{{timestamp}}",
+          "ProcessGuid": "{{guid}}",
+          "ProcessId": "{{pid}}",
+          "Image": "{{image_path}}",
+          "ImageLoaded": "{{dll_path}}",
+          "FileVersion": "{{file_version}}",
+          "Description": "{{description}}",
+          "Product": "{{product}}",
+          "Company": "{{company}}",
+          "OriginalFileName": "{{original_filename}}",
+          "Hashes": "SHA256={{sha256}}",
+          "Signed": "{{signed}}",
+          "Signature": "{{signature}}",
+          "SignatureStatus": "{{signature_status}}",
+          "User": "{{domain}}\\{{username}}"
+        }
+      },
+      "agent": {
+        "name": "{{agent_name}}",
+        "id": "{{agent_id}}"
+      }
+    }
+  },
+
+  "event_10_process_access": {
+    "_description": "Process accessed - Credential dumping, injection",
+    "_fields": {
+      "required": ["SourceImage", "TargetImage", "GrantedAccess"],
+      "optional": ["CallTrace"]
+    },
+    "template": {
+      "winlog": {
+        "channel": "Microsoft-Windows-Sysmon/Operational",
+        "event_id": 10,
+        "provider_name": "Microsoft-Windows-Sysmon",
+        "computer_name": "{{hostname}}",
+        "event_data": {
+          "RuleName": "",
+          "UtcTime": "{{timestamp}}",
+          "SourceProcessGUID": "{{source_guid}}",
+          "SourceProcessId": "{{source_pid}}",
+          "SourceThreadId": "{{source_thread_id}}",
+          "SourceImage": "{{source_image}}",
+          "TargetProcessGUID": "{{target_guid}}",
+          "TargetProcessId": "{{target_pid}}",
+          "TargetImage": "{{target_image}}",
+          "GrantedAccess": "{{granted_access}}",
+          "CallTrace": "{{call_trace}}",
+          "SourceUser": "{{domain}}\\{{username}}",
+          "TargetUser": "{{target_user}}"
+        }
+      },
+      "agent": {
+        "name": "{{agent_name}}",
+        "id": "{{agent_id}}"
+      }
+    }
+  },
+
+  "event_11_file_create": {
+    "_description": "File created - Malware drops, persistence",
+    "_fields": {
+      "required": ["Image", "TargetFilename"],
+      "optional": ["CreationUtcTime"]
+    },
+    "template": {
+      "winlog": {
+        "channel": "Microsoft-Windows-Sysmon/Operational",
+        "event_id": 11,
+        "provider_name": "Microsoft-Windows-Sysmon",
+        "computer_name": "{{hostname}}",
+        "event_data": {
+          "RuleName": "",
+          "UtcTime": "{{timestamp}}",
+          "ProcessGuid": "{{guid}}",
+          "ProcessId": "{{pid}}",
+          "Image": "{{image_path}}",
+          "TargetFilename": "{{target_filename}}",
+          "CreationUtcTime": "{{creation_time}}",
+          "User": "{{domain}}\\{{username}}"
+        }
+      },
+      "agent": {
+        "name": "{{agent_name}}",
+        "id": "{{agent_id}}"
+      }
+    }
+  },
+
+  "event_12_13_registry": {
+    "_description": "Registry object added/deleted (12) or value set (13) - Persistence",
+    "_fields": {
+      "required": ["Image", "TargetObject", "EventType"],
+      "optional": ["Details"]
+    },
+    "template": {
+      "winlog": {
+        "channel": "Microsoft-Windows-Sysmon/Operational",
+        "event_id": "{{event_id}}",
+        "provider_name": "Microsoft-Windows-Sysmon",
+        "computer_name": "{{hostname}}",
+        "event_data": {
+          "RuleName": "",
+          "EventType": "{{event_type}}",
+          "UtcTime": "{{timestamp}}",
+          "ProcessGuid": "{{guid}}",
+          "ProcessId": "{{pid}}",
+          "Image": "{{image_path}}",
+          "TargetObject": "{{registry_key}}",
+          "Details": "{{details}}",
+          "User": "{{domain}}\\{{username}}"
+        }
+      },
+      "agent": {
+        "name": "{{agent_name}}",
+        "id": "{{agent_id}}"
+      }
+    }
+  },
+
+  "event_22_dns_query": {
+    "_description": "DNS query - C2, exfiltration",
+    "_fields": {
+      "required": ["Image", "QueryName", "QueryResults"],
+      "optional": ["QueryStatus"]
+    },
+    "template": {
+      "winlog": {
+        "channel": "Microsoft-Windows-Sysmon/Operational",
+        "event_id": 22,
+        "provider_name": "Microsoft-Windows-Sysmon",
+        "computer_name": "{{hostname}}",
+        "event_data": {
+          "RuleName": "",
+          "UtcTime": "{{timestamp}}",
+          "ProcessGuid": "{{guid}}",
+          "ProcessId": "{{pid}}",
+          "Image": "{{image_path}}",
+          "QueryName": "{{query_name}}",
+          "QueryStatus": "{{query_status}}",
+          "QueryResults": "{{query_results}}",
+          "User": "{{domain}}\\{{username}}"
+        }
+      },
+      "agent": {
+        "name": "{{agent_name}}",
+        "id": "{{agent_id}}"
+      }
+    }
+  }
+}

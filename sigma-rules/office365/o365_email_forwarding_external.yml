@@ -1,0 +1,31 @@
+title: Office 365 Email Forwarding to External Address
+id: 5b6a8c90-1234-4abc-def0-123456789004
+status: experimental
+description: Detects when email forwarding is configured to an external address, common in BEC attacks
+author: PookaSec
+date: 2026/01/29
+references:
+    - https://attack.mitre.org/techniques/T1114/003/
+    - https://docs.microsoft.com/en-us/microsoft-365/security/office-365-security/detect-and-remediate-outlook-rules-forms-attack
+tags:
+    - attack.collection
+    - attack.t1114.003
+logsource:
+    product: m365
+    service: exchange
+detection:
+    selection:
+        office365.operation: 'Set-Mailbox'
+    forwarding:
+        office365.parameters|contains:
+            - 'ForwardingSmtpAddress'
+            - 'ForwardingAddress'
+    condition: selection and forwarding
+fields:
+    - office365.user_id
+    - office365.client_ip
+    - office365.parameters
+falsepositives:
+    - Legitimate forwarding setup by IT
+    - User configured forwarding to personal email
+level: high

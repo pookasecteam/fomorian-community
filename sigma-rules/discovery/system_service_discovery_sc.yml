@@ -1,0 +1,31 @@
+title: System Service Discovery via SC Query
+id: a1b2c3d4-e5f6-7890-abcd-ef1234567890
+status: experimental
+description: Detects enumeration of system services using sc query command
+author: PookaSec
+date: 2026/01/29
+references:
+    - https://attack.mitre.org/techniques/T1007/
+tags:
+    - attack.discovery
+    - attack.t1007
+logsource:
+    category: process_creation
+    product: windows
+detection:
+    selection_sc:
+        Image|endswith: '\sc.exe'
+        CommandLine|contains:
+            - 'query'
+            - 'qc'
+            - 'queryex'
+    selection_powershell:
+        CommandLine|contains:
+            - 'Get-Service'
+            - 'Get-WmiObject Win32_Service'
+            - 'gwmi Win32_Service'
+    condition: selection_sc or selection_powershell
+falsepositives:
+    - System administrators checking service status
+    - IT support scripts
+level: low

@@ -1,0 +1,17 @@
+{
+  "_metadata": {
+    "attack_id": "T1074.001",
+    "variation": "001",
+    "name": "File Splitting for Exfiltration - impacket-split",
+    "description": "Attacker uses impacket-split to split large files into chunks for exfiltration",
+    "expected_detection": "LOW",
+    "kill_chain_phase": "collection",
+    "tool": "impacket-split",
+    "command": "impacket-split -in bigfile.zip -size 10MB",
+    "impact": "Prepares large files for exfiltration by splitting into smaller chunks",
+    "format": "wazuh-native",
+    "format_version": "1.0",
+    "note": "Local file operation, no network activity"
+  },
+  "logs": []
+}

@@ -1,0 +1,197 @@
+{
+  "_metadata": {
+    "attack_id": "T1047",
+    "batch": "threat-intel-2026-01-31",
+    "name": "WMI Process Execution",
+    "description": "WMI-based process execution via wmiprvse.exe spawning child processes",
+    "source": "https://github.com/MHaggis/NEBULA",
+    "expected_detection": "HIGH",
+    "kill_chain_phase": "execution",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Sysmon Event 1 - WmiPrvSE spawning PowerShell",
+      "sequence": 1,
+      "timestamp": "2026-01-31T19:22:15.123Z",
+      "log": {
+        "timestamp": "2026-01-31T19:22:15.123+0000",
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 1: WmiPrvSE Spawning PowerShell",
+          "id": "92151",
+          "mitre": {
+            "id": ["T1047"],
+            "tactic": ["Execution"],
+            "technique": ["Windows Management Instrumentation"]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": ["sysmon", "sysmon_event1", "windows"]
+        },
+        "agent": {
+          "id": "007",
+          "name": "WS01",
+          "ip": "10.1.0.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000007.700001",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local"
+            },
+            "eventdata": {
+              "utcTime": "2026-01-31 19:22:15.123",
+              "processGuid": "{12345678-wmi1-1234-wmi1-123456789abc}",
+              "processId": "5678",
+              "image": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+              "commandLine": "powershell.exe -NoProfile -NonInteractive -ExecutionPolicy Bypass -EncodedCommand JABjAGwAaQBlAG4AdAAgAD0AIABOAGUAdwAtAE8AYgBqAGUAYwB0",
+              "currentDirectory": "C:\\Windows\\System32\\",
+              "user": "NT AUTHORITY\\SYSTEM",
+              "integrityLevel": "System",
+              "hashes": "SHA256=ABCD1234567890ABCDEF1234567890ABCDEF1234567890ABCDEF1234567890AB",
+              "parentProcessGuid": "{12345678-wmi1-1234-wmi1-123456789000}",
+              "parentProcessId": "4567",
+              "parentImage": "C:\\Windows\\System32\\wbem\\WmiPrvSE.exe",
+              "parentCommandLine": "C:\\Windows\\system32\\wbem\\wmiprvse.exe"
+            }
+          }
+        },
+        "_fomorian_batch": "threat-intel-2026-01-31",
+        "_fomorian_test": true,
+        "_fomorian_attack_id": "T1047",
+        "_fomorian_expected_detection": "Sigma: WMI Process Execution (T1047)"
+      }
+    },
+    {
+      "_comment": "Sysmon Event 1 - WmiPrvSE spawning cmd.exe",
+      "sequence": 2,
+      "timestamp": "2026-01-31T19:25:30.456Z",
+      "log": {
+        "timestamp": "2026-01-31T19:25:30.456+0000",
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 1: WmiPrvSE Spawning CMD",
+          "id": "92151",
+          "mitre": {
+            "id": ["T1047"],
+            "tactic": ["Execution"],
+            "technique": ["Windows Management Instrumentation"]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": ["sysmon", "sysmon_event1", "windows"]
+        },
+        "agent": {
+          "id": "007",
+          "name": "WS01",
+          "ip": "10.1.0.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000007.700002",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local"
+            },
+            "eventdata": {
+              "utcTime": "2026-01-31 19:25:30.456",
+              "processGuid": "{12345678-wmi2-1234-wmi2-123456789abc}",
+              "processId": "6789",
+              "image": "C:\\Windows\\System32\\cmd.exe",
+              "commandLine": "cmd.exe /c whoami /all > C:\\Windows\\Temp\\out.txt",
+              "currentDirectory": "C:\\Windows\\System32\\",
+              "user": "NT AUTHORITY\\SYSTEM",
+              "integrityLevel": "System",
+              "hashes": "SHA256=D4E24D5B0D3ECEE5C8E87B44E4A33D3A4AA8B5C6D7E8F9A0B1C2D3E4F5A6B7C8",
+              "parentProcessGuid": "{12345678-wmi2-1234-wmi2-123456789000}",
+              "parentProcessId": "5678",
+              "parentImage": "C:\\Windows\\System32\\wbem\\WmiPrvSE.exe",
+              "parentCommandLine": "C:\\Windows\\system32\\wbem\\wmiprvse.exe"
+            }
+          }
+        },
+        "_fomorian_batch": "threat-intel-2026-01-31",
+        "_fomorian_test": true,
+        "_fomorian_attack_id": "T1047",
+        "_fomorian_expected_detection": "Sigma: WMI Process Execution (T1047)"
+      }
+    },
+    {
+      "_comment": "Sysmon Event 19 - WMI Event Filter Creation",
+      "sequence": 3,
+      "timestamp": "2026-01-31T19:28:45.789Z",
+      "log": {
+        "timestamp": "2026-01-31T19:28:45.789+0000",
+        "rule": {
+          "level": 14,
+          "description": "Sysmon - Event 19: WMI Event Filter Created",
+          "id": "92169",
+          "mitre": {
+            "id": ["T1047", "T1546.003"],
+            "tactic": ["Execution", "Persistence"],
+            "technique": ["Windows Management Instrumentation", "WMI Event Subscription"]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": ["sysmon", "sysmon_event19", "windows"]
+        },
+        "agent": {
+          "id": "007",
+          "name": "WS01",
+          "ip": "10.1.0.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000007.700003",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "19",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local"
+            },
+            "eventdata": {
+              "utcTime": "2026-01-31 19:28:45.789",
+              "operation": "Created",
+              "user": "NT AUTHORITY\\SYSTEM",
+              "eventNamespace": "root\\cimv2",
+              "name": "EvilFilter",
+              "query": "SELECT * FROM __InstanceModificationEvent WITHIN 60 WHERE TargetInstance ISA 'Win32_LocalTime' AND TargetInstance.Hour = 8"
+            }
+          }
+        },
+        "_fomorian_batch": "threat-intel-2026-01-31",
+        "_fomorian_test": true,
+        "_fomorian_attack_id": "T1047",
+        "_fomorian_expected_detection": "Sigma: WMI Event Filter Creation (T1546.003)"
+      }
+    }
+  ]
+}

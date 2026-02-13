@@ -1,0 +1,162 @@
+{
+  "_metadata": {
+    "attack_id": "T1036.003",
+    "variation": "001",
+    "name": "Renamed cmd.exe Masquerading",
+    "description": "cmd.exe copied and renamed to evade detection",
+    "expected_detection": "HIGH",
+    "expected_soar": "defense-evasion-response",
+    "kill_chain_phase": "defense-evasion",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Sysmon Event 11 - cmd.exe copied to user directory",
+      "sequence": 1,
+      "timestamp": "2026-01-29T13:45:00.000Z",
+      "log": {
+        "timestamp": "",
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 11: Renamed cmd.exe Masquerading",
+          "id": "100100",
+          "mitre": {
+            "id": [
+              "T1036.003"
+            ],
+            "tactic": [
+              "Defense Evasion"
+            ],
+            "technique": [
+              "Renamed cmd.exe Masquerading"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event11",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "007",
+          "name": "WS01",
+          "ip": "10.1.0.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000000.145604848",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "11",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "opcode": "0",
+              "keywords": "0x8000000000000000",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-01-29 13:45:00.000",
+              "processGuid": "{MASQ-001-0001-0001-000000000000}",
+              "processId": "5000",
+              "image": "C:\\Windows\\System32\\cmd.exe",
+              "targetFilename": "C:\\Users\\john.doe\\AppData\\Local\\Temp\\svchost.exe",
+              "creationUtcTime": "2026-01-29 13:45:00.000",
+              "user": "CORP\\john.doe"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Sysmon Event 1 - Renamed cmd.exe execution",
+      "sequence": 2,
+      "timestamp": "2026-01-29T13:45:05.000Z",
+      "log": {
+        "timestamp": "",
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 1: Renamed cmd.exe Masquerading",
+          "id": "100100",
+          "mitre": {
+            "id": [
+              "T1036.003"
+            ],
+            "tactic": [
+              "Defense Evasion"
+            ],
+            "technique": [
+              "Renamed cmd.exe Masquerading"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "007",
+          "name": "WS01",
+          "ip": "10.1.0.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000000.879839411",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "opcode": "0",
+              "keywords": "0x8000000000000000",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-01-29 13:45:05.000",
+              "processGuid": "{MASQ-001-0001-0001-000000000001}",
+              "processId": "12500",
+              "image": "C:\\Users\\john.doe\\AppData\\Local\\Temp\\svchost.exe",
+              "fileVersion": "10.0.19041.1 (WinBuild.160101.0800)",
+              "description": "Windows Command Processor",
+              "product": "Microsoft\u00ae Windows\u00ae Operating System",
+              "company": "Microsoft Corporation",
+              "originalFileName": "Cmd.Exe",
+              "commandLine": "svchost.exe /c whoami",
+              "currentDirectory": "C:\\Users\\john.doe\\AppData\\Local\\Temp\\",
+              "user": "CORP\\john.doe",
+              "integrityLevel": "Medium",
+              "hashes": "SHA256=CMDHASH1234567890ABCDEF1234567890ABCDEF1234567890ABCDEF12",
+              "parentProcessGuid": "{MASQ-001-0001-0001-000000000000}",
+              "parentProcessId": "5000",
+              "parentImage": "C:\\Windows\\System32\\cmd.exe",
+              "parentCommandLine": "cmd.exe"
+            }
+          }
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,139 @@
+{
+  "_metadata": {
+    "attack_id": "T1087.002",
+    "variation": "003",
+    "name": "SAM Remote Dump - impacket-samrdump",
+    "description": "Attacker uses impacket-samrdump to enumerate users and groups via SAMR protocol",
+    "expected_detection": "MEDIUM",
+    "kill_chain_phase": "discovery",
+    "format": "wazuh-native",
+    "format_version": "1.0",
+    "tool": "impacket-samrdump",
+    "command": "impacket-samrdump yourcompany.local/Administrator:\"\"@10.1.0.99",
+    "impact": "Enumerates domain users, groups, and RIDs for attack planning"
+  },
+  "logs": [
+    {
+      "_comment": "Event 4624 - Network logon for SAMR access",
+      "sequence": 1,
+      "timestamp": "2026-02-11T03:15:00.000Z",
+      "log": {
+        "timestamp": "2026-02-11T03:15:00.000Z",
+        "rule": {
+          "level": 3,
+          "description": "Windows Eventchannel event",
+          "id": "60009",
+          "firedtimes": 1,
+          "mail": false,
+          "groups": ["windows", "eventchannel"]
+        },
+        "agent": {
+          "id": "012",
+          "name": "DC01",
+          "ip": "10.1.0.99"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1707628500.500001",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "4624",
+              "channel": "Security",
+              "providerName": "Microsoft-Windows-Security-Auditing",
+              "computer": "DC01.yourcompany.local",
+              "level": "0",
+              "task": "12544",
+              "keywords": "0x8020000000000000",
+              "severityValue": "AUDIT_SUCCESS"
+            },
+            "eventdata": {
+              "subjectUserSid": "S-1-5-18",
+              "subjectUserName": "DC01$",
+              "subjectDomainName": "YOURCOMPANY",
+              "subjectLogonId": "0x3e7",
+              "targetUserSid": "S-1-5-21-3298120035-3471069779-879265153-500",
+              "targetUserName": "Administrator",
+              "targetDomainName": "YOURCOMPANY",
+              "targetLogonId": "0x56789",
+              "logonType": "3",
+              "logonProcessName": "Kerberos",
+              "authenticationPackageName": "Kerberos",
+              "workstationName": "-",
+              "logonGuid": "{00000000-0000-0000-0000-000000000000}",
+              "transmittedServices": "-",
+              "lmPackageName": "-",
+              "keyLength": "0",
+              "processId": "0x0",
+              "processName": "-",
+              "ipAddress": "10.1.0.50",
+              "ipPort": "445"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Event 5145 - SAMR named pipe access",
+      "sequence": 2,
+      "timestamp": "2026-02-11T03:15:01.000Z",
+      "log": {
+        "timestamp": "2026-02-11T03:15:01.000Z",
+        "rule": {
+          "level": 3,
+          "description": "Windows Eventchannel event",
+          "id": "60009",
+          "firedtimes": 1,
+          "mail": false,
+          "groups": ["windows", "eventchannel"]
+        },
+        "agent": {
+          "id": "012",
+          "name": "DC01",
+          "ip": "10.1.0.99"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1707628501.500001",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "5145",
+              "channel": "Security",
+              "providerName": "Microsoft-Windows-Security-Auditing",
+              "computer": "DC01.yourcompany.local",
+              "level": "0",
+              "task": "12811",
+              "keywords": "0x8020000000000000",
+              "severityValue": "AUDIT_SUCCESS"
+            },
+            "eventdata": {
+              "subjectUserSid": "S-1-5-21-3298120035-3471069779-879265153-500",
+              "subjectUserName": "Administrator",
+              "subjectDomainName": "YOURCOMPANY",
+              "subjectLogonId": "0x56789",
+              "objectType": "File",
+              "ipAddress": "10.1.0.50",
+              "ipPort": "49152",
+              "shareName": "\\\\*\\IPC$",
+              "shareLocalPath": "-",
+              "relativePath": "\\samr",
+              "accessMask": "0x1",
+              "accessList": "%%4416"
+            }
+          }
+        }
+      }
+    }
+  ]
+}

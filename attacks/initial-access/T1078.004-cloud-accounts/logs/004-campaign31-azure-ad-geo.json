@@ -1,0 +1,82 @@
+{
+  "_metadata": {
+    "attack_id": "T1078.004",
+    "variation": "004",
+    "name": "Valid Accounts: Cloud Accounts - Azure AD Suspicious Geo-location",
+    "description": "Azure AD/M365 login with compromised credentials from unusual geo-location (impossible travel)",
+    "expected_detection": "LOW",
+    "kill_chain_phase": "initial-access",
+    "format": "wazuh-native",
+    "format_version": "1.0",
+    "campaign": "31",
+    "batch": "12"
+  },
+  "logs": [
+    {
+      "_comment": "Simulated Azure AD Sign-in log - Unusual geo-location",
+      "sequence": 1,
+      "timestamp": "2026-02-10T21:12:00.000Z",
+      "log": {
+        "timestamp": "2026-02-10T21:12:00.000Z",
+        "rule": {
+          "level": 12,
+          "description": "Azure AD - Impossible Travel Detected",
+          "id": "100405",
+          "mitre": {
+            "id": ["T1078.004"],
+            "tactic": ["Initial Access"],
+            "technique": ["Valid Accounts: Cloud Accounts"]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": ["cloud", "azure_ad", "authentication", "impossible_travel"]
+        },
+        "agent": {"id": "002", "name": "analyst-workstation", "ip": "10.0.10.5"},
+        "manager": {"name": "wazuh.manager"},
+        "id": "1710000007.000001",
+        "decoder": {"name": "json"},
+        "location": "/var/log/azure_ad_signin.log",
+        "data": {
+          "userPrincipalName": "analyst@yourcompany.onmicrosoft.com",
+          "appDisplayName": "Office 365 Exchange Online",
+          "ipAddress": "185.220.101.50",
+          "location": {
+            "city": "Moscow",
+            "state": "Moscow",
+            "countryOrRegion": "RU",
+            "geoCoordinates": {
+              "latitude": 55.7558,
+              "longitude": 37.6173
+            }
+          },
+          "previousLocation": {
+            "city": "San Francisco",
+            "state": "California",
+            "countryOrRegion": "US",
+            "geoCoordinates": {
+              "latitude": 37.7749,
+              "longitude": -122.4194
+            }
+          },
+          "timeSinceLastLogin": "45 minutes",
+          "status": {
+            "errorCode": 0,
+            "failureReason": null,
+            "additionalDetails": "Success"
+          },
+          "deviceDetail": {
+            "browser": "Chrome 121",
+            "operatingSystem": "Windows 10",
+            "isManaged": false,
+            "isCompliant": false
+          },
+          "riskLevel": "high",
+          "riskEventTypes": ["impossibleTravel", "anonymizedIPAddress"]
+        },
+        "_fomorian_test": true,
+        "fomorian_campaign": 31,
+        "fomorian_batch": 12
+      }
+    }
+  ]
+}

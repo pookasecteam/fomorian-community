@@ -1,0 +1,78 @@
+{
+  "_metadata": {
+    "attack_id": "T1098",
+    "variation": "001",
+    "name": "UAT-8099 Hidden Admin Account Creation",
+    "description": "UAT-8099 APT creates hidden user accounts with dollar sign suffix for persistence in IIS environments",
+    "expected_detection": "HIGH",
+    "kill_chain_phase": "persistence",
+    "source_url": "https://blog.talosintelligence.com/uat-8099-new-persistence-mechanisms-and-regional-focus/",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Sysmon Event 1 - net user creating hidden admin$ account",
+      "sequence": 1,
+      "log": {
+        "timestamp": "2026-02-03T10:00:00.000Z",
+        "rule": {
+          "level": 14,
+          "description": "Sysmon - Event 1: Hidden user account creation",
+          "id": "92151",
+          "mitre": {"id": ["T1098", "T1136.001"], "tactic": ["Persistence"], "technique": ["Account Manipulation", "Local Account"]},
+          "groups": ["sysmon", "sysmon_event1", "windows"]
+        },
+        "agent": {"id": "007", "name": "WS01", "ip": "10.1.0.20"},
+        "manager": {"name": "wazuh.manager"},
+        "decoder": {"name": "windows_eventchannel"},
+        "data": {
+          "win": {
+            "system": {"eventID": "1", "channel": "Microsoft-Windows-Sysmon/Operational"},
+            "eventdata": {
+              "image": "C:\\Windows\\System32\\net.exe",
+              "commandLine": "net user admin$ P@ssw0rd123 /add",
+              "user": "NT AUTHORITY\\SYSTEM",
+              "parentImage": "C:\\Windows\\System32\\cmd.exe",
+              "parentCommandLine": "cmd.exe /c C:\\Users\\mssql$\\Desktop\\VN\\install.bat"
+            }
+          }
+        },
+        "_fomorian_test": true,
+        "_fomorian_attack_id": "T1098",
+        "_fomorian_batch": "morning-intel-20260203"
+      }
+    },
+    {
+      "_comment": "Sysmon Event 1 - Adding hidden account to Administrators group",
+      "sequence": 2,
+      "log": {
+        "timestamp": "2026-02-03T10:00:05.000Z",
+        "rule": {
+          "level": 14,
+          "description": "Sysmon - Event 1: Adding user to Administrators group",
+          "id": "92151",
+          "mitre": {"id": ["T1098"], "tactic": ["Persistence"], "technique": ["Account Manipulation"]},
+          "groups": ["sysmon", "sysmon_event1", "windows"]
+        },
+        "agent": {"id": "007", "name": "WS01", "ip": "10.1.0.20"},
+        "manager": {"name": "wazuh.manager"},
+        "decoder": {"name": "windows_eventchannel"},
+        "data": {
+          "win": {
+            "system": {"eventID": "1", "channel": "Microsoft-Windows-Sysmon/Operational"},
+            "eventdata": {
+              "image": "C:\\Windows\\System32\\net.exe",
+              "commandLine": "net localgroup Administrators admin$ /add",
+              "user": "NT AUTHORITY\\SYSTEM",
+              "parentImage": "C:\\Windows\\System32\\cmd.exe"
+            }
+          }
+        },
+        "_fomorian_test": true,
+        "_fomorian_attack_id": "T1098",
+        "_fomorian_batch": "morning-intel-20260203"
+      }
+    }
+  ]
+}

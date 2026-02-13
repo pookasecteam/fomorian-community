@@ -1,0 +1,81 @@
+{
+  "_metadata": {
+    "attack_id": "T1078.004",
+    "variation": "002",
+    "name": "Impossible Travel Detection",
+    "description": "Account accessed from two geographically distant locations in impossible timeframe",
+    "expected_detection": "CRITICAL",
+    "expected_soar": "credential-compromise-response",
+    "kill_chain_phase": "initial-access",
+    "notes": "Credential theft indicator - simultaneous use",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Legitimate sign-in from US",
+      "sequence": 1,
+      "timestamp": "2026-01-29T15:55:00.000Z",
+      "log": {
+        "azure": {
+          "signinlogs": {
+            "time": "2026-01-29T15:55:00.000Z",
+            "category": "SignInLogs",
+            "properties": {
+              "id": "signin-legit-001",
+              "userPrincipalName": "john.doe@corp.local",
+              "ipAddress": "192.168.1.100",
+              "clientAppUsed": "Browser",
+              "status": {
+                "errorCode": 0
+              },
+              "location": {
+                "city": "San Francisco",
+                "state": "California",
+                "countryOrRegion": "US"
+              },
+              "riskLevelAggregated": "none"
+            }
+          }
+        },
+        "agent": {
+          "name": "Azure-Sentinel",
+          "id": "azure"
+        }
+      }
+    },
+    {
+      "_comment": "Suspicious sign-in from different country 5 mins later",
+      "sequence": 2,
+      "timestamp": "2026-01-29T16:00:00.000Z",
+      "log": {
+        "azure": {
+          "signinlogs": {
+            "time": "2026-01-29T16:00:00.000Z",
+            "category": "SignInLogs",
+            "properties": {
+              "id": "signin-susp-001",
+              "userPrincipalName": "john.doe@corp.local",
+              "ipAddress": "185.220.101.45",
+              "clientAppUsed": "Browser",
+              "status": {
+                "errorCode": 0
+              },
+              "location": {
+                "city": "Beijing",
+                "state": "Beijing",
+                "countryOrRegion": "CN"
+              },
+              "riskLevelAggregated": "high",
+              "riskDetail": "impossibleTravel"
+            }
+          }
+        },
+        "agent": {
+          "name": "Azure-Sentinel",
+          "id": "azure"
+        }
+      }
+    }
+  ]
+}

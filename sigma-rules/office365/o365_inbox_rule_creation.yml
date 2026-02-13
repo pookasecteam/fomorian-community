@@ -1,0 +1,41 @@
+title: Office 365 Suspicious Inbox Rule Creation
+id: 5b6a8c90-1234-4abc-def0-123456789003
+status: experimental
+description: Detects creation of inbox rules that may be used to hide malicious activity or forward emails
+author: PookaSec
+date: 2026/01/29
+references:
+    - https://attack.mitre.org/techniques/T1137/005/
+    - https://www.microsoft.com/security/blog/2021/06/14/behind-the-scenes-of-business-email-compromise/
+tags:
+    - attack.persistence
+    - attack.t1137.005
+logsource:
+    product: m365
+    service: exchange
+detection:
+    selection:
+        office365.operation: 'New-InboxRule'
+    suspicious_keywords:
+        office365.parameters|contains:
+            - 'payment'
+            - 'wire'
+            - 'transfer'
+            - 'invoice'
+            - 'bank'
+            - 'urgent'
+            - 'confidential'
+    suspicious_folders:
+        office365.parameters|contains:
+            - 'RSS'
+            - 'Deleted'
+            - 'Junk'
+            - 'Archive'
+    condition: selection and (suspicious_keywords or suspicious_folders)
+fields:
+    - office365.user_id
+    - office365.client_ip
+    - office365.parameters
+falsepositives:
+    - Legitimate inbox organization rules
+level: high

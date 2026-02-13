@@ -1,0 +1,312 @@
+{
+  "_metadata": {
+    "attack_id": "T1003.006",
+    "variation": "001",
+    "name": "DCSync via Mimikatz",
+    "description": "Mimikatz performing DCSync to extract domain credentials",
+    "expected_detection": "CRITICAL",
+    "expected_soar": "credential-access-detection",
+    "kill_chain_phase": "credential-access",
+    "notes": "DCSync can extract all domain hashes - immediate response required",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Sysmon Event 1 - Mimikatz execution",
+      "sequence": 1,
+      "timestamp": "2026-01-29T12:30:00.000Z",
+      "log": {
+        "timestamp": "",
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 1: DCSync via Mimikatz",
+          "id": "100100",
+          "mitre": {
+            "id": [
+              "T1003.006"
+            ],
+            "tactic": [
+              "Credential Access"
+            ],
+            "technique": [
+              "DCSync via Mimikatz"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "007",
+          "name": "WS01",
+          "ip": "10.1.0.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000000.406401666",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "opcode": "0",
+              "keywords": "0x8000000000000000",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-01-29 12:30:00.000",
+              "processGuid": "{DCSYNC-001-0001-0001-000000000001}",
+              "processId": "10500",
+              "image": "C:\\Users\\Public\\mimi.exe",
+              "commandLine": "mimi.exe \"lsadump::dcsync /domain:corp.local /user:Administrator\" \"exit\"",
+              "currentDirectory": "C:\\Users\\Public\\",
+              "user": "CORP\\admin.user",
+              "integrityLevel": "High",
+              "parentProcessGuid": "{DCSYNC-001-0001-0001-000000000000}",
+              "parentProcessId": "10300",
+              "parentImage": "C:\\Windows\\System32\\cmd.exe",
+              "parentCommandLine": "cmd.exe"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Windows Security Event 4662 - DS-Replication-Get-Changes",
+      "sequence": 2,
+      "timestamp": "2026-01-29T12:30:01.000Z",
+      "log": {
+        "timestamp": "",
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 4662: DCSync via Mimikatz",
+          "id": "100100",
+          "mitre": {
+            "id": [
+              "T1003.006"
+            ],
+            "tactic": [
+              "Credential Access"
+            ],
+            "technique": [
+              "DCSync via Mimikatz"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event4662",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "001",
+          "name": "DC01",
+          "ip": "10.1.0.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000000.879266691",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "4662",
+              "channel": "Security",
+              "providerName": "Microsoft-Windows-Security-Auditing",
+              "computer": "DC01.corp.local",
+              "level": "4",
+              "task": "1",
+              "opcode": "0",
+              "keywords": "0x8000000000000000",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "subjectUserSid": "S-1-5-21-1234567890-1234567890-1234567890-500",
+              "subjectUserName": "admin.user",
+              "subjectDomainName": "CORP",
+              "subjectLogonId": "0x9B5D3",
+              "objectServer": "DS",
+              "objectType": "%{19195a5b-6da0-11d0-afd3-00c04fd930c9}",
+              "objectName": "%{19195a5b-6da0-11d0-afd3-00c04fd930c9}",
+              "operationType": "Object Access",
+              "handleId": "0x0",
+              "accessList": "%%7688",
+              "accessMask": "0x100",
+              "properties": "{1131f6aa-9c07-11d1-f79f-00c04fc2dcd2}",
+              "additionalInfo": "-",
+              "additionalInfo2": ""
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Windows Security Event 4662 - DS-Replication-Get-Changes-All",
+      "sequence": 3,
+      "timestamp": "2026-01-29T12:30:01.100Z",
+      "log": {
+        "timestamp": "",
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 4662: DCSync via Mimikatz",
+          "id": "100100",
+          "mitre": {
+            "id": [
+              "T1003.006"
+            ],
+            "tactic": [
+              "Credential Access"
+            ],
+            "technique": [
+              "DCSync via Mimikatz"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event4662",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "001",
+          "name": "DC01",
+          "ip": "10.1.0.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000000.912008059",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "4662",
+              "channel": "Security",
+              "providerName": "Microsoft-Windows-Security-Auditing",
+              "computer": "DC01.corp.local",
+              "level": "4",
+              "task": "1",
+              "opcode": "0",
+              "keywords": "0x8000000000000000",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "subjectUserSid": "S-1-5-21-1234567890-1234567890-1234567890-500",
+              "subjectUserName": "admin.user",
+              "subjectDomainName": "CORP",
+              "subjectLogonId": "0x9B5D3",
+              "objectServer": "DS",
+              "objectType": "%{19195a5b-6da0-11d0-afd3-00c04fd930c9}",
+              "objectName": "%{19195a5b-6da0-11d0-afd3-00c04fd930c9}",
+              "operationType": "Object Access",
+              "handleId": "0x0",
+              "accessList": "%%7688",
+              "accessMask": "0x100",
+              "properties": "{1131f6ad-9c07-11d1-f79f-00c04fc2dcd2}",
+              "additionalInfo": "-",
+              "additionalInfo2": ""
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Sysmon Event 3 - DRSUAPI connection to DC",
+      "sequence": 4,
+      "timestamp": "2026-01-29T12:30:00.500Z",
+      "log": {
+        "timestamp": "",
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 3: DCSync via Mimikatz",
+          "id": "100100",
+          "mitre": {
+            "id": [
+              "T1003.006"
+            ],
+            "tactic": [
+              "Credential Access"
+            ],
+            "technique": [
+              "DCSync via Mimikatz"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event3",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "007",
+          "name": "WS01",
+          "ip": "10.1.0.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000000.143662498",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "3",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "opcode": "0",
+              "keywords": "0x8000000000000000",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-01-29 12:30:00.500",
+              "processGuid": "{DCSYNC-001-0001-0001-000000000001}",
+              "processId": "10500",
+              "image": "C:\\Users\\Public\\mimi.exe",
+              "user": "CORP\\admin.user",
+              "protocol": "tcp",
+              "initiated": "true",
+              "sourceIp": "10.1.1.50",
+              "sourcePort": "56000",
+              "destinationIp": "10.1.1.10",
+              "destinationHostname": "DC01.corp.local",
+              "destinationPort": "135"
+            }
+          }
+        }
+      }
+    }
+  ]
+}

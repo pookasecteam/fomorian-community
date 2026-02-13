@@ -1,0 +1,185 @@
+{
+  "_metadata": {
+    "attack_id": "T1558.003",
+    "variation": "001",
+    "name": "Kerberoasting - Mass Service Ticket Requests",
+    "description": "Attacker uses impacket-GetUserSPNs to request service tickets (TGS-REP) for all accounts with SPNs, enabling offline password cracking of service accounts",
+    "expected_detection": "HIGH",
+    "kill_chain_phase": "credential-access",
+    "format": "wazuh-native",
+    "format_version": "1.0",
+    "tool": "impacket-GetUserSPNs",
+    "command": "impacket-GetUserSPNs yourcompany.local/Administrator:\"pass\" -dc-ip 10.1.0.99 -request",
+    "impact": "100+ service account credentials compromised via offline cracking, enables lateral movement and privilege escalation"
+  },
+  "logs": [
+    {
+      "_comment": "Event 4769 - Kerberos Service Ticket Request (RC4 encryption - suspicious for Kerberoasting)",
+      "sequence": 1,
+      "timestamp": "2026-02-10T23:20:00.000Z",
+      "log": {
+        "timestamp": "2026-02-10T23:20:00.000Z",
+        "rule": {
+          "level": 3,
+          "description": "Windows Eventchannel event",
+          "id": "60009",
+          "firedtimes": 1,
+          "mail": false,
+          "groups": ["windows", "eventchannel"]
+        },
+        "agent": {
+          "id": "012",
+          "name": "DC01",
+          "ip": "10.1.0.99"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1707600000.600001",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "4769",
+              "channel": "Security",
+              "providerName": "Microsoft-Windows-Security-Auditing",
+              "computer": "DC01.yourcompany.local",
+              "level": "0",
+              "task": "14339",
+              "keywords": "0x8020000000000000",
+              "severityValue": "AUDIT_SUCCESS"
+            },
+            "eventdata": {
+              "targetUserName": "svc_sqlprod",
+              "targetDomainName": "YOURCOMPANY.LOCAL",
+              "serviceName": "MSSQLSvc/sql-prod.yourcompany.local:1433",
+              "serviceId": "S-1-5-21-3298120035-3471069779-879265153-1108",
+              "ticketOptions": "0x40810000",
+              "ticketEncryptionType": "0x17",
+              "ipAddress": "::ffff:10.1.0.50",
+              "ipPort": "56789",
+              "status": "0x0",
+              "logonGuid": "{00000000-0000-0000-0000-000000000000}",
+              "transmittedServices": "-"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Event 4769 - Second service ticket request (HTTP service)",
+      "sequence": 2,
+      "timestamp": "2026-02-10T23:20:01.000Z",
+      "log": {
+        "timestamp": "2026-02-10T23:20:01.000Z",
+        "rule": {
+          "level": 3,
+          "description": "Windows Eventchannel event",
+          "id": "60009",
+          "firedtimes": 1,
+          "mail": false,
+          "groups": ["windows", "eventchannel"]
+        },
+        "agent": {
+          "id": "012",
+          "name": "DC01",
+          "ip": "10.1.0.99"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1707600000.600002",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "4769",
+              "channel": "Security",
+              "providerName": "Microsoft-Windows-Security-Auditing",
+              "computer": "DC01.yourcompany.local",
+              "level": "0",
+              "task": "14339",
+              "keywords": "0x8020000000000000",
+              "severityValue": "AUDIT_SUCCESS"
+            },
+            "eventdata": {
+              "targetUserName": "svc_intranet",
+              "targetDomainName": "YOURCOMPANY.LOCAL",
+              "serviceName": "HTTP/intranet.yourcompany.local",
+              "serviceId": "S-1-5-21-3298120035-3471069779-879265153-1109",
+              "ticketOptions": "0x40810000",
+              "ticketEncryptionType": "0x17",
+              "ipAddress": "::ffff:10.1.0.50",
+              "ipPort": "56789",
+              "status": "0x0",
+              "logonGuid": "{00000000-0000-0000-0000-000000000000}",
+              "transmittedServices": "-"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Event 4769 - Third service ticket request (Exchange service)",
+      "sequence": 3,
+      "timestamp": "2026-02-10T23:20:02.000Z",
+      "log": {
+        "timestamp": "2026-02-10T23:20:02.000Z",
+        "rule": {
+          "level": 3,
+          "description": "Windows Eventchannel event",
+          "id": "60009",
+          "firedtimes": 1,
+          "mail": false,
+          "groups": ["windows", "eventchannel"]
+        },
+        "agent": {
+          "id": "012",
+          "name": "DC01",
+          "ip": "10.1.0.99"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1707600000.600003",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "4769",
+              "channel": "Security",
+              "providerName": "Microsoft-Windows-Security-Auditing",
+              "computer": "DC01.yourcompany.local",
+              "level": "0",
+              "task": "14339",
+              "keywords": "0x8020000000000000",
+              "severityValue": "AUDIT_SUCCESS"
+            },
+            "eventdata": {
+              "targetUserName": "svc_exchange",
+              "targetDomainName": "YOURCOMPANY.LOCAL",
+              "serviceName": "HTTP/mail.yourcompany.local",
+              "serviceId": "S-1-5-21-3298120035-3471069779-879265153-1110",
+              "ticketOptions": "0x40810000",
+              "ticketEncryptionType": "0x17",
+              "ipAddress": "::ffff:10.1.0.50",
+              "ipPort": "56789",
+              "status": "0x0",
+              "logonGuid": "{00000000-0000-0000-0000-000000000000}",
+              "transmittedServices": "-"
+            }
+          }
+        }
+      }
+    }
+  ]
+}

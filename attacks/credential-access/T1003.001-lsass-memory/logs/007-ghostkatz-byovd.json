@@ -1,0 +1,383 @@
+{
+  "_metadata": {
+    "attack_id": "T1003.001",
+    "variation": "007",
+    "name": "GhostKatz BYOVD Credential Dumping",
+    "description": "Simulates GhostKatz tool using vulnerable kernel drivers (BYOVD) to extract LSASS credentials via physical memory read, bypassing user-mode detection",
+    "expected_detection": "CRITICAL",
+    "kill_chain_phase": "credential-access",
+    "format": "wazuh-native",
+    "format_version": "2.0",
+    "tool": "GhostKatz",
+    "references": ["https://github.com/RainbowDynamix/GhostKatz"]
+  },
+  "attacker_profile": {
+    "c2_framework": "Cobalt Strike",
+    "beacon_process": "rundll32.exe",
+    "target": "LSASS credentials",
+    "compromised_account": "CORP\\operator"
+  },
+  "logs": [
+    {
+      "_comment": "Phase 1: Cobalt Strike beacon drops TPwSav vulnerable driver",
+      "sequence": 1,
+      "relative_time": "T+0:00:00",
+      "timestamp": "2026-02-02T23:00:00.000Z",
+      "log": {
+        "timestamp": "2026-02-02T23:00:00.000+0000",
+        "rule": {
+          "level": 5,
+          "description": "Sysmon - Event 11: File created",
+          "id": "92011",
+          "mitre": {
+            "id": ["T1068"],
+            "tactic": ["Privilege Escalation"],
+            "technique": ["Exploitation for Privilege Escalation"]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": ["sysmon", "sysmon_event11", "windows"]
+        },
+        "agent": {"id": "007", "name": "WS01", "ip": "10.1.0.20"},
+        "manager": {"name": "wazuh.manager"},
+        "id": "1707100000.500001",
+        "decoder": {"name": "windows_eventchannel"},
+        "location": "EventChannel",
+        "_fomorian_test": true,
+        "_fomorian_batch": "ghostkatz-byovd",
+        "_fomorian_attack_id": "T1068",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "11",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "systemTime": "2026-02-02T23:00:00.000000000Z"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-02 23:00:00.000",
+              "processGuid": "{12345678-DDDD-EEEE-FFFF-500000000001}",
+              "processId": "4892",
+              "image": "C:\\Windows\\System32\\rundll32.exe",
+              "targetFilename": "C:\\Users\\operator\\AppData\\Local\\Temp\\TPwSav.sys",
+              "creationUtcTime": "2026-02-02 23:00:00.000",
+              "user": "CORP\\operator"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Phase 2: Vulnerable driver loaded into kernel - TPwSav (Sysmon Event 6)",
+      "sequence": 2,
+      "relative_time": "T+0:00:02",
+      "timestamp": "2026-02-02T23:00:02.000Z",
+      "log": {
+        "timestamp": "2026-02-02T23:00:02.000+0000",
+        "rule": {
+          "level": 10,
+          "description": "Sysmon - Event 6: Driver loaded",
+          "id": "92006",
+          "mitre": {
+            "id": ["T1068", "T1014"],
+            "tactic": ["Privilege Escalation", "Defense Evasion"],
+            "technique": ["Exploitation for Privilege Escalation", "Rootkit"]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": ["sysmon", "sysmon_event6", "windows"]
+        },
+        "agent": {"id": "007", "name": "WS01", "ip": "10.1.0.20"},
+        "manager": {"name": "wazuh.manager"},
+        "id": "1707100002.500002",
+        "decoder": {"name": "windows_eventchannel"},
+        "location": "EventChannel",
+        "_fomorian_test": true,
+        "_fomorian_batch": "ghostkatz-byovd",
+        "_fomorian_attack_id": "T1068",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "6",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "systemTime": "2026-02-02T23:00:02.000000000Z"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-02 23:00:02.000",
+              "imageLoaded": "C:\\Users\\operator\\AppData\\Local\\Temp\\TPwSav.sys",
+              "hashes": "SHA256=011DF46E94218CBB2F0B8DA13AB3CEC397246FDC63436E58B1BF597550A647F6",
+              "signed": "true",
+              "signature": "Toshiba Corporation",
+              "signatureStatus": "Valid"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Phase 3: Alternative - ThrottleStop driver file created",
+      "sequence": 3,
+      "relative_time": "T+0:00:05",
+      "timestamp": "2026-02-02T23:00:05.000Z",
+      "log": {
+        "timestamp": "2026-02-02T23:00:05.000+0000",
+        "rule": {
+          "level": 5,
+          "description": "Sysmon - Event 11: File created",
+          "id": "92011",
+          "mitre": {
+            "id": ["T1068"],
+            "tactic": ["Privilege Escalation"],
+            "technique": ["Exploitation for Privilege Escalation"]
+          },
+          "firedtimes": 2,
+          "mail": false,
+          "groups": ["sysmon", "sysmon_event11", "windows"]
+        },
+        "agent": {"id": "007", "name": "WS01", "ip": "10.1.0.20"},
+        "manager": {"name": "wazuh.manager"},
+        "id": "1707100005.500003",
+        "decoder": {"name": "windows_eventchannel"},
+        "location": "EventChannel",
+        "_fomorian_test": true,
+        "_fomorian_batch": "ghostkatz-byovd",
+        "_fomorian_attack_id": "T1068",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "11",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "systemTime": "2026-02-02T23:00:05.000000000Z"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-02 23:00:05.000",
+              "processGuid": "{12345678-DDDD-EEEE-FFFF-500000000001}",
+              "processId": "4892",
+              "image": "C:\\Windows\\System32\\rundll32.exe",
+              "targetFilename": "C:\\ProgramData\\ThrottleStop\\ThrottleStop.sys",
+              "creationUtcTime": "2026-02-02 23:00:05.000",
+              "user": "CORP\\operator"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Phase 4: ThrottleStop driver loaded into kernel",
+      "sequence": 4,
+      "relative_time": "T+0:00:07",
+      "timestamp": "2026-02-02T23:00:07.000Z",
+      "log": {
+        "timestamp": "2026-02-02T23:00:07.000+0000",
+        "rule": {
+          "level": 10,
+          "description": "Sysmon - Event 6: Driver loaded",
+          "id": "92006",
+          "mitre": {
+            "id": ["T1068", "T1014"],
+            "tactic": ["Privilege Escalation", "Defense Evasion"],
+            "technique": ["Exploitation for Privilege Escalation", "Rootkit"]
+          },
+          "firedtimes": 2,
+          "mail": false,
+          "groups": ["sysmon", "sysmon_event6", "windows"]
+        },
+        "agent": {"id": "007", "name": "WS01", "ip": "10.1.0.20"},
+        "manager": {"name": "wazuh.manager"},
+        "id": "1707100007.500004",
+        "decoder": {"name": "windows_eventchannel"},
+        "location": "EventChannel",
+        "_fomorian_test": true,
+        "_fomorian_batch": "ghostkatz-byovd",
+        "_fomorian_attack_id": "T1068",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "6",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "systemTime": "2026-02-02T23:00:07.000000000Z"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-02 23:00:07.000",
+              "imageLoaded": "C:\\ProgramData\\ThrottleStop\\ThrottleStop.sys",
+              "hashes": "SHA256=16F83F056177C4EC24C7E99D01CA9D9D6713BD0497EEEDB777A3FFEFA99C97F0",
+              "signed": "true",
+              "signature": "TechPowerUp",
+              "signatureStatus": "Valid"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Phase 5: Beacon process loading driver via Sysmon Event 7",
+      "sequence": 5,
+      "relative_time": "T+0:00:10",
+      "timestamp": "2026-02-02T23:00:10.000Z",
+      "log": {
+        "timestamp": "2026-02-02T23:00:10.000+0000",
+        "rule": {
+          "level": 6,
+          "description": "Sysmon - Event 7: Image loaded",
+          "id": "92007",
+          "mitre": {
+            "id": ["T1068"],
+            "tactic": ["Privilege Escalation"],
+            "technique": ["Exploitation for Privilege Escalation"]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": ["sysmon", "sysmon_event7", "windows"]
+        },
+        "agent": {"id": "007", "name": "WS01", "ip": "10.1.0.20"},
+        "manager": {"name": "wazuh.manager"},
+        "id": "1707100010.500005",
+        "decoder": {"name": "windows_eventchannel"},
+        "location": "EventChannel",
+        "_fomorian_test": true,
+        "_fomorian_batch": "ghostkatz-byovd",
+        "_fomorian_attack_id": "T1003.001",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "7",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "systemTime": "2026-02-02T23:00:10.000000000Z"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-02 23:00:10.000",
+              "processGuid": "{12345678-DDDD-EEEE-FFFF-500000000001}",
+              "processId": "4892",
+              "image": "C:\\Windows\\System32\\rundll32.exe",
+              "imageLoaded": "C:\\Users\\operator\\AppData\\Local\\Temp\\TPwSav.sys",
+              "fileVersion": "1.0.0.0",
+              "description": "TPwSav Driver",
+              "product": "Toshiba Power Saver",
+              "company": "Toshiba Corporation",
+              "originalFileName": "TPwSav.sys",
+              "hashes": "SHA256=011DF46E94218CBB2F0B8DA13AB3CEC397246FDC63436E58B1BF597550A647F6",
+              "signed": "true",
+              "signature": "Toshiba Corporation",
+              "signatureStatus": "Valid",
+              "user": "CORP\\operator"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Phase 6: GhostKatz executing via BOF - credential extraction begins",
+      "sequence": 6,
+      "relative_time": "T+0:00:15",
+      "timestamp": "2026-02-02T23:00:15.000Z",
+      "log": {
+        "timestamp": "2026-02-02T23:00:15.000+0000",
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 10: Process accessed",
+          "id": "92010",
+          "mitre": {
+            "id": ["T1003.001"],
+            "tactic": ["Credential Access"],
+            "technique": ["LSASS Memory"]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": ["sysmon", "sysmon_event10", "windows"]
+        },
+        "agent": {"id": "007", "name": "WS01", "ip": "10.1.0.20"},
+        "manager": {"name": "wazuh.manager"},
+        "id": "1707100015.500006",
+        "decoder": {"name": "windows_eventchannel"},
+        "location": "EventChannel",
+        "_fomorian_test": true,
+        "_fomorian_batch": "ghostkatz-byovd",
+        "_fomorian_attack_id": "T1003.001",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "10",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "systemTime": "2026-02-02T23:00:15.000000000Z"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-02 23:00:15.000",
+              "sourceProcessGuid": "{12345678-DDDD-EEEE-FFFF-500000000001}",
+              "sourceProcessId": "4892",
+              "sourceThreadId": "6128",
+              "sourceImage": "C:\\Windows\\System32\\rundll32.exe",
+              "targetProcessGuid": "{12345678-0000-0000-0000-000000000004}",
+              "targetProcessId": "672",
+              "targetImage": "C:\\Windows\\System32\\lsass.exe",
+              "grantedAccess": "0x1010",
+              "callTrace": "C:\\Windows\\SYSTEM32\\ntdll.dll+9d4c4|C:\\Windows\\System32\\KERNELBASE.dll+2c13e|UNKNOWN(000001F8A2B40000)",
+              "sourceUser": "CORP\\operator",
+              "targetUser": "NT AUTHORITY\\SYSTEM"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Phase 7: Secondary driver drop in ProgramData",
+      "sequence": 7,
+      "relative_time": "T+0:00:20",
+      "timestamp": "2026-02-02T23:00:20.000Z",
+      "log": {
+        "timestamp": "2026-02-02T23:00:20.000+0000",
+        "rule": {
+          "level": 5,
+          "description": "Sysmon - Event 11: File created",
+          "id": "92011",
+          "mitre": {
+            "id": ["T1068"],
+            "tactic": ["Privilege Escalation"],
+            "technique": ["Exploitation for Privilege Escalation"]
+          },
+          "firedtimes": 3,
+          "mail": false,
+          "groups": ["sysmon", "sysmon_event11", "windows"]
+        },
+        "agent": {"id": "007", "name": "WS01", "ip": "10.1.0.20"},
+        "manager": {"name": "wazuh.manager"},
+        "id": "1707100020.500007",
+        "decoder": {"name": "windows_eventchannel"},
+        "location": "EventChannel",
+        "_fomorian_test": true,
+        "_fomorian_batch": "ghostkatz-byovd",
+        "_fomorian_attack_id": "T1068",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "11",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "systemTime": "2026-02-02T23:00:20.000000000Z"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-02 23:00:20.000",
+              "processGuid": "{12345678-DDDD-EEEE-FFFF-500000000002}",
+              "processId": "5124",
+              "image": "C:\\Windows\\System32\\svchost.exe",
+              "targetFilename": "C:\\ProgramData\\vuln_driver.sys",
+              "creationUtcTime": "2026-02-02 23:00:20.000",
+              "user": "NT AUTHORITY\\SYSTEM"
+            }
+          }
+        }
+      }
+    }
+  ]
+}

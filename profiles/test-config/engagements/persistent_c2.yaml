@@ -1,0 +1,10 @@
+type: persistent_c2
+name: APT Persistent Access Simulation
+persistent_c2:
+  beacon_interval_min: 60
+  beacon_interval_max: 300
+  persistence_methods:
+  - registry_run_key
+  - scheduled_task
+  - wmi_subscription
+  check_in_schedule: working_hours

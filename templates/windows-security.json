@@ -1,0 +1,256 @@
+{
+  "_description": "Windows Security Event Log Templates",
+  "_usage": "Authentication, privilege use, account management events",
+
+  "event_4624_successful_logon": {
+    "_description": "Successful logon - Lateral movement, credential use",
+    "template": {
+      "winlog": {
+        "channel": "Security",
+        "event_id": 4624,
+        "provider_name": "Microsoft-Windows-Security-Auditing",
+        "computer_name": "{{hostname}}",
+        "event_data": {
+          "SubjectUserSid": "{{subject_sid}}",
+          "SubjectUserName": "{{subject_user}}",
+          "SubjectDomainName": "{{subject_domain}}",
+          "SubjectLogonId": "{{subject_logon_id}}",
+          "TargetUserSid": "{{target_sid}}",
+          "TargetUserName": "{{target_user}}",
+          "TargetDomainName": "{{target_domain}}",
+          "TargetLogonId": "{{target_logon_id}}",
+          "LogonType": "{{logon_type}}",
+          "LogonProcessName": "{{logon_process}}",
+          "AuthenticationPackageName": "{{auth_package}}",
+          "WorkstationName": "{{workstation}}",
+          "LogonGuid": "{{logon_guid}}",
+          "TransmittedServices": "-",
+          "LmPackageName": "-",
+          "KeyLength": "0",
+          "ProcessId": "{{pid}}",
+          "ProcessName": "{{process_name}}",
+          "IpAddress": "{{source_ip}}",
+          "IpPort": "{{source_port}}",
+          "ImpersonationLevel": "{{impersonation_level}}",
+          "RestrictedAdminMode": "-",
+          "TargetOutboundUserName": "-",
+          "TargetOutboundDomainName": "-",
+          "VirtualAccount": "No",
+          "TargetLinkedLogonId": "0x0",
+          "ElevatedToken": "{{elevated_token}}"
+        }
+      },
+      "agent": {
+        "name": "{{agent_name}}",
+        "id": "{{agent_id}}"
+      }
+    },
+    "logon_types": {
+      "2": "Interactive (console)",
+      "3": "Network (SMB, etc.)",
+      "4": "Batch",
+      "5": "Service",
+      "7": "Unlock",
+      "8": "NetworkCleartext",
+      "9": "NewCredentials (runas)",
+      "10": "RemoteInteractive (RDP)",
+      "11": "CachedInteractive"
+    }
+  },
+
+  "event_4625_failed_logon": {
+    "_description": "Failed logon - Brute force, password spray",
+    "template": {
+      "winlog": {
+        "channel": "Security",
+        "event_id": 4625,
+        "provider_name": "Microsoft-Windows-Security-Auditing",
+        "computer_name": "{{hostname}}",
+        "event_data": {
+          "SubjectUserSid": "{{subject_sid}}",
+          "SubjectUserName": "{{subject_user}}",
+          "SubjectDomainName": "{{subject_domain}}",
+          "SubjectLogonId": "{{subject_logon_id}}",
+          "TargetUserSid": "S-1-0-0",
+          "TargetUserName": "{{target_user}}",
+          "TargetDomainName": "{{target_domain}}",
+          "Status": "{{status}}",
+          "FailureReason": "{{failure_reason}}",
+          "SubStatus": "{{sub_status}}",
+          "LogonType": "{{logon_type}}",
+          "LogonProcessName": "{{logon_process}}",
+          "AuthenticationPackageName": "{{auth_package}}",
+          "WorkstationName": "{{workstation}}",
+          "TransmittedServices": "-",
+          "LmPackageName": "-",
+          "KeyLength": "0",
+          "ProcessId": "{{pid}}",
+          "ProcessName": "{{process_name}}",
+          "IpAddress": "{{source_ip}}",
+          "IpPort": "{{source_port}}"
+        }
+      },
+      "agent": {
+        "name": "{{agent_name}}",
+        "id": "{{agent_id}}"
+      }
+    },
+    "failure_codes": {
+      "0xC000006D": "Bad username or password",
+      "0xC000006A": "Incorrect password",
+      "0xC0000064": "User does not exist",
+      "0xC000006F": "Outside authorized hours",
+      "0xC0000070": "Unauthorized workstation",
+      "0xC0000071": "Expired password",
+      "0xC0000072": "Account disabled",
+      "0xC0000234": "Account locked out"
+    }
+  },
+
+  "event_4648_explicit_credential": {
+    "_description": "Logon with explicit credentials - RunAs, scheduled tasks",
+    "template": {
+      "winlog": {
+        "channel": "Security",
+        "event_id": 4648,
+        "provider_name": "Microsoft-Windows-Security-Auditing",
+        "computer_name": "{{hostname}}",
+        "event_data": {
+          "SubjectUserSid": "{{subject_sid}}",
+          "SubjectUserName": "{{subject_user}}",
+          "SubjectDomainName": "{{subject_domain}}",
+          "SubjectLogonId": "{{subject_logon_id}}",
+          "LogonGuid": "{{logon_guid}}",
+          "TargetUserName": "{{target_user}}",
+          "TargetDomainName": "{{target_domain}}",
+          "TargetLogonGuid": "{{target_logon_guid}}",
+          "TargetServerName": "{{target_server}}",
+          "TargetInfo": "{{target_info}}",
+          "ProcessId": "{{pid}}",
+          "ProcessName": "{{process_name}}",
+          "IpAddress": "{{source_ip}}",
+          "IpPort": "{{source_port}}"
+        }
+      },
+      "agent": {
+        "name": "{{agent_name}}",
+        "id": "{{agent_id}}"
+      }
+    }
+  },
+
+  "event_4672_special_privileges": {
+    "_description": "Special privileges assigned - Admin logon detection",
+    "template": {
+      "winlog": {
+        "channel": "Security",
+        "event_id": 4672,
+        "provider_name": "Microsoft-Windows-Security-Auditing",
+        "computer_name": "{{hostname}}",
+        "event_data": {
+          "SubjectUserSid": "{{subject_sid}}",
+          "SubjectUserName": "{{subject_user}}",
+          "SubjectDomainName": "{{subject_domain}}",
+          "SubjectLogonId": "{{subject_logon_id}}",
+          "PrivilegeList": "{{privilege_list}}"
+        }
+      },
+      "agent": {
+        "name": "{{agent_name}}",
+        "id": "{{agent_id}}"
+      }
+    },
+    "common_privileges": [
+      "SeDebugPrivilege",
+      "SeTakeOwnershipPrivilege",
+      "SeLoadDriverPrivilege",
+      "SeBackupPrivilege",
+      "SeRestorePrivilege",
+      "SeImpersonatePrivilege"
+    ]
+  },
+
+  "event_4688_process_creation": {
+    "_description": "Process creation (non-Sysmon) - Execution detection",
+    "template": {
+      "winlog": {
+        "channel": "Security",
+        "event_id": 4688,
+        "provider_name": "Microsoft-Windows-Security-Auditing",
+        "computer_name": "{{hostname}}",
+        "event_data": {
+          "SubjectUserSid": "{{subject_sid}}",
+          "SubjectUserName": "{{subject_user}}",
+          "SubjectDomainName": "{{subject_domain}}",
+          "SubjectLogonId": "{{subject_logon_id}}",
+          "NewProcessId": "{{new_pid}}",
+          "NewProcessName": "{{new_process}}",
+          "TokenElevationType": "{{elevation_type}}",
+          "ProcessId": "{{parent_pid}}",
+          "CommandLine": "{{command_line}}",
+          "TargetUserSid": "{{target_sid}}",
+          "TargetUserName": "{{target_user}}",
+          "TargetDomainName": "{{target_domain}}",
+          "TargetLogonId": "{{target_logon_id}}",
+          "ParentProcessName": "{{parent_process}}",
+          "MandatoryLabel": "{{mandatory_label}}"
+        }
+      },
+      "agent": {
+        "name": "{{agent_name}}",
+        "id": "{{agent_id}}"
+      }
+    }
+  },
+
+  "event_1102_audit_log_cleared": {
+    "_description": "Security log cleared - Defense evasion",
+    "template": {
+      "winlog": {
+        "channel": "Security",
+        "event_id": 1102,
+        "provider_name": "Microsoft-Windows-Eventlog",
+        "computer_name": "{{hostname}}",
+        "event_data": {
+          "SubjectUserSid": "{{subject_sid}}",
+          "SubjectUserName": "{{subject_user}}",
+          "SubjectDomainName": "{{subject_domain}}",
+          "SubjectLogonId": "{{subject_logon_id}}"
+        }
+      },
+      "agent": {
+        "name": "{{agent_name}}",
+        "id": "{{agent_id}}"
+      }
+    }
+  },
+
+  "event_4771_kerberos_preauth_failed": {
+    "_description": "Kerberos pre-authentication failed - Password spray",
+    "template": {
+      "winlog": {
+        "channel": "Security",
+        "event_id": 4771,
+        "provider_name": "Microsoft-Windows-Security-Auditing",
+        "computer_name": "{{hostname}}",
+        "event_data": {
+          "TargetUserName": "{{target_user}}",
+          "TargetSid": "{{target_sid}}",
+          "ServiceName": "krbtgt/{{domain}}",
+          "TicketOptions": "{{ticket_options}}",
+          "Status": "{{status}}",
+          "PreAuthType": "{{preauth_type}}",
+          "IpAddress": "{{source_ip}}",
+          "IpPort": "{{source_port}}",
+          "CertIssuerName": "",
+          "CertSerialNumber": "",
+          "CertThumbprint": ""
+        }
+      },
+      "agent": {
+        "name": "{{agent_name}}",
+        "id": "{{agent_id}}"
+      }
+    }
+  }
+}

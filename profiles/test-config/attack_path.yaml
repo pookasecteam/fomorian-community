@@ -1,0 +1,7 @@
+name: Basic Attack Path
+entry_point: WS01
+path:
+- host: WS01
+  role: initial_compromise
+  techniques:
+  - T1059.001

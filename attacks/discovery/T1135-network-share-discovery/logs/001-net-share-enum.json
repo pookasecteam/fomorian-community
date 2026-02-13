@@ -1,0 +1,234 @@
+{
+  "_metadata": {
+    "attack_id": "T1135",
+    "variation": "001",
+    "name": "Network Share Discovery",
+    "description": "Attacker enumerating network shares for sensitive data",
+    "expected_detection": "MEDIUM",
+    "expected_soar": "discovery-detection",
+    "kill_chain_phase": "discovery",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Sysmon Event 1 - net share enumeration",
+      "sequence": 1,
+      "timestamp": "2026-01-29T14:30:00.000Z",
+      "log": {
+        "timestamp": "",
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 1: Network Share Discovery",
+          "id": "100100",
+          "mitre": {
+            "id": [
+              "T1135"
+            ],
+            "tactic": [
+              "Discovery"
+            ],
+            "technique": [
+              "Network Share Discovery"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "007",
+          "name": "WS01",
+          "ip": "10.1.0.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000000.424120774",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "opcode": "0",
+              "keywords": "0x8000000000000000",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-01-29 14:30:00.000",
+              "processGuid": "{SHARE-001-0001-0001-000000000001}",
+              "processId": "14000",
+              "image": "C:\\Windows\\System32\\net.exe",
+              "commandLine": "net view \\\\FILESERVER01 /all",
+              "currentDirectory": "C:\\Users\\john.doe\\",
+              "user": "CORP\\john.doe",
+              "integrityLevel": "Medium",
+              "parentProcessGuid": "{SHARE-001-0001-0001-000000000000}",
+              "parentProcessId": "13800",
+              "parentImage": "C:\\Windows\\System32\\cmd.exe",
+              "parentCommandLine": "cmd.exe"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Sysmon Event 1 - net share on DC",
+      "sequence": 2,
+      "timestamp": "2026-01-29T14:30:10.000Z",
+      "log": {
+        "timestamp": "",
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 1: Network Share Discovery",
+          "id": "100100",
+          "mitre": {
+            "id": [
+              "T1135"
+            ],
+            "tactic": [
+              "Discovery"
+            ],
+            "technique": [
+              "Network Share Discovery"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "007",
+          "name": "WS01",
+          "ip": "10.1.0.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000000.625172135",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "opcode": "0",
+              "keywords": "0x8000000000000000",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-01-29 14:30:10.000",
+              "processGuid": "{SHARE-001-0001-0001-000000000002}",
+              "processId": "14100",
+              "image": "C:\\Windows\\System32\\net.exe",
+              "commandLine": "net view \\\\DC01 /all",
+              "currentDirectory": "C:\\Users\\john.doe\\",
+              "user": "CORP\\john.doe",
+              "integrityLevel": "Medium",
+              "parentProcessGuid": "{SHARE-001-0001-0001-000000000000}",
+              "parentProcessId": "13800",
+              "parentImage": "C:\\Windows\\System32\\cmd.exe",
+              "parentCommandLine": "cmd.exe"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Sysmon Event 3 - SMB connection during enumeration",
+      "sequence": 3,
+      "timestamp": "2026-01-29T14:30:01.000Z",
+      "log": {
+        "timestamp": "",
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 3: Network Share Discovery",
+          "id": "100100",
+          "mitre": {
+            "id": [
+              "T1135"
+            ],
+            "tactic": [
+              "Discovery"
+            ],
+            "technique": [
+              "Network Share Discovery"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event3",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "007",
+          "name": "WS01",
+          "ip": "10.1.0.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000000.984137681",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "3",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "opcode": "0",
+              "keywords": "0x8000000000000000",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-01-29 14:30:01.000",
+              "processGuid": "{SHARE-001-0001-0001-000000000001}",
+              "processId": "14000",
+              "image": "C:\\Windows\\System32\\net.exe",
+              "user": "CORP\\john.doe",
+              "protocol": "tcp",
+              "initiated": "true",
+              "sourceIp": "10.1.1.50",
+              "sourcePort": "60000",
+              "destinationIp": "10.1.1.20",
+              "destinationHostname": "FILESERVER01.corp.local",
+              "destinationPort": "445"
+            }
+          }
+        }
+      }
+    }
+  ]
+}

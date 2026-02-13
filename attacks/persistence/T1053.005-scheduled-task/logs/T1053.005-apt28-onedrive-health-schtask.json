@@ -1,0 +1,72 @@
+{
+  "_metadata": {
+    "attack_id": "T1053.005",
+    "variation": "001",
+    "name": "APT28 MiniDoor - OneDriveHealth Scheduled Task",
+    "description": "Based on APT28 MiniDoor/PixyNetLoader persistence via OneDriveHealth scheduled task",
+    "expected_detection": "HIGH",
+    "kill_chain_phase": "persistence",
+    "source_url": "https://thehackernews.com/2026/02/apt28-uses-microsoft-office-cve-2026.html",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Sysmon Event 1 - Schtasks creating OneDriveHealth task",
+      "sequence": 1,
+      "timestamp": "2026-02-03T10:05:00.000Z",
+      "log": {
+        "timestamp": "",
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 1: Scheduled task creation",
+          "id": "92151",
+          "mitre": {
+            "id": ["T1053.005"],
+            "tactic": ["Persistence", "Execution"],
+            "technique": ["Scheduled Task"]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": ["sysmon", "sysmon_event1", "windows"]
+        },
+        "agent": {"id": "007", "name": "WS01", "ip": "10.1.0.20"},
+        "manager": {"name": "wazuh.manager"},
+        "id": "1706951100.000001",
+        "decoder": {"name": "windows_eventchannel"},
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-03 10:05:00.000",
+              "processGuid": "{B2C3D4E5-2345-6789-BCDE-F01234567890}",
+              "processId": "5124",
+              "image": "C:\\Windows\\System32\\schtasks.exe",
+              "commandLine": "schtasks /create /tn \"OneDriveHealth\" /tr \"C:\\Users\\victim\\AppData\\Local\\Microsoft\\OneDrive\\OneDriveHealth.exe\" /sc onlogon /ru SYSTEM",
+              "currentDirectory": "C:\\Users\\victim\\",
+              "user": "CORP\\victim",
+              "integrityLevel": "High",
+              "hashes": "SHA256=SCHTASKS_HASH",
+              "parentProcessGuid": "{PARENT-GUID}",
+              "parentProcessId": "4532",
+              "parentImage": "C:\\Windows\\System32\\cmd.exe",
+              "parentCommandLine": "cmd.exe /c"
+            }
+          }
+        },
+        "_fomorian_test": true,
+        "_fomorian_attack_id": "T1053.005",
+        "_fomorian_batch": "morning-intel-20260203"
+      }
+    }
+  ]
+}

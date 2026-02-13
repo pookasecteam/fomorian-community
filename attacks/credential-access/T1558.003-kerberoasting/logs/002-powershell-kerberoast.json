@@ -1,0 +1,104 @@
+{
+  "_metadata": {
+    "attack_id": "T1558.003",
+    "variation": "002",
+    "name": "PowerShell Kerberoasting",
+    "description": "Attacker performs Kerberoasting via native PowerShell",
+    "expected_detection": "HIGH",
+    "kill_chain_phase": "credential-access",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Get-ADUser with SPN filter",
+      "sequence": 1,
+      "timestamp": "2026-02-04T14:40:00.000Z",
+      "log": {
+        "timestamp": "",
+        "rule": {
+          "level": 14,
+          "description": "Sysmon - Event 1: PowerShell Kerberoasting - SPN Query",
+          "id": "92151",
+          "mitre": {
+            "id": ["T1558.003"],
+            "tactic": ["Credential Access"],
+            "technique": ["Kerberoasting"]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": ["sysmon", "sysmon_event1", "windows"]
+        },
+        "agent": {"id": "007", "name": "WS01", "ip": "10.1.0.20"},
+        "manager": {"name": "wazuh.manager"},
+        "id": "1700000001.558003001",
+        "decoder": {"name": "windows_eventchannel"},
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local"
+            },
+            "eventdata": {
+              "image": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+              "commandLine": "powershell.exe -c \"Get-ADUser -Filter {ServicePrincipalName -ne '$null'} -Properties ServicePrincipalName\"",
+              "user": "CORP\\attacker",
+              "parentImage": "C:\\Windows\\System32\\cmd.exe"
+            }
+          }
+        },
+        "_fomorian_test": true,
+        "_fomorian_attack_id": "T1558.003",
+        "_fomorian_batch": "campaign8-powerstrike"
+      }
+    },
+    {
+      "_comment": "Request TGS tickets for offline cracking",
+      "sequence": 2,
+      "timestamp": "2026-02-04T14:40:10.000Z",
+      "log": {
+        "timestamp": "",
+        "rule": {
+          "level": 15,
+          "description": "Sysmon - Event 1: PowerShell Kerberoasting - TGS Request",
+          "id": "92151",
+          "mitre": {
+            "id": ["T1558.003"],
+            "tactic": ["Credential Access"],
+            "technique": ["Kerberoasting"]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": ["sysmon", "sysmon_event1", "windows"]
+        },
+        "agent": {"id": "007", "name": "WS01", "ip": "10.1.0.20"},
+        "manager": {"name": "wazuh.manager"},
+        "id": "1700000001.558003002",
+        "decoder": {"name": "windows_eventchannel"},
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local"
+            },
+            "eventdata": {
+              "image": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+              "commandLine": "powershell.exe -c \"Add-Type -AssemblyName System.IdentityModel;New-Object System.IdentityModel.Tokens.KerberosRequestorSecurityToken -ArgumentList 'MSSQLSvc/sql01.corp.local:1433'\"",
+              "user": "CORP\\attacker",
+              "parentImage": "C:\\Windows\\System32\\cmd.exe"
+            }
+          }
+        },
+        "_fomorian_test": true,
+        "_fomorian_attack_id": "T1558.003",
+        "_fomorian_batch": "campaign8-powerstrike"
+      }
+    }
+  ]
+}

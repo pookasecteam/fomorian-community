@@ -1,0 +1,89 @@
+{
+  "_metadata": {
+    "attack_id": "T1003.001",
+    "variation": "006",
+    "name": "Windows Defender LSASS Access (False Positive)",
+    "description": "Legitimate Windows Defender scanning LSASS. Should NOT trigger credential dumping alerts.",
+    "expected_detection": "NONE",
+    "expected_soar": "none - should be filtered",
+    "notes": "Tests false positive filtering. Our SOAR workflow should subtract score for legitimate security tools.",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Sysmon Event 10 - Windows Defender accessing LSASS",
+      "sequence": 1,
+      "timestamp": "2026-01-29T16:30:00.123Z",
+      "log": {
+        "timestamp": "",
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 10: Windows Defender LSASS Access (False Positive)",
+          "id": "100100",
+          "mitre": {
+            "id": [
+              "T1003.001"
+            ],
+            "tactic": [
+              "Unknown"
+            ],
+            "technique": [
+              "Windows Defender LSASS Access (False Positive)"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event10",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "007",
+          "name": "WS01",
+          "ip": "10.1.0.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000000.686195064",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "10",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "opcode": "0",
+              "keywords": "0x8000000000000000",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "ruleName": "",
+              "utcTime": "2026-01-29 16:30:00.123",
+              "sourceProcessGUID": "{12345678-AAAA-AAAA-AAAA-AAAAAAAAA001}",
+              "sourceProcessId": "3456",
+              "sourceThreadId": "3460",
+              "sourceImage": "C:\\ProgramData\\Microsoft\\Windows Defender\\Platform\\4.18.2301.6-0\\MsMpEng.exe",
+              "targetProcessGUID": "{12345678-0000-0000-0000-000000000001}",
+              "targetProcessId": "672",
+              "targetImage": "C:\\Windows\\System32\\lsass.exe",
+              "grantedAccess": "0x1410",
+              "callTrace": "C:\\Windows\\SYSTEM32\\ntdll.dll+9d4c4|C:\\ProgramData\\Microsoft\\Windows Defender\\Platform\\4.18.2301.6-0\\mpengine.dll+1a2b3c",
+              "sourceUser": "NT AUTHORITY\\SYSTEM",
+              "targetUser": "NT AUTHORITY\\SYSTEM"
+            }
+          }
+        }
+      }
+    }
+  ]
+}

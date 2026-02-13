@@ -1,0 +1,616 @@
+{
+  "_metadata": {
+    "attack_id": "T1490",
+    "variation": "001",
+    "name": "Shadow Copy Deletion",
+    "description": "Attacker deleting Volume Shadow Copies to prevent recovery",
+    "expected_detection": "CRITICAL",
+    "expected_soar": "ransomware-response",
+    "kill_chain_phase": "impact",
+    "notes": "Shadow copy deletion is a strong ransomware indicator. Generates both Sysmon and Windows Security logs.",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Sysmon Event 1 - vssadmin delete shadows",
+      "sequence": 1,
+      "timestamp": "",
+      "log": {
+        "timestamp": "",
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 1: Shadow Copy Deletion",
+          "id": "100100",
+          "mitre": {
+            "id": [
+              "T1490"
+            ],
+            "tactic": [
+              "Impact"
+            ],
+            "technique": [
+              "Shadow Copy Deletion"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "{{agent_id}}",
+          "name": "{{agent_name}}",
+          "ip": "10.1.0.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000000.168608049",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "{{hostname}}",
+              "level": "4",
+              "task": "1",
+              "opcode": "0",
+              "keywords": "0x8000000000000000",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "{{utc_time}}",
+              "processGuid": "{{guid}}",
+              "processId": "{{pid}}",
+              "image": "C:\\Windows\\System32\\vssadmin.exe",
+              "commandLine": "vssadmin.exe delete shadows /all /quiet",
+              "currentDirectory": "C:\\Windows\\System32\\",
+              "user": "{{domain_upper}}\\{{username}}",
+              "integrityLevel": "High",
+              "hashes": "SHA256=8B8D3D5C6D2E3F4A5B6C7D8E9F0A1B2C3D4E5F6A7B8C9D0E1F2A3B4C5D6E7F8A",
+              "parentProcessGuid": "{{parent_guid}}",
+              "parentProcessId": "{{parent_pid}}",
+              "parentImage": "C:\\Users\\Public\\cryptolocker.exe",
+              "parentCommandLine": "cryptolocker.exe --encrypt --path C:\\Users\\{{username}}\\Documents"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Windows Security Event 4688 - vssadmin process creation",
+      "sequence": 2,
+      "timestamp": "",
+      "log": {
+        "timestamp": "",
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 4688: Shadow Copy Deletion",
+          "id": "100100",
+          "mitre": {
+            "id": [
+              "T1490"
+            ],
+            "tactic": [
+              "Impact"
+            ],
+            "technique": [
+              "Shadow Copy Deletion"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event4688",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "{{agent_id}}",
+          "name": "{{agent_name}}",
+          "ip": "10.1.0.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000000.379738039",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "4688",
+              "channel": "Security",
+              "providerName": "Microsoft-Windows-Security-Auditing",
+              "computer": "{{hostname}}",
+              "level": "4",
+              "task": "1",
+              "opcode": "0",
+              "keywords": "0x8000000000000000",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "subjectUserSid": "S-1-5-21-1234567890-1234567890-1234567890-1001",
+              "subjectUserName": "{{username}}",
+              "subjectDomainName": "{{domain_upper}}",
+              "subjectLogonId": "0x3E7",
+              "newProcessId": "0x{{pid_hex}}",
+              "newProcessName": "C:\\Windows\\System32\\vssadmin.exe",
+              "tokenElevationType": "%%1937",
+              "processId": "0x{{parent_pid_hex}}",
+              "commandLine": "vssadmin.exe delete shadows /all /quiet",
+              "targetUserSid": "S-1-5-21-1234567890-1234567890-1234567890-1001",
+              "targetUserName": "{{username}}",
+              "targetDomainName": "{{domain_upper}}",
+              "targetLogonId": "0x3E7",
+              "parentProcessName": "C:\\Users\\Public\\cryptolocker.exe",
+              "mandatoryLabel": "S-1-16-12288"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Sysmon Event 1 - wmic shadowcopy delete",
+      "sequence": 3,
+      "timestamp": "",
+      "log": {
+        "timestamp": "",
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 1: Shadow Copy Deletion",
+          "id": "100100",
+          "mitre": {
+            "id": [
+              "T1490"
+            ],
+            "tactic": [
+              "Impact"
+            ],
+            "technique": [
+              "Shadow Copy Deletion"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "{{agent_id}}",
+          "name": "{{agent_name}}",
+          "ip": "10.1.0.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000000.505433831",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "{{hostname}}",
+              "level": "4",
+              "task": "1",
+              "opcode": "0",
+              "keywords": "0x8000000000000000",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "{{utc_time}}",
+              "processGuid": "{{guid}}",
+              "processId": "{{pid}}",
+              "image": "C:\\Windows\\System32\\wbem\\WMIC.exe",
+              "commandLine": "wmic shadowcopy delete",
+              "currentDirectory": "C:\\Windows\\System32\\",
+              "user": "{{domain_upper}}\\{{username}}",
+              "integrityLevel": "High",
+              "hashes": "SHA256=9A8B7C6D5E4F3A2B1C0D9E8F7A6B5C4D3E2F1A0B9C8D7E6F5A4B3C2D1E0F9A8B",
+              "parentProcessGuid": "{{parent_guid}}",
+              "parentProcessId": "{{parent_pid}}",
+              "parentImage": "C:\\Users\\Public\\cryptolocker.exe",
+              "parentCommandLine": "cryptolocker.exe --encrypt --path C:\\Users\\{{username}}\\Documents"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Windows Security Event 4688 - wmic process creation",
+      "sequence": 4,
+      "timestamp": "",
+      "log": {
+        "timestamp": "",
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 4688: Shadow Copy Deletion",
+          "id": "100100",
+          "mitre": {
+            "id": [
+              "T1490"
+            ],
+            "tactic": [
+              "Impact"
+            ],
+            "technique": [
+              "Shadow Copy Deletion"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event4688",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "{{agent_id}}",
+          "name": "{{agent_name}}",
+          "ip": "10.1.0.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000000.13670699",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "4688",
+              "channel": "Security",
+              "providerName": "Microsoft-Windows-Security-Auditing",
+              "computer": "{{hostname}}",
+              "level": "4",
+              "task": "1",
+              "opcode": "0",
+              "keywords": "0x8000000000000000",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "subjectUserSid": "S-1-5-21-1234567890-1234567890-1234567890-1001",
+              "subjectUserName": "{{username}}",
+              "subjectDomainName": "{{domain_upper}}",
+              "subjectLogonId": "0x3E7",
+              "newProcessId": "0x{{pid_hex}}",
+              "newProcessName": "C:\\Windows\\System32\\wbem\\WMIC.exe",
+              "tokenElevationType": "%%1937",
+              "processId": "0x{{parent_pid_hex}}",
+              "commandLine": "wmic shadowcopy delete",
+              "targetUserSid": "S-1-5-21-1234567890-1234567890-1234567890-1001",
+              "targetUserName": "{{username}}",
+              "targetDomainName": "{{domain_upper}}",
+              "targetLogonId": "0x3E7",
+              "parentProcessName": "C:\\Users\\Public\\cryptolocker.exe",
+              "mandatoryLabel": "S-1-16-12288"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Sysmon Event 1 - bcdedit disable recovery",
+      "sequence": 5,
+      "timestamp": "",
+      "log": {
+        "timestamp": "",
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 1: Shadow Copy Deletion",
+          "id": "100100",
+          "mitre": {
+            "id": [
+              "T1490"
+            ],
+            "tactic": [
+              "Impact"
+            ],
+            "technique": [
+              "Shadow Copy Deletion"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "{{agent_id}}",
+          "name": "{{agent_name}}",
+          "ip": "10.1.0.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000000.743740422",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "{{hostname}}",
+              "level": "4",
+              "task": "1",
+              "opcode": "0",
+              "keywords": "0x8000000000000000",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "{{utc_time}}",
+              "processGuid": "{{guid}}",
+              "processId": "{{pid}}",
+              "image": "C:\\Windows\\System32\\bcdedit.exe",
+              "commandLine": "bcdedit.exe /set {default} recoveryenabled No",
+              "currentDirectory": "C:\\Windows\\System32\\",
+              "user": "{{domain_upper}}\\{{username}}",
+              "integrityLevel": "High",
+              "hashes": "SHA256=1A2B3C4D5E6F7A8B9C0D1E2F3A4B5C6D7E8F9A0B1C2D3E4F5A6B7C8D9E0F1A2B",
+              "parentProcessGuid": "{{parent_guid}}",
+              "parentProcessId": "{{parent_pid}}",
+              "parentImage": "C:\\Users\\Public\\cryptolocker.exe",
+              "parentCommandLine": "cryptolocker.exe --encrypt --path C:\\Users\\{{username}}\\Documents"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Windows Security Event 4688 - bcdedit process creation",
+      "sequence": 6,
+      "timestamp": "",
+      "log": {
+        "timestamp": "",
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 4688: Shadow Copy Deletion",
+          "id": "100100",
+          "mitre": {
+            "id": [
+              "T1490"
+            ],
+            "tactic": [
+              "Impact"
+            ],
+            "technique": [
+              "Shadow Copy Deletion"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event4688",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "{{agent_id}}",
+          "name": "{{agent_name}}",
+          "ip": "10.1.0.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000000.674942622",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "4688",
+              "channel": "Security",
+              "providerName": "Microsoft-Windows-Security-Auditing",
+              "computer": "{{hostname}}",
+              "level": "4",
+              "task": "1",
+              "opcode": "0",
+              "keywords": "0x8000000000000000",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "subjectUserSid": "S-1-5-21-1234567890-1234567890-1234567890-1001",
+              "subjectUserName": "{{username}}",
+              "subjectDomainName": "{{domain_upper}}",
+              "subjectLogonId": "0x3E7",
+              "newProcessId": "0x{{pid_hex}}",
+              "newProcessName": "C:\\Windows\\System32\\bcdedit.exe",
+              "tokenElevationType": "%%1937",
+              "processId": "0x{{parent_pid_hex}}",
+              "commandLine": "bcdedit.exe /set {default} recoveryenabled No",
+              "targetUserSid": "S-1-5-21-1234567890-1234567890-1234567890-1001",
+              "targetUserName": "{{username}}",
+              "targetDomainName": "{{domain_upper}}",
+              "targetLogonId": "0x3E7",
+              "parentProcessName": "C:\\Users\\Public\\cryptolocker.exe",
+              "mandatoryLabel": "S-1-16-12288"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Sysmon Event 1 - PowerShell delete shadows alternative method",
+      "sequence": 7,
+      "timestamp": "",
+      "log": {
+        "timestamp": "",
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 1: Shadow Copy Deletion",
+          "id": "100100",
+          "mitre": {
+            "id": [
+              "T1490"
+            ],
+            "tactic": [
+              "Impact"
+            ],
+            "technique": [
+              "Shadow Copy Deletion"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "{{agent_id}}",
+          "name": "{{agent_name}}",
+          "ip": "10.1.0.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000000.831489714",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "{{hostname}}",
+              "level": "4",
+              "task": "1",
+              "opcode": "0",
+              "keywords": "0x8000000000000000",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "{{utc_time}}",
+              "processGuid": "{{guid}}",
+              "processId": "{{pid}}",
+              "image": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+              "commandLine": "powershell.exe -Command \"Get-WmiObject Win32_ShadowCopy | ForEach-Object { $_.Delete() }\"",
+              "currentDirectory": "C:\\Windows\\System32\\",
+              "user": "{{domain_upper}}\\{{username}}",
+              "integrityLevel": "High",
+              "hashes": "SHA256=DE96A6E69944335375DC1AC238336066889D9FFC7D73628EF4FE1B1B160AB32C",
+              "parentProcessGuid": "{{parent_guid}}",
+              "parentProcessId": "{{parent_pid}}",
+              "parentImage": "C:\\Users\\Public\\cryptolocker.exe",
+              "parentCommandLine": "cryptolocker.exe --encrypt --path C:\\Users\\{{username}}\\Documents"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Windows Security Event 4688 - PowerShell process creation",
+      "sequence": 8,
+      "timestamp": "",
+      "log": {
+        "timestamp": "",
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 4688: Shadow Copy Deletion",
+          "id": "100100",
+          "mitre": {
+            "id": [
+              "T1490"
+            ],
+            "tactic": [
+              "Impact"
+            ],
+            "technique": [
+              "Shadow Copy Deletion"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event4688",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "{{agent_id}}",
+          "name": "{{agent_name}}",
+          "ip": "10.1.0.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000000.540619025",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "4688",
+              "channel": "Security",
+              "providerName": "Microsoft-Windows-Security-Auditing",
+              "computer": "{{hostname}}",
+              "level": "4",
+              "task": "1",
+              "opcode": "0",
+              "keywords": "0x8000000000000000",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "subjectUserSid": "S-1-5-21-1234567890-1234567890-1234567890-1001",
+              "subjectUserName": "{{username}}",
+              "subjectDomainName": "{{domain_upper}}",
+              "subjectLogonId": "0x3E7",
+              "newProcessId": "0x{{pid_hex}}",
+              "newProcessName": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+              "tokenElevationType": "%%1937",
+              "processId": "0x{{parent_pid_hex}}",
+              "commandLine": "powershell.exe -Command \"Get-WmiObject Win32_ShadowCopy | ForEach-Object { $_.Delete() }\"",
+              "targetUserSid": "S-1-5-21-1234567890-1234567890-1234567890-1001",
+              "targetUserName": "{{username}}",
+              "targetDomainName": "{{domain_upper}}",
+              "targetLogonId": "0x3E7",
+              "parentProcessName": "C:\\Users\\Public\\cryptolocker.exe",
+              "mandatoryLabel": "S-1-16-12288"
+            }
+          }
+        }
+      }
+    }
+  ]
+}

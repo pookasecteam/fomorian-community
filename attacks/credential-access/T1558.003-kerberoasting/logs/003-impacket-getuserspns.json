@@ -1,0 +1,70 @@
+{
+  "_metadata": {
+    "attack_id": "T1558.003",
+    "variation": "003",
+    "name": "Kerberoasting - impacket-GetUserSPNs",
+    "description": "Attacker uses impacket-GetUserSPNs to request service tickets for accounts with SPNs and crack offline",
+    "expected_detection": "HIGH",
+    "kill_chain_phase": "credential-access",
+    "tool": "impacket-GetUserSPNs",
+    "command": "impacket-GetUserSPNs yourcompany.local/Administrator:\"\" -dc-ip 10.1.0.10 -request",
+    "impact": "Service account password cracking via Kerberoasting",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Event 4769 - Service ticket request for SPN (Kerberoasting)",
+      "sequence": 1,
+      "timestamp": "2026-02-11T06:00:00.000Z",
+      "log": {
+        "timestamp": "2026-02-11T06:00:00.000Z",
+        "rule": {
+          "level": 3,
+          "description": "Windows Eventchannel event",
+          "id": "60009",
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "windows",
+            "eventchannel"
+          ]
+        },
+        "agent": {
+          "id": "012",
+          "name": "DC01",
+          "ip": "10.1.0.99"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1707635600.500001",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "4769",
+              "channel": "Security",
+              "providerName": "Microsoft-Windows-Security-Auditing",
+              "computer": "DC01.yourcompany.local",
+              "level": "0",
+              "keywords": "0x8020000000000000",
+              "severityValue": "AUDIT_SUCCESS"
+            },
+            "eventdata": {
+              "targetUserName": "Administrator",
+              "serviceName": "MSSQLSvc/SQL01.yourcompany.local:1433",
+              "ticketEncryptionType": "0x17",
+              "ticketOptions": "0x40810000",
+              "logonGuid": "{12345678-1234-1234-1234-123456789012}",
+              "ipAddress": "10.1.0.50"
+            }
+          }
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,66 @@
+{
+  "_metadata": {
+    "attack_id": "T1098",
+    "variation": "001",
+    "name": "Azure AD Global Admin Assignment",
+    "description": "Attacker assigns Global Administrator role to compromised account",
+    "expected_detection": "CRITICAL",
+    "expected_soar": "privilege-escalation-response",
+    "kill_chain_phase": "persistence",
+    "notes": "Privilege escalation in Azure AD",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Global Admin role assigned",
+      "sequence": 1,
+      "timestamp": "2026-01-29T16:05:00.000Z",
+      "log": {
+        "azure": {
+          "auditlogs": {
+            "time": "2026-01-29T16:05:00.000Z",
+            "operationName": "Add member to role",
+            "category": "RoleManagement",
+            "resultType": "Success",
+            "properties": {
+              "id": "audit-guid-001",
+              "category": "RoleManagement",
+              "activityDisplayName": "Add member to role",
+              "activityDateTime": "2026-01-29T16:05:00.000Z",
+              "initiatedBy": {
+                "user": {
+                  "id": "attacker-user-guid",
+                  "displayName": "Compromised Service Account",
+                  "userPrincipalName": "svc.backup@corp.local",
+                  "ipAddress": "185.220.101.45"
+                }
+              },
+              "targetResources": [
+                {
+                  "id": "target-user-guid",
+                  "displayName": "John Doe",
+                  "userPrincipalName": "john.doe@corp.local",
+                  "modifiedProperties": [
+                    {
+                      "displayName": "Role.ObjectID",
+                      "newValue": "62e90394-69f5-4237-9190-012177145e10"
+                    },
+                    {
+                      "displayName": "Role.DisplayName",
+                      "newValue": "Global Administrator"
+                    }
+                  ]
+                }
+              ]
+            }
+          }
+        },
+        "agent": {
+          "name": "Azure-Sentinel",
+          "id": "azure"
+        }
+      }
+    }
+  ]
+}

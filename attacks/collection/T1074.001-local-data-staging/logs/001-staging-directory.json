@@ -1,0 +1,182 @@
+{
+  "_metadata": {
+    "attack_id": "T1074.001",
+    "variation": "001",
+    "name": "Local Data Staging",
+    "description": "Collecting and staging sensitive data for exfiltration",
+    "expected_detection": "MEDIUM",
+    "kill_chain_phase": "collection",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Sysmon Event 1 - Create staging directory",
+      "sequence": 1,
+      "timestamp": "2026-01-29T23:20:00.000Z",
+      "log": {
+        "timestamp": "",
+        "rule": {
+          "level": 8,
+          "description": "Sysmon - Event 1: Staging Directory Created",
+          "id": "100100",
+          "mitre": {
+            "id": ["T1074.001"],
+            "tactic": ["Collection"],
+            "technique": ["Local Data Staging"]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": ["sysmon", "sysmon_event1", "windows"]
+        },
+        "agent": {"id": "007", "name": "WS01", "ip": "10.1.0.20"},
+        "manager": {"name": "wazuh.manager"},
+        "id": "1700000001.900001",
+        "decoder": {"name": "windows_eventchannel"},
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "opcode": "0",
+              "keywords": "0x8000000000000000",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-01-29 23:20:00.000",
+              "processGuid": "{STAGE-001-0001-0001-000000000001}",
+              "processId": "21100",
+              "image": "C:\\Windows\\System32\\cmd.exe",
+              "commandLine": "cmd.exe /c mkdir C:\\Users\\Public\\staging",
+              "currentDirectory": "C:\\Users\\attacker\\",
+              "user": "CORP\\attacker",
+              "integrityLevel": "Medium",
+              "hashes": "SHA256=B99D61D874728EDC0918CA0EB10EAB93D381E7367E377406E65963366C874450",
+              "parentProcessGuid": "{STAGE-001-0001-0001-000000000000}",
+              "parentProcessId": "21000",
+              "parentImage": "C:\\Windows\\System32\\cmd.exe",
+              "parentCommandLine": "cmd.exe"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Sysmon Event 1 - Copy sensitive files to staging",
+      "sequence": 2,
+      "timestamp": "2026-01-29T23:20:05.000Z",
+      "log": {
+        "timestamp": "",
+        "rule": {
+          "level": 10,
+          "description": "Sysmon - Event 1: Sensitive Files Copied to Staging",
+          "id": "100100",
+          "mitre": {
+            "id": ["T1074.001"],
+            "tactic": ["Collection"],
+            "technique": ["Local Data Staging"]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": ["sysmon", "sysmon_event1", "windows"]
+        },
+        "agent": {"id": "007", "name": "WS01", "ip": "10.1.0.20"},
+        "manager": {"name": "wazuh.manager"},
+        "id": "1700000001.900002",
+        "decoder": {"name": "windows_eventchannel"},
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "opcode": "0",
+              "keywords": "0x8000000000000000",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-01-29 23:20:05.000",
+              "processGuid": "{STAGE-001-0001-0001-000000000002}",
+              "processId": "21200",
+              "image": "C:\\Windows\\System32\\xcopy.exe",
+              "commandLine": "xcopy /s /e C:\\Users\\*\\Documents\\*.docx C:\\Users\\Public\\staging\\",
+              "currentDirectory": "C:\\Users\\attacker\\",
+              "user": "CORP\\attacker",
+              "integrityLevel": "Medium",
+              "hashes": "SHA256=XCOPYHASH1234567890ABCDEF1234567890ABCDEF1234567890ABC",
+              "parentProcessGuid": "{STAGE-001-0001-0001-000000000000}",
+              "parentProcessId": "21000",
+              "parentImage": "C:\\Windows\\System32\\cmd.exe",
+              "parentCommandLine": "cmd.exe"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Sysmon Event 1 - robocopy to staging",
+      "sequence": 3,
+      "timestamp": "2026-01-29T23:20:10.000Z",
+      "log": {
+        "timestamp": "",
+        "rule": {
+          "level": 10,
+          "description": "Sysmon - Event 1: Robocopy Mass File Staging",
+          "id": "100100",
+          "mitre": {
+            "id": ["T1074.001"],
+            "tactic": ["Collection"],
+            "technique": ["Local Data Staging"]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": ["sysmon", "sysmon_event1", "windows"]
+        },
+        "agent": {"id": "007", "name": "WS01", "ip": "10.1.0.20"},
+        "manager": {"name": "wazuh.manager"},
+        "id": "1700000001.900003",
+        "decoder": {"name": "windows_eventchannel"},
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "opcode": "0",
+              "keywords": "0x8000000000000000",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-01-29 23:20:10.000",
+              "processGuid": "{STAGE-001-0001-0001-000000000003}",
+              "processId": "21300",
+              "image": "C:\\Windows\\System32\\Robocopy.exe",
+              "commandLine": "robocopy C:\\Shares\\Finance C:\\Users\\Public\\staging /E /COPYALL /R:0 /W:0",
+              "currentDirectory": "C:\\Users\\attacker\\",
+              "user": "CORP\\attacker",
+              "integrityLevel": "Medium",
+              "hashes": "SHA256=ROBOCOPYHASH1234567890ABCDEF1234567890ABCDEF1234567890",
+              "parentProcessGuid": "{STAGE-001-0001-0001-000000000000}",
+              "parentProcessId": "21000",
+              "parentImage": "C:\\Windows\\System32\\cmd.exe",
+              "parentCommandLine": "cmd.exe"
+            }
+          }
+        }
+      }
+    }
+  ]
+}

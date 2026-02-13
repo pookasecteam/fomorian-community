@@ -1,0 +1,28 @@
+title: Office 365 Unified Audit Logging Disabled
+id: 5b6a8c90-1234-4abc-def0-123456789008
+status: experimental
+description: Detects when unified audit logging is disabled, a defense evasion technique
+author: PookaSec
+date: 2026/01/29
+references:
+    - https://attack.mitre.org/techniques/T1562/008/
+    - https://docs.microsoft.com/en-us/microsoft-365/compliance/turn-audit-log-search-on-or-off
+tags:
+    - attack.defense_evasion
+    - attack.t1562.008
+logsource:
+    product: m365
+    service: exchange
+detection:
+    selection:
+        office365.operation: 'Set-AdminAuditLogConfig'
+    disable_audit:
+        office365.parameters|contains: 'UnifiedAuditLogIngestionEnabled'
+    condition: selection and disable_audit
+fields:
+    - office365.user_id
+    - office365.client_ip
+    - office365.parameters
+falsepositives:
+    - Legitimate administrative changes
+level: critical

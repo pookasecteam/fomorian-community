@@ -1,0 +1,585 @@
+{
+  "_metadata": {
+    "attack_id": "T1486",
+    "variation": "001",
+    "name": "Ransomware File Encryption",
+    "description": "Ransomware encrypting files and dropping ransom note",
+    "expected_detection": "CRITICAL",
+    "expected_soar": "ransomware-response",
+    "kill_chain_phase": "impact",
+    "notes": "Maximum severity - immediate response required. Generates both Sysmon and Windows Security logs.",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Sysmon Event 1 - Ransomware executable launch",
+      "sequence": 1,
+      "timestamp": "",
+      "log": {
+        "timestamp": "",
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 1: Ransomware File Encryption",
+          "id": "100100",
+          "mitre": {
+            "id": [
+              "T1486"
+            ],
+            "tactic": [
+              "Impact"
+            ],
+            "technique": [
+              "Ransomware File Encryption"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "{{agent_id}}",
+          "name": "{{agent_name}}",
+          "ip": "10.1.0.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000000.925520166",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "{{hostname}}",
+              "level": "4",
+              "task": "1",
+              "opcode": "0",
+              "keywords": "0x8000000000000000",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "{{utc_time}}",
+              "processGuid": "{{guid}}",
+              "processId": "{{pid}}",
+              "image": "C:\\Users\\Public\\cryptolocker.exe",
+              "commandLine": "cryptolocker.exe --encrypt --path C:\\Users\\{{username}}\\Documents",
+              "currentDirectory": "C:\\Users\\Public\\",
+              "user": "{{domain_upper}}\\{{username}}",
+              "integrityLevel": "High",
+              "hashes": "SHA256=BADCAFE0DEADBEEF1234567890ABCDEF1234567890ABCDEF1234567890ABCDEF",
+              "parentProcessGuid": "{{parent_guid}}",
+              "parentProcessId": "{{parent_pid}}",
+              "parentImage": "C:\\Windows\\System32\\cmd.exe",
+              "parentCommandLine": "cmd.exe"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Windows Security Event 4688 - Ransomware process creation",
+      "sequence": 2,
+      "timestamp": "",
+      "log": {
+        "timestamp": "",
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 4688: Ransomware File Encryption",
+          "id": "100100",
+          "mitre": {
+            "id": [
+              "T1486"
+            ],
+            "tactic": [
+              "Impact"
+            ],
+            "technique": [
+              "Ransomware File Encryption"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event4688",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "{{agent_id}}",
+          "name": "{{agent_name}}",
+          "ip": "10.1.0.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000000.703591764",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "4688",
+              "channel": "Security",
+              "providerName": "Microsoft-Windows-Security-Auditing",
+              "computer": "{{hostname}}",
+              "level": "4",
+              "task": "1",
+              "opcode": "0",
+              "keywords": "0x8000000000000000",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "subjectUserSid": "S-1-5-21-1234567890-1234567890-1234567890-1001",
+              "subjectUserName": "{{username}}",
+              "subjectDomainName": "{{domain_upper}}",
+              "subjectLogonId": "0x3E7",
+              "newProcessId": "0x{{pid_hex}}",
+              "newProcessName": "C:\\Users\\Public\\cryptolocker.exe",
+              "tokenElevationType": "%%1937",
+              "processId": "0x{{parent_pid_hex}}",
+              "commandLine": "cryptolocker.exe --encrypt --path C:\\Users\\{{username}}\\Documents",
+              "targetUserSid": "S-1-5-21-1234567890-1234567890-1234567890-1001",
+              "targetUserName": "{{username}}",
+              "targetDomainName": "{{domain_upper}}",
+              "targetLogonId": "0x3E7",
+              "parentProcessName": "C:\\Windows\\System32\\cmd.exe",
+              "mandatoryLabel": "S-1-16-12288"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Sysmon Event 11 - Encrypted file creation (.encrypted)",
+      "sequence": 3,
+      "timestamp": "",
+      "log": {
+        "timestamp": "",
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 11: Ransomware File Encryption",
+          "id": "100100",
+          "mitre": {
+            "id": [
+              "T1486"
+            ],
+            "tactic": [
+              "Impact"
+            ],
+            "technique": [
+              "Ransomware File Encryption"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event11",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "{{agent_id}}",
+          "name": "{{agent_name}}",
+          "ip": "10.1.0.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000000.218542297",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "11",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "{{hostname}}",
+              "level": "4",
+              "task": "1",
+              "opcode": "0",
+              "keywords": "0x8000000000000000",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "{{utc_time}}",
+              "processGuid": "{{guid}}",
+              "processId": "{{pid}}",
+              "image": "C:\\Users\\Public\\cryptolocker.exe",
+              "targetFilename": "C:\\Users\\{{username}}\\Documents\\Q4_Financial_Report.xlsx.encrypted",
+              "creationUtcTime": "{{utc_time}}",
+              "user": "{{domain_upper}}\\{{username}}"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Sysmon Event 11 - Second encrypted file",
+      "sequence": 4,
+      "timestamp": "",
+      "log": {
+        "timestamp": "",
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 11: Ransomware File Encryption",
+          "id": "100100",
+          "mitre": {
+            "id": [
+              "T1486"
+            ],
+            "tactic": [
+              "Impact"
+            ],
+            "technique": [
+              "Ransomware File Encryption"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event11",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "{{agent_id}}",
+          "name": "{{agent_name}}",
+          "ip": "10.1.0.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000000.380954048",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "11",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "{{hostname}}",
+              "level": "4",
+              "task": "1",
+              "opcode": "0",
+              "keywords": "0x8000000000000000",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "{{utc_time}}",
+              "processGuid": "{{guid}}",
+              "processId": "{{pid}}",
+              "image": "C:\\Users\\Public\\cryptolocker.exe",
+              "targetFilename": "C:\\Users\\{{username}}\\Documents\\Customer_Database.accdb.encrypted",
+              "creationUtcTime": "{{utc_time}}",
+              "user": "{{domain_upper}}\\{{username}}"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Sysmon Event 11 - Ransom note dropped in Documents",
+      "sequence": 5,
+      "timestamp": "",
+      "log": {
+        "timestamp": "",
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 11: Ransomware File Encryption",
+          "id": "100100",
+          "mitre": {
+            "id": [
+              "T1486"
+            ],
+            "tactic": [
+              "Impact"
+            ],
+            "technique": [
+              "Ransomware File Encryption"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event11",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "{{agent_id}}",
+          "name": "{{agent_name}}",
+          "ip": "10.1.0.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000000.245354166",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "11",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "{{hostname}}",
+              "level": "4",
+              "task": "1",
+              "opcode": "0",
+              "keywords": "0x8000000000000000",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "{{utc_time}}",
+              "processGuid": "{{guid}}",
+              "processId": "{{pid}}",
+              "image": "C:\\Users\\Public\\cryptolocker.exe",
+              "targetFilename": "C:\\Users\\{{username}}\\Documents\\README_DECRYPT.txt",
+              "creationUtcTime": "{{utc_time}}",
+              "user": "{{domain_upper}}\\{{username}}"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Sysmon Event 11 - Ransom note dropped on Desktop",
+      "sequence": 6,
+      "timestamp": "",
+      "log": {
+        "timestamp": "",
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 11: Ransomware File Encryption",
+          "id": "100100",
+          "mitre": {
+            "id": [
+              "T1486"
+            ],
+            "tactic": [
+              "Impact"
+            ],
+            "technique": [
+              "Ransomware File Encryption"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event11",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "{{agent_id}}",
+          "name": "{{agent_name}}",
+          "ip": "10.1.0.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000000.602451018",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "11",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "{{hostname}}",
+              "level": "4",
+              "task": "1",
+              "opcode": "0",
+              "keywords": "0x8000000000000000",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "{{utc_time}}",
+              "processGuid": "{{guid}}",
+              "processId": "{{pid}}",
+              "image": "C:\\Users\\Public\\cryptolocker.exe",
+              "targetFilename": "C:\\Users\\{{username}}\\Desktop\\README_DECRYPT.txt",
+              "creationUtcTime": "{{utc_time}}",
+              "user": "{{domain_upper}}\\{{username}}"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Sysmon Event 3 - C2 callback after encryption complete",
+      "sequence": 7,
+      "timestamp": "",
+      "log": {
+        "timestamp": "",
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 3: Ransomware File Encryption",
+          "id": "100100",
+          "mitre": {
+            "id": [
+              "T1486"
+            ],
+            "tactic": [
+              "Impact"
+            ],
+            "technique": [
+              "Ransomware File Encryption"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event3",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "{{agent_id}}",
+          "name": "{{agent_name}}",
+          "ip": "10.1.0.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000000.279343625",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "3",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "{{hostname}}",
+              "level": "4",
+              "task": "1",
+              "opcode": "0",
+              "keywords": "0x8000000000000000",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "{{utc_time}}",
+              "processGuid": "{{guid}}",
+              "processId": "{{pid}}",
+              "image": "C:\\Users\\Public\\cryptolocker.exe",
+              "user": "{{domain_upper}}\\{{username}}",
+              "protocol": "tcp",
+              "initiated": "true",
+              "sourceIsIpv6": "false",
+              "sourceIp": "{{host_ip}}",
+              "sourceHostname": "{{hostname}}",
+              "sourcePort": "49856",
+              "destinationIsIpv6": "false",
+              "destinationIp": "{{c2_ip}}",
+              "destinationHostname": "{{c2_domain}}",
+              "destinationPort": "443"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Windows Security Event 5156 - Network connection allowed",
+      "sequence": 8,
+      "timestamp": "",
+      "log": {
+        "timestamp": "",
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 5156: Ransomware File Encryption",
+          "id": "100100",
+          "mitre": {
+            "id": [
+              "T1486"
+            ],
+            "tactic": [
+              "Impact"
+            ],
+            "technique": [
+              "Ransomware File Encryption"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event5156",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "{{agent_id}}",
+          "name": "{{agent_name}}",
+          "ip": "10.1.0.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000000.513679510",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "5156",
+              "channel": "Security",
+              "providerName": "Microsoft-Windows-Security-Auditing",
+              "computer": "{{hostname}}",
+              "level": "4",
+              "task": "1",
+              "opcode": "0",
+              "keywords": "0x8000000000000000",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "processId": "{{pid}}",
+              "application": "\\device\\harddiskvolume2\\users\\public\\cryptolocker.exe",
+              "direction": "Outbound",
+              "sourceAddress": "{{host_ip}}",
+              "sourcePort": "49856",
+              "destAddress": "{{c2_ip}}",
+              "destPort": "443",
+              "protocol": "6",
+              "layerName": "Connect",
+              "layerRTID": "48"
+            }
+          }
+        }
+      }
+    }
+  ]
+}

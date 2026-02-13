@@ -1,0 +1,20 @@
+type: business_email_compromise
+name: Business Email Compromise Simulation
+
+bec:
+  target_email: cfo@company.com
+  impersonated_email: ceo@company.com
+  oauth_app_name: Microsoft Security Update
+  forwarding_address: attacker@external.com
+  target_mailboxes:
+    - cfo@company.com
+    - accounting@company.com
+    - finance@company.com
+  search_keywords:
+    - wire transfer
+    - payment
+    - invoice
+    - bank account
+    - routing number
+    - ACH
+    - direct deposit

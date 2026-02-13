@@ -1,0 +1,253 @@
+{
+  "_metadata": {
+    "attack_id": "T1003.001",
+    "variation": "008",
+    "name": "PssCaptureSnapshot API LSASS Clone",
+    "description": "LSASS memory dump using PssCaptureSnapshot API to clone process then dump",
+    "expected_detection": "HIGH",
+    "kill_chain_phase": "credential-access",
+    "references": ["https://github.com/yo-yo-yo-jbo/dumping_lsass"],
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Sysmon Event 1 - Snapshot tool execution",
+      "sequence": 1,
+      "timestamp": "2026-02-02T15:30:00.000Z",
+      "log": {
+        "timestamp": "2026-02-02T15:30:00.000+0000",
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 1: Suspicious process execution",
+          "id": "92151",
+          "mitre": {
+            "id": ["T1003.001"],
+            "tactic": ["Credential Access"],
+            "technique": ["LSASS Memory"]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": ["sysmon", "sysmon_event1", "windows"]
+        },
+        "agent": {"id": "007", "name": "WS01", "ip": "10.1.0.20"},
+        "manager": {"name": "wazuh.manager"},
+        "id": "1706884200.100001",
+        "decoder": {"name": "windows_eventchannel"},
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "severityValue": "INFORMATION",
+              "systemTime": "2026-02-02T15:30:00.000Z"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-02 15:30:00.000",
+              "processGuid": "{12345678-1234-1234-1234-123456789020}",
+              "processId": "9912",
+              "image": "C:\\Users\\attacker\\Tools\\pss_dumper.exe",
+              "fileVersion": "-",
+              "description": "-",
+              "product": "-",
+              "company": "-",
+              "originalFileName": "-",
+              "commandLine": "pss_dumper.exe --target lsass.exe --output C:\\Temp\\snapshot.dmp",
+              "currentDirectory": "C:\\Users\\attacker\\Tools\\",
+              "user": "CORP\\attacker",
+              "logonGuid": "{12345678-aaaa-bbbb-cccc-ddddeeeeaaaa}",
+              "logonId": "0x3e7",
+              "terminalSessionId": "1",
+              "integrityLevel": "High",
+              "hashes": "SHA256=B2C3D4E5F6A1B2C3D4E5F6A1B2C3D4E5F6A1B2C3D4E5F6A1B2C3D4E5F6A1B2C3",
+              "parentProcessGuid": "{12345678-1234-1234-1234-123456789009}",
+              "parentProcessId": "5544",
+              "parentImage": "C:\\Windows\\System32\\cmd.exe",
+              "parentCommandLine": "cmd.exe",
+              "parentUser": "CORP\\attacker"
+            }
+          }
+        },
+        "_fomorian_batch": "lsass-dump-techniques",
+        "_fomorian_test": true,
+        "_fomorian_attack_id": "T1003.001",
+        "_fomorian_technique": "psscapturesnapshot"
+      }
+    },
+    {
+      "_comment": "Sysmon Event 10 - Process access with PROCESS_DUP_HANDLE for snapshot",
+      "sequence": 2,
+      "timestamp": "2026-02-02T15:30:01.000Z",
+      "log": {
+        "timestamp": "2026-02-02T15:30:01.000+0000",
+        "rule": {
+          "level": 14,
+          "description": "Sysmon - Event 10: Process accessing LSASS with DUP_HANDLE",
+          "id": "92052",
+          "mitre": {
+            "id": ["T1003.001"],
+            "tactic": ["Credential Access"],
+            "technique": ["LSASS Memory"]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": ["sysmon", "sysmon_event_10", "windows", "credential_access"]
+        },
+        "agent": {"id": "007", "name": "WS01", "ip": "10.1.0.20"},
+        "manager": {"name": "wazuh.manager"},
+        "id": "1706884201.100002",
+        "decoder": {"name": "windows_eventchannel"},
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "10",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "10",
+              "severityValue": "INFORMATION",
+              "systemTime": "2026-02-02T15:30:01.000Z"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-02 15:30:01.000",
+              "sourceProcessGuid": "{12345678-1234-1234-1234-123456789020}",
+              "sourceProcessId": "9912",
+              "sourceThreadId": "9916",
+              "sourceImage": "C:\\Users\\attacker\\Tools\\pss_dumper.exe",
+              "targetProcessGuid": "{12345678-1234-1234-1234-123456789002}",
+              "targetProcessId": "672",
+              "targetImage": "C:\\Windows\\System32\\lsass.exe",
+              "grantedAccess": "0x1F1FFF",
+              "callTrace": "C:\\Windows\\SYSTEM32\\ntdll.dll+9d4c4|C:\\Windows\\System32\\KERNELBASE.dll+2c13e|C:\\Windows\\System32\\kernel32.dll+1a8f2|C:\\Users\\attacker\\Tools\\pss_dumper.exe+2b4c",
+              "sourceUser": "CORP\\attacker",
+              "targetUser": "NT AUTHORITY\\SYSTEM"
+            }
+          }
+        },
+        "_fomorian_batch": "lsass-dump-techniques",
+        "_fomorian_test": true,
+        "_fomorian_attack_id": "T1003.001",
+        "_fomorian_technique": "psscapturesnapshot"
+      }
+    },
+    {
+      "_comment": "Sysmon Event 8 - CreateRemoteThread for snapshot callback (some implementations)",
+      "sequence": 3,
+      "timestamp": "2026-02-02T15:30:01.500Z",
+      "log": {
+        "timestamp": "2026-02-02T15:30:01.500+0000",
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 8: CreateRemoteThread detected",
+          "id": "92080",
+          "mitre": {
+            "id": ["T1003.001"],
+            "tactic": ["Credential Access"],
+            "technique": ["LSASS Memory"]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": ["sysmon", "sysmon_event_8", "windows"]
+        },
+        "agent": {"id": "007", "name": "WS01", "ip": "10.1.0.20"},
+        "manager": {"name": "wazuh.manager"},
+        "id": "1706884201.100003",
+        "decoder": {"name": "windows_eventchannel"},
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "8",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "8",
+              "severityValue": "INFORMATION",
+              "systemTime": "2026-02-02T15:30:01.500Z"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-02 15:30:01.500",
+              "sourceProcessGuid": "{12345678-1234-1234-1234-123456789020}",
+              "sourceProcessId": "9912",
+              "sourceImage": "C:\\Users\\attacker\\Tools\\pss_dumper.exe",
+              "targetProcessGuid": "{12345678-1234-1234-1234-123456789002}",
+              "targetProcessId": "672",
+              "targetImage": "C:\\Windows\\System32\\lsass.exe",
+              "newThreadId": "11248",
+              "startAddress": "0x00007FFA12345678",
+              "startModule": "C:\\Windows\\System32\\ntdll.dll",
+              "startFunction": "RtlUserThreadStart",
+              "sourceUser": "CORP\\attacker",
+              "targetUser": "NT AUTHORITY\\SYSTEM"
+            }
+          }
+        },
+        "_fomorian_batch": "lsass-dump-techniques",
+        "_fomorian_test": true,
+        "_fomorian_attack_id": "T1003.001",
+        "_fomorian_technique": "psscapturesnapshot"
+      }
+    },
+    {
+      "_comment": "Sysmon Event 11 - Snapshot dump file created",
+      "sequence": 4,
+      "timestamp": "2026-02-02T15:30:02.000Z",
+      "log": {
+        "timestamp": "2026-02-02T15:30:02.000+0000",
+        "rule": {
+          "level": 14,
+          "description": "Sysmon - Event 11: LSASS dump file created",
+          "id": "92101",
+          "mitre": {
+            "id": ["T1003.001"],
+            "tactic": ["Credential Access"],
+            "technique": ["LSASS Memory"]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": ["sysmon", "sysmon_event_11", "windows", "credential_access"]
+        },
+        "agent": {"id": "007", "name": "WS01", "ip": "10.1.0.20"},
+        "manager": {"name": "wazuh.manager"},
+        "id": "1706884202.100004",
+        "decoder": {"name": "windows_eventchannel"},
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "11",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "11",
+              "severityValue": "INFORMATION",
+              "systemTime": "2026-02-02T15:30:02.000Z"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-02 15:30:02.000",
+              "processGuid": "{12345678-1234-1234-1234-123456789020}",
+              "processId": "9912",
+              "image": "C:\\Users\\attacker\\Tools\\pss_dumper.exe",
+              "targetFilename": "C:\\Temp\\snapshot.dmp",
+              "creationUtcTime": "2026-02-02 15:30:02.000",
+              "user": "CORP\\attacker"
+            }
+          }
+        },
+        "_fomorian_batch": "lsass-dump-techniques",
+        "_fomorian_test": true,
+        "_fomorian_attack_id": "T1003.001",
+        "_fomorian_technique": "psscapturesnapshot"
+      }
+    }
+  ]
+}

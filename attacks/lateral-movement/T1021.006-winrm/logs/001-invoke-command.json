@@ -1,0 +1,308 @@
+{
+  "_metadata": {
+    "attack_id": "T1021.006",
+    "variation": "001",
+    "name": "WinRM Lateral Movement via Invoke-Command",
+    "description": "Using PowerShell Invoke-Command to execute commands on remote system",
+    "expected_detection": "HIGH",
+    "expected_soar": "lateral-movement-detection",
+    "kill_chain_phase": "lateral-movement",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "PowerShell ScriptBlock logging - Invoke-Command",
+      "sequence": 1,
+      "timestamp": "2026-01-29T13:15:00.000Z",
+      "log": {
+        "timestamp": "",
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 4104: WinRM Lateral Movement via Invoke-Command",
+          "id": "100100",
+          "mitre": {
+            "id": [
+              "T1021.006"
+            ],
+            "tactic": [
+              "Lateral Movement"
+            ],
+            "technique": [
+              "WinRM Lateral Movement via Invoke-Command"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event4104",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "007",
+          "name": "WS01",
+          "ip": "10.1.0.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000000.10637642",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "4104",
+              "channel": "Microsoft-Windows-PowerShell/Operational",
+              "providerName": "Microsoft-Windows-PowerShell",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "opcode": "0",
+              "keywords": "0x8000000000000000",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "messageNumber": "1",
+              "messageTotal": "1",
+              "scriptBlockText": "Invoke-Command -ComputerName DC01 -ScriptBlock { whoami; hostname; ipconfig }",
+              "scriptBlockId": "winrm-001-script-001",
+              "path": ""
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Sysmon Event 3 - WinRM connection",
+      "sequence": 2,
+      "timestamp": "2026-01-29T13:15:01.000Z",
+      "log": {
+        "timestamp": "",
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 3: WinRM Lateral Movement via Invoke-Command",
+          "id": "100100",
+          "mitre": {
+            "id": [
+              "T1021.006"
+            ],
+            "tactic": [
+              "Lateral Movement"
+            ],
+            "technique": [
+              "WinRM Lateral Movement via Invoke-Command"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event3",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "007",
+          "name": "WS01",
+          "ip": "10.1.0.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000000.243411479",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "3",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "opcode": "0",
+              "keywords": "0x8000000000000000",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-01-29 13:15:01.000",
+              "processGuid": "{WINRM-001-0001-0001-000000000001}",
+              "processId": "11500",
+              "image": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+              "user": "CORP\\admin.user",
+              "protocol": "tcp",
+              "initiated": "true",
+              "sourceIp": "10.1.1.50",
+              "sourcePort": "58000",
+              "destinationIp": "10.1.1.10",
+              "destinationHostname": "DC01.corp.local",
+              "destinationPort": "5985"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Windows Security Event 4624 - Network Logon on target",
+      "sequence": 3,
+      "timestamp": "2026-01-29T13:15:02.000Z",
+      "log": {
+        "timestamp": "",
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 4624: WinRM Lateral Movement via Invoke-Command",
+          "id": "100100",
+          "mitre": {
+            "id": [
+              "T1021.006"
+            ],
+            "tactic": [
+              "Lateral Movement"
+            ],
+            "technique": [
+              "WinRM Lateral Movement via Invoke-Command"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event4624",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "001",
+          "name": "DC01",
+          "ip": "10.1.0.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000000.352377901",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "4624",
+              "channel": "Security",
+              "providerName": "Microsoft-Windows-Security-Auditing",
+              "computer": "DC01.corp.local",
+              "level": "4",
+              "task": "1",
+              "opcode": "0",
+              "keywords": "0x8000000000000000",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "subjectUserSid": "S-1-0-0",
+              "subjectUserName": "-",
+              "subjectDomainName": "-",
+              "subjectLogonId": "0x0",
+              "targetUserSid": "S-1-5-21-1234567890-1234567890-1234567890-500",
+              "targetUserName": "admin.user",
+              "targetDomainName": "CORP",
+              "targetLogonId": "0xBC234",
+              "logonType": "3",
+              "logonProcessName": "Kerberos",
+              "authenticationPackageName": "Kerberos",
+              "workstationName": "",
+              "logonGuid": "{23456789-bcde-2345-bcde-234567890123}",
+              "transmittedServices": "-",
+              "lmPackageName": "-",
+              "keyLength": "0",
+              "processId": "0x0",
+              "processName": "-",
+              "ipAddress": "10.1.1.50",
+              "ipPort": "58000"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Sysmon Event 1 - wsmprovhost.exe on target (WinRM host process)",
+      "sequence": 4,
+      "timestamp": "2026-01-29T13:15:03.000Z",
+      "log": {
+        "timestamp": "",
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 1: WinRM Lateral Movement via Invoke-Command",
+          "id": "100100",
+          "mitre": {
+            "id": [
+              "T1021.006"
+            ],
+            "tactic": [
+              "Lateral Movement"
+            ],
+            "technique": [
+              "WinRM Lateral Movement via Invoke-Command"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "001",
+          "name": "DC01",
+          "ip": "10.1.0.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000000.385697233",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "DC01.corp.local",
+              "level": "4",
+              "task": "1",
+              "opcode": "0",
+              "keywords": "0x8000000000000000",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-01-29 13:15:03.000",
+              "processGuid": "{WINRM-001-0001-DC01-000000000001}",
+              "processId": "5500",
+              "image": "C:\\Windows\\System32\\wsmprovhost.exe",
+              "commandLine": "C:\\Windows\\System32\\wsmprovhost.exe -Embedding",
+              "currentDirectory": "C:\\Windows\\System32\\",
+              "user": "CORP\\admin.user",
+              "integrityLevel": "High",
+              "parentProcessGuid": "{WINRM-001-0001-DC01-000000000000}",
+              "parentProcessId": "708",
+              "parentImage": "C:\\Windows\\System32\\svchost.exe",
+              "parentCommandLine": "C:\\Windows\\System32\\svchost.exe -k NetworkService"
+            }
+          }
+        }
+      }
+    }
+  ]
+}

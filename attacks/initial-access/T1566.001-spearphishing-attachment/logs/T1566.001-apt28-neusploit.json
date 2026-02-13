@@ -1,0 +1,162 @@
+{
+  "_metadata": {
+    "attack_id": "T1566.001",
+    "variation": "001",
+    "name": "APT28 Operation Neusploit CVE-2026-21509",
+    "description": "Simulates APT28 spearphishing attack exploiting MS Office CVE-2026-21509 to deploy MiniDoor email stealer and PixyNetLoader",
+    "expected_detection": "HIGH",
+    "kill_chain_phase": "initial-access",
+    "source_url": "https://thehackernews.com/2026/02/apt28-uses-microsoft-office-cve-2026.html",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Sysmon Event 1 - Word opens malicious RTF exploiting CVE-2026-21509",
+      "sequence": 1,
+      "timestamp": "2026-02-03T09:00:00.000Z",
+      "log": {
+        "timestamp": "",
+        "rule": {
+          "level": 10,
+          "description": "Sysmon - Event 1: Microsoft Word opened suspicious document",
+          "id": "92151",
+          "mitre": {
+            "id": ["T1566.001"],
+            "tactic": ["Initial Access"],
+            "technique": ["Phishing: Spearphishing Attachment"]
+          },
+          "groups": ["sysmon", "sysmon_event1", "windows"]
+        },
+        "agent": {"id": "007", "name": "WS01", "ip": "10.1.0.20"},
+        "manager": {"name": "wazuh.manager"},
+        "id": "1700000002.000001",
+        "decoder": {"name": "windows_eventchannel"},
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-03 09:00:00.000",
+              "processGuid": "{4DC16835-BA1B-65B0-F100-000000001500}",
+              "processId": "2156",
+              "image": "C:\\Program Files\\Microsoft Office\\root\\Office16\\WINWORD.EXE",
+              "commandLine": "\"C:\\Program Files\\Microsoft Office\\root\\Office16\\WINWORD.EXE\" /n \"C:\\Users\\victim\\Downloads\\invoice_ua_29012026.rtf\"",
+              "currentDirectory": "C:\\Users\\victim\\Downloads\\",
+              "user": "CORP\\victim",
+              "integrityLevel": "Medium",
+              "parentProcessGuid": "{4DC16835-BA0A-65B0-F000-000000001500}",
+              "parentProcessId": "1892",
+              "parentImage": "C:\\Windows\\explorer.exe"
+            }
+          }
+        },
+        "_fomorian_test": true,
+        "_fomorian_attack_id": "T1566.001",
+        "_fomorian_batch": "morning-intel-20260203"
+      }
+    },
+    {
+      "_comment": "Sysmon Event 1 - Regasm.exe executing malicious DLL via LOLBin",
+      "sequence": 2,
+      "timestamp": "2026-02-03T09:00:15.000Z",
+      "log": {
+        "timestamp": "",
+        "rule": {
+          "level": 14,
+          "description": "Sysmon - Event 1: Regasm/Regsvcs Proxy Execution",
+          "id": "92151",
+          "mitre": {
+            "id": ["T1218.009"],
+            "tactic": ["Defense Evasion"],
+            "technique": ["System Binary Proxy Execution: Regsvcs/Regasm"]
+          },
+          "groups": ["sysmon", "sysmon_event1", "windows"]
+        },
+        "agent": {"id": "007", "name": "WS01", "ip": "10.1.0.20"},
+        "manager": {"name": "wazuh.manager"},
+        "id": "1700000002.000002",
+        "decoder": {"name": "windows_eventchannel"},
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-03 09:00:15.000",
+              "processGuid": "{4DC16835-BA2C-65B0-F200-000000001500}",
+              "processId": "5784",
+              "image": "C:\\Windows\\Microsoft.NET\\Framework64\\v4.0.30319\\regasm.exe",
+              "commandLine": "C:\\Windows\\Microsoft.NET\\Framework64\\v4.0.30319\\regasm.exe /U C:\\Users\\victim\\AppData\\Local\\Temp\\PixyNet.dll",
+              "currentDirectory": "C:\\Users\\victim\\AppData\\Local\\Temp\\",
+              "user": "CORP\\victim",
+              "integrityLevel": "Medium",
+              "parentProcessGuid": "{4DC16835-BA1B-65B0-F100-000000001500}",
+              "parentProcessId": "2156",
+              "parentImage": "C:\\Program Files\\Microsoft Office\\root\\Office16\\WINWORD.EXE"
+            }
+          }
+        },
+        "_fomorian_test": true,
+        "_fomorian_attack_id": "T1218.009",
+        "_fomorian_batch": "morning-intel-20260203"
+      }
+    },
+    {
+      "_comment": "Sysmon Event 7 - EhStoreShell.dll loaded for email stealing",
+      "sequence": 3,
+      "timestamp": "2026-02-03T09:00:20.000Z",
+      "log": {
+        "timestamp": "",
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 7: MiniDoor Email Stealer DLL Loaded",
+          "id": "92157",
+          "mitre": {
+            "id": ["T1114.001"],
+            "tactic": ["Collection"],
+            "technique": ["Email Collection: Local Email Collection"]
+          },
+          "groups": ["sysmon", "sysmon_event7", "windows"]
+        },
+        "agent": {"id": "007", "name": "WS01", "ip": "10.1.0.20"},
+        "manager": {"name": "wazuh.manager"},
+        "id": "1700000002.000003",
+        "decoder": {"name": "windows_eventchannel"},
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "7",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-03 09:00:20.000",
+              "processGuid": "{4DC16835-BA3D-65B0-F300-000000001500}",
+              "processId": "3892",
+              "image": "C:\\Windows\\explorer.exe",
+              "imageLoaded": "C:\\Users\\victim\\AppData\\Roaming\\Microsoft\\Windows\\EhStoreShell.dll",
+              "hashes": "SHA256=bec369597633eac7cc27a698288e4ae8d12bdd9b01946e73a28e1423b17252b1",
+              "signed": "false",
+              "signatureStatus": "Unavailable"
+            }
+          }
+        },
+        "_fomorian_test": true,
+        "_fomorian_attack_id": "T1114.001",
+        "_fomorian_batch": "morning-intel-20260203"
+      }
+    }
+  ]
+}

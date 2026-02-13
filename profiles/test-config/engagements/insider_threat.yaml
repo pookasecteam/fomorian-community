@@ -1,0 +1,10 @@
+type: insider_threat
+name: Insider Threat Simulation
+insider_threat:
+  actor_username: departing_employee
+  after_hours: true
+  target_shares:
+  - HR
+  - Finance
+  - Confidential
+  exfil_method: usb

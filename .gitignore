@@ -1,0 +1,22 @@
+# Generated scenario output files
+scenario.json
+*.scenario.json
+output/
+
+# Override parent .gitignore to include attack template logs
+!attacks/**/logs/
+!attacks/**/logs/*.json
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.pytest_cache/
+*.egg-info/
+dist/
+build/
+
+# Environment
+.env
+.venv/
+venv/

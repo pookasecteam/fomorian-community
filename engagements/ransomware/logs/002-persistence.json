@@ -1,0 +1,53 @@
+{
+  "_metadata": {
+    "engagement": "ransomware",
+    "phase": "persistence",
+    "phase_number": 2,
+    "description": "Persistence phase of Ransomware - example-corp",
+    "techniques": [
+      "T1547.001"
+    ],
+    "timespan": "T+0:27:00 to T+0:27:30",
+    "attacker_logic": "Attacker executes persistence techniques",
+    "format": "wazuh-native",
+    "format_version": "2.0"
+  },
+  "attacker_profile": {
+    "c2_server": "185.141.27.98",
+    "initial_target": "WS01.corp.local",
+    "compromised_user": "CORP\\jsmith"
+  },
+  "logs": [
+    {
+      "_comment": "Registry Run key persistence",
+      "sequence": 1,
+      "relative_time": "T+0:27:00",
+      "timestamp": "2026-01-30T08:27:00Z",
+      "log": {
+        "winlog": {
+          "channel": "Microsoft-Windows-Sysmon/Operational",
+          "event_id": 13,
+          "computer_name": "WORKSTATION01.example.local",
+          "event_data": {
+            "UtcTime": "2026-01-30 11:44:08.181",
+            "EventType": "SetValue",
+            "ProcessGuid": "{C257A465-WS01-0012-3E5E2BF140B0}",
+            "ProcessId": "2238",
+            "Image": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+            "TargetObject": "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run\\WindowsUpdate",
+            "Details": "C:\\Users\\Public\\update.exe",
+            "User": "EXAMPLE\\jsmith"
+          }
+        },
+        "agent": {
+          "name": "WS01",
+          "id": "007"
+        },
+        "timestamp": "2026-01-30T08:27:00.000+0000",
+        "_fomorian_test": true,
+        "_fomorian_engagement": "ransomware",
+        "_fomorian_phase": "persistence"
+      }
+    }
+  ]
+}

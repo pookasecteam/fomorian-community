@@ -1,0 +1,182 @@
+{
+  "_metadata": {
+    "attack_id": "T1087.002",
+    "variation": "001",
+    "name": "Domain Account Discovery",
+    "description": "Enumerating domain user accounts for targeting",
+    "expected_detection": "MEDIUM",
+    "kill_chain_phase": "discovery",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Sysmon Event 1 - net user /domain",
+      "sequence": 1,
+      "timestamp": "2026-01-30T02:50:00.000Z",
+      "log": {
+        "timestamp": "",
+        "rule": {
+          "level": 8,
+          "description": "Sysmon - Event 1: Domain User Enumeration",
+          "id": "100100",
+          "mitre": {
+            "id": ["T1087.002"],
+            "tactic": ["Discovery"],
+            "technique": ["Domain Account"]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": ["sysmon", "sysmon_event1", "windows"]
+        },
+        "agent": {"id": "007", "name": "WS01", "ip": "10.1.0.20"},
+        "manager": {"name": "wazuh.manager"},
+        "id": "1700000020.600001",
+        "decoder": {"name": "windows_eventchannel"},
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "opcode": "0",
+              "keywords": "0x8000000000000000",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-01-30 02:50:00.000",
+              "processGuid": "{DOMU-001-0001-000000000001}",
+              "processId": "45100",
+              "image": "C:\\Windows\\System32\\net.exe",
+              "commandLine": "net user /domain",
+              "currentDirectory": "C:\\Users\\attacker\\",
+              "user": "CORP\\attacker",
+              "integrityLevel": "Medium",
+              "hashes": "SHA256=NETHASH1234567890ABCDEF1234567890ABCDEF1234567890ABCDEF",
+              "parentProcessGuid": "{DOMU-001-0001-000000000000}",
+              "parentProcessId": "45000",
+              "parentImage": "C:\\Windows\\System32\\cmd.exe",
+              "parentCommandLine": "cmd.exe"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Sysmon Event 1 - Query specific domain user",
+      "sequence": 2,
+      "timestamp": "2026-01-30T02:50:05.000Z",
+      "log": {
+        "timestamp": "",
+        "rule": {
+          "level": 8,
+          "description": "Sysmon - Event 1: Specific Domain User Query",
+          "id": "100100",
+          "mitre": {
+            "id": ["T1087.002"],
+            "tactic": ["Discovery"],
+            "technique": ["Domain Account"]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": ["sysmon", "sysmon_event1", "windows"]
+        },
+        "agent": {"id": "007", "name": "WS01", "ip": "10.1.0.20"},
+        "manager": {"name": "wazuh.manager"},
+        "id": "1700000020.600002",
+        "decoder": {"name": "windows_eventchannel"},
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "opcode": "0",
+              "keywords": "0x8000000000000000",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-01-30 02:50:05.000",
+              "processGuid": "{DOMU-001-0001-000000000002}",
+              "processId": "45200",
+              "image": "C:\\Windows\\System32\\net.exe",
+              "commandLine": "net user administrator /domain",
+              "currentDirectory": "C:\\Users\\attacker\\",
+              "user": "CORP\\attacker",
+              "integrityLevel": "Medium",
+              "hashes": "SHA256=NETHASH1234567890ABCDEF1234567890ABCDEF1234567890ABCDEF",
+              "parentProcessGuid": "{DOMU-001-0001-000000000000}",
+              "parentProcessId": "45000",
+              "parentImage": "C:\\Windows\\System32\\cmd.exe",
+              "parentCommandLine": "cmd.exe"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Sysmon Event 1 - PowerShell Get-ADUser",
+      "sequence": 3,
+      "timestamp": "2026-01-30T02:50:10.000Z",
+      "log": {
+        "timestamp": "",
+        "rule": {
+          "level": 10,
+          "description": "Sysmon - Event 1: PowerShell AD User Enumeration",
+          "id": "100100",
+          "mitre": {
+            "id": ["T1087.002"],
+            "tactic": ["Discovery"],
+            "technique": ["Domain Account"]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": ["sysmon", "sysmon_event1", "windows"]
+        },
+        "agent": {"id": "007", "name": "WS01", "ip": "10.1.0.20"},
+        "manager": {"name": "wazuh.manager"},
+        "id": "1700000020.600003",
+        "decoder": {"name": "windows_eventchannel"},
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "opcode": "0",
+              "keywords": "0x8000000000000000",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-01-30 02:50:10.000",
+              "processGuid": "{DOMU-001-0001-000000000003}",
+              "processId": "45300",
+              "image": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+              "commandLine": "powershell.exe -c \"Get-ADUser -Filter * -Properties * | Select-Object SamAccountName,Enabled,LastLogonDate\"",
+              "currentDirectory": "C:\\Users\\attacker\\",
+              "user": "CORP\\attacker",
+              "integrityLevel": "Medium",
+              "hashes": "SHA256=DE96A6E69944335375DC1AC238336066889D9FFC7D73628EF4FE1B1B160AB32C",
+              "parentProcessGuid": "{DOMU-001-0001-000000000000}",
+              "parentProcessId": "45000",
+              "parentImage": "C:\\Windows\\System32\\cmd.exe",
+              "parentCommandLine": "cmd.exe"
+            }
+          }
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,28 @@
+title: Office 365 Global Address List Enumeration
+id: 5b6a8c90-1234-4abc-def0-123456789012
+status: experimental
+description: Detects enumeration of the Global Address List, often used for reconnaissance
+author: PookaSec
+date: 2026/01/29
+references:
+    - https://attack.mitre.org/techniques/T1087/003/
+tags:
+    - attack.discovery
+    - attack.t1087.003
+logsource:
+    product: m365
+    service: exchange
+detection:
+    selection:
+        office365.operation|contains:
+            - 'Get-GlobalAddressList'
+            - 'Get-AddressList'
+            - 'Get-Recipient'
+    condition: selection
+fields:
+    - office365.user_id
+    - office365.client_ip
+falsepositives:
+    - Legitimate administrative tasks
+    - Authorized directory queries
+level: low

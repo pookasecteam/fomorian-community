@@ -1,0 +1,18 @@
+name: my-environment
+domain: corp.local
+network:
+  internal: 10.0.0.0/24
+hosts:
+- hostname: WS01.corp.local
+  short_name: WS01
+  ip: 10.0.0.50
+  os: windows
+  agent_id: '001'
+  role: workstation
+  users:
+  - user1
+users:
+- username: user1
+  display_name: User One
+  groups:
+  - Domain Users

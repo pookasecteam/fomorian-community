@@ -1,0 +1,70 @@
+{
+  "_metadata": {
+    "attack_id": "T1087.002",
+    "variation": "001",
+    "name": "Domain Account Discovery via net user /domain",
+    "description": "Enumerate domain user accounts using net.exe user /domain command",
+    "expected_detection": "HIGH",
+    "kill_chain_phase": "discovery",
+    "format": "wazuh-native",
+    "format_version": "1.0",
+    "campaign": "Campaign 22",
+    "date_executed": "2026-02-09"
+  },
+  "logs": [
+    {
+      "_comment": "Sysmon Event 1 - Process Creation: net.exe user /domain",
+      "sequence": 1,
+      "timestamp": "2026-02-09T10:06:00.000Z",
+      "log": {
+        "timestamp": "",
+        "rule": {
+          "level": 3,
+          "description": "Sysmon - Event 1: Process creation",
+          "id": "200151",
+          "mitre": {
+            "id": ["T1087.002"],
+            "tactic": ["Discovery"],
+            "technique": ["Account Discovery: Domain Account"]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": ["sysmon", "sysmon_event1", "windows"]
+        },
+        "agent": {"id": "012", "name": "DC01", "ip": "10.1.0.10"},
+        "manager": {"name": "wazuh.manager"},
+        "id": "1709000004.000001",
+        "decoder": {"name": "windows_eventchannel"},
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "DC01.yourcompany.local",
+              "level": "4",
+              "task": "1",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-09 10:06:00.000",
+              "processGuid": "{12345678-1234-1234-1234-000000004001}",
+              "processId": "5128",
+              "image": "C:\\Windows\\System32\\net.exe",
+              "commandLine": "net  user /domain",
+              "currentDirectory": "C:\\Windows\\System32\\",
+              "user": "YOURCOMPANY\\Administrator",
+              "integrityLevel": "High",
+              "hashes": "SHA256=E6C4D3E8E0B3F4E5C3E7F1D2E9C8D1A5B3C7E2F1D8C9E3A1B5D2C8E7F3A9B1C4",
+              "parentProcessGuid": "{12345678-1234-1234-1234-000000004000}",
+              "parentProcessId": "1234",
+              "parentImage": "C:\\Windows\\System32\\cmd.exe",
+              "parentCommandLine": "C:\\Windows\\System32\\cmd.exe"
+            }
+          }
+        }
+      }
+    }
+  ]
+}

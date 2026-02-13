@@ -1,0 +1,235 @@
+{
+  "_metadata": {
+    "attack_id": "T1134.001",
+    "variation": "001",
+    "name": "PrintSpoofer Privilege Escalation",
+    "description": "PrintSpoofer exploiting SeImpersonatePrivilege to get SYSTEM",
+    "expected_detection": "CRITICAL",
+    "expected_soar": "privilege-escalation-detection",
+    "kill_chain_phase": "privilege-escalation",
+    "notes": "Common technique for service account to SYSTEM escalation",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Sysmon Event 1 - PrintSpoofer execution",
+      "sequence": 1,
+      "timestamp": "2026-01-29T13:45:00.000Z",
+      "log": {
+        "timestamp": "",
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 1: PrintSpoofer Privilege Escalation",
+          "id": "100100",
+          "mitre": {
+            "id": [
+              "T1134.001"
+            ],
+            "tactic": [
+              "Privilege Escalation"
+            ],
+            "technique": [
+              "PrintSpoofer Privilege Escalation"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "007",
+          "name": "WS01",
+          "ip": "10.1.0.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000000.952768109",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "opcode": "0",
+              "keywords": "0x8000000000000000",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-01-29 13:45:00.000",
+              "processGuid": "{A1B2C3D4-2002-2002-2002-000000000001}",
+              "processId": "16500",
+              "image": "C:\\Users\\Public\\PrintSpoofer64.exe",
+              "commandLine": "PrintSpoofer64.exe -i -c cmd.exe",
+              "currentDirectory": "C:\\Users\\Public\\",
+              "user": "IIS APPPOOL\\DefaultAppPool",
+              "integrityLevel": "High",
+              "parentProcessGuid": "{A1B2C3D4-2002-2002-2002-000000000000}",
+              "parentProcessId": "4200",
+              "parentImage": "C:\\Windows\\System32\\inetsrv\\w3wp.exe",
+              "parentCommandLine": "c:\\windows\\system32\\inetsrv\\w3wp.exe -ap \"DefaultAppPool\""
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Sysmon Event 1 - SYSTEM cmd.exe spawned",
+      "sequence": 2,
+      "timestamp": "2026-01-29T13:45:01.000Z",
+      "log": {
+        "timestamp": "",
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 1: PrintSpoofer Privilege Escalation",
+          "id": "100100",
+          "mitre": {
+            "id": [
+              "T1134.001"
+            ],
+            "tactic": [
+              "Privilege Escalation"
+            ],
+            "technique": [
+              "PrintSpoofer Privilege Escalation"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "007",
+          "name": "WS01",
+          "ip": "10.1.0.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000000.362940231",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "opcode": "0",
+              "keywords": "0x8000000000000000",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-01-29 13:45:01.000",
+              "processGuid": "{A1B2C3D4-2002-2002-2002-000000000002}",
+              "processId": "16600",
+              "image": "C:\\Windows\\System32\\cmd.exe",
+              "commandLine": "cmd.exe",
+              "currentDirectory": "C:\\Users\\Public\\",
+              "user": "NT AUTHORITY\\SYSTEM",
+              "integrityLevel": "System",
+              "parentProcessGuid": "{A1B2C3D4-2002-2002-2002-000000000001}",
+              "parentProcessId": "16500",
+              "parentImage": "C:\\Users\\Public\\PrintSpoofer64.exe",
+              "parentCommandLine": "PrintSpoofer64.exe -i -c cmd.exe"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Windows Security Event 4648 - Explicit credential logon",
+      "sequence": 3,
+      "timestamp": "2026-01-29T13:45:00.500Z",
+      "log": {
+        "timestamp": "",
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 4648: PrintSpoofer Privilege Escalation",
+          "id": "100100",
+          "mitre": {
+            "id": [
+              "T1134.001"
+            ],
+            "tactic": [
+              "Privilege Escalation"
+            ],
+            "technique": [
+              "PrintSpoofer Privilege Escalation"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event4648",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "007",
+          "name": "WS01",
+          "ip": "10.1.0.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000000.637501143",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "4648",
+              "channel": "Security",
+              "providerName": "Microsoft-Windows-Security-Auditing",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "opcode": "0",
+              "keywords": "0x8000000000000000",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "subjectUserSid": "S-1-5-82-3006700770-424185619-1745488364-794895919-4004696415",
+              "subjectUserName": "DefaultAppPool",
+              "subjectDomainName": "IIS APPPOOL",
+              "subjectLogonId": "0x1A8C3",
+              "logonGuid": "{00000000-0000-0000-0000-000000000000}",
+              "targetUserName": "SYSTEM",
+              "targetDomainName": "NT AUTHORITY",
+              "targetLogonGuid": "{00000000-0000-0000-0000-000000000000}",
+              "targetServerName": "localhost",
+              "targetInfo": "localhost",
+              "processId": "0x4074",
+              "processName": "C:\\Users\\Public\\PrintSpoofer64.exe"
+            }
+          }
+        }
+      }
+    }
+  ]
+}

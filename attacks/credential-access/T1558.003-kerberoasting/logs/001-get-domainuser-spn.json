@@ -1,0 +1,70 @@
+{
+  "_metadata": {
+    "attack_id": "T1558.003",
+    "variation": "001",
+    "name": "Kerberoasting - PowerView Get-DomainUser SPN Enumeration",
+    "description": "Enumerate service principal names (SPNs) for Kerberoasting attack",
+    "expected_detection": "HIGH",
+    "kill_chain_phase": "credential-access",
+    "format": "wazuh-native",
+    "format_version": "1.0",
+    "campaign": "Campaign 21",
+    "date_executed": "2026-02-09"
+  },
+  "logs": [
+    {
+      "_comment": "Sysmon Event 1 - Process Creation: PowerShell Get-DomainUser",
+      "sequence": 1,
+      "timestamp": "2026-02-09T10:39:00.000Z",
+      "log": {
+        "timestamp": "",
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 1: Process creation",
+          "id": "200151",
+          "mitre": {
+            "id": ["T1558.003"],
+            "tactic": ["Credential Access"],
+            "technique": ["Steal or Forge Kerberos Tickets: Kerberoasting"]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": ["sysmon", "sysmon_event1", "windows"]
+        },
+        "agent": {"id": "012", "name": "DC01", "ip": "10.1.0.10"},
+        "manager": {"name": "wazuh.manager"},
+        "id": "1709000104.000001",
+        "decoder": {"name": "windows_eventchannel"},
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "DC01.yourcompany.local",
+              "level": "4",
+              "task": "1",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-09 10:39:00.000",
+              "processGuid": "{12345678-1234-1234-1234-000000104001}",
+              "processId": "7256",
+              "image": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+              "commandLine": "powershell.exe -Command \"Get-DomainUser -SPN | Select-Object samaccountname,serviceprincipalname\"",
+              "currentDirectory": "C:\\Windows\\System32\\",
+              "user": "YOURCOMPANY\\Administrator",
+              "integrityLevel": "High",
+              "hashes": "SHA256=F6A7B8C9D0E1F2A3B4C5D6E7F8A9B0C1D2E3F4A5B6C7D8E9F0A1B2C3D4E5F6A7",
+              "parentProcessGuid": "{12345678-1234-1234-1234-000000104000}",
+              "parentProcessId": "1234",
+              "parentImage": "C:\\Windows\\System32\\cmd.exe",
+              "parentCommandLine": "C:\\Windows\\System32\\cmd.exe"
+            }
+          }
+        }
+      }
+    }
+  ]
+}

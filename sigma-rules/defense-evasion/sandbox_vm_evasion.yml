@@ -1,0 +1,46 @@
+title: Sandbox or Virtual Machine Detection Attempt
+id: f6a7b8c9-d0e1-2345-f012-678901234567
+status: experimental
+description: Detects attempts to identify virtual machine or sandbox environments for evasion
+author: PookaSec
+date: 2026/01/29
+references:
+    - https://attack.mitre.org/techniques/T1497/001/
+tags:
+    - attack.defense_evasion
+    - attack.t1497.001
+logsource:
+    category: process_creation
+    product: windows
+detection:
+    selection_wmic:
+        Image|endswith: '\wmic.exe'
+        CommandLine|contains:
+            - 'computersystem get'
+            - 'bios get'
+            - 'baseboard get'
+    selection_registry:
+        CommandLine|contains:
+            - 'VMware'
+            - 'VirtualBox'
+            - 'VBOX'
+            - 'Hyper-V'
+            - 'QEMU'
+            - 'Xen'
+    selection_powershell:
+        CommandLine|contains:
+            - 'Get-WmiObject Win32_ComputerSystem'
+            - 'Win32_BIOS'
+            - 'Model.*Virtual'
+            - 'Manufacturer.*VMware'
+    selection_processes:
+        CommandLine|contains:
+            - 'vmtoolsd'
+            - 'vmwaretray'
+            - 'VBoxService'
+            - 'VBoxTray'
+    condition: selection_wmic or selection_registry or selection_powershell or selection_processes
+falsepositives:
+    - System inventory scripts
+    - IT asset management
+level: medium

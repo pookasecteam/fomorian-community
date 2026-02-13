@@ -1,0 +1,121 @@
+{
+  "_metadata": {
+    "attack_id": "T1543.003",
+    "variation": "001",
+    "name": "Windows Service Creation via sc.exe",
+    "description": "Create malicious Windows service using sc.exe create command",
+    "expected_detection": "HIGH",
+    "kill_chain_phase": "persistence",
+    "format": "wazuh-native",
+    "format_version": "1.0",
+    "campaign": "Campaign 22",
+    "date_executed": "2026-02-09",
+    "detection_gap": "Service creation via VBoxManage guestcontrol not logged (Event 4697 missing)"
+  },
+  "logs": [
+    {
+      "_comment": "Sysmon Event 1 - Process Creation: sc.exe create",
+      "sequence": 1,
+      "timestamp": "2026-02-09T10:10:00.000Z",
+      "log": {
+        "timestamp": "",
+        "rule": {
+          "level": 3,
+          "description": "Sysmon - Event 1: Process creation",
+          "id": "200151",
+          "mitre": {
+            "id": ["T1543.003"],
+            "tactic": ["Persistence", "Privilege Escalation"],
+            "technique": ["Create or Modify System Process: Windows Service"]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": ["sysmon", "sysmon_event1", "windows"]
+        },
+        "agent": {"id": "013", "name": "FS01", "ip": "10.1.0.11"},
+        "manager": {"name": "wazuh.manager"},
+        "id": "1709000006.000001",
+        "decoder": {"name": "windows_eventchannel"},
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "FS01.yourcompany.local",
+              "level": "4",
+              "task": "1",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-09 10:10:00.000",
+              "processGuid": "{12345678-1234-1234-1234-000000006001}",
+              "processId": "7128",
+              "image": "C:\\Windows\\System32\\sc.exe",
+              "commandLine": "sc  create Campaign22Service binPath= \"C:\\Windows\\System32\\cmd.exe /c echo backdoor\" start= auto",
+              "currentDirectory": "C:\\Windows\\System32\\",
+              "user": "YOURCOMPANY\\Administrator",
+              "integrityLevel": "High",
+              "hashes": "SHA256=F2A5C8E3D1B4E7A9C5D2E8F1B3A7C4D9E2F5A8B1C7D3E9A4B5C8D2F1E7A3B9C6",
+              "parentProcessGuid": "{12345678-1234-1234-1234-000000006000}",
+              "parentProcessId": "1234",
+              "parentImage": "C:\\Windows\\System32\\cmd.exe",
+              "parentCommandLine": "C:\\Windows\\System32\\cmd.exe"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Windows Event 4697 - Service Installation",
+      "sequence": 2,
+      "timestamp": "2026-02-09T10:10:01.000Z",
+      "log": {
+        "timestamp": "",
+        "rule": {
+          "level": 12,
+          "description": "New service was installed in the system",
+          "id": "60651",
+          "mitre": {
+            "id": ["T1543.003"],
+            "tactic": ["Persistence", "Privilege Escalation"],
+            "technique": ["Create or Modify System Process: Windows Service"]
+          },
+          "firedtimes": 1,
+          "mail": true,
+          "groups": ["windows", "windows_security"]
+        },
+        "agent": {"id": "013", "name": "FS01", "ip": "10.1.0.11"},
+        "manager": {"name": "wazuh.manager"},
+        "id": "1709000006.000002",
+        "decoder": {"name": "windows_eventchannel"},
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "4697",
+              "channel": "Security",
+              "providerName": "Microsoft-Windows-Security-Auditing",
+              "computer": "FS01.yourcompany.local",
+              "level": "0",
+              "task": "13569",
+              "severityValue": "AUDIT_SUCCESS"
+            },
+            "eventdata": {
+              "serviceName": "Campaign22Service",
+              "serviceFileName": "C:\\Windows\\System32\\cmd.exe /c echo backdoor",
+              "serviceType": "0x10",
+              "serviceStartType": "2",
+              "serviceAccount": "LocalSystem",
+              "subjectUserSid": "S-1-5-21-1234567890-1234567890-1234567890-500",
+              "subjectUserName": "Administrator",
+              "subjectDomainName": "YOURCOMPANY",
+              "subjectLogonId": "0x3e7"
+            }
+          }
+        }
+      }
+    }
+  ]
+}

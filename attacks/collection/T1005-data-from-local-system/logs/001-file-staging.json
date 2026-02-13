@@ -1,0 +1,70 @@
+{
+  "_metadata": {
+    "attack_id": "T1005",
+    "variation": "001",
+    "name": "Data from Local System - File Staging",
+    "description": "Stage local files for exfiltration using PowerShell recursive file copy",
+    "expected_detection": "MEDIUM",
+    "kill_chain_phase": "collection",
+    "format": "wazuh-native",
+    "format_version": "1.0",
+    "campaign": "Campaign 25",
+    "date_executed": "2026-02-09"
+  },
+  "logs": [
+    {
+      "_comment": "Sysmon Event 1 - Process Creation: PowerShell file staging",
+      "sequence": 1,
+      "timestamp": "2026-02-09T14:26:00.000Z",
+      "log": {
+        "timestamp": "",
+        "rule": {
+          "level": 8,
+          "description": "Sysmon - Event 1: Process creation",
+          "id": "200151",
+          "mitre": {
+            "id": ["T1005"],
+            "tactic": ["Collection"],
+            "technique": ["Data from Local System"]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": ["sysmon", "sysmon_event1", "windows"]
+        },
+        "agent": {"id": "013", "name": "FS01", "ip": "10.1.0.11"},
+        "manager": {"name": "wazuh.manager"},
+        "id": "1709000213.000001",
+        "decoder": {"name": "windows_eventchannel"},
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "FS01.yourcompany.local",
+              "level": "4",
+              "task": "1",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-09 14:26:00.000",
+              "processGuid": "{12345678-1234-1234-1234-000000213001}",
+              "processId": "20920",
+              "image": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+              "commandLine": "powershell.exe -Command \"Get-ChildItem C:\\Users -Recurse -Include *.txt,*.pdf -ErrorAction SilentlyContinue | Copy-Item -Destination C:\\Users\\Public\\staged_data\\\"",
+              "currentDirectory": "C:\\Windows\\System32\\",
+              "user": "YOURCOMPANY\\Administrator",
+              "integrityLevel": "High",
+              "hashes": "SHA256=C5D6E7F8A9B0C1D2E3F4A5B6C7D8E9F0A1B2C3D4E5F6A7B8C9D0E1F2A3B4C5D6",
+              "parentProcessGuid": "{12345678-1234-1234-1234-000000213000}",
+              "parentProcessId": "1234",
+              "parentImage": "C:\\Windows\\System32\\cmd.exe",
+              "parentCommandLine": "C:\\Windows\\System32\\cmd.exe"
+            }
+          }
+        }
+      }
+    }
+  ]
+}

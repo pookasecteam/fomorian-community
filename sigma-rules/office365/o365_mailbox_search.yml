@@ -1,0 +1,35 @@
+title: Office 365 Compliance Search for Sensitive Keywords
+id: 5b6a8c90-1234-4abc-def0-123456789006
+status: experimental
+description: Detects creation of compliance searches targeting financial keywords, indicating reconnaissance
+author: PookaSec
+date: 2026/01/29
+references:
+    - https://attack.mitre.org/techniques/T1087/003/
+    - https://docs.microsoft.com/en-us/microsoft-365/compliance/content-search
+tags:
+    - attack.discovery
+    - attack.t1087.003
+logsource:
+    product: m365
+    service: securitycompliancecenter
+detection:
+    selection:
+        office365.operation: 'SearchCreated'
+    financial_keywords:
+        office365.extended_properties|contains:
+            - 'wire transfer'
+            - 'payment'
+            - 'invoice'
+            - 'bank account'
+            - 'routing number'
+            - 'confidential'
+    condition: selection and financial_keywords
+fields:
+    - office365.user_id
+    - office365.client_ip
+    - office365.extended_properties
+falsepositives:
+    - Legitimate compliance investigations
+    - Legal discovery searches
+level: medium

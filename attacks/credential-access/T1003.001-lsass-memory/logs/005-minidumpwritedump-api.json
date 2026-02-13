@@ -1,0 +1,194 @@
+{
+  "_metadata": {
+    "attack_id": "T1003.001",
+    "variation": "005",
+    "name": "MiniDumpWriteDump API Direct Call",
+    "description": "LSASS memory dump using direct MiniDumpWriteDump API from custom tool",
+    "expected_detection": "HIGH",
+    "kill_chain_phase": "credential-access",
+    "references": ["https://github.com/yo-yo-yo-jbo/dumping_lsass"],
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Sysmon Event 1 - Custom dumper tool execution",
+      "sequence": 1,
+      "timestamp": "2026-02-02T15:00:00.000Z",
+      "log": {
+        "timestamp": "2026-02-02T15:00:00.000+0000",
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 1: Suspicious process execution",
+          "id": "92151",
+          "mitre": {
+            "id": ["T1003.001"],
+            "tactic": ["Credential Access"],
+            "technique": ["LSASS Memory"]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": ["sysmon", "sysmon_event1", "windows"]
+        },
+        "agent": {"id": "007", "name": "WS01", "ip": "10.1.0.20"},
+        "manager": {"name": "wazuh.manager"},
+        "id": "1706882400.100001",
+        "decoder": {"name": "windows_eventchannel"},
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "severityValue": "INFORMATION",
+              "systemTime": "2026-02-02T15:00:00.000Z"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-02 15:00:00.000",
+              "processGuid": "{12345678-1234-1234-1234-123456789010}",
+              "processId": "8824",
+              "image": "C:\\Users\\attacker\\Desktop\\dumper.exe",
+              "fileVersion": "-",
+              "description": "-",
+              "product": "-",
+              "company": "-",
+              "originalFileName": "-",
+              "commandLine": "dumper.exe -p lsass -o C:\\Temp\\out.dmp",
+              "currentDirectory": "C:\\Users\\attacker\\Desktop\\",
+              "user": "CORP\\attacker",
+              "logonGuid": "{12345678-aaaa-bbbb-cccc-ddddeeeeaaaa}",
+              "logonId": "0x3e7",
+              "terminalSessionId": "1",
+              "integrityLevel": "High",
+              "hashes": "SHA256=A1B2C3D4E5F6A1B2C3D4E5F6A1B2C3D4E5F6A1B2C3D4E5F6A1B2C3D4E5F6A1B2",
+              "parentProcessGuid": "{12345678-1234-1234-1234-123456789009}",
+              "parentProcessId": "5544",
+              "parentImage": "C:\\Windows\\System32\\cmd.exe",
+              "parentCommandLine": "cmd.exe",
+              "parentUser": "CORP\\attacker"
+            }
+          }
+        },
+        "_fomorian_batch": "lsass-dump-techniques",
+        "_fomorian_test": true,
+        "_fomorian_attack_id": "T1003.001",
+        "_fomorian_technique": "minidumpwritedump-api"
+      }
+    },
+    {
+      "_comment": "Sysmon Event 10 - Process access to LSASS with PROCESS_VM_READ",
+      "sequence": 2,
+      "timestamp": "2026-02-02T15:00:01.000Z",
+      "log": {
+        "timestamp": "2026-02-02T15:00:01.000+0000",
+        "rule": {
+          "level": 14,
+          "description": "Sysmon - Event 10: Process accessing LSASS memory",
+          "id": "92052",
+          "mitre": {
+            "id": ["T1003.001"],
+            "tactic": ["Credential Access"],
+            "technique": ["LSASS Memory"]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": ["sysmon", "sysmon_event_10", "windows", "credential_access"]
+        },
+        "agent": {"id": "007", "name": "WS01", "ip": "10.1.0.20"},
+        "manager": {"name": "wazuh.manager"},
+        "id": "1706882401.100002",
+        "decoder": {"name": "windows_eventchannel"},
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "10",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "10",
+              "severityValue": "INFORMATION",
+              "systemTime": "2026-02-02T15:00:01.000Z"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-02 15:00:01.000",
+              "sourceProcessGuid": "{12345678-1234-1234-1234-123456789010}",
+              "sourceProcessId": "8824",
+              "sourceThreadId": "8828",
+              "sourceImage": "C:\\Users\\attacker\\Desktop\\dumper.exe",
+              "targetProcessGuid": "{12345678-1234-1234-1234-123456789002}",
+              "targetProcessId": "672",
+              "targetImage": "C:\\Windows\\System32\\lsass.exe",
+              "grantedAccess": "0x1410",
+              "callTrace": "C:\\Windows\\SYSTEM32\\ntdll.dll+9d4c4|C:\\Windows\\System32\\KERNELBASE.dll+2c13e|C:\\Windows\\System32\\dbgcore.dll+6a12|C:\\Users\\attacker\\Desktop\\dumper.exe+1a2f",
+              "sourceUser": "CORP\\attacker",
+              "targetUser": "NT AUTHORITY\\SYSTEM"
+            }
+          }
+        },
+        "_fomorian_batch": "lsass-dump-techniques",
+        "_fomorian_test": true,
+        "_fomorian_attack_id": "T1003.001",
+        "_fomorian_technique": "minidumpwritedump-api"
+      }
+    },
+    {
+      "_comment": "Sysmon Event 11 - Dump file created",
+      "sequence": 3,
+      "timestamp": "2026-02-02T15:00:02.000Z",
+      "log": {
+        "timestamp": "2026-02-02T15:00:02.000+0000",
+        "rule": {
+          "level": 14,
+          "description": "Sysmon - Event 11: LSASS dump file created",
+          "id": "92101",
+          "mitre": {
+            "id": ["T1003.001"],
+            "tactic": ["Credential Access"],
+            "technique": ["LSASS Memory"]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": ["sysmon", "sysmon_event_11", "windows", "credential_access"]
+        },
+        "agent": {"id": "007", "name": "WS01", "ip": "10.1.0.20"},
+        "manager": {"name": "wazuh.manager"},
+        "id": "1706882402.100003",
+        "decoder": {"name": "windows_eventchannel"},
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "11",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "11",
+              "severityValue": "INFORMATION",
+              "systemTime": "2026-02-02T15:00:02.000Z"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-02 15:00:02.000",
+              "processGuid": "{12345678-1234-1234-1234-123456789010}",
+              "processId": "8824",
+              "image": "C:\\Users\\attacker\\Desktop\\dumper.exe",
+              "targetFilename": "C:\\Temp\\out.dmp",
+              "creationUtcTime": "2026-02-02 15:00:02.000",
+              "user": "CORP\\attacker"
+            }
+          }
+        },
+        "_fomorian_batch": "lsass-dump-techniques",
+        "_fomorian_test": true,
+        "_fomorian_attack_id": "T1003.001",
+        "_fomorian_technique": "minidumpwritedump-api"
+      }
+    }
+  ]
+}

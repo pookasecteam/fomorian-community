@@ -1,0 +1,72 @@
+# Fomorian - Attack Scenario Generator for Wazuh SIEM Testing
+# Docker Compose for development and testing
+#
+# Usage:
+#   docker-compose up -d              # Start all services
+#   docker-compose run fomorian wizard # Run wizard
+#   docker-compose down               # Stop all services
+
+version: '3.8'
+
+services:
+  # Main Fomorian container
+  fomorian:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: pookasec/fomorian:latest
+    container_name: fomorian
+    stdin_open: true
+    tty: true
+    volumes:
+      # Mount config directory
+      - ./config:/app/config
+      # Mount output directory
+      - ./output:/app/output
+      # Mount state directory for wizard checkpoints
+      - ./.fomorian:/app/.fomorian
+      # Mount attacks directory for templates
+      - ./attacks:/app/attacks:ro
+      # Mount engagements directory
+      - ./engagements:/app/engagements:ro
+      # Optionally mount Docker socket for container detection
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    environment:
+      - FOMORIAN_CONFIG_DIR=/app/config
+      - FOMORIAN_OUTPUT_DIR=/app/output
+      - FOMORIAN_STATE_DIR=/app/.fomorian
+      # Wazuh connection (set via .env file or override)
+      - WAZUH_HOST=${WAZUH_HOST:-}
+      - WAZUH_PORT=${WAZUH_PORT:-55000}
+      - WAZUH_USER=${WAZUH_USER:-}
+      - WAZUH_PASSWORD=${WAZUH_PASSWORD:-}
+    networks:
+      - fomorian-net
+    # Keep container running for interactive use
+    command: ["tail", "-f", "/dev/null"]
+
+  # Development container with source mounted
+  fomorian-dev:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: pookasec/fomorian:dev
+    container_name: fomorian-dev
+    stdin_open: true
+    tty: true
+    volumes:
+      # Mount entire source for development
+      - .:/app
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    environment:
+      - FOMORIAN_CONFIG_DIR=/app/config
+      - FOMORIAN_OUTPUT_DIR=/app/output
+      - FOMORIAN_STATE_DIR=/app/.fomorian
+    networks:
+      - fomorian-net
+    profiles:
+      - dev
+
+networks:
+  fomorian-net:
+    driver: bridge

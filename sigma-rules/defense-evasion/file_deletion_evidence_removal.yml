@@ -1,0 +1,41 @@
+title: Evidence Removal via File Deletion
+id: d4e5f6a7-b8c9-0123-def0-456789012345
+status: experimental
+description: Detects deletion of files that may indicate evidence removal or anti-forensics
+author: PookaSec
+date: 2026/01/29
+references:
+    - https://attack.mitre.org/techniques/T1070/004/
+tags:
+    - attack.defense_evasion
+    - attack.t1070.004
+logsource:
+    category: process_creation
+    product: windows
+detection:
+    selection_del:
+        Image|endswith:
+            - '\cmd.exe'
+        CommandLine|contains:
+            - 'del /f'
+            - 'del /q'
+            - 'erase /f'
+            - 'erase /q'
+    selection_powershell:
+        CommandLine|contains:
+            - 'Remove-Item -Force'
+            - 'Remove-Item -Recurse'
+            - 'ri -fo'
+            - 'rm -fo'
+    selection_targets:
+        CommandLine|contains:
+            - '.log'
+            - '.evtx'
+            - 'Temp\\'
+            - 'prefetch'
+            - 'Recent\\'
+    condition: (selection_del or selection_powershell) and selection_targets
+falsepositives:
+    - Legitimate cleanup scripts
+    - Disk space management
+level: medium

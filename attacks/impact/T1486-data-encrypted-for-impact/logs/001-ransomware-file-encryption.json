@@ -1,0 +1,117 @@
+{
+  "_metadata": {
+    "attack_id": "T1486",
+    "variation": "001",
+    "name": "Ransomware File Encryption Simulation",
+    "description": "Simulate ransomware by renaming files with .encrypted extension",
+    "expected_detection": "MEDIUM",
+    "kill_chain_phase": "impact",
+    "format": "wazuh-native",
+    "format_version": "1.0",
+    "campaign": "Campaign 26",
+    "date_executed": "2026-02-09"
+  },
+  "logs": [
+    {
+      "_comment": "Sysmon Event 1 - Process Creation: PowerShell encryption simulation",
+      "sequence": 1,
+      "timestamp": "2026-02-09T15:20:00.000Z",
+      "log": {
+        "timestamp": "",
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 1: Process creation",
+          "id": "200151",
+          "mitre": {
+            "id": ["T1486"],
+            "tactic": ["Impact"],
+            "technique": ["Data Encrypted for Impact"]
+          },
+          "firedtimes": 1,
+          "mail": true,
+          "groups": ["sysmon", "sysmon_event1", "windows"]
+        },
+        "agent": {"id": "014", "name": "WS01", "ip": "10.1.0.20"},
+        "manager": {"name": "wazuh.manager"},
+        "id": "1709000310.000001",
+        "decoder": {"name": "windows_eventchannel"},
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.yourcompany.local",
+              "level": "4",
+              "task": "1",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-09 15:20:00.000",
+              "processGuid": "{12345678-1234-1234-1234-000000310001}",
+              "processId": "35456",
+              "image": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+              "commandLine": "powershell.exe -Command \"Copy-Item 'C:\\Users\\Public\\encrypt_test.txt' 'C:\\Users\\Public\\encrypt_test.txt.encrypted'; Remove-Item 'C:\\Users\\Public\\encrypt_test.txt'\"",
+              "currentDirectory": "C:\\Windows\\System32\\",
+              "user": "YOURCOMPANY\\Administrator",
+              "integrityLevel": "High",
+              "hashes": "SHA256=2F3A4B5C6D7E8F9A0B1C2D3E4F5A6B7C8D9E0F1A2B3C4D5E6F7A8B9C0D1E2F3A",
+              "parentProcessGuid": "{12345678-1234-1234-1234-000000310000}",
+              "parentProcessId": "1234",
+              "parentImage": "C:\\Windows\\System32\\cmd.exe",
+              "parentCommandLine": "C:\\Windows\\System32\\cmd.exe"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Sysmon Event 11 - File Create: .encrypted file created",
+      "sequence": 2,
+      "timestamp": "2026-02-09T15:20:01.000Z",
+      "log": {
+        "timestamp": "",
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 11: File created",
+          "id": "200155",
+          "mitre": {
+            "id": ["T1486"],
+            "tactic": ["Impact"],
+            "technique": ["Data Encrypted for Impact"]
+          },
+          "firedtimes": 1,
+          "mail": true,
+          "groups": ["sysmon", "sysmon_event11", "windows"]
+        },
+        "agent": {"id": "014", "name": "WS01", "ip": "10.1.0.20"},
+        "manager": {"name": "wazuh.manager"},
+        "id": "1709000310.000002",
+        "decoder": {"name": "windows_eventchannel"},
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "11",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.yourcompany.local",
+              "level": "4",
+              "task": "11",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-09 15:20:01.000",
+              "processGuid": "{12345678-1234-1234-1234-000000310001}",
+              "processId": "35456",
+              "image": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+              "targetFilename": "C:\\Users\\Public\\encrypt_test.txt.encrypted",
+              "creationUtcTime": "2026-02-09 15:20:01.000"
+            }
+          }
+        }
+      }
+    }
+  ]
+}

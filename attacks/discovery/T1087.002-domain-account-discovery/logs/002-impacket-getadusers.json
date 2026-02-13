@@ -1,0 +1,136 @@
+{
+  "_metadata": {
+    "attack_id": "T1087.002",
+    "batch": "threat-intel-2026-01-31",
+    "name": "Impacket GetADUsers Domain Enumeration",
+    "description": "Domain account enumeration via GetADUsers.py with distinctive 4-attribute LDAP query",
+    "source": "https://www.huntress.com/blog/ldap-active-directory-detection-part-one",
+    "expected_detection": "HIGH",
+    "kill_chain_phase": "discovery",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Sysmon Event 1 - GetADUsers.py execution",
+      "sequence": 1,
+      "timestamp": "2026-01-31T15:10:33.789Z",
+      "log": {
+        "timestamp": "2026-01-31T15:10:33.789+0000",
+        "rule": {
+          "level": 10,
+          "description": "Sysmon - Event 1: Impacket GetADUsers Enumeration Tool",
+          "id": "92151",
+          "mitre": {
+            "id": ["T1087.002"],
+            "tactic": ["Discovery"],
+            "technique": ["Domain Account"]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": ["sysmon", "sysmon_event1", "windows"]
+        },
+        "agent": {
+          "id": "007",
+          "name": "WS01",
+          "ip": "10.1.0.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000007.300001",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local"
+            },
+            "eventdata": {
+              "utcTime": "2026-01-31 15:10:33.789",
+              "processGuid": "{12345678-gadu-1234-gadu-123456789abc}",
+              "processId": "6789",
+              "image": "C:\\Python39\\python.exe",
+              "commandLine": "python.exe GetADUsers.py -all corp.local/jsmith:Password123 -dc-ip 10.0.10.10",
+              "currentDirectory": "C:\\Tools\\impacket\\examples\\",
+              "user": "CORP\\attacker",
+              "integrityLevel": "Medium",
+              "hashes": "SHA256=ABCD1234567890ABCDEF1234567890ABCDEF1234567890ABCDEF1234567890AB",
+              "parentProcessGuid": "{12345678-gadu-1234-gadu-123456789000}",
+              "parentProcessId": "5678",
+              "parentImage": "C:\\Windows\\System32\\cmd.exe",
+              "parentCommandLine": "cmd.exe"
+            }
+          }
+        },
+        "_fomorian_batch": "threat-intel-2026-01-31",
+        "_fomorian_test": true,
+        "_fomorian_attack_id": "T1087.002",
+        "_fomorian_expected_detection": "Sigma: Impacket GetADUsers Tool (T1087.002)"
+      }
+    },
+    {
+      "_comment": "LDAP Event 1644 - GetADUsers distinctive 4-attribute query",
+      "sequence": 2,
+      "timestamp": "2026-01-31T15:10:35.456Z",
+      "log": {
+        "timestamp": "2026-01-31T15:10:35.456+0000",
+        "rule": {
+          "level": 10,
+          "description": "Directory Service - LDAP Query for User Enumeration",
+          "id": "60012",
+          "mitre": {
+            "id": ["T1087.002"],
+            "tactic": ["Discovery"],
+            "technique": ["Domain Account"]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": ["windows", "ldap", "directory_service"]
+        },
+        "agent": {
+          "id": "001",
+          "name": "DC01",
+          "ip": "10.0.10.10"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000001.300001",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1644",
+              "channel": "Directory Service",
+              "providerName": "Microsoft-Windows-ActiveDirectory_DomainService",
+              "computer": "DC01.corp.local"
+            },
+            "eventdata": {
+              "clientIP": "192.168.1.105",
+              "clientPort": "52456",
+              "startingNode": "DC=corp,DC=local",
+              "ldapFilter": "(&(objectCategory=person)(objectClass=user))",
+              "searchScope": "2",
+              "attributeSelection": "sAMAccountName,pwdLastSet,mail,lastLogon",
+              "visitedEntries": "3500",
+              "returnedEntries": "450"
+            }
+          }
+        },
+        "_fomorian_batch": "threat-intel-2026-01-31",
+        "_fomorian_test": true,
+        "_fomorian_attack_id": "T1087.002",
+        "_fomorian_expected_detection": "Sigma: GetADUsers LDAP Query Pattern (T1087.002)"
+      }
+    }
+  ]
+}

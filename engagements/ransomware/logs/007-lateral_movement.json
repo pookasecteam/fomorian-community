@@ -1,0 +1,92 @@
+{
+  "_metadata": {
+    "engagement": "ransomware",
+    "phase": "lateral-movement",
+    "phase_number": 7,
+    "description": "Lateral Movement phase of Ransomware - example-corp",
+    "techniques": [
+      "T1021.002"
+    ],
+    "timespan": "T+7:37:30 to T+7:39:00",
+    "attacker_logic": "Attacker executes lateral-movement techniques",
+    "format": "wazuh-native",
+    "format_version": "2.0"
+  },
+  "attacker_profile": {
+    "c2_server": "185.141.27.98",
+    "initial_target": "WS01.corp.local",
+    "compromised_user": "CORP\\jsmith"
+  },
+  "logs": [
+    {
+      "_comment": "Lateral movement to DC01 via SMB",
+      "sequence": 1,
+      "relative_time": "T+7:37:30",
+      "timestamp": "2026-01-30T15:37:30Z",
+      "log": {
+        "winlog": {
+          "channel": "Microsoft-Windows-Sysmon/Operational",
+          "event_id": 3,
+          "computer_name": "WORKSTATION01.example.local",
+          "event_data": {
+            "UtcTime": "2026-01-30 11:56:46.368",
+            "ProcessGuid": "{C257A465-WS01-0033-8BF13C781180}",
+            "ProcessId": "4378",
+            "Image": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+            "User": "EXAMPLE\\mjones",
+            "Protocol": "tcp",
+            "Initiated": "true",
+            "SourceIp": "10.1.1.50",
+            "SourcePort": "50401",
+            "DestinationIp": "10.1.1.10",
+            "DestinationHostname": "DC01.example.local",
+            "DestinationPort": "445"
+          }
+        },
+        "agent": {
+          "name": "WS01",
+          "id": "007"
+        },
+        "timestamp": "2026-01-30T15:37:30.000+0000",
+        "_fomorian_test": true,
+        "_fomorian_engagement": "ransomware",
+        "_fomorian_phase": "lateral-movement"
+      }
+    },
+    {
+      "_comment": "Lateral movement to FS01 via SMB",
+      "sequence": 2,
+      "relative_time": "T+7:38:30",
+      "timestamp": "2026-01-30T15:38:30Z",
+      "log": {
+        "winlog": {
+          "channel": "Microsoft-Windows-Sysmon/Operational",
+          "event_id": 3,
+          "computer_name": "DC01.example.local",
+          "event_data": {
+            "UtcTime": "2026-01-30 11:57:10.032",
+            "ProcessGuid": "{C257A465-DC01-0036-8E4FAA7ABD0A}",
+            "ProcessId": "4616",
+            "Image": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+            "User": "EXAMPLE\\jsmith",
+            "Protocol": "tcp",
+            "Initiated": "true",
+            "SourceIp": "10.1.1.10",
+            "SourcePort": "54287",
+            "DestinationIp": "10.1.1.20",
+            "DestinationHostname": "FILESERVER01.example.local",
+            "DestinationPort": "445"
+          }
+        },
+        "agent": {
+          "name": "DC01",
+          "id": "003"
+        },
+        "timestamp": "2026-01-30T15:38:30.000+0000",
+        "_fomorian_test": true,
+        "_fomorian_engagement": "ransomware",
+        "_fomorian_phase": "lateral-movement"
+      }
+    }
+  ]
+}

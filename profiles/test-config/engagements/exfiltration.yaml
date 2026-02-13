@@ -1,0 +1,10 @@
+type: exfiltration
+name: Data Exfiltration Simulation
+exfiltration:
+  staging_directory: C:\Users\Public\staging
+  archive_password: exfil2026
+  exfil_method: https
+  target_paths:
+  - \\FILESERVER01\Confidential
+  - C:\Users\*\Documents\*
+  max_file_size_mb: 100

@@ -1,0 +1,105 @@
+{
+  "_metadata": {
+    "attack_id": "T1036.003",
+    "variation": "001",
+    "name": "Masquerading - cmd.exe renamed to svchost.exe",
+    "description": "Attacker copies cmd.exe to staging directory with svchost.exe name to evade detection",
+    "expected_detection": "HIGH",
+    "kill_chain_phase": "defense-evasion",
+    "format": "wazuh-native",
+    "format_version": "1.0",
+    "campaign": "operation-celtic-storm"
+  },
+  "logs": [
+    {
+      "_comment": "Sysmon Event 1 - Copy cmd.exe to svchost.exe",
+      "sequence": 1,
+      "timestamp": "2026-02-04T21:40:00.000Z",
+      "log": {
+        "timestamp": "2026-02-04T21:40:00.000Z",
+        "rule": {
+          "level": 3,
+          "description": "Sysmon - Event 1: Process Create",
+          "id": "92000",
+          "firedtimes": 1,
+          "mail": false,
+          "groups": ["sysmon", "sysmon_event1"]
+        },
+        "agent": {"id": "003", "name": "DC01", "ip": "10.0.10.10"},
+        "manager": {"name": "wazuh.manager"},
+        "id": "1707081600.000001",
+        "decoder": {"name": "windows_eventchannel"},
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "DC01.Pooka.local"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-04 21:40:00.000",
+              "processGuid": "{DC01-CS04-0001-0001-000000000001}",
+              "processId": "5060",
+              "image": "C:\\Windows\\System32\\cmd.exe",
+              "commandLine": "cmd.exe /c copy C:\\Windows\\System32\\cmd.exe C:\\Windows\\Temp\\celtic_storm\\svchost.exe",
+              "currentDirectory": "C:\\Windows\\Temp\\",
+              "user": "POOKA\\Administrator",
+              "integrityLevel": "High",
+              "parentProcessGuid": "{DC01-CS04-0001-0001-000000000000}",
+              "parentProcessId": "1234",
+              "parentImage": "C:\\Windows\\System32\\wbem\\WmiPrvSE.exe"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Sysmon Event 1 - Execute masqueraded svchost.exe",
+      "sequence": 2,
+      "timestamp": "2026-02-04T21:40:05.000Z",
+      "log": {
+        "timestamp": "2026-02-04T21:40:05.000Z",
+        "rule": {
+          "level": 3,
+          "description": "Sysmon - Event 1: Process Create",
+          "id": "92000",
+          "firedtimes": 1,
+          "mail": false,
+          "groups": ["sysmon", "sysmon_event1"]
+        },
+        "agent": {"id": "003", "name": "DC01", "ip": "10.0.10.10"},
+        "manager": {"name": "wazuh.manager"},
+        "id": "1707081605.000001",
+        "decoder": {"name": "windows_eventchannel"},
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "DC01.Pooka.local"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-04 21:40:05.000",
+              "processGuid": "{DC01-CS04-0001-0001-000000000002}",
+              "processId": "5064",
+              "image": "C:\\Windows\\Temp\\celtic_storm\\svchost.exe",
+              "commandLine": "C:\\Windows\\Temp\\celtic_storm\\svchost.exe /c whoami",
+              "currentDirectory": "C:\\Windows\\Temp\\",
+              "user": "POOKA\\Administrator",
+              "integrityLevel": "High",
+              "hashes": "SHA256=B99D61D874728EDC0918CA0EB10EAB93D381E7367E377406E65963366C874450",
+              "parentProcessGuid": "{DC01-CS04-0001-0001-000000000000}",
+              "parentProcessId": "1234",
+              "parentImage": "C:\\Windows\\System32\\wbem\\WmiPrvSE.exe",
+              "originalFileName": "Cmd.Exe"
+            }
+          }
+        }
+      }
+    }
+  ]
+}

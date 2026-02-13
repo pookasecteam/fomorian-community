@@ -1,0 +1,37 @@
+title: Encrypted C2 Communication on Non-Standard Port
+id: b8c9d0e1-f2a3-4567-1234-890123456789
+status: experimental
+description: Detects HTTPS/TLS traffic on non-standard ports which may indicate encrypted C2
+author: PookaSec
+date: 2026/01/29
+references:
+    - https://attack.mitre.org/techniques/T1573/001/
+    - https://attack.mitre.org/techniques/T1571/
+tags:
+    - attack.command_and_control
+    - attack.t1573.001
+    - attack.t1571
+logsource:
+    category: network_connection
+    product: windows
+detection:
+    selection:
+        Initiated: 'true'
+        DestinationPort:
+            - 8443
+            - 8080
+            - 4443
+            - 9443
+            - 1443
+            - 10443
+    filter_browsers:
+        Image|endswith:
+            - '\chrome.exe'
+            - '\firefox.exe'
+            - '\msedge.exe'
+            - '\iexplore.exe'
+    condition: selection and not filter_browsers
+falsepositives:
+    - Legitimate applications using non-standard HTTPS ports
+    - Development environments
+level: medium

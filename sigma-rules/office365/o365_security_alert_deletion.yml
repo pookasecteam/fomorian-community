@@ -1,0 +1,37 @@
+title: Office 365 Security Alert Email Deletion
+id: 5b6a8c90-1234-4abc-def0-123456789009
+status: experimental
+description: Detects deletion of security alert emails to hide compromise indicators
+author: PookaSec
+date: 2026/01/29
+references:
+    - https://attack.mitre.org/techniques/T1070/008/
+    - https://www.microsoft.com/security/blog/2020/03/09/protecting-organizations-against-password-spray-attacks/
+tags:
+    - attack.defense_evasion
+    - attack.t1070.008
+logsource:
+    product: m365
+    service: exchange
+detection:
+    selection:
+        office365.operation|contains:
+            - 'SoftDelete'
+            - 'HardDelete'
+            - 'MoveToDeletedItems'
+    security_subjects:
+        office365.affected_items.Subject|contains:
+            - 'Security Alert'
+            - 'security notification'
+            - 'sign-in detected'
+            - 'unusual activity'
+            - 'password reset'
+            - 'verification code'
+    condition: selection and security_subjects
+fields:
+    - office365.user_id
+    - office365.client_ip
+    - office365.affected_items
+falsepositives:
+    - User cleaning up legitimate security alerts
+level: high

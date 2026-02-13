@@ -1,0 +1,234 @@
+{
+  "_metadata": {
+    "attack_id": "T1018",
+    "variation": "001",
+    "name": "Remote System Discovery via net view",
+    "description": "Attacker enumerating remote systems using net view and ping sweep",
+    "expected_detection": "MEDIUM",
+    "expected_soar": "discovery-detection",
+    "kill_chain_phase": "discovery",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Sysmon Event 1 - net view enumeration",
+      "sequence": 1,
+      "timestamp": "2026-01-29T14:20:00.000Z",
+      "log": {
+        "timestamp": "",
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 1: Remote System Discovery via net view",
+          "id": "100100",
+          "mitre": {
+            "id": [
+              "T1018"
+            ],
+            "tactic": [
+              "Discovery"
+            ],
+            "technique": [
+              "Remote System Discovery via net view"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "007",
+          "name": "WS01",
+          "ip": "10.1.0.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000000.647169723",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "opcode": "0",
+              "keywords": "0x8000000000000000",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-01-29 14:20:00.000",
+              "processGuid": "{A1B2C3D4-3003-3003-3003-000000000001}",
+              "processId": "18000",
+              "image": "C:\\Windows\\System32\\net.exe",
+              "commandLine": "net view /domain",
+              "currentDirectory": "C:\\Users\\john.doe\\",
+              "user": "CORP\\john.doe",
+              "integrityLevel": "Medium",
+              "parentProcessGuid": "{A1B2C3D4-3003-3003-3003-000000000000}",
+              "parentProcessId": "17900",
+              "parentImage": "C:\\Windows\\System32\\cmd.exe",
+              "parentCommandLine": "cmd.exe"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Sysmon Event 1 - nltest domain controller enumeration",
+      "sequence": 2,
+      "timestamp": "2026-01-29T14:20:05.000Z",
+      "log": {
+        "timestamp": "",
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 1: Remote System Discovery via net view",
+          "id": "100100",
+          "mitre": {
+            "id": [
+              "T1018"
+            ],
+            "tactic": [
+              "Discovery"
+            ],
+            "technique": [
+              "Remote System Discovery via net view"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "007",
+          "name": "WS01",
+          "ip": "10.1.0.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000000.700414797",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "opcode": "0",
+              "keywords": "0x8000000000000000",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-01-29 14:20:05.000",
+              "processGuid": "{A1B2C3D4-3003-3003-3003-000000000002}",
+              "processId": "18100",
+              "image": "C:\\Windows\\System32\\nltest.exe",
+              "commandLine": "nltest /dclist:corp.local",
+              "currentDirectory": "C:\\Users\\john.doe\\",
+              "user": "CORP\\john.doe",
+              "integrityLevel": "Medium",
+              "parentProcessGuid": "{A1B2C3D4-3003-3003-3003-000000000000}",
+              "parentProcessId": "17900",
+              "parentImage": "C:\\Windows\\System32\\cmd.exe",
+              "parentCommandLine": "cmd.exe"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Sysmon Event 3 - LDAP query to DC",
+      "sequence": 3,
+      "timestamp": "2026-01-29T14:20:06.000Z",
+      "log": {
+        "timestamp": "",
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 3: Remote System Discovery via net view",
+          "id": "100100",
+          "mitre": {
+            "id": [
+              "T1018"
+            ],
+            "tactic": [
+              "Discovery"
+            ],
+            "technique": [
+              "Remote System Discovery via net view"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event3",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "007",
+          "name": "WS01",
+          "ip": "10.1.0.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000000.953391361",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "3",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "opcode": "0",
+              "keywords": "0x8000000000000000",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-01-29 14:20:06.000",
+              "processGuid": "{A1B2C3D4-3003-3003-3003-000000000002}",
+              "processId": "18100",
+              "image": "C:\\Windows\\System32\\nltest.exe",
+              "user": "CORP\\john.doe",
+              "protocol": "tcp",
+              "initiated": "true",
+              "sourceIp": "10.1.1.50",
+              "sourcePort": "50200",
+              "destinationIp": "10.1.1.10",
+              "destinationHostname": "DC01.corp.local",
+              "destinationPort": "389"
+            }
+          }
+        }
+      }
+    }
+  ]
+}

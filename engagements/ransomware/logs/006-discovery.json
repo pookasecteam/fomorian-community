@@ -1,0 +1,326 @@
+{
+  "_metadata": {
+    "engagement": "ransomware",
+    "phase": "discovery",
+    "phase_number": 6,
+    "description": "Discovery phase of Ransomware - example-corp",
+    "techniques": [
+      "T1087.002",
+      "T1069.002",
+      "T1018",
+      "T1518.001",
+      "T1033"
+    ],
+    "timespan": "T+7:10:00 to T+7:32:30",
+    "attacker_logic": "Attacker executes discovery techniques",
+    "format": "wazuh-native",
+    "format_version": "2.0"
+  },
+  "attacker_profile": {
+    "c2_server": "185.141.27.98",
+    "initial_target": "WS01.corp.local",
+    "compromised_user": "CORP\\jsmith"
+  },
+  "logs": [
+    {
+      "_comment": "Discovery command: whoami",
+      "sequence": 1,
+      "relative_time": "T+7:10:00",
+      "timestamp": "2026-01-30T15:10:00Z",
+      "log": {
+        "winlog": {
+          "channel": "Microsoft-Windows-Sysmon/Operational",
+          "event_id": 1,
+          "computer_name": "WORKSTATION01.example.local",
+          "event_data": {
+            "UtcTime": "2026-01-30 11:50:10.509",
+            "ProcessGuid": "{C257A465-WS01-0019-3F0110B189C9}",
+            "ProcessId": "2952",
+            "Image": "C:\\Windows\\System32\\cmd.exe",
+            "CommandLine": "cmd.exe /c whoami /all",
+            "User": "EXAMPLE\\jsmith",
+            "ParentProcessGuid": "{C257A465-WS01-0018-976E64BF95A6}"
+          }
+        },
+        "agent": {
+          "name": "WS01",
+          "id": "007"
+        },
+        "timestamp": "2026-01-30T15:10:00.000+0000",
+        "_fomorian_test": true,
+        "_fomorian_engagement": "ransomware",
+        "_fomorian_phase": "discovery"
+      }
+    },
+    {
+      "_comment": "Discovery command: net",
+      "sequence": 2,
+      "relative_time": "T+7:11:00",
+      "timestamp": "2026-01-30T15:11:00Z",
+      "log": {
+        "winlog": {
+          "channel": "Microsoft-Windows-Sysmon/Operational",
+          "event_id": 1,
+          "computer_name": "WORKSTATION01.example.local",
+          "event_data": {
+            "UtcTime": "2026-01-30 11:50:14.377",
+            "ProcessGuid": "{C257A465-WS01-0020-E15A224F1B17}",
+            "ProcessId": "3060",
+            "Image": "C:\\Windows\\System32\\cmd.exe",
+            "CommandLine": "cmd.exe /c net user /domain",
+            "User": "EXAMPLE\\jsmith",
+            "ParentProcessGuid": "{C257A465-WS01-0019-3F0110B189C9}"
+          }
+        },
+        "agent": {
+          "name": "WS01",
+          "id": "007"
+        },
+        "timestamp": "2026-01-30T15:11:00.000+0000",
+        "_fomorian_test": true,
+        "_fomorian_engagement": "ransomware",
+        "_fomorian_phase": "discovery"
+      }
+    },
+    {
+      "_comment": "Discovery command: net",
+      "sequence": 3,
+      "relative_time": "T+7:12:30",
+      "timestamp": "2026-01-30T15:12:30Z",
+      "log": {
+        "winlog": {
+          "channel": "Microsoft-Windows-Sysmon/Operational",
+          "event_id": 1,
+          "computer_name": "WORKSTATION01.example.local",
+          "event_data": {
+            "UtcTime": "2026-01-30 11:50:16.133",
+            "ProcessGuid": "{C257A465-WS01-0021-25E6F7A8027E}",
+            "ProcessId": "3183",
+            "Image": "C:\\Windows\\System32\\cmd.exe",
+            "CommandLine": "cmd.exe /c net group \"Domain Admins\" /domain",
+            "User": "EXAMPLE\\mjones",
+            "ParentProcessGuid": "{C257A465-WS01-0020-E15A224F1B17}"
+          }
+        },
+        "agent": {
+          "name": "WS01",
+          "id": "007"
+        },
+        "timestamp": "2026-01-30T15:12:30.000+0000",
+        "_fomorian_test": true,
+        "_fomorian_engagement": "ransomware",
+        "_fomorian_phase": "discovery"
+      }
+    },
+    {
+      "_comment": "Domain controller enumeration",
+      "sequence": 4,
+      "relative_time": "T+7:14:30",
+      "timestamp": "2026-01-30T15:14:30Z",
+      "log": {
+        "winlog": {
+          "channel": "Microsoft-Windows-Sysmon/Operational",
+          "event_id": 1,
+          "provider_name": "Microsoft-Windows-Sysmon",
+          "computer_name": "WORKSTATION01.example.local",
+          "event_data": {
+            "UtcTime": "2026-01-30 11:50:31.654",
+            "ProcessGuid": "{C257A465-WS01-0022-1A26E38B7C67}",
+            "ProcessId": "3213",
+            "Image": "C:\\Windows\\System32\\nltest.exe",
+            "CommandLine": "nltest /dclist:",
+            "CurrentDirectory": "C:\\Windows\\System32\\",
+            "User": "EXAMPLE\\jsmith",
+            "IntegrityLevel": "High",
+            "ParentProcessGuid": "{C257A465-WS01-0021-25E6F7A8027E}",
+            "ParentProcessId": "3183",
+            "ParentImage": "C:\\Windows\\System32\\cmd.exe"
+          }
+        },
+        "agent": {
+          "name": "WS01",
+          "id": "007"
+        },
+        "timestamp": "2026-01-30T15:14:30.000+0000",
+        "_fomorian_test": true,
+        "_fomorian_engagement": "ransomware",
+        "_fomorian_phase": "discovery"
+      }
+    },
+    {
+      "_comment": "Domain user enumeration",
+      "sequence": 5,
+      "relative_time": "T+7:17:00",
+      "timestamp": "2026-01-30T15:17:00Z",
+      "log": {
+        "winlog": {
+          "channel": "Microsoft-Windows-Sysmon/Operational",
+          "event_id": 1,
+          "provider_name": "Microsoft-Windows-Sysmon",
+          "computer_name": "WORKSTATION01.example.local",
+          "event_data": {
+            "UtcTime": "2026-01-30 11:50:39.093",
+            "ProcessGuid": "{C257A465-WS01-0023-98699E02FB4C}",
+            "ProcessId": "3313",
+            "Image": "C:\\Windows\\System32\\dsquery.exe",
+            "CommandLine": "dsquery user -limit 0",
+            "CurrentDirectory": "C:\\Windows\\System32\\",
+            "User": "EXAMPLE\\jsmith",
+            "IntegrityLevel": "High",
+            "ParentProcessGuid": "{C257A465-WS01-0022-1A26E38B7C67}",
+            "ParentProcessId": "3213",
+            "ParentImage": "C:\\Windows\\System32\\cmd.exe"
+          }
+        },
+        "agent": {
+          "name": "WS01",
+          "id": "007"
+        },
+        "timestamp": "2026-01-30T15:17:00.000+0000",
+        "_fomorian_test": true,
+        "_fomorian_engagement": "ransomware",
+        "_fomorian_phase": "discovery"
+      }
+    },
+    {
+      "_comment": "Domain computer enumeration",
+      "sequence": 6,
+      "relative_time": "T+7:20:00",
+      "timestamp": "2026-01-30T15:20:00Z",
+      "log": {
+        "winlog": {
+          "channel": "Microsoft-Windows-Sysmon/Operational",
+          "event_id": 1,
+          "provider_name": "Microsoft-Windows-Sysmon",
+          "computer_name": "WORKSTATION01.example.local",
+          "event_data": {
+            "UtcTime": "2026-01-30 11:50:48.333",
+            "ProcessGuid": "{C257A465-WS01-0024-28A079642F5E}",
+            "ProcessId": "3466",
+            "Image": "C:\\Windows\\System32\\dsquery.exe",
+            "CommandLine": "dsquery computer -limit 0",
+            "CurrentDirectory": "C:\\Windows\\System32\\",
+            "User": "EXAMPLE\\jsmith",
+            "IntegrityLevel": "High",
+            "ParentProcessGuid": "{C257A465-WS01-0023-98699E02FB4C}",
+            "ParentProcessId": "3313",
+            "ParentImage": "C:\\Windows\\System32\\cmd.exe"
+          }
+        },
+        "agent": {
+          "name": "WS01",
+          "id": "007"
+        },
+        "timestamp": "2026-01-30T15:20:00.000+0000",
+        "_fomorian_test": true,
+        "_fomorian_engagement": "ransomware",
+        "_fomorian_phase": "discovery"
+      }
+    },
+    {
+      "_comment": "Domain admin enumeration",
+      "sequence": 7,
+      "relative_time": "T+7:23:30",
+      "timestamp": "2026-01-30T15:23:30Z",
+      "log": {
+        "winlog": {
+          "channel": "Microsoft-Windows-Sysmon/Operational",
+          "event_id": 1,
+          "provider_name": "Microsoft-Windows-Sysmon",
+          "computer_name": "WORKSTATION01.example.local",
+          "event_data": {
+            "UtcTime": "2026-01-30 11:50:53.883",
+            "ProcessGuid": "{C257A465-WS01-0025-9E506EC8E233}",
+            "ProcessId": "3559",
+            "Image": "C:\\Windows\\System32\\net.exe",
+            "CommandLine": "net group \"Domain Admins\" /domain",
+            "CurrentDirectory": "C:\\Windows\\System32\\",
+            "User": "EXAMPLE\\mjones",
+            "IntegrityLevel": "High",
+            "ParentProcessGuid": "{C257A465-WS01-0024-28A079642F5E}",
+            "ParentProcessId": "3466",
+            "ParentImage": "C:\\Windows\\System32\\cmd.exe"
+          }
+        },
+        "agent": {
+          "name": "WS01",
+          "id": "007"
+        },
+        "timestamp": "2026-01-30T15:23:30.000+0000",
+        "_fomorian_test": true,
+        "_fomorian_engagement": "ransomware",
+        "_fomorian_phase": "discovery"
+      }
+    },
+    {
+      "_comment": "Enterprise admin enumeration",
+      "sequence": 8,
+      "relative_time": "T+7:27:30",
+      "timestamp": "2026-01-30T15:27:30Z",
+      "log": {
+        "winlog": {
+          "channel": "Microsoft-Windows-Sysmon/Operational",
+          "event_id": 1,
+          "provider_name": "Microsoft-Windows-Sysmon",
+          "computer_name": "WORKSTATION01.example.local",
+          "event_data": {
+            "UtcTime": "2026-01-30 11:50:57.727",
+            "ProcessGuid": "{C257A465-WS01-0026-C2148FB344AF}",
+            "ProcessId": "3624",
+            "Image": "C:\\Windows\\System32\\net.exe",
+            "CommandLine": "net group \"Enterprise Admins\" /domain",
+            "CurrentDirectory": "C:\\Windows\\System32\\",
+            "User": "EXAMPLE\\jsmith",
+            "IntegrityLevel": "High",
+            "ParentProcessGuid": "{C257A465-WS01-0025-9E506EC8E233}",
+            "ParentProcessId": "3559",
+            "ParentImage": "C:\\Windows\\System32\\cmd.exe"
+          }
+        },
+        "agent": {
+          "name": "WS01",
+          "id": "007"
+        },
+        "timestamp": "2026-01-30T15:27:30.000+0000",
+        "_fomorian_test": true,
+        "_fomorian_engagement": "ransomware",
+        "_fomorian_phase": "discovery"
+      }
+    },
+    {
+      "_comment": "Security software discovery",
+      "sequence": 9,
+      "relative_time": "T+7:32:00",
+      "timestamp": "2026-01-30T15:32:00Z",
+      "log": {
+        "winlog": {
+          "channel": "Microsoft-Windows-Sysmon/Operational",
+          "event_id": 1,
+          "provider_name": "Microsoft-Windows-Sysmon",
+          "computer_name": "WORKSTATION01.example.local",
+          "event_data": {
+            "UtcTime": "2026-01-30 11:51:06.370",
+            "ProcessGuid": "{C257A465-WS01-0027-D4DCF8812CAC}",
+            "ProcessId": "3761",
+            "Image": "C:\\Windows\\System32\\wbem\\WMIC.exe",
+            "CommandLine": "wmic /namespace:\\\\root\\securitycenter2 path antivirusproduct get displayname",
+            "CurrentDirectory": "C:\\Windows\\System32\\",
+            "User": "EXAMPLE\\mjones",
+            "IntegrityLevel": "High",
+            "ParentProcessGuid": "{C257A465-WS01-0026-C2148FB344AF}",
+            "ParentProcessId": "3624",
+            "ParentImage": "C:\\Windows\\System32\\cmd.exe"
+          }
+        },
+        "agent": {
+          "name": "WS01",
+          "id": "007"
+        },
+        "timestamp": "2026-01-30T15:32:00.000+0000",
+        "_fomorian_test": true,
+        "_fomorian_engagement": "ransomware",
+        "_fomorian_phase": "discovery"
+      }
+    }
+  ]
+}

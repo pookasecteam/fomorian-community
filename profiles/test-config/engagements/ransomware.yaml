@@ -1,0 +1,14 @@
+type: ransomware
+name: Ransomware Attack Simulation
+ransomware:
+  encryption_extension: .encrypted
+  ransom_note: README_RESTORE.txt
+  shadow_delete: true
+  recovery_disable: true
+  target_extensions:
+  - .docx
+  - .xlsx
+  - .pdf
+  - .jpg
+  - .png
+  - .sql

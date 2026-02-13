@@ -1,0 +1,75 @@
+{
+  "_metadata": {
+    "attack_id": "T1018",
+    "variation": "001",
+    "name": "AD Computer Discovery - impacket-GetADComputers",
+    "description": "Attacker uses impacket-GetADComputers to enumerate all computers in Active Directory",
+    "expected_detection": "MEDIUM",
+    "kill_chain_phase": "discovery",
+    "format": "wazuh-native",
+    "format_version": "1.0",
+    "tool": "impacket-GetADComputers",
+    "command": "impacket-GetADComputers yourcompany.local/Administrator:\"\" -dc-ip 10.1.0.10",
+    "impact": "Reveals all domain computers for targeting lateral movement"
+  },
+  "logs": [
+    {
+      "_comment": "Event 4662 - LDAP query for computer objects",
+      "sequence": 1,
+      "timestamp": "2026-02-11T03:10:00.000Z",
+      "log": {
+        "timestamp": "2026-02-11T03:10:00.000Z",
+        "rule": {
+          "level": 3,
+          "description": "Windows Eventchannel event",
+          "id": "60009",
+          "firedtimes": 1,
+          "mail": false,
+          "groups": ["windows", "eventchannel"]
+        },
+        "agent": {
+          "id": "012",
+          "name": "DC01",
+          "ip": "10.1.0.99"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1707628200.500001",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "4662",
+              "channel": "Security",
+              "providerName": "Microsoft-Windows-Security-Auditing",
+              "computer": "DC01.yourcompany.local",
+              "level": "0",
+              "task": "14080",
+              "keywords": "0x8020000000000000",
+              "severityValue": "AUDIT_SUCCESS"
+            },
+            "eventdata": {
+              "subjectUserSid": "S-1-5-21-3298120035-3471069779-879265153-500",
+              "subjectUserName": "Administrator",
+              "subjectDomainName": "YOURCOMPANY",
+              "subjectLogonId": "0x12345",
+              "objectServer": "DS",
+              "objectType": "%%14676",
+              "objectName": "CN=Computers,DC=yourcompany,DC=local",
+              "handleId": "0x0",
+              "accessList": "%%7688",
+              "accessMask": "0x100",
+              "properties": "%%7688\n\t\t\tcomputer",
+              "additionalInfo": "-",
+              "additionalInfo2": "-"
+            }
+          }
+        }
+      }
+    }
+  ]
+}

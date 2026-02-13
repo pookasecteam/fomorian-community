@@ -1,0 +1,320 @@
+{
+  "_metadata": {
+    "attack_id": "T1003.001",
+    "variation": "011",
+    "name": "WER Shtinikering LSASS Dump",
+    "description": "LSASS memory dump via Windows Error Reporting ALPC exploitation (Shtinikering technique)",
+    "expected_detection": "HIGH",
+    "kill_chain_phase": "credential-access",
+    "references": ["https://github.com/yo-yo-yo-jbo/dumping_lsass", "https://github.com/deepinstinct/Shtinikering"],
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Sysmon Event 1 - Shtinikering tool execution (requires SYSTEM)",
+      "sequence": 1,
+      "timestamp": "2026-02-02T17:00:00.000Z",
+      "log": {
+        "timestamp": "2026-02-02T17:00:00.000+0000",
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 1: Suspicious WER exploitation tool",
+          "id": "92151",
+          "mitre": {
+            "id": ["T1003.001"],
+            "tactic": ["Credential Access"],
+            "technique": ["LSASS Memory"]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": ["sysmon", "sysmon_event1", "windows"]
+        },
+        "agent": {"id": "007", "name": "WS01", "ip": "10.1.0.20"},
+        "manager": {"name": "wazuh.manager"},
+        "id": "1706889600.100001",
+        "decoder": {"name": "windows_eventchannel"},
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "severityValue": "INFORMATION",
+              "systemTime": "2026-02-02T17:00:00.000Z"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-02 17:00:00.000",
+              "processGuid": "{12345678-1234-1234-1234-123456789050}",
+              "processId": "12456",
+              "image": "C:\\Users\\attacker\\Tools\\shtinikering.exe",
+              "fileVersion": "-",
+              "description": "-",
+              "product": "-",
+              "company": "-",
+              "originalFileName": "-",
+              "commandLine": "shtinikering.exe -target lsass",
+              "currentDirectory": "C:\\Users\\attacker\\Tools\\",
+              "user": "NT AUTHORITY\\SYSTEM",
+              "logonGuid": "{12345678-0000-0000-0000-000000000000}",
+              "logonId": "0x3e7",
+              "terminalSessionId": "0",
+              "integrityLevel": "System",
+              "hashes": "SHA256=E5F6A1B2C3D4E5F6A1B2C3D4E5F6A1B2C3D4E5F6A1B2C3D4E5F6A1B2C3D4E5F6",
+              "parentProcessGuid": "{12345678-1234-1234-1234-123456789049}",
+              "parentProcessId": "12000",
+              "parentImage": "C:\\Windows\\System32\\services.exe",
+              "parentCommandLine": "C:\\Windows\\system32\\services.exe",
+              "parentUser": "NT AUTHORITY\\SYSTEM"
+            }
+          }
+        },
+        "_fomorian_batch": "lsass-dump-techniques",
+        "_fomorian_test": true,
+        "_fomorian_attack_id": "T1003.001",
+        "_fomorian_technique": "wer-shtinikering"
+      }
+    },
+    {
+      "_comment": "Sysmon Event 10 - Process access to LSASS for PID resolution",
+      "sequence": 2,
+      "timestamp": "2026-02-02T17:00:01.000Z",
+      "log": {
+        "timestamp": "2026-02-02T17:00:01.000+0000",
+        "rule": {
+          "level": 14,
+          "description": "Sysmon - Event 10: Process accessing LSASS",
+          "id": "92052",
+          "mitre": {
+            "id": ["T1003.001"],
+            "tactic": ["Credential Access"],
+            "technique": ["LSASS Memory"]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": ["sysmon", "sysmon_event_10", "windows", "credential_access"]
+        },
+        "agent": {"id": "007", "name": "WS01", "ip": "10.1.0.20"},
+        "manager": {"name": "wazuh.manager"},
+        "id": "1706889601.100002",
+        "decoder": {"name": "windows_eventchannel"},
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "10",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "10",
+              "severityValue": "INFORMATION",
+              "systemTime": "2026-02-02T17:00:01.000Z"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-02 17:00:01.000",
+              "sourceProcessGuid": "{12345678-1234-1234-1234-123456789050}",
+              "sourceProcessId": "12456",
+              "sourceThreadId": "12460",
+              "sourceImage": "C:\\Users\\attacker\\Tools\\shtinikering.exe",
+              "targetProcessGuid": "{12345678-1234-1234-1234-123456789002}",
+              "targetProcessId": "672",
+              "targetImage": "C:\\Windows\\System32\\lsass.exe",
+              "grantedAccess": "0x0400",
+              "callTrace": "C:\\Windows\\SYSTEM32\\ntdll.dll+9d4c4|C:\\Windows\\System32\\KERNELBASE.dll+2c13e|C:\\Users\\attacker\\Tools\\shtinikering.exe+4c28",
+              "sourceUser": "NT AUTHORITY\\SYSTEM",
+              "targetUser": "NT AUTHORITY\\SYSTEM"
+            }
+          }
+        },
+        "_fomorian_batch": "lsass-dump-techniques",
+        "_fomorian_test": true,
+        "_fomorian_attack_id": "T1003.001",
+        "_fomorian_technique": "wer-shtinikering"
+      }
+    },
+    {
+      "_comment": "Sysmon Event 1 - WerFaultSecure spawned via ALPC",
+      "sequence": 3,
+      "timestamp": "2026-02-02T17:00:02.000Z",
+      "log": {
+        "timestamp": "2026-02-02T17:00:02.000+0000",
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 1: WerFaultSecure spawned for crash dump",
+          "id": "92151",
+          "mitre": {
+            "id": ["T1003.001"],
+            "tactic": ["Credential Access"],
+            "technique": ["LSASS Memory"]
+          },
+          "firedtimes": 2,
+          "mail": false,
+          "groups": ["sysmon", "sysmon_event1", "windows"]
+        },
+        "agent": {"id": "007", "name": "WS01", "ip": "10.1.0.20"},
+        "manager": {"name": "wazuh.manager"},
+        "id": "1706889602.100003",
+        "decoder": {"name": "windows_eventchannel"},
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "severityValue": "INFORMATION",
+              "systemTime": "2026-02-02T17:00:02.000Z"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-02 17:00:02.000",
+              "processGuid": "{12345678-1234-1234-1234-123456789051}",
+              "processId": "12600",
+              "image": "C:\\Windows\\System32\\WerFaultSecure.exe",
+              "fileVersion": "10.0.19041.1",
+              "description": "Windows Error Reporting",
+              "product": "Microsoft Windows Operating System",
+              "company": "Microsoft Corporation",
+              "originalFileName": "WerFaultSecure.exe",
+              "commandLine": "C:\\Windows\\System32\\WerFaultSecure.exe -u -p 672 -s 500",
+              "currentDirectory": "C:\\Windows\\system32\\",
+              "user": "NT AUTHORITY\\SYSTEM",
+              "logonGuid": "{12345678-0000-0000-0000-000000000000}",
+              "logonId": "0x3e7",
+              "terminalSessionId": "0",
+              "integrityLevel": "System",
+              "hashes": "SHA256=1234567890ABCDEF1234567890ABCDEF1234567890ABCDEF1234567890ABCDEF",
+              "parentProcessGuid": "{12345678-1234-1234-1234-123456789052}",
+              "parentProcessId": "1012",
+              "parentImage": "C:\\Windows\\System32\\svchost.exe",
+              "parentCommandLine": "C:\\Windows\\system32\\svchost.exe -k WerSvcGroup",
+              "parentUser": "NT AUTHORITY\\SYSTEM"
+            }
+          }
+        },
+        "_fomorian_batch": "lsass-dump-techniques",
+        "_fomorian_test": true,
+        "_fomorian_attack_id": "T1003.001",
+        "_fomorian_technique": "wer-shtinikering"
+      }
+    },
+    {
+      "_comment": "Sysmon Event 10 - WerFaultSecure accessing LSASS memory",
+      "sequence": 4,
+      "timestamp": "2026-02-02T17:00:03.000Z",
+      "log": {
+        "timestamp": "2026-02-02T17:00:03.000+0000",
+        "rule": {
+          "level": 14,
+          "description": "Sysmon - Event 10: WerFaultSecure accessing LSASS",
+          "id": "92052",
+          "mitre": {
+            "id": ["T1003.001"],
+            "tactic": ["Credential Access"],
+            "technique": ["LSASS Memory"]
+          },
+          "firedtimes": 2,
+          "mail": false,
+          "groups": ["sysmon", "sysmon_event_10", "windows", "credential_access"]
+        },
+        "agent": {"id": "007", "name": "WS01", "ip": "10.1.0.20"},
+        "manager": {"name": "wazuh.manager"},
+        "id": "1706889603.100004",
+        "decoder": {"name": "windows_eventchannel"},
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "10",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "10",
+              "severityValue": "INFORMATION",
+              "systemTime": "2026-02-02T17:00:03.000Z"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-02 17:00:03.000",
+              "sourceProcessGuid": "{12345678-1234-1234-1234-123456789051}",
+              "sourceProcessId": "12600",
+              "sourceThreadId": "12604",
+              "sourceImage": "C:\\Windows\\System32\\WerFaultSecure.exe",
+              "targetProcessGuid": "{12345678-1234-1234-1234-123456789002}",
+              "targetProcessId": "672",
+              "targetImage": "C:\\Windows\\System32\\lsass.exe",
+              "grantedAccess": "0x1FFFFF",
+              "callTrace": "C:\\Windows\\SYSTEM32\\ntdll.dll+9d4c4|C:\\Windows\\System32\\KERNELBASE.dll+2c13e|C:\\Windows\\System32\\dbgcore.dll+6a12|C:\\Windows\\System32\\WerFaultSecure.exe+8a2f",
+              "sourceUser": "NT AUTHORITY\\SYSTEM",
+              "targetUser": "NT AUTHORITY\\SYSTEM"
+            }
+          }
+        },
+        "_fomorian_batch": "lsass-dump-techniques",
+        "_fomorian_test": true,
+        "_fomorian_attack_id": "T1003.001",
+        "_fomorian_technique": "wer-shtinikering"
+      }
+    },
+    {
+      "_comment": "Sysmon Event 11 - LSASS dump created in CrashDumps folder",
+      "sequence": 5,
+      "timestamp": "2026-02-02T17:00:05.000Z",
+      "log": {
+        "timestamp": "2026-02-02T17:00:05.000+0000",
+        "rule": {
+          "level": 14,
+          "description": "Sysmon - Event 11: LSASS dump file created via WER",
+          "id": "92101",
+          "mitre": {
+            "id": ["T1003.001"],
+            "tactic": ["Credential Access"],
+            "technique": ["LSASS Memory"]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": ["sysmon", "sysmon_event_11", "windows", "credential_access"]
+        },
+        "agent": {"id": "007", "name": "WS01", "ip": "10.1.0.20"},
+        "manager": {"name": "wazuh.manager"},
+        "id": "1706889605.100005",
+        "decoder": {"name": "windows_eventchannel"},
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "11",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "11",
+              "severityValue": "INFORMATION",
+              "systemTime": "2026-02-02T17:00:05.000Z"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-02 17:00:05.000",
+              "processGuid": "{12345678-1234-1234-1234-123456789051}",
+              "processId": "12600",
+              "image": "C:\\Windows\\System32\\WerFaultSecure.exe",
+              "targetFilename": "C:\\Users\\SYSTEM\\AppData\\Local\\CrashDumps\\lsass.exe.672.dmp",
+              "creationUtcTime": "2026-02-02 17:00:05.000",
+              "user": "NT AUTHORITY\\SYSTEM"
+            }
+          }
+        },
+        "_fomorian_batch": "lsass-dump-techniques",
+        "_fomorian_test": true,
+        "_fomorian_attack_id": "T1003.001",
+        "_fomorian_technique": "wer-shtinikering"
+      }
+    }
+  ]
+}

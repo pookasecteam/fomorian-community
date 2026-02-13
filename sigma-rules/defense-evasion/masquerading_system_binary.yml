@@ -1,0 +1,35 @@
+title: Masquerading - System Binary from Suspicious Location
+id: a7b8c9d0-e1f2-3456-0123-789012345678
+status: experimental
+description: Detects execution of commonly abused system binary names from non-standard locations
+author: PookaSec
+date: 2026/01/29
+references:
+    - https://attack.mitre.org/techniques/T1036/005/
+tags:
+    - attack.defense_evasion
+    - attack.t1036.005
+logsource:
+    category: process_creation
+    product: windows
+detection:
+    selection_suspicious_names:
+        Image|endswith:
+            - '\svchost.exe'
+            - '\lsass.exe'
+            - '\csrss.exe'
+            - '\smss.exe'
+            - '\wininit.exe'
+            - '\services.exe'
+            - '\explorer.exe'
+            - '\spoolsv.exe'
+            - '\winlogon.exe'
+    filter_legitimate_paths:
+        Image|startswith:
+            - 'C:\Windows\System32\'
+            - 'C:\Windows\SysWOW64\'
+            - 'C:\Windows\'
+    condition: selection_suspicious_names and not filter_legitimate_paths
+falsepositives:
+    - Very rare legitimate use
+level: critical

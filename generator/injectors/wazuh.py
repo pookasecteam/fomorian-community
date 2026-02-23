@@ -659,10 +659,19 @@ class WazuhInjector(SIEMInjector):
         return alert
 
     def prepare_log(self, log_entry: LogEntry) -> Dict[str, Any]:
-        """Prepare log with Wazuh-friendly structure."""
+        """Prepare log with Wazuh-friendly structure.
+
+        If the inner log is already in native Wazuh format (has rule with id,
+        agent, decoder), preserve the original fields instead of overwriting.
+        """
         prepared = super().prepare_log(log_entry)
 
-        # Add Wazuh-specific fields
+        # Check if the original log is already in native Wazuh format
+        if self._is_wazuh_native(log_entry.log):
+            # Native format: don't overwrite rule/decoder from template
+            return prepared
+
+        # Non-native: add Wazuh-specific fields
         facility = self.config.extra.get("facility", "fomorian")
         prepared["decoder"] = {"name": facility}
         prepared["location"] = f"{facility}-generator"

@@ -28,11 +28,11 @@ fomorian generate \
 # Or inject existing scenario
 fomorian inject ./scenario.json -s wazuh \
   --inject-method indexer \
-  --siem-password YOUR_INDEXER_ADMIN_PASSWORD
+  --password YOUR_INDEXER_ADMIN_PASSWORD
 
 # Auto-detect best method (picks indexer when available)
 fomorian inject ./scenario.json -s wazuh --inject-method auto \
-  --siem-password YOUR_INDEXER_ADMIN_PASSWORD
+  --password YOUR_INDEXER_ADMIN_PASSWORD
 ```
 
 ---
@@ -67,12 +67,12 @@ fomorian inject ./scenario.json -s wazuh --inject-method indexer
 # Or pass password directly
 fomorian inject ./scenario.json -s wazuh \
   --inject-method indexer \
-  --siem-password YOUR_INDEXER_ADMIN_PASSWORD
+  --password YOUR_INDEXER_ADMIN_PASSWORD
 
 # Custom indexer host/port
 fomorian inject ./scenario.json -s wazuh \
   --inject-method indexer \
-  --siem-password YOUR_PASSWORD \
+  --password YOUR_PASSWORD \
   --indexer-host 192.168.1.100 \
   --indexer-port 9200
 ```
@@ -296,7 +296,7 @@ If all signals fail, you can pass the installation details explicitly:
 ```bash
 fomorian inject ./scenario.json -s wazuh \
   --inject-method indexer \
-  --siem-password YOUR_PASSWORD \
+  --password YOUR_PASSWORD \
   --indexer-host localhost \
   --indexer-port 9200
 ```

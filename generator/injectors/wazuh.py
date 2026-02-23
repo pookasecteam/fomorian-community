@@ -574,8 +574,17 @@ class WazuhInjector(SIEMInjector):
             },
             "location": "fomorian-generator",
             "full_log": json.dumps(log, default=str),
-            "data": log,
+            "data": {k: v for k, v in log.items() if not (k == "timestamp" and not v)},
         }
+
+        # Clean up empty values in data that would cause indexer mapping failures
+        inner_rule = alert["data"].get("rule", {})
+        inner_mitre = inner_rule.get("mitre", {})
+        if inner_mitre:
+            # Remove empty string entries from MITRE arrays
+            for key in ("id", "tactic", "technique"):
+                if key in inner_mitre:
+                    inner_mitre[key] = [v for v in inner_mitre[key] if v]
 
         # Add Windows-specific fields if present
         if "winlog" in log:

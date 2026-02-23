@@ -1,0 +1,634 @@
+{
+  "_metadata": {
+    "phase": "collection",
+    "phase_index": 7,
+    "total_logs": 9,
+    "techniques": [
+      "T1005",
+      "T1039",
+      "T1056.001",
+      "T1113",
+      "T1560.001"
+    ]
+  },
+  "logs": [
+    {
+      "_comment": "Screenshot capture via PowerShell",
+      "sequence": 40,
+      "timestamp": "2026-02-24T11:55:21.768691Z",
+      "attack_phase": "collection",
+      "technique": "T1113",
+      "host": "WS01",
+      "log": {
+        "rule": {
+          "level": 12,
+          "description": "PowerShell ScriptBlock logging (Event 4104)",
+          "id": "100400",
+          "mitre": {
+            "id": [
+              "T1113"
+            ],
+            "tactic": [
+              "Collection"
+            ],
+            "technique": [
+              "T1113"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "windows",
+            "powershell"
+          ]
+        },
+        "agent": {
+          "id": "001",
+          "name": "WS01",
+          "ip": "10.0.10.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "4104",
+              "channel": "Microsoft-Windows-PowerShell/Operational",
+              "providerName": "Microsoft-Windows-PowerShell",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "4104",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "messageNumber": "1",
+              "messageTotal": "1",
+              "scriptBlockText": "Add-Type -AssemblyName System.Windows.Forms; [System.Windows.Forms.Screen]::PrimaryScreen | ForEach-Object { $bitmap = New-Object System.Drawing.Bitmap($_.Bounds.Width, $_.Bounds.Height); $graphics = [System.Drawing.Graphics]::FromImage($bitmap); $graphics.CopyFromScreen($_.Bounds.Location, [System.Drawing.Point]::Empty, $_.Bounds.Size); $bitmap.Save('C:\\Users\\Public\\screenshot.png')}",
+              "scriptBlockId": "{FD12E5CD-WS01-0033-D4CEFDE74C5B}",
+              "path": ""
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Screenshot file created",
+      "sequence": 41,
+      "timestamp": "2026-02-24T11:55:25.389956Z",
+      "attack_phase": "collection",
+      "technique": "T1113",
+      "host": "WS01",
+      "log": {
+        "rule": {
+          "level": 6,
+          "description": "Sysmon - Event 11: FileCreate",
+          "id": "100111",
+          "mitre": {
+            "id": [
+              "T1113"
+            ],
+            "tactic": [
+              "Collection"
+            ],
+            "technique": [
+              "T1113"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event11",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "001",
+          "name": "WS01",
+          "ip": "10.0.10.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "11",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "11",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-24 11:55:21.768",
+              "processGuid": "{FD12E5CD-WS01-0033-D4CEFDE74C5B}",
+              "processId": "4377",
+              "image": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+              "targetFilename": "C:\\Users\\Public\\screenshot.png",
+              "creationUtcTime": "2026-02-24 11:55:21.768",
+              "user": "CORP\\user1"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Keylogger execution",
+      "sequence": 42,
+      "timestamp": "2026-02-24T11:55:29.703212Z",
+      "attack_phase": "collection",
+      "technique": "T1056.001",
+      "host": "WS01",
+      "log": {
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 1: Process creation",
+          "id": "100101",
+          "mitre": {
+            "id": [
+              "T1056.001"
+            ],
+            "tactic": [
+              "Collection"
+            ],
+            "technique": [
+              "T1056.001"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "001",
+          "name": "WS01",
+          "ip": "10.0.10.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-24 11:55:29.703",
+              "processGuid": "{FD12E5CD-WS01-0034-0475FCA65866}",
+              "processId": "4460",
+              "image": "C:\\Users\\Public\\keylog.exe",
+              "commandLine": "keylog.exe -o C:\\Users\\Public\\keystrokes.log",
+              "currentDirectory": "C:\\Users\\Public\\",
+              "user": "CORP\\user1",
+              "integrityLevel": "High",
+              "hashes": "SHA256=DEADBEEF1234567890ABCDEF1234567890ABCDEF1234567890ABCDEF12345678",
+              "parentProcessGuid": "{FD12E5CD-WS01-0033-D4CEFDE74C5B}",
+              "parentProcessId": "4377",
+              "parentImage": "C:\\Windows\\System32\\cmd.exe"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "PowerShell keylogger API call",
+      "sequence": 43,
+      "timestamp": "2026-02-24T11:55:30.755658Z",
+      "attack_phase": "collection",
+      "technique": "T1056.001",
+      "host": "WS01",
+      "log": {
+        "rule": {
+          "level": 12,
+          "description": "PowerShell ScriptBlock logging (Event 4104)",
+          "id": "100400",
+          "mitre": {
+            "id": [
+              "T1056.001"
+            ],
+            "tactic": [
+              "Collection"
+            ],
+            "technique": [
+              "T1056.001"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "windows",
+            "powershell"
+          ]
+        },
+        "agent": {
+          "id": "001",
+          "name": "WS01",
+          "ip": "10.0.10.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "4104",
+              "channel": "Microsoft-Windows-PowerShell/Operational",
+              "providerName": "Microsoft-Windows-PowerShell",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "4104",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "messageNumber": "1",
+              "messageTotal": "1",
+              "scriptBlockText": "$API = '[DllImport(\"user32.dll\")] public static extern short GetAsyncKeyState(int vKey);'; Add-Type -MemberDefinition $API -Name Keyboard -Namespace PsKeyLogger",
+              "scriptBlockId": "{FD12E5CD-WS01-0035-16366AEEC98A}",
+              "path": ""
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Local data discovery",
+      "sequence": 44,
+      "timestamp": "2026-02-24T11:55:33.200767Z",
+      "attack_phase": "collection",
+      "technique": "T1005",
+      "host": "WS01",
+      "log": {
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 1: Process creation",
+          "id": "100101",
+          "mitre": {
+            "id": [
+              "T1005"
+            ],
+            "tactic": [
+              "Collection"
+            ],
+            "technique": [
+              "T1005"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "001",
+          "name": "WS01",
+          "ip": "10.0.10.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-24 11:55:33.200",
+              "processGuid": "{FD12E5CD-WS01-0036-6531FE0D636C}",
+              "processId": "4692",
+              "image": "C:\\Windows\\System32\\cmd.exe",
+              "commandLine": "cmd.exe /c dir /s /b C:\\Users\\*.docx C:\\Users\\*.xlsx C:\\Users\\*.pdf > C:\\temp\\files.txt",
+              "currentDirectory": "C:\\Windows\\System32\\",
+              "user": "CORP\\user1",
+              "integrityLevel": "High",
+              "parentProcessGuid": "{FD12E5CD-WS01-0035-16366AEEC98A}",
+              "parentProcessId": "4597",
+              "parentImage": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Archive collected data with password",
+      "sequence": 45,
+      "timestamp": "2026-02-24T11:55:40.378635Z",
+      "attack_phase": "collection",
+      "technique": "T1560.001",
+      "host": "WS01",
+      "log": {
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 1: Process creation",
+          "id": "100101",
+          "mitre": {
+            "id": [
+              "T1560.001"
+            ],
+            "tactic": [
+              "Collection"
+            ],
+            "technique": [
+              "T1560.001"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "001",
+          "name": "WS01",
+          "ip": "10.0.10.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-24 11:55:40.378",
+              "processGuid": "{FD12E5CD-WS01-0037-8D11C5718B2F}",
+              "processId": "4700",
+              "image": "C:\\Program Files\\7-Zip\\7z.exe",
+              "commandLine": "7z.exe a -pinfected C:\\temp\\data.7z @C:\\temp\\files.txt",
+              "currentDirectory": "C:\\Program Files\\7-Zip\\",
+              "user": "CORP\\user1",
+              "integrityLevel": "High",
+              "parentProcessGuid": "{FD12E5CD-WS01-0036-6531FE0D636C}",
+              "parentProcessId": "4692",
+              "parentImage": "C:\\Windows\\System32\\cmd.exe"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Network share connection",
+      "sequence": 46,
+      "timestamp": "2026-02-24T11:55:48.979990Z",
+      "attack_phase": "collection",
+      "technique": "T1039",
+      "host": "WS01",
+      "log": {
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 1: Process creation",
+          "id": "100101",
+          "mitre": {
+            "id": [
+              "T1039"
+            ],
+            "tactic": [
+              "Collection"
+            ],
+            "technique": [
+              "T1039"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "001",
+          "name": "WS01",
+          "ip": "10.0.10.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-24 11:55:48.979",
+              "processGuid": "{FD12E5CD-WS01-0038-5D504E22F3ED}",
+              "processId": "4822",
+              "image": "C:\\Windows\\System32\\net.exe",
+              "commandLine": "net use Z: \\\\FILESERVER\\shared /user:CORP\\admin.svc P@ssw0rd123",
+              "currentDirectory": "C:\\Windows\\System32\\",
+              "user": "CORP\\user1",
+              "integrityLevel": "High",
+              "parentProcessGuid": "{FD12E5CD-WS01-0037-8D11C5718B2F}",
+              "parentProcessId": "4700",
+              "parentImage": "C:\\Windows\\System32\\cmd.exe"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Network share data collection via robocopy",
+      "sequence": 47,
+      "timestamp": "2026-02-24T11:55:56.808478Z",
+      "attack_phase": "collection",
+      "technique": "T1039",
+      "host": "WS01",
+      "log": {
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 1: Process creation",
+          "id": "100101",
+          "mitre": {
+            "id": [
+              "T1039"
+            ],
+            "tactic": [
+              "Collection"
+            ],
+            "technique": [
+              "T1039"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "001",
+          "name": "WS01",
+          "ip": "10.0.10.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-24 11:55:56.808",
+              "processGuid": "{FD12E5CD-WS01-0039-4254E8EB1C8B}",
+              "processId": "4937",
+              "image": "C:\\Windows\\System32\\robocopy.exe",
+              "commandLine": "robocopy Z:\\confidential C:\\temp\\exfil /E /R:1 /W:1",
+              "currentDirectory": "C:\\Windows\\System32\\",
+              "user": "CORP\\user1",
+              "integrityLevel": "High",
+              "parentProcessGuid": "{FD12E5CD-WS01-0038-5D504E22F3ED}",
+              "parentProcessId": "4822",
+              "parentImage": "C:\\Windows\\System32\\cmd.exe"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Archive data for exfiltration",
+      "sequence": 48,
+      "timestamp": "2026-02-24T11:56:05.757877Z",
+      "attack_phase": "collection",
+      "technique": "T1560.001",
+      "host": "WS01",
+      "log": {
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 1: Process creation",
+          "id": "100101",
+          "mitre": {
+            "id": [
+              "T1560.001"
+            ],
+            "tactic": [
+              "Collection"
+            ],
+            "technique": [
+              "T1560.001"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "001",
+          "name": "WS01",
+          "ip": "10.0.10.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-24 11:56:05.757",
+              "processGuid": "{FD12E5CD-WS01-0040-699F4CF39E2D}",
+              "processId": "5095",
+              "image": "C:\\Program Files\\7-Zip\\7z.exe",
+              "commandLine": "7z.exe a -p\"exfil2026\" C:\\Users\\Public\\data.7z C:\\Users\\*\\Documents\\*",
+              "user": "CORP\\user1",
+              "parentProcessGuid": "{FD12E5CD-WS01-0039-4254E8EB1C8B}"
+            }
+          }
+        }
+      }
+    }
+  ]
+}

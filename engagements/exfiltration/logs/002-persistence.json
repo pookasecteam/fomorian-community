@@ -1,0 +1,80 @@
+{
+  "_metadata": {
+    "phase": "persistence",
+    "phase_index": 2,
+    "total_logs": 1,
+    "techniques": [
+      "T1547.001"
+    ]
+  },
+  "logs": [
+    {
+      "_comment": "Registry Run key persistence",
+      "sequence": 16,
+      "timestamp": "2026-02-24T08:04:20.144300Z",
+      "attack_phase": "persistence",
+      "technique": "T1547.001",
+      "host": "WS01",
+      "log": {
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 13: RegistryEvent (Value Set)",
+          "id": "100113",
+          "mitre": {
+            "id": [
+              "T1547.001"
+            ],
+            "tactic": [
+              "Persistence"
+            ],
+            "technique": [
+              "T1547.001"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event13",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "001",
+          "name": "WS01",
+          "ip": "10.0.10.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "13",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "13",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-24 08:04:20.144",
+              "eventType": "SetValue",
+              "processGuid": "{FD12E5CD-WS01-0012-36E75029D0E1}",
+              "processId": "2270",
+              "image": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+              "targetObject": "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run\\WindowsUpdate",
+              "details": "C:\\Users\\Public\\update.exe",
+              "user": "CORP\\user1"
+            }
+          }
+        }
+      }
+    }
+  ]
+}

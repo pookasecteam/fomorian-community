@@ -1,0 +1,643 @@
+{
+  "_metadata": {
+    "phase": "discovery",
+    "phase_index": 6,
+    "total_logs": 9,
+    "techniques": [
+      "T1018",
+      "T1033",
+      "T1069.002",
+      "T1087.002",
+      "T1518.001"
+    ]
+  },
+  "logs": [
+    {
+      "_comment": "Discovery command: whoami",
+      "sequence": 23,
+      "timestamp": "2026-02-24T08:09:07.528172Z",
+      "attack_phase": "discovery",
+      "technique": "T1033",
+      "host": "WS01",
+      "log": {
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 1: Process creation",
+          "id": "100101",
+          "mitre": {
+            "id": [
+              "T1033"
+            ],
+            "tactic": [
+              "Discovery"
+            ],
+            "technique": [
+              "T1033"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "001",
+          "name": "WS01",
+          "ip": "10.0.10.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-24 08:09:07.528",
+              "processGuid": "{FD12E5CD-WS01-0019-6DF29FB08A6F}",
+              "processId": "2912",
+              "image": "C:\\Windows\\System32\\cmd.exe",
+              "commandLine": "cmd.exe /c whoami /all",
+              "user": "CORP\\user1",
+              "parentProcessGuid": "{FD12E5CD-WS01-0018-D70F417B1A23}"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Discovery command: net",
+      "sequence": 24,
+      "timestamp": "2026-02-24T08:09:15.231134Z",
+      "attack_phase": "discovery",
+      "technique": "T1087.002",
+      "host": "WS01",
+      "log": {
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 1: Process creation",
+          "id": "100101",
+          "mitre": {
+            "id": [
+              "T1087.002"
+            ],
+            "tactic": [
+              "Discovery"
+            ],
+            "technique": [
+              "T1087.002"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "001",
+          "name": "WS01",
+          "ip": "10.0.10.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-24 08:09:15.231",
+              "processGuid": "{FD12E5CD-WS01-0020-73A758772B7F}",
+              "processId": "3043",
+              "image": "C:\\Windows\\System32\\cmd.exe",
+              "commandLine": "cmd.exe /c net user /domain",
+              "user": "CORP\\user1",
+              "parentProcessGuid": "{FD12E5CD-WS01-0019-6DF29FB08A6F}"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Discovery command: net",
+      "sequence": 25,
+      "timestamp": "2026-02-24T08:09:24.887812Z",
+      "attack_phase": "discovery",
+      "technique": "T1069.002",
+      "host": "WS01",
+      "log": {
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 1: Process creation",
+          "id": "100101",
+          "mitre": {
+            "id": [
+              "T1069.002"
+            ],
+            "tactic": [
+              "Discovery"
+            ],
+            "technique": [
+              "T1069.002"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "001",
+          "name": "WS01",
+          "ip": "10.0.10.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-24 08:09:24.887",
+              "processGuid": "{FD12E5CD-WS01-0021-BA5C4694E961}",
+              "processId": "3190",
+              "image": "C:\\Windows\\System32\\cmd.exe",
+              "commandLine": "cmd.exe /c net group \"Domain Admins\" /domain",
+              "user": "CORP\\user1",
+              "parentProcessGuid": "{FD12E5CD-WS01-0020-73A758772B7F}"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Domain controller enumeration",
+      "sequence": 26,
+      "timestamp": "2026-02-24T08:09:33.068622Z",
+      "attack_phase": "discovery",
+      "technique": "T1018",
+      "host": "WS01",
+      "log": {
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 1: Process creation",
+          "id": "100101",
+          "mitre": {
+            "id": [
+              "T1018"
+            ],
+            "tactic": [
+              "Discovery"
+            ],
+            "technique": [
+              "T1018"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "001",
+          "name": "WS01",
+          "ip": "10.0.10.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-24 08:09:33.068",
+              "processGuid": "{FD12E5CD-WS01-0022-4A8B3CE7D194}",
+              "processId": "3282",
+              "image": "C:\\Windows\\System32\\nltest.exe",
+              "commandLine": "nltest /dclist:",
+              "currentDirectory": "C:\\Windows\\System32\\",
+              "user": "CORP\\user1",
+              "integrityLevel": "High",
+              "parentProcessGuid": "{FD12E5CD-WS01-0021-BA5C4694E961}",
+              "parentProcessId": "3190",
+              "parentImage": "C:\\Windows\\System32\\cmd.exe"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Domain user enumeration",
+      "sequence": 27,
+      "timestamp": "2026-02-24T08:09:39.982987Z",
+      "attack_phase": "discovery",
+      "technique": "T1087.002",
+      "host": "WS01",
+      "log": {
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 1: Process creation",
+          "id": "100101",
+          "mitre": {
+            "id": [
+              "T1087.002"
+            ],
+            "tactic": [
+              "Discovery"
+            ],
+            "technique": [
+              "T1087.002"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "001",
+          "name": "WS01",
+          "ip": "10.0.10.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-24 08:09:39.982",
+              "processGuid": "{FD12E5CD-WS01-0023-FDE631E3FFDE}",
+              "processId": "3327",
+              "image": "C:\\Windows\\System32\\dsquery.exe",
+              "commandLine": "dsquery user -limit 0",
+              "currentDirectory": "C:\\Windows\\System32\\",
+              "user": "CORP\\user1",
+              "integrityLevel": "High",
+              "parentProcessGuid": "{FD12E5CD-WS01-0022-4A8B3CE7D194}",
+              "parentProcessId": "3282",
+              "parentImage": "C:\\Windows\\System32\\cmd.exe"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Domain computer enumeration",
+      "sequence": 28,
+      "timestamp": "2026-02-24T08:09:45.445321Z",
+      "attack_phase": "discovery",
+      "technique": "T1018",
+      "host": "WS01",
+      "log": {
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 1: Process creation",
+          "id": "100101",
+          "mitre": {
+            "id": [
+              "T1018"
+            ],
+            "tactic": [
+              "Discovery"
+            ],
+            "technique": [
+              "T1018"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "001",
+          "name": "WS01",
+          "ip": "10.0.10.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-24 08:09:45.445",
+              "processGuid": "{FD12E5CD-WS01-0024-9CEB5C56CB39}",
+              "processId": "3432",
+              "image": "C:\\Windows\\System32\\dsquery.exe",
+              "commandLine": "dsquery computer -limit 0",
+              "currentDirectory": "C:\\Windows\\System32\\",
+              "user": "CORP\\user1",
+              "integrityLevel": "High",
+              "parentProcessGuid": "{FD12E5CD-WS01-0023-FDE631E3FFDE}",
+              "parentProcessId": "3327",
+              "parentImage": "C:\\Windows\\System32\\cmd.exe"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Domain admin enumeration",
+      "sequence": 29,
+      "timestamp": "2026-02-24T08:09:53.778773Z",
+      "attack_phase": "discovery",
+      "technique": "T1069.002",
+      "host": "WS01",
+      "log": {
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 1: Process creation",
+          "id": "100101",
+          "mitre": {
+            "id": [
+              "T1069.002"
+            ],
+            "tactic": [
+              "Discovery"
+            ],
+            "technique": [
+              "T1069.002"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "001",
+          "name": "WS01",
+          "ip": "10.0.10.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-24 08:09:53.778",
+              "processGuid": "{FD12E5CD-WS01-0025-F68D9FBB764C}",
+              "processId": "3501",
+              "image": "C:\\Windows\\System32\\net.exe",
+              "commandLine": "net group \"Domain Admins\" /domain",
+              "currentDirectory": "C:\\Windows\\System32\\",
+              "user": "CORP\\user1",
+              "integrityLevel": "High",
+              "parentProcessGuid": "{FD12E5CD-WS01-0024-9CEB5C56CB39}",
+              "parentProcessId": "3432",
+              "parentImage": "C:\\Windows\\System32\\cmd.exe"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Enterprise admin enumeration",
+      "sequence": 30,
+      "timestamp": "2026-02-24T08:09:55.555742Z",
+      "attack_phase": "discovery",
+      "technique": "T1069.002",
+      "host": "WS01",
+      "log": {
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 1: Process creation",
+          "id": "100101",
+          "mitre": {
+            "id": [
+              "T1069.002"
+            ],
+            "tactic": [
+              "Discovery"
+            ],
+            "technique": [
+              "T1069.002"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "001",
+          "name": "WS01",
+          "ip": "10.0.10.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-24 08:09:55.555",
+              "processGuid": "{FD12E5CD-WS01-0026-C151DF9ECD2C}",
+              "processId": "3601",
+              "image": "C:\\Windows\\System32\\net.exe",
+              "commandLine": "net group \"Enterprise Admins\" /domain",
+              "currentDirectory": "C:\\Windows\\System32\\",
+              "user": "CORP\\user1",
+              "integrityLevel": "High",
+              "parentProcessGuid": "{FD12E5CD-WS01-0025-F68D9FBB764C}",
+              "parentProcessId": "3501",
+              "parentImage": "C:\\Windows\\System32\\cmd.exe"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Security software discovery",
+      "sequence": 31,
+      "timestamp": "2026-02-24T08:09:56.601946Z",
+      "attack_phase": "discovery",
+      "technique": "T1518.001",
+      "host": "WS01",
+      "log": {
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 1: Process creation",
+          "id": "100101",
+          "mitre": {
+            "id": [
+              "T1518.001"
+            ],
+            "tactic": [
+              "Discovery"
+            ],
+            "technique": [
+              "T1518.001"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "001",
+          "name": "WS01",
+          "ip": "10.0.10.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-24 08:09:56.601",
+              "processGuid": "{FD12E5CD-WS01-0027-CEE1FC399D95}",
+              "processId": "3736",
+              "image": "C:\\Windows\\System32\\wbem\\WMIC.exe",
+              "commandLine": "wmic /namespace:\\\\root\\securitycenter2 path antivirusproduct get displayname",
+              "currentDirectory": "C:\\Windows\\System32\\",
+              "user": "CORP\\user1",
+              "integrityLevel": "High",
+              "parentProcessGuid": "{FD12E5CD-WS01-0026-C151DF9ECD2C}",
+              "parentProcessId": "3601",
+              "parentImage": "C:\\Windows\\System32\\cmd.exe"
+            }
+          }
+        }
+      }
+    }
+  ]
+}

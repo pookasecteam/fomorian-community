@@ -2,11 +2,11 @@
 
 <img src="https://img.shields.io/badge/PookaSec-Fomorian-8B0000?style=for-the-badge" alt="Fomorian"/> <img src="https://img.shields.io/badge/Community-Trial-blue?style=for-the-badge" alt="Community Trial"/> <img src="https://img.shields.io/badge/Open%20Source-For%20Wazuh%20Users-green?style=for-the-badge" alt="Open Source"/>
 
-> *In Celtic mythology, the Fomorians (Fomóraig) were a supernatural race of adversaries. Dark, chaotic beings who emerged from the sea and the underworld to challenge the gods. They represented the forces that defenders must prepare to face.*
+> *In Celtic mythology, the Fomorians were a supernatural race of adversaries. Dark, chaotic beings who emerged from the sea and the underworld to challenge the gods. They represented the forces that defenders must prepare to face.*
 
 **Fomorian** is an open source adversary simulation framework for the Wazuh community. Generate realistic attack scenarios, inject them into your SIEM, and validate your detection coverage, without executing real attacks.
 
-> **Community Trial:** This release includes ~45 attack techniques (3-4 per kill chain phase) and 1 full engagement scenario (ransomware). The full version contains 231+ techniques, 7 engagement types, and 1,273+ attack logs. [Contact PookaSec](https://github.com/pookasecteam) for the full release.
+> **Community Trial:** This release includes 91 attack techniques (6-10 per kill chain phase), 2 engagement scenarios, and 585 attack logs. The full version contains 244+ techniques, 7 engagement types, and 1,371+ attack logs. [Contact PookaSec](https://github.com/pookasecteam) for the full release.
 
 ## Why Fomorian?
 
@@ -14,10 +14,10 @@ Most attack simulation tools execute real techniques on endpoints. Fomorian take
 
 **What this tests:**
 ```
-Real Attack:  Endpoint → Telemetry → Collection → Parsing → Enrichment → Detection → Alert
+Real Attack:  Endpoint > Telemetry > Collection > Parsing > Enrichment > Detection > Alert
 
-Fomorian:     Injects here ─────────┘            └─────────────────────────────────┘
-                                                    Tests everything from here on
+Fomorian:     Injects here --------+            +----------------------------------+
+                                                  Tests everything from here on
 ```
 
 Your endpoints might generate perfect telemetry. But if your SIEM drops fields, your parser is misconfigured, or your Sigma rule has broken logic, you will never see the alert.
@@ -39,56 +39,58 @@ See [COMPARISON.md](COMPARISON.md) for detailed analysis.
 ## Quick Start
 
 ```bash
-# Clone the repo
+# Clone and install
 git clone https://github.com/pookasecteam/fomorian-community.git
 cd fomorian-community
-
-# Install dependencies
-pip install -r requirements.txt
-
-# Option 1: Use the inject script (simplest)
-# Edit TARGET in scripts/inject-logs.sh to point to your Wazuh host
-./scripts/inject-logs.sh --dry-run attacks/execution/T1059.001-powershell/
-
-# Option 2: Use the generator engine
 pip install -e .
+
+# Generate a scenario with your environment config
 fomorian generate \
   --config profiles/test-config \
   --engagement ransomware \
   --output scenario.json
 
-# Option 3: Docker
-docker-compose up -d
-docker-compose run fomorian generate \
-  --config /app/profiles/test-config \
-  --engagement ransomware \
-  --output /app/output/scenario.json
+# Inject via Wazuh Indexer (recommended, 95%+ success rate)
+fomorian inject scenario.json -s wazuh \
+  --inject-method indexer \
+  --password YOUR_INDEXER_ADMIN_PASSWORD
+
+# Or auto-detect the best injection method
+fomorian inject scenario.json -s wazuh \
+  --inject-method auto \
+  --password YOUR_INDEXER_ADMIN_PASSWORD
+
+# Detect your Wazuh installation
+fomorian detect-wazuh --siem-password YOUR_INDEXER_ADMIN_PASSWORD
 ```
+
+See [SIEM-IMPORT-GUIDE.md](SIEM-IMPORT-GUIDE.md) for all injection methods and troubleshooting.
 
 ## Community Trial Contents
 
-### Attack Techniques (~45 techniques)
+### Attack Techniques (91 techniques)
 
 | Kill Chain Phase | Techniques | Examples |
 |------------------|:----------:|----------|
-| Initial Access | 3 | Spearphishing, Exploit Public App, Cloud Accounts |
-| Execution | 4 | PowerShell, CMD, WMI, Rundll32 |
-| Persistence | 4 | Registry Run Keys, Scheduled Task, Services, Account Manipulation |
-| Privilege Escalation | 3 | UAC Bypass, Token Impersonation, Exploitation |
-| Defense Evasion | 4 | Disable Security Tools, Clear Logs, Masquerading, DLL Injection |
-| Credential Access | 4 | LSASS Dump, DCSync, Kerberoasting, Password Spray |
-| Discovery | 4 | System Info, Domain Accounts, Network Shares, Remote Systems |
-| Lateral Movement | 3 | SMB/Admin Shares, RDP, WinRM |
-| Collection | 3 | Data from Local System, Data Staging, Archive |
-| Command & Control | 3 | HTTP C2, DNS Tunneling, Ingress Tool Transfer |
-| Exfiltration | 3 | Cloud Storage, Over C2 Channel, Alternative Protocol |
-| Impact | 3 | Ransomware Encryption, Inhibit Recovery, Data Destruction |
+| Initial Access | 6 | Spearphishing Attachment/Link, Exploit Public App, Supply Chain, Cloud Accounts |
+| Execution | 8 | PowerShell, CMD, WMI, Mshta, Rundll32, Python, Unix Shell |
+| Persistence | 8 | Registry Run Keys, Scheduled Task, Services, Web Shell, Account Manipulation |
+| Privilege Escalation | 7 | UAC Bypass, Token Impersonation, Container Escape, SUID Abuse, Exploitation |
+| Defense Evasion | 10 | Disable Security Tools, Clear Logs, DLL Injection, NTFS ADS, Obfuscation, Registry |
+| Credential Access | 9 | LSASS Dump, DCSync, Kerberoasting, AS-REP Roast, NTDS, Password Spray |
+| Discovery | 8 | System Info, Domain Accounts, Network Shares, Remote Systems, Network Scanning |
+| Lateral Movement | 7 | SMB/PsExec, RDP, WinRM, SSH, Pass the Hash, Exploitation of Remote Services |
+| Collection | 7 | Local System Data, Network Shares, Email, Screen Capture, Keylogging, Archive |
+| Command & Control | 7 | HTTP C2, DNS Tunneling, Ingress Tool Transfer, Remote Access Tools, Encrypted Channel |
+| Exfiltration | 7 | Cloud Storage, Over C2 Channel, FTP, DNS Exfil, Cloud Account Transfer |
+| Impact | 7 | Ransomware Encryption, Inhibit Recovery, Data Destruction, Service Stop, Cryptomining |
 
-### Engagement Scenario
+### Engagement Scenarios
 
-| Engagement | Phases | Description |
-|------------|--------|-------------|
-| ransomware | 11 | Full ransomware kill chain from phishing to encryption |
+| Engagement | Phases | Logs | Description |
+|------------|:------:|:----:|-------------|
+| ransomware | 11 | 148 | Full ransomware kill chain from phishing to encryption |
+| exfiltration | 10 | 61 | Data theft scenario from compromise through cloud exfiltration |
 
 ### Sigma Rules
 
@@ -96,14 +98,13 @@ Includes Graylog pipeline detection rules and individual YAML Sigma rules matchi
 
 ## Full Version
 
-The full Fomorian release includes:
-
 | Feature | Community Trial | Full Version |
 |---------|:--------------:|:------------:|
-| Attack Techniques | ~45 | 231+ |
-| Attack Logs | ~100 | 1,273+ |
-| Engagement Types | 1 (ransomware) | 7 |
+| Attack Techniques | 91 | 244+ |
+| Attack Logs | 585 | 1,371+ |
+| Engagement Types | 2 | 7 |
 | Generator Engine | Full | Full |
+| Wazuh Indexer Injection | Full | Full |
 | Sigma Rules | Subset | All |
 | Support | Community | Direct |
 
@@ -115,7 +116,9 @@ The full Fomorian release includes:
 - **Multi Day Scenarios:** Support realistic APT dwell times (hours to weeks)
 - **Randomization:** Realistic timestamps, GUIDs, and behavioral variations
 - **SIEM Agnostic Output:** JSON, NDJSON, Syslog formats for any SIEM
-- **Direct Wazuh Injection:** Inject directly into Wazuh Manager (archives, alerts, or API)
+- **Wazuh Indexer Injection:** Bulk inject via OpenSearch API (recommended, 95%+ success rate)
+- **Multiple Injection Methods:** Indexer, alerts.json, archives, file monitoring, or Wazuh API
+- **Non Root Detection:** Detects Wazuh installations without requiring root access
 
 ## Configuration
 
@@ -149,13 +152,14 @@ hosts:
 
 ```
 fomorian-community/
-├── attacks/                    # Attack log templates by tactic (~45 techniques)
+├── attacks/                    # Attack log templates by tactic (91 techniques)
 │   ├── initial-access/
 │   ├── execution/
 │   ├── persistence/
 │   └── ...
 ├── engagements/
-│   └── ransomware/             # Full 11-phase ransomware scenario
+│   ├── ransomware/             # Full 11-phase ransomware scenario
+│   └── exfiltration/           # Full 10-phase data theft scenario
 ├── sigma-rules/                # Graylog pipeline detection rules
 ├── generator/                  # Core Fomorian engine
 ├── profiles/                   # Environment configuration templates
@@ -168,8 +172,7 @@ fomorian-community/
 
 ## SIEM Integration
 
-See [WAZUH-INTEGRATION.md](WAZUH-INTEGRATION.md) for detailed Wazuh setup instructions.
-See [SIEM-IMPORT-GUIDE.md](SIEM-IMPORT-GUIDE.md) for general SIEM import guidance.
+See [SIEM-IMPORT-GUIDE.md](SIEM-IMPORT-GUIDE.md) for all injection methods, troubleshooting, and environment variables.
 
 **License:** MIT
 

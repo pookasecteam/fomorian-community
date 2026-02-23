@@ -112,8 +112,8 @@ class TemplateLibrary:
 
         # Find all JSON files in attacks directory
         for json_file in self.templates_dir.rglob("*.json"):
-            # Skip non-log files
-            if "README" in json_file.name or "validation" in str(json_file):
+            # Skip non-log files and macOS resource forks
+            if json_file.name.startswith("._") or "README" in json_file.name or "validation" in str(json_file):
                 continue
 
             try:
@@ -138,8 +138,8 @@ class TemplateLibrary:
                     self._by_os[os_type] = []
                 self._by_os[os_type].append(template)
 
-            except (json.JSONDecodeError, KeyError) as e:
-                # Skip invalid files
+            except (json.JSONDecodeError, UnicodeDecodeError, KeyError) as e:
+                # Skip invalid or non-UTF-8 files
                 continue
 
         self._indexed = True

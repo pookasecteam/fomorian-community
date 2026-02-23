@@ -38,6 +38,10 @@ class WazuhInstallation:
     container_name: Optional[str]
     version: Optional[str]
     api_available: bool
+    indexer_available: bool = False
+    indexer_host: str = "localhost"
+    indexer_port: int = 9200
+    indexer_protocol: str = "https"
 
 
 class WazuhInjector(SIEMInjector):
@@ -99,7 +103,9 @@ class WazuhInjector(SIEMInjector):
             self._effective_method = self._method
 
         # Validate the selected method works
-        if self._effective_method == "api":
+        if self._effective_method == "indexer":
+            return self._test_indexer_access()
+        elif self._effective_method == "api":
             return self._authenticate()
         elif self._effective_method == "file":
             return self._test_file_access()
@@ -110,10 +116,12 @@ class WazuhInjector(SIEMInjector):
 
     def _detect_installation(self) -> WazuhInstallation:
         """Detect how Wazuh is installed on the system."""
+        inst: Optional[WazuhInstallation] = None
+
         # Check for Docker containers first
         docker_container = self._detect_docker_container()
         if docker_container:
-            return WazuhInstallation(
+            inst = WazuhInstallation(
                 type="docker",
                 manager_available=True,
                 base_path="/var/ossec",  # Path inside container
@@ -123,39 +131,51 @@ class WazuhInjector(SIEMInjector):
             )
 
         # Check for native installation
-        native_path = self._detect_native_installation()
-        if native_path:
-            is_manager = self._is_wazuh_manager(native_path)
-            return WazuhInstallation(
-                type="native",
-                manager_available=is_manager,
-                base_path=native_path,
-                container_name=None,
-                version=self._get_native_version(native_path),
-                api_available=is_manager and self._test_api_connectivity(),
-            )
+        if inst is None:
+            native_path = self._detect_native_installation()
+            if native_path:
+                is_manager = self._is_wazuh_manager(native_path)
+                inst = WazuhInstallation(
+                    type="native",
+                    manager_available=is_manager,
+                    base_path=native_path,
+                    container_name=None,
+                    version=self._get_native_version(native_path),
+                    api_available=is_manager and self._test_api_connectivity(),
+                )
 
         # Check for agent-only installation
-        agent_path = self._detect_agent_only()
-        if agent_path:
-            return WazuhInstallation(
-                type="agent",
-                manager_available=False,
-                base_path=agent_path,
-                container_name=None,
-                version=None,
-                api_available=False,
-            )
+        if inst is None:
+            agent_path = self._detect_agent_only()
+            if agent_path:
+                inst = WazuhInstallation(
+                    type="agent",
+                    manager_available=False,
+                    base_path=agent_path,
+                    container_name=None,
+                    version=None,
+                    api_available=False,
+                )
 
         # No Wazuh detected - file injection will still work
-        return WazuhInstallation(
-            type="none",
-            manager_available=False,
-            base_path="",
-            container_name=None,
-            version=None,
-            api_available=self._test_api_connectivity(),
-        )
+        if inst is None:
+            inst = WazuhInstallation(
+                type="none",
+                manager_available=False,
+                base_path="",
+                container_name=None,
+                version=None,
+                api_available=self._test_api_connectivity(),
+            )
+
+        # Probe for Wazuh Indexer (OpenSearch) regardless of install type
+        idx_available, idx_host, idx_port, idx_proto = self._detect_indexer()
+        inst.indexer_available = idx_available
+        inst.indexer_host = idx_host
+        inst.indexer_port = idx_port
+        inst.indexer_protocol = idx_proto
+
+        return inst
 
     def _detect_docker_container(self) -> Optional[str]:
         """Detect if Wazuh is running in a Docker container."""
@@ -182,31 +202,119 @@ class WazuhInjector(SIEMInjector):
         return None
 
     def _detect_native_installation(self) -> Optional[str]:
-        """Detect native Wazuh installation path."""
+        """Detect native Wazuh installation path.
+
+        Uses multiple signals so detection works without root access
+        (e.g. /var/ossec is 750 wazuh:wazuh on standard installs).
+        """
+        # Signal 1: Direct path check (works if user has permissions)
         for path in self.NATIVE_PATHS:
-            if os.path.isdir(path) and os.path.isdir(os.path.join(path, "etc")):
+            try:
+                if os.path.isdir(path) and os.path.isdir(os.path.join(path, "etc")):
+                    return path
+            except PermissionError:
+                # Path exists but we can't read it - still a valid detection
                 return path
+
+        # Signal 2: Check if wazuh-manager service is running via systemctl
+        try:
+            result = subprocess.run(
+                ["systemctl", "is-active", "wazuh-manager"],
+                capture_output=True, text=True, timeout=5,
+            )
+            if result.returncode == 0 and result.stdout.strip() == "active":
+                return "/var/ossec"
+        except (subprocess.TimeoutExpired, FileNotFoundError):
+            pass
+
+        # Signal 3: Check package manager for installed package
+        for cmd in (
+            ["dpkg", "-s", "wazuh-manager"],
+            ["rpm", "-q", "wazuh-manager"],
+        ):
+            try:
+                result = subprocess.run(
+                    cmd, capture_output=True, text=True, timeout=5,
+                )
+                if result.returncode == 0:
+                    return "/var/ossec"
+            except (subprocess.TimeoutExpired, FileNotFoundError):
+                pass
+
+        # Signal 4: Check /etc/ossec-init.conf (created by installer)
+        if os.path.isfile("/etc/ossec-init.conf"):
+            return "/var/ossec"
+
         return None
 
     def _detect_agent_only(self) -> Optional[str]:
         """Detect Wazuh agent installation (no manager)."""
         agent_paths = ["/var/ossec", "/Library/Ossec"]
         for path in agent_paths:
-            if os.path.isdir(path):
-                # Agent has ossec.conf but no manager-specific dirs
-                if os.path.isfile(os.path.join(path, "etc", "ossec.conf")):
-                    if not os.path.isdir(os.path.join(path, "logs", "alerts")):
-                        return path
+            try:
+                if os.path.isdir(path):
+                    # Agent has ossec.conf but no manager-specific dirs
+                    if os.path.isfile(os.path.join(path, "etc", "ossec.conf")):
+                        if not os.path.isdir(os.path.join(path, "logs", "alerts")):
+                            return path
+            except PermissionError:
+                pass
         return None
 
     def _is_wazuh_manager(self, base_path: str) -> bool:
-        """Check if the installation is a Wazuh manager (not just agent)."""
+        """Check if the installation is a Wazuh manager (not just agent).
+
+        Uses multiple signals so detection works without root access.
+        """
+        # Signal 1: Direct path check (works if user has permissions)
         manager_indicators = [
             os.path.join(base_path, "logs", "alerts"),
             os.path.join(base_path, "logs", "archives"),
             os.path.join(base_path, "bin", "wazuh-analysisd"),
         ]
-        return any(os.path.exists(p) for p in manager_indicators)
+        try:
+            if any(os.path.exists(p) for p in manager_indicators):
+                return True
+        except PermissionError:
+            pass
+
+        # Signal 2: systemctl check
+        try:
+            result = subprocess.run(
+                ["systemctl", "is-active", "wazuh-manager"],
+                capture_output=True, text=True, timeout=5,
+            )
+            if result.returncode == 0 and result.stdout.strip() == "active":
+                return True
+        except (subprocess.TimeoutExpired, FileNotFoundError):
+            pass
+
+        # Signal 3: Package manager check
+        for cmd in (
+            ["dpkg", "-s", "wazuh-manager"],
+            ["rpm", "-q", "wazuh-manager"],
+        ):
+            try:
+                result = subprocess.run(
+                    cmd, capture_output=True, text=True, timeout=5,
+                )
+                if result.returncode == 0:
+                    return True
+            except (subprocess.TimeoutExpired, FileNotFoundError):
+                pass
+
+        # Signal 4: Check for wazuh-manager process
+        try:
+            result = subprocess.run(
+                ["pgrep", "-x", "wazuh-analysisd"],
+                capture_output=True, timeout=5,
+            )
+            if result.returncode == 0:
+                return True
+        except (subprocess.TimeoutExpired, FileNotFoundError):
+            pass
+
+        return False
 
     def _get_wazuh_version(self, container: str) -> Optional[str]:
         """Get Wazuh version from Docker container."""
@@ -224,7 +332,12 @@ class WazuhInjector(SIEMInjector):
         return None
 
     def _get_native_version(self, base_path: str) -> Optional[str]:
-        """Get Wazuh version from native installation."""
+        """Get Wazuh version from native installation.
+
+        Uses multiple methods since /var/ossec/bin/ may be inaccessible
+        without root (750 wazuh:wazuh on standard installs).
+        """
+        # Method 1: Direct binary (works if user has permissions)
         try:
             result = subprocess.run(
                 [os.path.join(base_path, "bin", "wazuh-control"), "info", "-v"],
@@ -234,9 +347,64 @@ class WazuhInjector(SIEMInjector):
             )
             if result.returncode == 0:
                 return result.stdout.strip()
-        except (subprocess.TimeoutExpired, FileNotFoundError):
+        except (subprocess.TimeoutExpired, FileNotFoundError, PermissionError):
             pass
+
+        # Method 2: Package manager (works for any user)
+        for cmd in (
+            ["dpkg", "-s", "wazuh-manager"],
+            ["rpm", "-q", "wazuh-manager"],
+        ):
+            try:
+                result = subprocess.run(
+                    cmd, capture_output=True, text=True, timeout=5,
+                )
+                if result.returncode == 0:
+                    for line in result.stdout.splitlines():
+                        if line.startswith("Version:"):
+                            return line.split(":", 1)[1].strip()
+                        # rpm -q outputs "wazuh-manager-4.14.3-1.x86_64"
+                        if "wazuh-manager-" in line:
+                            parts = line.split("-")
+                            if len(parts) >= 3:
+                                return parts[2]
+            except (subprocess.TimeoutExpired, FileNotFoundError):
+                pass
+
         return None
+
+    def _detect_indexer(self) -> Tuple[bool, str, int, str]:
+        """Probe for a Wazuh Indexer (OpenSearch) on localhost.
+
+        Returns:
+            (available, host, port, protocol) tuple.
+        """
+        indexer_host = self.config.extra.get("indexer_host", "localhost")
+        indexer_port = int(self.config.extra.get("indexer_port", 9200))
+
+        # Try HTTPS first (default Wazuh Indexer config), then HTTP
+        for protocol in ("https", "http"):
+            try:
+                url = f"{protocol}://{indexer_host}:{indexer_port}/"
+                req = urllib.request.Request(url, method="GET")
+
+                # If password available, try Basic auth (admin:password is default)
+                if self.config.password:
+                    credentials = base64.b64encode(
+                        f"admin:{self.config.password}".encode()
+                    ).decode()
+                    req.add_header("Authorization", f"Basic {credentials}")
+
+                context = self._get_ssl_context()
+                with urllib.request.urlopen(req, timeout=5, context=context) as resp:
+                    body = json.loads(resp.read().decode("utf-8"))
+                    # OpenSearch/Wazuh Indexer returns a version object
+                    if "version" in body:
+                        return (True, indexer_host, indexer_port, protocol)
+            except Exception:
+                continue
+
+        return (False, indexer_host, indexer_port, "https")
 
     def _test_api_connectivity(self) -> bool:
         """Test if Wazuh API is reachable."""
@@ -248,19 +416,35 @@ class WazuhInjector(SIEMInjector):
             return False
 
     def _select_best_method(self) -> str:
-        """Select the best injection method based on detected installation."""
+        """Select the best injection method based on detected installation.
+
+        Priority order:
+        1. indexer  - OpenSearch Bulk API is most reliable for bulk injection
+        2. alerts   - Docker exec to alerts.json (reliable, no Filebeat race)
+        3. alerts   - Native with confirmed write access
+        4. api      - Wazuh Manager API (if credentials available)
+        5. file     - Universal fallback (write to monitored log file)
+        """
         inst = self._installation
 
-        # If manager is available, prefer alerts for direct injection
-        # (alerts.json is what Filebeat tails and indexes)
-        if inst.manager_available:
+        # 1. Prefer indexer when available (most reliable for bulk)
+        if inst.indexer_available and self.config.password:
+            return "indexer"
+
+        # 2. Docker alerts.json is reliable (no Filebeat race condition)
+        if inst.manager_available and inst.type == "docker":
             return "alerts"
 
-        # If API is available and configured, use it
+        # 3. Native alerts.json only if we have write access
+        if inst.manager_available and inst.type == "native":
+            if self._test_direct_write_access():
+                return "alerts"
+
+        # 4. Wazuh API if credentials are configured
         if inst.api_available and self.config.password:
             return "api"
 
-        # Default to file-based injection (most universal)
+        # 5. File-based fallback
         return "file"
 
     def _test_file_access(self) -> bool:
@@ -302,6 +486,29 @@ class WazuhInjector(SIEMInjector):
             except Exception:
                 return False
 
+    def _test_indexer_access(self) -> bool:
+        """Test if we can authenticate and list indices on the Wazuh Indexer."""
+        inst = self._installation
+        if not inst or not inst.indexer_available:
+            return False
+
+        try:
+            url = f"{inst.indexer_protocol}://{inst.indexer_host}:{inst.indexer_port}/_cat/indices?format=json&index=wazuh-alerts-*"
+            req = urllib.request.Request(url, method="GET")
+
+            if self.config.password:
+                credentials = base64.b64encode(
+                    f"admin:{self.config.password}".encode()
+                ).decode()
+                req.add_header("Authorization", f"Basic {credentials}")
+
+            context = self._get_ssl_context()
+            with urllib.request.urlopen(req, timeout=10, context=context) as resp:
+                # Any 2xx response means we can authenticate and query
+                return 200 <= resp.status < 300
+        except Exception:
+            return False
+
     def _authenticate(self) -> bool:
         """Authenticate with Wazuh API and get token."""
         try:
@@ -325,13 +532,18 @@ class WazuhInjector(SIEMInjector):
             return False
 
     def _get_ssl_context(self):
-        """Get SSL context for API requests."""
-        if not self.config.verify_ssl:
-            context = ssl.create_default_context()
-            context.check_hostname = False
-            context.verify_mode = ssl.CERT_NONE
-            return context
-        return None
+        """Get SSL context for HTTPS requests.
+
+        Wazuh Manager API and Indexer both use self-signed certificates
+        in standard installations, so SSL verification is disabled by default.
+        """
+        # Wazuh uses self-signed certs; always skip verification unless
+        # the user has explicitly set verify_ssl (which requires them to
+        # have configured trusted certs).
+        context = ssl.create_default_context()
+        context.check_hostname = False
+        context.verify_mode = ssl.CERT_NONE
+        return context
 
     def _api_request(self, endpoint: str, method: str = "GET", data: Any = None) -> Optional[Dict]:
         """Make authenticated API request."""
@@ -364,7 +576,9 @@ class WazuhInjector(SIEMInjector):
         """Send a single log using the selected method."""
         method = self._effective_method or "file"
 
-        if method == "api":
+        if method == "indexer":
+            return self._send_to_indexer_bulk([log]) > 0
+        elif method == "api":
             return self._send_to_api(log)
         elif method == "file":
             return self._send_to_file([log])
@@ -379,7 +593,9 @@ class WazuhInjector(SIEMInjector):
         """Send batch of logs."""
         method = self._effective_method or "file"
 
-        if method == "file":
+        if method == "indexer":
+            return self._send_to_indexer_bulk(logs)
+        elif method == "file":
             if self._send_to_file(logs):
                 return len(logs)
             return 0
@@ -399,6 +615,70 @@ class WazuhInjector(SIEMInjector):
                 if self._send_to_api(log):
                     success += 1
             return success
+
+    def _send_to_indexer_bulk(self, logs: List[Dict[str, Any]]) -> int:
+        """Send logs to Wazuh Indexer via OpenSearch Bulk API.
+
+        Args:
+            logs: List of log dicts to index.
+
+        Returns:
+            Count of successfully indexed documents.
+        """
+        inst = self._installation
+        if not inst or not inst.indexer_available:
+            return 0
+
+        # Build NDJSON bulk payload
+        now = datetime.utcnow()
+        index_name = f"wazuh-alerts-4.x-{now.strftime('%Y.%m.%d')}"
+
+        lines = []
+        for log in logs:
+            alert = self._prepare_alert(log)
+            action = json.dumps({"index": {"_index": index_name}})
+            doc = json.dumps(alert, default=str)
+            lines.append(action)
+            lines.append(doc)
+
+        if not lines:
+            return 0
+
+        # NDJSON requires trailing newline
+        body = "\n".join(lines) + "\n"
+
+        # POST to _bulk endpoint
+        url = f"{inst.indexer_protocol}://{inst.indexer_host}:{inst.indexer_port}/_bulk"
+        req = urllib.request.Request(url, method="POST")
+        req.add_header("Content-Type", "application/x-ndjson")
+
+        if self.config.password:
+            credentials = base64.b64encode(
+                f"admin:{self.config.password}".encode()
+            ).decode()
+            req.add_header("Authorization", f"Basic {credentials}")
+
+        req.data = body.encode("utf-8")
+
+        try:
+            context = self._get_ssl_context()
+            with urllib.request.urlopen(req, timeout=60, context=context) as resp:
+                result = json.loads(resp.read().decode("utf-8"))
+
+                if not result.get("errors", True):
+                    # All succeeded
+                    return len(logs)
+
+                # Partial success: count items without errors
+                success = 0
+                for item in result.get("items", []):
+                    idx = item.get("index", {})
+                    status = idx.get("status", 0)
+                    if 200 <= status < 300:
+                        success += 1
+                return success
+        except Exception:
+            return 0
 
     def _send_to_file(self, logs: List[Dict[str, Any]]) -> bool:
         """Write logs to file for Wazuh to read."""
@@ -777,6 +1057,10 @@ class WazuhInjector(SIEMInjector):
             "container_name": inst.container_name,
             "version": inst.version,
             "api_available": inst.api_available,
+            "indexer_available": inst.indexer_available,
+            "indexer_host": inst.indexer_host,
+            "indexer_port": inst.indexer_port,
+            "indexer_protocol": inst.indexer_protocol,
             "effective_method": self._effective_method,
             "configured_method": self._method,
         }

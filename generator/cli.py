@@ -544,15 +544,17 @@ def _run_interactive_wizard(output_dir: str):
 @click.option("--realtime", is_flag=True, help="Replay logs with original timing delays")
 @click.option(
     "--inject-method",
-    type=click.Choice(["auto", "api", "file", "archives", "alerts"]),
+    type=click.Choice(["auto", "api", "file", "archives", "alerts", "indexer"]),
     default="auto",
-    help="Wazuh injection method: auto (detect best), api, file, archives, alerts",
+    help="Wazuh injection method: auto (detect best), api, file, archives, alerts, indexer",
 )
+@click.option("--indexer-host", type=str, envvar="WAZUH_INDEXER_HOST", default=None, help="Wazuh Indexer host (or set WAZUH_INDEXER_HOST)")
+@click.option("--indexer-port", type=int, envvar="WAZUH_INDEXER_PORT", default=None, help="Wazuh Indexer port (or set WAZUH_INDEXER_PORT)")
 def generate(
     config: str, engagement: str, output: str, format: str, duration: str,
     seed: int, dry_run: bool, inject: str, siem_host: str, siem_port: int,
     siem_token: str, siem_user: str, siem_password: str, realtime: bool,
-    inject_method: str
+    inject_method: str, indexer_host: str, indexer_port: int
 ):
     """Generate an attack scenario based on configuration."""
     console.print(f"\n[bold blue]Generating {engagement} scenario...[/bold blue]\n")
@@ -628,7 +630,8 @@ def generate(
     if inject:
         _inject_to_siem(
             scenario, inject, siem_host, siem_port, siem_token,
-            siem_user, siem_password, realtime, inject_method
+            siem_user, siem_password, realtime, inject_method,
+            indexer_host=indexer_host, indexer_port=indexer_port,
         )
 
     console.print(Panel.fit(
@@ -645,7 +648,8 @@ def generate(
 
 def _inject_to_siem(
     scenario, siem_type: str, host: str, port: int, token: str,
-    username: str, password: str, realtime: bool, inject_method: str = "auto"
+    username: str, password: str, realtime: bool, inject_method: str = "auto",
+    indexer_host: str = None, indexer_port: int = None,
 ):
     """Inject scenario into SIEM."""
     from .injectors import get_injector, InjectorConfig
@@ -658,6 +662,10 @@ def _inject_to_siem(
     if siem_type == "wazuh":
         extra["method"] = inject_method
         extra["facility"] = "fomorian"
+        if indexer_host:
+            extra["indexer_host"] = indexer_host
+        if indexer_port:
+            extra["indexer_port"] = indexer_port
 
     config = InjectorConfig(
         host=host or "localhost",
@@ -839,14 +847,17 @@ def validate(config: str):
 @click.option("--no-verify-ssl", is_flag=True, help="Disable SSL verification")
 @click.option(
     "--inject-method",
-    type=click.Choice(["auto", "api", "file", "archives", "alerts"]),
+    type=click.Choice(["auto", "api", "file", "archives", "alerts", "indexer"]),
     default="auto",
-    help="Wazuh injection method: auto (detect best), api, file, archives, alerts",
+    help="Wazuh injection method: auto (detect best), api, file, archives, alerts, indexer",
 )
+@click.option("--indexer-host", type=str, envvar="WAZUH_INDEXER_HOST", default=None, help="Wazuh Indexer host (or set WAZUH_INDEXER_HOST)")
+@click.option("--indexer-port", type=int, envvar="WAZUH_INDEXER_PORT", default=None, help="Wazuh Indexer port (or set WAZUH_INDEXER_PORT)")
 def inject(
     scenario_file: str, siem: str, host: str, port: int, token: str,
     username: str, password: str, index: str, realtime: bool,
-    batch_size: int, delay: float, no_verify_ssl: bool, inject_method: str
+    batch_size: int, delay: float, no_verify_ssl: bool, inject_method: str,
+    indexer_host: str, indexer_port: int,
 ):
     """Inject an existing scenario file into a SIEM."""
     import json
@@ -922,7 +933,10 @@ def inject(
     console.print(f"Loaded {len(logs)} logs from scenario")
 
     # Inject
-    _inject_to_siem(scenario, siem, host, port, token, username, password, realtime, inject_method)
+    _inject_to_siem(
+        scenario, siem, host, port, token, username, password, realtime, inject_method,
+        indexer_host=indexer_host, indexer_port=indexer_port,
+    )
 
 
 # ============================================================
@@ -931,7 +945,10 @@ def inject(
 
 @cli.command("detect-wazuh")
 @click.option("--show-instructions", "-i", is_flag=True, help="Show setup instructions")
-def detect_wazuh(show_instructions: bool):
+@click.option("--siem-password", type=str, envvar="PURPLE_TEAM_PASSWORD", default=None, help="Password for indexer detection")
+@click.option("--indexer-host", type=str, envvar="WAZUH_INDEXER_HOST", default=None, help="Wazuh Indexer host")
+@click.option("--indexer-port", type=int, envvar="WAZUH_INDEXER_PORT", default=None, help="Wazuh Indexer port")
+def detect_wazuh(show_instructions: bool, siem_password: str, indexer_host: str, indexer_port: int):
     """Detect Wazuh installation and show compatible injection methods."""
     from .injectors import InjectorConfig
     from .injectors.wazuh import WazuhInjector
@@ -939,10 +956,17 @@ def detect_wazuh(show_instructions: bool):
     console.print("\n[bold blue]Detecting Wazuh Installation...[/bold blue]\n")
 
     # Create a basic config for detection
+    extra = {"method": "auto"}
+    if indexer_host:
+        extra["indexer_host"] = indexer_host
+    if indexer_port:
+        extra["indexer_port"] = indexer_port
+
     config = InjectorConfig(
         host="localhost",
         port=55000,
-        extra={"method": "auto"},
+        password=siem_password,
+        extra=extra,
     )
 
     injector = WazuhInjector(config)
@@ -961,6 +985,10 @@ def detect_wazuh(show_instructions: bool):
     table.add_row("Container Name", info.get("container_name") or "N/A")
     table.add_row("Version", info.get("version") or "Unknown")
     table.add_row("API Available", "Yes" if info.get("api_available") else "No")
+    indexer_status = "Yes" if info.get("indexer_available") else "No"
+    if info.get("indexer_available"):
+        indexer_status += f" ({info.get('indexer_protocol', 'https')}://{info.get('indexer_host', 'localhost')}:{info.get('indexer_port', 9200)})"
+    table.add_row("Indexer Available", indexer_status)
 
     console.print(table)
 
@@ -968,13 +996,20 @@ def detect_wazuh(show_instructions: bool):
     console.print("\n[bold]Recommended Injection Methods:[/bold]")
 
     inst_type = info.get("type", "none")
-    if inst_type == "docker":
-        console.print("  [green]1. archives[/green] - Direct write to archives.json (recommended)")
+    has_indexer = info.get("indexer_available", False)
+
+    if has_indexer:
+        console.print("  [green]1. indexer[/green] - OpenSearch Bulk API to Wazuh Indexer (recommended)")
         console.print("  [yellow]2. alerts[/yellow] - Direct write to alerts.json")
         console.print("  [dim]3. file[/dim] - Monitored log file (requires ossec.conf setup)")
         console.print("  [dim]4. api[/dim] - Wazuh API (requires credentials)")
+    elif inst_type == "docker":
+        console.print("  [green]1. alerts[/green] - Direct write to alerts.json via Docker (recommended)")
+        console.print("  [yellow]2. archives[/yellow] - Direct write to archives.json")
+        console.print("  [dim]3. file[/dim] - Monitored log file (requires ossec.conf setup)")
+        console.print("  [dim]4. api[/dim] - Wazuh API (requires credentials)")
     elif inst_type == "native" and info.get("manager_available"):
-        console.print("  [green]1. archives[/green] - Direct write to archives.json (recommended)")
+        console.print("  [green]1. indexer[/green] - OpenSearch Bulk API (add --siem-password to detect)")
         console.print("  [yellow]2. alerts[/yellow] - Direct write to alerts.json")
         console.print("  [dim]3. file[/dim] - Monitored log file (requires ossec.conf setup)")
         console.print("  [dim]4. api[/dim] - Wazuh API (requires credentials)")
@@ -987,12 +1022,14 @@ def detect_wazuh(show_instructions: bool):
 
     # Show usage example
     console.print("\n[bold]Quick Start:[/bold]")
-    if inst_type in ("docker", "native") and info.get("manager_available"):
-        console.print("  [dim]fomorian generate -c ./config -e ransomware --inject wazuh --inject-method archives[/dim]")
+    if has_indexer:
+        console.print("  [dim]fomorian inject scenario.json -s wazuh --siem-password YOUR_PASSWORD[/dim]")
+    elif inst_type in ("docker", "native") and info.get("manager_available"):
+        console.print("  [dim]fomorian inject scenario.json -s wazuh --inject-method alerts[/dim]")
     elif inst_type == "agent":
-        console.print("  [dim]fomorian generate -c ./config -e ransomware --inject wazuh --inject-method file[/dim]")
+        console.print("  [dim]fomorian inject scenario.json -s wazuh --inject-method file[/dim]")
     else:
-        console.print("  [dim]fomorian generate -c ./config -e ransomware --inject wazuh --inject-method api \\[/dim]")
+        console.print("  [dim]fomorian inject scenario.json -s wazuh --inject-method api \\[/dim]")
         console.print("  [dim]  --siem-host your-wazuh-server --siem-user wazuh-wui --siem-password xxx[/dim]")
 
     if show_instructions:
@@ -1033,6 +1070,7 @@ def list_resources(resource: str, tactic: str):
 
         methods = [
             ("auto", "Auto-detect best method based on installation", "Auto"),
+            ("indexer", "OpenSearch Bulk API to Wazuh Indexer (recommended)", "--siem-password"),
             ("archives", "Write directly to /var/ossec/logs/archives/archives.json", "Manager access"),
             ("alerts", "Write directly to /var/ossec/logs/alerts/alerts.json", "Manager access"),
             ("file", "Write to monitored log file (most compatible)", "ossec.conf setup"),
@@ -1050,17 +1088,22 @@ def list_resources(resource: str, tactic: str):
         console.print("  PURPLE_TEAM_TOKEN    - API token/key")
         console.print("  PURPLE_TEAM_USERNAME - Username")
         console.print("  PURPLE_TEAM_PASSWORD - Password")
+        console.print("  WAZUH_INDEXER_HOST   - Wazuh Indexer hostname (default: localhost)")
+        console.print("  WAZUH_INDEXER_PORT   - Wazuh Indexer port (default: 9200)")
 
         console.print("\n[bold]Examples:[/bold]")
-        console.print("  [dim]# Inject directly into Wazuh archives (recommended for local Wazuh)[/dim]")
-        console.print("  fomorian generate -c ./config -e ransomware --inject wazuh --inject-method archives")
+        console.print("  [dim]# Inject via Wazuh Indexer (recommended for native installs)[/dim]")
+        console.print("  fomorian inject scenario.json -s wazuh --siem-password YOUR_INDEXER_PASSWORD")
+        console.print("")
+        console.print("  [dim]# Inject directly into Wazuh alerts.json (recommended for Docker)[/dim]")
+        console.print("  fomorian inject scenario.json -s wazuh --inject-method alerts")
         console.print("")
         console.print("  [dim]# Use Wazuh API for remote injection[/dim]")
-        console.print("  fomorian generate -c ./config -e ransomware --inject wazuh --inject-method api \\")
+        console.print("  fomorian inject scenario.json -s wazuh --inject-method api \\")
         console.print("    --siem-host wazuh-manager --siem-user wazuh-wui --siem-password xxx")
         console.print("")
         console.print("  [dim]# Detect Wazuh installation and show recommended methods[/dim]")
-        console.print("  fomorian detect-wazuh")
+        console.print("  fomorian detect-wazuh --siem-password YOUR_PASSWORD")
 
     elif resource == "engagements":
         table = Table(title="Available Engagement Types")

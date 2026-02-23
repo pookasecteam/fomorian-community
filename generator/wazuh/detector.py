@@ -246,25 +246,67 @@ class WazuhDetector:
             return None
 
     def _detect_native(self) -> Optional[WazuhInstallation]:
-        """Detect native Wazuh installation."""
+        """Detect native Wazuh installation.
+
+        Uses multiple signals so detection works without root access
+        (e.g., /var/ossec is 750 wazuh:wazuh on fresh installs).
+        """
+        detected_path = None
+
+        # Signal 1: Direct path check (works if user has permissions)
         for path in self.NATIVE_PATHS:
             ossec_path = Path(path)
-            control_path = ossec_path / "bin" / "wazuh-control"
+            try:
+                control_path = ossec_path / "bin" / "wazuh-control"
+                if control_path.exists():
+                    detected_path = ossec_path
+                    break
+            except PermissionError:
+                # Path exists but can't read: still a detection
+                detected_path = ossec_path
+                break
 
-            if control_path.exists():
-                # This is a manager installation
-                version = self._get_native_version(ossec_path)
-                return WazuhInstallation(
-                    install_type=InstallationType.NATIVE,
-                    location=str(ossec_path),
-                    version=version,
-                    alerts_path=str(ossec_path / "logs" / "alerts" / "alerts.json"),
-                    archives_path=str(ossec_path / "logs" / "archives" / "archives.json"),
-                    api_url="https://localhost:55000",
-                    recommended_method="alerts",
+        # Signal 2: systemctl check
+        if detected_path is None:
+            try:
+                result = subprocess.run(
+                    ["systemctl", "is-active", "wazuh-manager"],
+                    capture_output=True, text=True, timeout=5,
                 )
+                if result.returncode == 0 and result.stdout.strip() == "active":
+                    detected_path = Path("/var/ossec")
+            except (subprocess.TimeoutExpired, FileNotFoundError):
+                pass
 
-        return None
+        # Signal 3: Package manager check
+        if detected_path is None:
+            for cmd in (["dpkg", "-s", "wazuh-manager"], ["rpm", "-q", "wazuh-manager"]):
+                try:
+                    result = subprocess.run(cmd, capture_output=True, text=True, timeout=5)
+                    if result.returncode == 0:
+                        detected_path = Path("/var/ossec")
+                        break
+                except (subprocess.TimeoutExpired, FileNotFoundError):
+                    pass
+
+        # Signal 4: /etc/ossec-init.conf
+        if detected_path is None:
+            if Path("/etc/ossec-init.conf").is_file():
+                detected_path = Path("/var/ossec")
+
+        if detected_path is None:
+            return None
+
+        version = self._get_native_version(detected_path)
+        return WazuhInstallation(
+            install_type=InstallationType.NATIVE,
+            location=str(detected_path),
+            version=version,
+            alerts_path=str(detected_path / "logs" / "alerts" / "alerts.json"),
+            archives_path=str(detected_path / "logs" / "archives" / "archives.json"),
+            api_url="https://localhost:55000",
+            recommended_method="alerts",
+        )
 
     def _detect_agent_only(self) -> Optional[WazuhInstallation]:
         """Detect Wazuh agent-only installation."""

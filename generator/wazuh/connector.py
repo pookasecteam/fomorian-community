@@ -14,6 +14,7 @@ from enum import Enum
 
 class InjectionMethod(str, Enum):
     """Log injection methods."""
+    INDEXER = "indexer"    # OpenSearch Bulk API to Wazuh Indexer
     ALERTS = "alerts"      # Direct write to alerts.json
     ARCHIVES = "archives"  # Direct write to archives.json
     API = "api"            # Via Wazuh Manager API

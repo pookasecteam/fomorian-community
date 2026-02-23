@@ -150,32 +150,90 @@ def _check_docker_connectivity(config: Dict[str, Any]) -> CheckResult:
 
 
 def _check_native_connectivity(config: Dict[str, Any]) -> CheckResult:
-    """Check native Wazuh installation."""
+    """Check native Wazuh installation.
+
+    Uses multiple signals so it works without root access to /var/ossec.
+    """
+    import os
+
     location = config.get("location", "/var/ossec")
     path = Path(location)
 
-    if not path.exists():
+    # Signal 1: Direct path check (may fail without root if 750 perms)
+    try:
+        if path.exists():
+            control = path / "bin" / "wazuh-control"
+            try:
+                if control.exists():
+                    return CheckResult(
+                        name="Wazuh Connectivity",
+                        passed=True,
+                        severity=CheckSeverity.INFO,
+                        message=f"Native installation at {location}"
+                    )
+            except PermissionError:
+                # Path exists but can't read contents, still detected
+                pass
+
+            return CheckResult(
+                name="Wazuh Connectivity",
+                passed=True,
+                severity=CheckSeverity.INFO,
+                message=f"Native installation at {location} (limited access)"
+            )
+    except PermissionError:
+        # Path exists but permission denied = Wazuh is installed
         return CheckResult(
             name="Wazuh Connectivity",
-            passed=False,
-            severity=CheckSeverity.ERROR,
-            message=f"Wazuh installation not found at {location}"
+            passed=True,
+            severity=CheckSeverity.INFO,
+            message=f"Native installation at {location} (permission restricted)"
         )
 
-    control = path / "bin" / "wazuh-control"
-    if not control.exists():
+    # Signal 2: systemctl check
+    try:
+        result = subprocess.run(
+            ["systemctl", "is-active", "wazuh-manager"],
+            capture_output=True, text=True, timeout=5,
+        )
+        if result.returncode == 0 and result.stdout.strip() == "active":
+            return CheckResult(
+                name="Wazuh Connectivity",
+                passed=True,
+                severity=CheckSeverity.INFO,
+                message="Wazuh Manager service is active"
+            )
+    except (subprocess.TimeoutExpired, FileNotFoundError):
+        pass
+
+    # Signal 3: Package manager check
+    for cmd in (["dpkg", "-s", "wazuh-manager"], ["rpm", "-q", "wazuh-manager"]):
+        try:
+            result = subprocess.run(cmd, capture_output=True, text=True, timeout=5)
+            if result.returncode == 0:
+                return CheckResult(
+                    name="Wazuh Connectivity",
+                    passed=True,
+                    severity=CheckSeverity.INFO,
+                    message="Wazuh Manager package installed"
+                )
+        except (subprocess.TimeoutExpired, FileNotFoundError):
+            pass
+
+    # Signal 4: /etc/ossec-init.conf
+    if os.path.isfile("/etc/ossec-init.conf"):
         return CheckResult(
             name="Wazuh Connectivity",
-            passed=False,
-            severity=CheckSeverity.ERROR,
-            message="wazuh-control not found"
+            passed=True,
+            severity=CheckSeverity.INFO,
+            message=f"Wazuh detected via /etc/ossec-init.conf"
         )
 
     return CheckResult(
         name="Wazuh Connectivity",
-        passed=True,
-        severity=CheckSeverity.INFO,
-        message=f"Native installation at {location}"
+        passed=False,
+        severity=CheckSeverity.ERROR,
+        message=f"Wazuh installation not found at {location}"
     )
 
 

@@ -41,7 +41,8 @@ class WazuhStep(WizardStep):
 
     # Injection methods
     INJECTION_METHODS = [
-        ("alerts", "Direct write to alerts.json (recommended)"),
+        ("indexer", "OpenSearch Bulk API to Wazuh Indexer (recommended)"),
+        ("alerts", "Direct write to alerts.json"),
         ("archives", "Direct write to archives.json"),
         ("api", "Via Wazuh Manager API"),
         ("file", "Write to monitored log file"),
@@ -226,16 +227,60 @@ class WazuhStep(WizardStep):
             return None
 
     def _detect_native(self) -> Optional[Dict[str, Any]]:
-        """Detect native Wazuh installation."""
+        """Detect native Wazuh installation.
+
+        Uses multiple signals so detection works without root access.
+        """
+        # Signal 1: Direct path check
         for path in self.NATIVE_PATHS:
             ossec_path = Path(path)
-            if ossec_path.exists() and (ossec_path / "bin" / "wazuh-control").exists():
+            try:
+                if ossec_path.exists() and (ossec_path / "bin" / "wazuh-control").exists():
+                    return {
+                        "type": "native",
+                        "location": str(ossec_path),
+                        "method": "alerts",
+                        "alerts_path": str(ossec_path / "logs" / "alerts" / "alerts.json"),
+                    }
+            except PermissionError:
+                # Path exists but can't read: still a valid detection
                 return {
                     "type": "native",
                     "location": str(ossec_path),
                     "method": "alerts",
                     "alerts_path": str(ossec_path / "logs" / "alerts" / "alerts.json"),
                 }
+
+        # Signal 2: systemctl check
+        try:
+            result = subprocess.run(
+                ["systemctl", "is-active", "wazuh-manager"],
+                capture_output=True, text=True, timeout=5,
+            )
+            if result.returncode == 0 and result.stdout.strip() == "active":
+                return {
+                    "type": "native",
+                    "location": "/var/ossec",
+                    "method": "alerts",
+                    "alerts_path": "/var/ossec/logs/alerts/alerts.json",
+                }
+        except (subprocess.TimeoutExpired, FileNotFoundError):
+            pass
+
+        # Signal 3: Package manager check
+        for cmd in (["dpkg", "-s", "wazuh-manager"], ["rpm", "-q", "wazuh-manager"]):
+            try:
+                result = subprocess.run(cmd, capture_output=True, text=True, timeout=5)
+                if result.returncode == 0:
+                    return {
+                        "type": "native",
+                        "location": "/var/ossec",
+                        "method": "alerts",
+                        "alerts_path": "/var/ossec/logs/alerts/alerts.json",
+                    }
+            except (subprocess.TimeoutExpired, FileNotFoundError):
+                pass
+
         return None
 
     def _detect_from_env(self) -> Optional[Dict[str, Any]]:

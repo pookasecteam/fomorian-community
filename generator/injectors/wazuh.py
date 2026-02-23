@@ -500,7 +500,7 @@ class WazuhInjector(SIEMInjector):
     def _to_archive_format(self, log: Dict[str, Any]) -> Dict[str, Any]:
         """Convert log to Wazuh archives format."""
         pt = log.get("_purple_team", {})
-        timestamp = log.get("timestamp", datetime.utcnow().isoformat() + "Z")
+        timestamp = log.get("timestamp") or datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%S.%f")[:-3] + "+0000"
 
         return {
             "timestamp": timestamp,
@@ -523,12 +523,12 @@ class WazuhInjector(SIEMInjector):
     def _to_wazuh_alert(self, log: Dict[str, Any]) -> Dict[str, Any]:
         """Convert log to Wazuh alert format."""
         pt = log.get("_purple_team", {})
-        timestamp = log.get("timestamp", datetime.utcnow().isoformat() + "Z")
+        timestamp = log.get("timestamp") or datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%S.%f")[:-3] + "+0000"
 
         # Get technique info
-        technique = pt.get("technique", log.get("technique", "T0000"))
-        phase = pt.get("attack_phase", log.get("attack_phase", "unknown"))
-        comment = pt.get("comment", log.get("_comment", "Fomorian Attack Simulation"))
+        technique = pt.get("technique") or log.get("technique") or "T0000"
+        phase = pt.get("attack_phase") or log.get("attack_phase") or "unknown"
+        comment = pt.get("comment") or log.get("_comment") or "Fomorian Attack Simulation"
 
         # Map phase to MITRE tactic
         phase_to_tactic = {

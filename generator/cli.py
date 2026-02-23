@@ -889,15 +889,32 @@ def inject(
     )
 
     logs = []
-    for log_data in data.get("logs", []):
+    for i, log_data in enumerate(data.get("logs", [])):
+        inner_log = log_data.get("log", log_data)
+
+        # Extract MITRE info from inner log if not in outer wrapper
+        mitre = (inner_log.get("rule", {}).get("mitre", {})
+                 or log_data.get("rule", {}).get("mitre", {}))
+        mitre_ids = mitre.get("id", [])
+        mitre_tactics = mitre.get("tactic", [])
+
+        technique = (log_data.get("technique")
+                     or (mitre_ids[0] if mitre_ids else ""))
+        attack_phase = (log_data.get("attack_phase")
+                        or (mitre_tactics[0] if mitre_tactics else ""))
+        host = (log_data.get("host")
+                or inner_log.get("agent", {}).get("name", ""))
+        comment = (log_data.get("_comment")
+                   or inner_log.get("rule", {}).get("description", ""))
+
         logs.append(LogEntry(
-            sequence=log_data.get("sequence", 0),
+            sequence=log_data.get("sequence", i),
             timestamp=log_data.get("timestamp", ""),
-            attack_phase=log_data.get("attack_phase", ""),
-            technique=log_data.get("technique", ""),
-            host=log_data.get("host", ""),
-            comment=log_data.get("_comment", ""),
-            log=log_data.get("log", log_data),
+            attack_phase=attack_phase,
+            technique=technique,
+            host=host,
+            comment=comment,
+            log=inner_log,
         ))
 
     scenario = AttackScenario(metadata=metadata, logs=logs)

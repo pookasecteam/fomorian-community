@@ -520,12 +520,58 @@ class WazuhInjector(SIEMInjector):
             "full_log": json.dumps(log, default=str),
         }
 
+    def _is_wazuh_native(self, log: Dict[str, Any]) -> bool:
+        """Check if a log is already in Wazuh native alert format."""
+        return (
+            "rule" in log
+            and "agent" in log
+            and isinstance(log.get("rule"), dict)
+            and "id" in log.get("rule", {})
+            and "decoder" in log
+        )
+
     def _to_wazuh_alert(self, log: Dict[str, Any]) -> Dict[str, Any]:
-        """Convert log to Wazuh alert format."""
+        """Convert log to Wazuh alert format.
+
+        If the log is already in Wazuh native format (has rule, agent, decoder),
+        it is passed through with minimal fixups. Otherwise it is wrapped in a
+        new alert envelope.
+        """
         pt = log.get("_purple_team", {})
         timestamp = log.get("timestamp") or datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%S.%f")[:-3] + "+0000"
 
-        # Get technique info
+        # If already Wazuh native format, pass through with fixups
+        if self._is_wazuh_native(log):
+            alert = dict(log)
+            alert["timestamp"] = timestamp
+            # Strip internal metadata
+            alert.pop("_purple_team", None)
+            # Ensure decoder marks this as fomorian
+            if alert.get("decoder", {}).get("name") != "fomorian":
+                alert.setdefault("decoder", {})["parent"] = alert["decoder"].get("name", "")
+                alert["decoder"]["name"] = "fomorian"
+            # Add fomorian group if not present
+            groups = alert.get("rule", {}).get("groups", [])
+            if "fomorian" not in groups:
+                alert["rule"]["groups"] = ["fomorian"] + groups
+            # Add id if missing
+            if not alert.get("id"):
+                alert["id"] = f"fomorian.{pt.get('sequence', 0)}.{int(datetime.utcnow().timestamp())}"
+            # Clean empty timestamp in data subfield
+            if "data" in alert and isinstance(alert["data"], dict):
+                alert["data"] = {
+                    k: v for k, v in alert["data"].items()
+                    if not (k == "timestamp" and not v)
+                }
+            # Clean empty MITRE arrays
+            mitre = alert.get("rule", {}).get("mitre", {})
+            if mitre:
+                for key in ("id", "tactic", "technique"):
+                    if key in mitre:
+                        mitre[key] = [v for v in mitre[key] if v]
+            return alert
+
+        # Non-native format: wrap in alert envelope
         technique = pt.get("technique") or log.get("technique") or "T0000"
         phase = pt.get("attack_phase") or log.get("attack_phase") or "unknown"
         comment = pt.get("comment") or log.get("_comment") or "Fomorian Attack Simulation"
@@ -545,6 +591,17 @@ class WazuhInjector(SIEMInjector):
             "exfiltration": "exfiltration",
             "impact": "impact",
         }
+
+        # Build data dict, excluding fields that conflict with Wazuh index mappings
+        data = {}
+        for k, v in log.items():
+            if k == "timestamp" and not v:
+                continue  # Skip empty timestamps
+            if k == "data" and isinstance(v, dict):
+                # Hoist inner data fields to avoid data.data nesting conflict
+                data.update(v)
+                continue
+            data[k] = v
 
         alert = {
             "timestamp": timestamp,
@@ -574,7 +631,7 @@ class WazuhInjector(SIEMInjector):
             },
             "location": "fomorian-generator",
             "full_log": json.dumps(log, default=str),
-            "data": {k: v for k, v in log.items() if not (k == "timestamp" and not v)},
+            "data": data,
         }
 
         # Clean up empty values in data that would cause indexer mapping failures

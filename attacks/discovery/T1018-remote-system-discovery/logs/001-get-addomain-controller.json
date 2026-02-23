@@ -20,7 +20,7 @@
         "rule": {
           "level": 6,
           "description": "PowerShell ScriptBlock Logging",
-          "id": "91801",
+          "id": "100400",
           "firedtimes": 1,
           "mail": false,
           "groups": ["windows", "powershell"]

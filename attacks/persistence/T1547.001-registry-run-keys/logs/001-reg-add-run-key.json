@@ -21,7 +21,7 @@
         "rule": {
           "level": 12,
           "description": "Sysmon - Event 1: Process creation",
-          "id": "200151",
+          "id": "100101",
           "mitre": {
             "id": ["T1547.001"],
             "tactic": ["Persistence", "Privilege Escalation"],
@@ -75,7 +75,7 @@
         "rule": {
           "level": 12,
           "description": "Sysmon - Event 13: Registry value set",
-          "id": "200157",
+          "id": "100107",
           "mitre": {
             "id": ["T1547.001"],
             "tactic": ["Persistence", "Privilege Escalation"],

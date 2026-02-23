@@ -203,19 +203,19 @@ class ScenarioBuilder:
             hours = (total_seconds % 86400) // 3600
             return f"{days}d {hours}h"
 
-    # Wazuh rule ID mappings for Sysmon events
+    # Fomorian rule IDs for Sysmon events (100xxx range, portable across environments)
     _SYSMON_RULE_IDS = {
-        "1": "200151", "3": "200153", "5": "200155",
-        "7": "200157", "8": "200158", "10": "200160",
-        "11": "200161", "13": "200163", "17": "200167",
-        "22": "200172", "23": "200173",
+        "1": "100101", "3": "100103", "5": "100105",
+        "7": "100107", "8": "100108", "10": "100110",
+        "11": "100111", "13": "100113", "17": "100117",
+        "22": "100122", "23": "100123",
     }
 
-    # Wazuh rule ID mappings for Windows Security events
+    # Fomorian rule IDs for Windows Security events (100xxx range, portable)
     _SECURITY_RULE_IDS = {
-        "4624": "60106", "4625": "60122", "4648": "60144",
-        "4663": "60155", "4672": "60110", "4688": "60104",
-        "4720": "60132", "4724": "60136", "4738": "60140",
+        "4624": "100624", "4625": "100625", "4648": "100648",
+        "4663": "100663", "4672": "100672", "4688": "100688",
+        "4720": "100720", "4724": "100724", "4738": "100738",
     }
 
     # Sysmon event type descriptions
@@ -259,19 +259,19 @@ class ScenarioBuilder:
                 eventdata[camel] = v
 
             if "Sysmon" in channel:
-                rule_id = self._SYSMON_RULE_IDS.get(event_id, "200151")
+                rule_id = self._SYSMON_RULE_IDS.get(event_id, "100100")
                 event_name = self._SYSMON_EVENT_NAMES.get(event_id, "Unknown")
                 groups = ["sysmon", f"sysmon_event{event_id}", "windows"]
                 rule_desc = f"Sysmon - Event {event_id}: {event_name}"
                 rule_level = 12 if event_id in ("1", "10", "13") else 6
             elif "PowerShell" in channel:
-                rule_id = "91801"
+                rule_id = "100400"
                 groups = ["windows", "powershell"]
                 rule_desc = f"PowerShell ScriptBlock logging (Event {event_id})"
                 rule_level = 12
             else:
                 # Windows Security events
-                rule_id = self._SECURITY_RULE_IDS.get(event_id, "60000")
+                rule_id = self._SECURITY_RULE_IDS.get(event_id, "100600")
                 groups = ["windows", "windows_security"]
                 rule_desc = f"Windows Security Event {event_id}"
                 rule_level = 10
@@ -347,7 +347,7 @@ class ScenarioBuilder:
                 "rule": {
                     "level": 8,
                     "description": f"Office 365: {operation}",
-                    "id": "91550",
+                    "id": "100365",
                     "mitre": {
                         "id": [technique],
                         "tactic": [phase.replace("-", " ").title()],

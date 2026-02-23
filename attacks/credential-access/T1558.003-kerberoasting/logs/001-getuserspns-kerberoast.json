@@ -20,7 +20,7 @@
         "rule": {
           "level": 6,
           "description": "Kerberos Service Ticket Request",
-          "id": "60144",
+          "id": "100648",
           "firedtimes": 1,
           "mail": false,
           "groups": ["windows", "kerberos"]
@@ -62,7 +62,7 @@
         "rule": {
           "level": 6,
           "description": "Kerberos Service Ticket Request",
-          "id": "60144",
+          "id": "100648",
           "firedtimes": 2,
           "mail": false,
           "groups": ["windows", "kerberos"]

@@ -221,7 +221,7 @@
               "protocol": "tcp",
               "initiated": "true",
               "sourceIp": "10.1.1.50",
-              "sourcePort": "60000",
+              "sourcePort": "100600",
               "destinationIp": "10.1.1.20",
               "destinationHostname": "FILESERVER01.corp.local",
               "destinationPort": "445"

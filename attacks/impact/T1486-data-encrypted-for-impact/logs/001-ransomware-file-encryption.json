@@ -21,7 +21,7 @@
         "rule": {
           "level": 12,
           "description": "Sysmon - Event 1: Process creation",
-          "id": "200151",
+          "id": "100101",
           "mitre": {
             "id": ["T1486"],
             "tactic": ["Impact"],
@@ -75,7 +75,7 @@
         "rule": {
           "level": 12,
           "description": "Sysmon - Event 11: File created",
-          "id": "200155",
+          "id": "100105",
           "mitre": {
             "id": ["T1486"],
             "tactic": ["Impact"],

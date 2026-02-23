@@ -13,6 +13,7 @@ Injection Methods:
 - alerts: Direct write to alerts.json (manager only)
 """
 
+import copy
 import json
 import os
 import subprocess
@@ -250,13 +251,14 @@ class WazuhInjector(SIEMInjector):
         """Select the best injection method based on detected installation."""
         inst = self._installation
 
+        # If manager is available, prefer alerts for direct injection
+        # (alerts.json is what Filebeat tails and indexes)
+        if inst.manager_available:
+            return "alerts"
+
         # If API is available and configured, use it
         if inst.api_available and self.config.password:
             return "api"
-
-        # If manager is available, prefer archives for direct injection
-        if inst.manager_available:
-            return "archives"
 
         # Default to file-based injection (most universal)
         return "file"
@@ -439,7 +441,7 @@ class WazuhInjector(SIEMInjector):
         if not inst or not inst.manager_available:
             return False
 
-        archive_entry = self._to_archive_format(log)
+        archive_entry = self._prepare_alert(log)
         archive_json = json.dumps(archive_entry, default=str)
 
         if inst.type == "docker":
@@ -465,13 +467,86 @@ class WazuhInjector(SIEMInjector):
             except Exception:
                 return False
 
+    def _prepare_alert(self, log: Dict[str, Any]) -> Dict[str, Any]:
+        """Prepare a log for writing to alerts.json.
+
+        Native-format logs (rule+agent+decoder+data) are written directly
+        with minimal decoration. Non-native logs go through the full
+        _to_wazuh_alert() wrapping.
+        """
+        # Extract metadata before checking format
+        pt = log.get("_purple_team", {})
+        now = datetime.utcnow()
+        timestamp = now.strftime("%Y-%m-%dT%H:%M:%S.%f")[:-3] + "+0000"
+
+        # Check if the inner log data is native Wazuh format
+        # Native logs have: rule (with id), agent, decoder, data
+        inner = log.get("log") if isinstance(log.get("log"), dict) else None
+        native_source = inner if (inner and self._is_wazuh_native(inner)) else (
+            log if self._is_wazuh_native(log) else None
+        )
+
+        if native_source is not None:
+            # Native path: copy the native alert structure directly
+            alert = {}
+            # Only copy known Wazuh alert keys from the native source
+            wazuh_keys = (
+                "rule", "agent", "manager", "decoder", "location",
+                "data", "id", "full_log",
+            )
+            for key in wazuh_keys:
+                if key in native_source:
+                    alert[key] = copy.deepcopy(native_source[key]) if isinstance(native_source[key], (dict, list)) else native_source[key]
+
+            # Set fresh timestamp
+            alert["timestamp"] = timestamp
+
+            # Mark as fomorian
+            decoder = alert.get("decoder", {})
+            if decoder.get("name") != "fomorian":
+                alert["decoder"] = {"parent": decoder.get("name", ""), "name": "fomorian"}
+
+            # Add fomorian group
+            groups = alert.get("rule", {}).get("groups", [])
+            if "fomorian" not in groups:
+                alert.setdefault("rule", {})["groups"] = ["fomorian"] + groups
+
+            # Add id if missing
+            if not alert.get("id"):
+                alert["id"] = f"fomorian.{pt.get('sequence', 0)}.{int(now.timestamp())}"
+
+            # Clean data: remove empty timestamp (mapper_parsing_exception)
+            if "data" in alert and isinstance(alert["data"], dict):
+                alert["data"] = {
+                    k: v for k, v in alert["data"].items()
+                    if not (k == "timestamp" and v == "")
+                }
+
+            # Clean MITRE arrays: remove empty strings
+            mitre = alert.get("rule", {}).get("mitre", {})
+            if mitre:
+                for key in ("id", "tactic", "technique"):
+                    if key in mitre and isinstance(mitre[key], list):
+                        mitre[key] = [v for v in mitre[key] if v]
+
+            return alert
+
+        # Non-native fallback: use full wrapping
+        return self._to_wazuh_alert(log)
+
     def _send_to_alerts(self, log: Dict[str, Any]) -> bool:
-        """Write directly to alerts.json."""
+        """Write directly to alerts.json.
+
+        For native-format logs (already have rule/agent/decoder/data), write
+        them with minimal decoration: fresh timestamp, fomorian decoder tag,
+        and fomorian group. This avoids the re-wrapping that was causing
+        bloated data fields and silent indexing failures.
+        """
         inst = self._installation
         if not inst or not inst.manager_available:
             return False
 
-        alert = self._to_wazuh_alert(log)
+        alert = self._prepare_alert(log)
         alert_json = json.dumps(alert, default=str)
 
         if inst.type == "docker":

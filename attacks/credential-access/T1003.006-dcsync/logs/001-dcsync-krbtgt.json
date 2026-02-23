@@ -20,7 +20,7 @@
         "rule": {
           "level": 8,
           "description": "Active Directory Object Access",
-          "id": "60104",
+          "id": "100688",
           "firedtimes": 1,
           "mail": false,
           "groups": ["windows", "active_directory"]

@@ -65,7 +65,7 @@
         "rule": {
           "level": 8,
           "description": "Scheduled Task Created",
-          "id": "60144",
+          "id": "100648",
           "mitre": {
             "id": ["T1053.005"],
             "tactic": ["Persistence", "Privilege Escalation"],

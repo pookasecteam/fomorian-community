@@ -22,7 +22,7 @@
         "rule": {
           "level": 3,
           "description": "Sysmon - Event 1: Process creation",
-          "id": "200151",
+          "id": "100101",
           "mitre": {
             "id": ["T1543.003"],
             "tactic": ["Persistence", "Privilege Escalation"],

@@ -1,0 +1,77 @@
+{
+  "_metadata": {
+    "attack_id": "T1574.006",
+    "variation": "001",
+    "name": "Network Scripts Command Injection",
+    "description": "Modifying network interface scripts in /etc/sysconfig/network-scripts/ to inject commands executed during network activation",
+    "expected_detection": "HIGH",
+    "kill_chain_phase": "privilege-escalation",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Sysmon Event 1 - Writing malicious ifcfg script with embedded command",
+      "sequence": 1,
+      "timestamp": "2026-02-22T03:02:00.500Z",
+      "log": {
+        "timestamp": "2026-02-22T03:02:00.500+0000",
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 1: Network interface script injection for privilege escalation",
+          "id": "100101",
+          "mitre": {
+            "id": [
+              "T1574.006"
+            ],
+            "tactic": [
+              "Privilege Escalation",
+              "Persistence",
+              "Defense Evasion"
+            ],
+            "technique": [
+              "Hijack Execution Flow: Dynamic Linker Hijacking"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "linux"
+          ]
+        },
+        "agent": {
+          "id": "030",
+          "name": "VULN01",
+          "ip": "198.51.100.30"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1708567320.000006",
+        "decoder": {
+          "name": "sysmon-linux"
+        },
+        "location": "/var/log/syslog",
+        "data": {
+          "eventdata": {
+            "utcTime": "2026-02-22 03:02:00.500",
+            "processGuid": "{a1b2c3d4-0004-6700-0000-000000000001}",
+            "processId": "31700",
+            "image": "/usr/bin/bash",
+            "commandLine": "bash -c echo 'DEVICE=eth0 /bin/bash' > /etc/sysconfig/network-scripts/ifcfg-campaign23",
+            "currentDirectory": "/root",
+            "user": "root",
+            "integrityLevel": "no_level",
+            "hashes": "SHA256=e4d909c290d0fb1ca068ffaddf22cbd0e4a09fa7a443e3bce81c1e1e9b7a3f12",
+            "parentProcessGuid": "{a1b2c3d4-0004-6700-0000-000000000000}",
+            "parentProcessId": "31600",
+            "parentImage": "/usr/bin/sudo",
+            "parentCommandLine": "sudo -S bash -c echo DEVICE=eth0 /bin/bash > /etc/sysconfig/network-scripts/ifcfg-campaign23"
+          }
+        }
+      }
+    }
+  ]
+}

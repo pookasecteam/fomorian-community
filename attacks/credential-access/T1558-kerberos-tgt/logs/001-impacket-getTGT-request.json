@@ -1,0 +1,77 @@
+{
+  "_metadata": {
+    "attack_id": "T1558",
+    "variation": "001",
+    "name": "Kerberos TGT Request - impacket-getTGT",
+    "description": "Attacker uses impacket-getTGT to request a Ticket Granting Ticket (TGT) from the Key Distribution Center using valid credentials, enabling further Kerberos attacks",
+    "expected_detection": "MEDIUM",
+    "kill_chain_phase": "credential-access",
+    "format": "wazuh-native",
+    "format_version": "1.0",
+    "tool": "impacket-getTGT"
+  },
+  "logs": [
+    {
+      "_comment": "Event 4768 - Kerberos TGT Request (Authentication Service)",
+      "sequence": 1,
+      "timestamp": "2026-02-10T20:10:00.000Z",
+      "log": {
+        "timestamp": "2026-02-10T20:10:00.000Z",
+        "rule": {
+          "level": 3,
+          "description": "Windows Eventchannel event",
+          "id": "100600",
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "windows",
+            "eventchannel"
+          ]
+        },
+        "agent": {
+          "id": "010",
+          "name": "DC01",
+          "ip": "198.51.100.12"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1707600600.300001",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "4768",
+              "channel": "Security",
+              "providerName": "Microsoft-Windows-Security-Auditing",
+              "computer": "DC01.corp.local",
+              "level": "0",
+              "task": "14339",
+              "keywords": "0x8020000000000000",
+              "severityValue": "AUDIT_SUCCESS"
+            },
+            "eventdata": {
+              "targetUserName": "Administrator",
+              "targetDomainName": "CORP.LOCAL",
+              "targetSid": "S-1-5-21-3298120035-3471069779-879265153-500",
+              "serviceName": "krbtgt/CORP.LOCAL",
+              "serviceId": "S-1-5-21-3298120035-3471069779-879265153-502",
+              "ticketOptions": "0x40810010",
+              "status": "0x0",
+              "ticketEncryptionType": "0x12",
+              "preAuthType": "15",
+              "ipAddress": "::ffff:198.51.100.110",
+              "ipPort": "56789",
+              "certIssuerName": "-",
+              "certSerialNumber": "-",
+              "certThumbprint": "-"
+            }
+          }
+        }
+      }
+    }
+  ]
+}

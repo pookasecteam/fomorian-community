@@ -1,0 +1,63 @@
+{
+  "_metadata": {
+    "technique_id": "T1124",
+    "technique_name": "System Time Discovery",
+    "tactic": "Discovery",
+    "platform": "Windows",
+    "description": "Adversary queries system time and timezone using w32tm and tzutil",
+    "severity": "LOW",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "rule": {
+        "level": 3,
+        "description": "Sysmon - Event 1",
+        "id": "100603",
+        "mitre": {
+          "id": [
+            "T1124"
+          ],
+          "tactic": [
+            "Discovery"
+          ],
+          "technique": [
+            "System Time Discovery"
+          ]
+        }
+      },
+      "agent": {
+        "id": "010",
+        "name": "DC01"
+      },
+      "data": {
+        "win": {
+          "eventdata": {
+            "commandLine": "w32tm.exe  /query /status",
+            "currentDirectory": "C:\\Windows\\system32\\",
+            "image": "C:\\Windows\\System32\\w32tm.exe",
+            "integrityLevel": "High",
+            "parentImage": "C:\\Windows\\System32\\cmd.exe",
+            "processId": "3224",
+            "user": "CORP\\Administrator",
+            "utcTime": "2026-02-08 20:16:10.789"
+          },
+          "system": {
+            "channel": "Microsoft-Windows-Sysmon/Operational",
+            "computer": "DC01.corp.local",
+            "eventID": "1",
+            "providerName": "Microsoft-Windows-Sysmon",
+            "systemTime": "2026-02-08T20:16:10.789Z"
+          }
+        }
+      },
+      "decoder": {
+        "name": "windows_eventchannel"
+      },
+      "location": "EventChannel",
+      "timestamp": "2026-02-08T20:16:10.789+0000",
+      "_fomorian_test": true
+    }
+  ]
+}

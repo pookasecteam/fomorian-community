@@ -1,0 +1,145 @@
+{
+  "_metadata": {
+    "attack_id": "T1657",
+    "variation": "001",
+    "name": "Financial Theft - Business Email Compromise Wire Transfer",
+    "description": "Attacker uses compromised email account to initiate fraudulent wire transfer requests",
+    "expected_detection": "HIGH",
+    "kill_chain_phase": "impact",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Office 365 audit - Mailbox rule created to hide responses",
+      "sequence": 1,
+      "timestamp": "2026-02-08T23:40:00.000Z",
+      "log": {
+        "timestamp": "2026-02-08T23:40:00.000+0000",
+        "rule": {
+          "level": 14,
+          "description": "Office 365 - Suspicious Inbox Rule Created",
+          "id": "100001",
+          "mitre": {
+            "id": [
+              "T1657",
+              "T1564.008"
+            ],
+            "tactic": [
+              "Impact",
+              "Defense Evasion"
+            ],
+            "technique": [
+              "Financial Theft",
+              "Email Hiding Rules"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": true,
+          "groups": [
+            "office365",
+            "email",
+            "bec"
+          ]
+        },
+        "agent": {
+          "id": "000",
+          "name": "wazuh.manager"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1707400000.300130",
+        "decoder": {
+          "name": "office365"
+        },
+        "location": "Office365",
+        "data": {
+          "office365": {
+            "RecordType": "ExchangeAdmin",
+            "Operation": "New-InboxRule",
+            "UserId": "cfo@company.com",
+            "ClientIP": "185.220.101.42",
+            "Parameters": {
+              "Name": ".",
+              "SubjectContainsWords": [
+                "wire",
+                "transfer",
+                "payment",
+                "invoice",
+                "urgent"
+              ],
+              "DeleteMessage": "True",
+              "MarkAsRead": "True"
+            }
+          }
+        },
+        "_fomorian_batch": "PT-2026-003-batch2-impact",
+        "_fomorian_test": true,
+        "_fomorian_attack_id": "T1657",
+        "_fomorian_expected_detection": "Sigma: BEC Inbox Rule for Wire Transfer Evasion (T1657)"
+      }
+    },
+    {
+      "_comment": "Office 365 audit - Email sent requesting wire transfer",
+      "sequence": 2,
+      "timestamp": "2026-02-08T23:41:00.000Z",
+      "log": {
+        "timestamp": "2026-02-08T23:41:00.000+0000",
+        "rule": {
+          "level": 12,
+          "description": "Office 365 - Wire Transfer Request Email Sent",
+          "id": "100001",
+          "mitre": {
+            "id": [
+              "T1657"
+            ],
+            "tactic": [
+              "Impact"
+            ],
+            "technique": [
+              "Financial Theft"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "office365",
+            "email",
+            "bec"
+          ]
+        },
+        "agent": {
+          "id": "000",
+          "name": "wazuh.manager"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1707400000.300131",
+        "decoder": {
+          "name": "office365"
+        },
+        "location": "Office365",
+        "data": {
+          "office365": {
+            "RecordType": "ExchangeItem",
+            "Operation": "Send",
+            "UserId": "cfo@company.com",
+            "ClientIP": "185.220.101.42",
+            "Subject": "URGENT: Wire Transfer Needed Today",
+            "Recipients": [
+              "accounting@company.com"
+            ],
+            "AttachmentCount": 1,
+            "ItemClass": "IPM.Note"
+          }
+        },
+        "_fomorian_batch": "PT-2026-003-batch2-impact",
+        "_fomorian_test": true,
+        "_fomorian_attack_id": "T1657",
+        "_fomorian_expected_detection": "Sigma: Suspicious Wire Transfer Request Email (T1657)"
+      }
+    }
+  ]
+}

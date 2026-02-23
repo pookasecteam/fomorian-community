@@ -1,0 +1,136 @@
+{
+  "_metadata": {
+    "attack_id": "T1548.001",
+    "variation": "001",
+    "name": "NFS no_root_squash Exploitation",
+    "description": "Mounting an NFS share with no_root_squash option and creating SUID binary on it for privilege escalation",
+    "expected_detection": "HIGH",
+    "kill_chain_phase": "privilege-escalation",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Sysmon Event 1 - showmount enumeration of NFS exports",
+      "sequence": 1,
+      "timestamp": "2026-02-22T03:01:00.000Z",
+      "log": {
+        "timestamp": "2026-02-22T03:01:00.000+0000",
+        "rule": {
+          "level": 8,
+          "description": "Sysmon - Event 1: NFS Export Enumeration via showmount",
+          "id": "100101",
+          "mitre": {
+            "id": [
+              "T1548.001"
+            ],
+            "tactic": [
+              "Privilege Escalation"
+            ],
+            "technique": [
+              "Setuid and Setgid"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "linux"
+          ]
+        },
+        "agent": {
+          "id": "030",
+          "name": "VULN01",
+          "ip": "198.51.100.30"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1708567260.000001",
+        "decoder": {
+          "name": "sysmon-linux"
+        },
+        "location": "/var/log/syslog",
+        "data": {
+          "eventdata": {
+            "utcTime": "2026-02-22 03:01:00.000",
+            "processGuid": "{a1b2c3d4-0001-0001-0001-000000000001}",
+            "processId": "18201",
+            "image": "/usr/sbin/showmount",
+            "commandLine": "showmount -e 198.51.100.30",
+            "currentDirectory": "/home/admin2",
+            "user": "admin2",
+            "integrityLevel": "no_level",
+            "hashes": "SHA256=b3f7a92e1d4c8f6a5b2e0d9c8a7f6e5d4c3b2a10f9e8d7c6b5a49382716050f",
+            "parentProcessGuid": "{a1b2c3d4-0001-0001-0001-000000000000}",
+            "parentProcessId": "18100",
+            "parentImage": "/usr/bin/bash",
+            "parentCommandLine": "bash"
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Sysmon Event 1 - Mounting NFS share with sudo",
+      "sequence": 2,
+      "timestamp": "2026-02-22T03:01:00.100Z",
+      "log": {
+        "timestamp": "2026-02-22T03:01:00.100+0000",
+        "rule": {
+          "level": 10,
+          "description": "Sysmon - Event 1: NFS Share Mount via sudo",
+          "id": "100101",
+          "mitre": {
+            "id": [
+              "T1548.001"
+            ],
+            "tactic": [
+              "Privilege Escalation"
+            ],
+            "technique": [
+              "Setuid and Setgid"
+            ]
+          },
+          "firedtimes": 2,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "linux"
+          ]
+        },
+        "agent": {
+          "id": "030",
+          "name": "VULN01",
+          "ip": "198.51.100.30"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1708567260.000002",
+        "decoder": {
+          "name": "sysmon-linux"
+        },
+        "location": "/var/log/syslog",
+        "data": {
+          "eventdata": {
+            "utcTime": "2026-02-22 03:01:00.100",
+            "processGuid": "{a1b2c3d4-0001-0001-0001-000000000002}",
+            "processId": "18215",
+            "image": "/bin/mount",
+            "commandLine": "mount -t nfs 198.51.100.30:/shared /tmp/nfsdir",
+            "currentDirectory": "/home/admin2",
+            "user": "root",
+            "integrityLevel": "no_level",
+            "hashes": "SHA256=c4e8a93f2d5b9e7a6c3f1e0d9b8a7c6d5e4f3a2b1c0d9e8f7a6b5c4d3e2f1a0",
+            "parentProcessGuid": "{a1b2c3d4-0001-0001-0001-000000000001}",
+            "parentProcessId": "18210",
+            "parentImage": "/usr/bin/sudo",
+            "parentCommandLine": "sudo -S mount -t nfs 198.51.100.30:/shared /tmp/nfsdir"
+          }
+        }
+      }
+    }
+  ]
+}

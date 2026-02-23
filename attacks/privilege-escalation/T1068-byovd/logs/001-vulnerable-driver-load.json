@@ -1,0 +1,214 @@
+{
+  "_metadata": {
+    "attack_id": "T1068",
+    "variation": "001",
+    "name": "BYOVD - Vulnerable Driver Load",
+    "description": "Adversary loads known vulnerable signed driver to gain kernel access and disable EDR",
+    "expected_detection": "CRITICAL",
+    "kill_chain_phase": "privilege-escalation",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Vulnerable driver file dropped to disk",
+      "sequence": 1,
+      "timestamp": "2026-01-31T18:00:00.000Z",
+      "log": {
+        "timestamp": "2026-01-31T18:00:00.000+0000",
+        "rule": {
+          "level": 14,
+          "description": "Sysmon - Event 11: Known vulnerable driver file created",
+          "id": "100920",
+          "mitre": {
+            "id": [
+              "T1068"
+            ],
+            "tactic": [
+              "Privilege Escalation"
+            ],
+            "technique": [
+              "Exploitation for Privilege Escalation"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": true,
+          "groups": [
+            "sysmon",
+            "sysmon_event11",
+            "windows",
+            "byovd"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1706726400.000001",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "11",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local"
+            },
+            "eventdata": {
+              "utcTime": "2026-01-31 18:00:00.000",
+              "processGuid": "{12345678-abcd-1234-abcd-123456789abc}",
+              "processId": "9000",
+              "image": "C:\\Users\\attacker\\Desktop\\edr_killer.exe",
+              "targetFilename": "C:\\Windows\\System32\\drivers\\viragt64.sys",
+              "creationUtcTime": "2026-01-31 18:00:00.000"
+            }
+          }
+        },
+        "_fomorian_batch": "threat-intel-detectfyi-2026-01-31",
+        "_fomorian_test": true,
+        "_fomorian_attack_id": "T1068",
+        "_fomorian_expected_detection": "Sigma: BYOVD Vulnerable Driver Created (T1068)"
+      }
+    },
+    {
+      "_comment": "Driver loaded from disk",
+      "sequence": 2,
+      "timestamp": "2026-01-31T18:00:02.000Z",
+      "log": {
+        "timestamp": "2026-01-31T18:00:02.000+0000",
+        "rule": {
+          "level": 14,
+          "description": "Sysmon - Event 6: Vulnerable driver loaded",
+          "id": "100001",
+          "mitre": {
+            "id": [
+              "T1068"
+            ],
+            "tactic": [
+              "Privilege Escalation"
+            ],
+            "technique": [
+              "Exploitation for Privilege Escalation"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": true,
+          "groups": [
+            "sysmon",
+            "sysmon_event6",
+            "windows",
+            "driver",
+            "byovd"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1706726402.000001",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "6",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local"
+            },
+            "eventdata": {
+              "utcTime": "2026-01-31 18:00:02.000",
+              "imageLoaded": "C:\\Windows\\System32\\drivers\\viragt64.sys",
+              "hashes": "SHA256=VULN_DRIVER_HASH",
+              "signed": "true",
+              "signature": "TG Soft S.r.l.",
+              "signatureStatus": "Valid"
+            }
+          }
+        },
+        "_fomorian_batch": "threat-intel-detectfyi-2026-01-31",
+        "_fomorian_test": true,
+        "_fomorian_attack_id": "T1068"
+      }
+    },
+    {
+      "_comment": "EDR process terminated after driver exploitation",
+      "sequence": 3,
+      "timestamp": "2026-01-31T18:00:15.000Z",
+      "log": {
+        "timestamp": "2026-01-31T18:00:15.000+0000",
+        "rule": {
+          "level": 15,
+          "description": "Sysmon - Event 5: EDR process terminated",
+          "id": "100917",
+          "mitre": {
+            "id": [
+              "T1562.001"
+            ],
+            "tactic": [
+              "Defense Evasion"
+            ],
+            "technique": [
+              "Impair Defenses: Disable or Modify Tools"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": true,
+          "groups": [
+            "sysmon",
+            "sysmon_event5",
+            "windows",
+            "edr",
+            "critical"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1706726415.000001",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "5",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local"
+            },
+            "eventdata": {
+              "utcTime": "2026-01-31 18:00:15.000",
+              "processGuid": "{12345678-abcd-1234-abcd-111111111111}",
+              "processId": "1234",
+              "image": "C:\\Program Files\\Windows Defender Advanced Threat Protection\\MsSense.exe",
+              "user": "NT AUTHORITY\\SYSTEM"
+            }
+          }
+        },
+        "_fomorian_batch": "threat-intel-detectfyi-2026-01-31",
+        "_fomorian_test": true,
+        "_fomorian_attack_id": "T1068"
+      }
+    }
+  ]
+}

@@ -5,7 +5,6 @@
     "name": "Clear Windows Event Logs via wevtutil",
     "description": "Attacker clearing Windows Event Logs to cover tracks",
     "expected_detection": "CRITICAL",
-    "expected_soar": "defense-evasion-response",
     "kill_chain_phase": "defense-evasion",
     "format": "wazuh-native",
     "format_version": "1.0"
@@ -16,7 +15,6 @@
       "sequence": 1,
       "timestamp": "2026-01-29T14:45:00.000Z",
       "log": {
-        "timestamp": "",
         "rule": {
           "level": 12,
           "description": "Sysmon - Event 1: Clear Windows Event Logs via wevtutil",
@@ -41,9 +39,9 @@
           ]
         },
         "agent": {
-          "id": "007",
+          "id": "020",
           "name": "WS01",
-          "ip": "10.1.0.20"
+          "ip": "198.51.100.20"
         },
         "manager": {
           "name": "wazuh.manager"
@@ -89,7 +87,6 @@
       "sequence": 2,
       "timestamp": "2026-01-29T14:45:01.000Z",
       "log": {
-        "timestamp": "",
         "rule": {
           "level": 12,
           "description": "Sysmon - Event 1102: Clear Windows Event Logs via wevtutil",
@@ -114,9 +111,9 @@
           ]
         },
         "agent": {
-          "id": "007",
+          "id": "020",
           "name": "WS01",
-          "ip": "10.1.0.20"
+          "ip": "198.51.100.20"
         },
         "manager": {
           "name": "wazuh.manager"
@@ -154,7 +151,6 @@
       "sequence": 3,
       "timestamp": "2026-01-29T14:45:02.000Z",
       "log": {
-        "timestamp": "",
         "rule": {
           "level": 12,
           "description": "Sysmon - Event 1: Clear Windows Event Logs via wevtutil",
@@ -179,9 +175,9 @@
           ]
         },
         "agent": {
-          "id": "007",
+          "id": "020",
           "name": "WS01",
-          "ip": "10.1.0.20"
+          "ip": "198.51.100.20"
         },
         "manager": {
           "name": "wazuh.manager"

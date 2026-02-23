@@ -5,9 +5,7 @@
     "name": "DNS Data Exfiltration",
     "description": "Attacker exfiltrates data encoded in DNS queries",
     "expected_detection": "HIGH",
-    "expected_soar": "exfiltration-detection",
     "kill_chain_phase": "exfiltration",
-    "notes": "Data encoded in DNS subdomain queries",
     "format": "wazuh-native",
     "format_version": "1.0"
   },
@@ -17,7 +15,6 @@
       "sequence": 1,
       "timestamp": "2026-01-29T15:30:00.000Z",
       "log": {
-        "timestamp": "",
         "rule": {
           "level": 12,
           "description": "Sysmon - Event 22: DNS Data Exfiltration",
@@ -42,9 +39,9 @@
           ]
         },
         "agent": {
-          "id": "007",
+          "id": "020",
           "name": "WS01",
-          "ip": "10.1.0.20"
+          "ip": "198.51.100.20"
         },
         "manager": {
           "name": "wazuh.manager"
@@ -86,7 +83,6 @@
       "sequence": 2,
       "timestamp": "2026-01-29T15:30:01.000Z",
       "log": {
-        "timestamp": "",
         "rule": {
           "level": 12,
           "description": "Sysmon - Event 22: DNS Data Exfiltration",
@@ -111,9 +107,9 @@
           ]
         },
         "agent": {
-          "id": "007",
+          "id": "020",
           "name": "WS01",
-          "ip": "10.1.0.20"
+          "ip": "198.51.100.20"
         },
         "manager": {
           "name": "wazuh.manager"
@@ -155,7 +151,6 @@
       "sequence": 3,
       "timestamp": "2026-01-29T15:30:02.000Z",
       "log": {
-        "timestamp": "",
         "rule": {
           "level": 12,
           "description": "Sysmon - Event 22: DNS Data Exfiltration",
@@ -180,9 +175,9 @@
           ]
         },
         "agent": {
-          "id": "007",
+          "id": "020",
           "name": "WS01",
-          "ip": "10.1.0.20"
+          "ip": "198.51.100.20"
         },
         "manager": {
           "name": "wazuh.manager"

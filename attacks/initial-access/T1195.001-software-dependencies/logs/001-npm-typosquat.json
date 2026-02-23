@@ -1,0 +1,250 @@
+{
+  "_metadata": {
+    "attack_id": "T1195.001",
+    "variation": "001",
+    "name": "NPM Package Typosquatting",
+    "description": "Malicious npm package installed via typosquatting attack (e.g., 'lodahs' instead of 'lodash')",
+    "expected_detection": "MEDIUM",
+    "kill_chain_phase": "initial-access",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Sysmon Event 1 - npm install of typosquatted package",
+      "sequence": 1,
+      "timestamp": "2026-02-08T12:20:00.000Z",
+      "log": {
+        "timestamp": "2026-02-08T12:20:00.000+0000",
+        "rule": {
+          "level": 6,
+          "description": "Sysmon - Event 1: NPM Package Installation",
+          "id": "100910",
+          "mitre": {
+            "id": [
+              "T1195.001"
+            ],
+            "tactic": [
+              "Initial Access"
+            ],
+            "technique": [
+              "Supply Chain Compromise: Compromise Software Dependencies and Development Tools"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1707400000.400013",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-08 12:20:00.000",
+              "processGuid": "{T1195001-0001-0001-0001-000000000001}",
+              "processId": "6000",
+              "image": "C:\\Program Files\\nodejs\\npm.cmd",
+              "commandLine": "npm install lodahs",
+              "currentDirectory": "C:\\Users\\developer\\projects\\webapp\\",
+              "user": "CORP\\developer",
+              "integrityLevel": "Medium",
+              "parentProcessGuid": "{T1195001-0001-0001-0000-000000000001}",
+              "parentProcessId": "5500",
+              "parentImage": "C:\\Windows\\System32\\cmd.exe",
+              "parentCommandLine": "cmd.exe"
+            }
+          }
+        },
+        "_fomorian_batch": "PT-2026-003-batch1-initial-access",
+        "_fomorian_test": true,
+        "_fomorian_attack_id": "T1195.001",
+        "_fomorian_expected_detection": "Sigma: Suspicious NPM Package Installation (T1195.001)"
+      }
+    },
+    {
+      "_comment": "Sysmon Event 1 - Malicious postinstall script execution",
+      "sequence": 2,
+      "timestamp": "2026-02-08T12:20:05.000Z",
+      "log": {
+        "timestamp": "2026-02-08T12:20:05.000+0000",
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 1: NPM Postinstall Script Execution",
+          "id": "100910",
+          "mitre": {
+            "id": [
+              "T1195.001",
+              "T1059.001"
+            ],
+            "tactic": [
+              "Initial Access",
+              "Execution"
+            ],
+            "technique": [
+              "Supply Chain Compromise: Compromise Software Dependencies and Development Tools",
+              "PowerShell"
+            ]
+          },
+          "firedtimes": 2,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1707400000.400014",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-08 12:20:05.000",
+              "processGuid": "{T1195001-0001-0001-0001-000000000002}",
+              "processId": "6100",
+              "image": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+              "commandLine": "powershell.exe -ep bypass -nop -w hidden -c \"$env:APPDATA\\..\\Local\\Temp\\update.ps1\"",
+              "currentDirectory": "C:\\Users\\developer\\projects\\webapp\\node_modules\\lodahs\\",
+              "user": "CORP\\developer",
+              "integrityLevel": "Medium",
+              "parentProcessGuid": "{T1195001-0001-0001-0001-000000000001}",
+              "parentProcessId": "6000",
+              "parentImage": "C:\\Program Files\\nodejs\\node.exe",
+              "parentCommandLine": "node.exe C:\\Users\\developer\\projects\\webapp\\node_modules\\lodahs\\postinstall.js"
+            }
+          }
+        },
+        "_fomorian_batch": "PT-2026-003-batch1-initial-access",
+        "_fomorian_test": true,
+        "_fomorian_attack_id": "T1195.001",
+        "_fomorian_expected_detection": "Sigma: NPM Postinstall Spawns PowerShell (T1195.001)"
+      }
+    },
+    {
+      "_comment": "Sysmon Event 3 - Malicious package phones home",
+      "sequence": 3,
+      "timestamp": "2026-02-08T12:20:10.000Z",
+      "log": {
+        "timestamp": "2026-02-08T12:20:10.000+0000",
+        "rule": {
+          "level": 10,
+          "description": "Sysmon - Event 3: Network Connection from Node Process",
+          "id": "100001",
+          "mitre": {
+            "id": [
+              "T1195.001",
+              "T1071.001"
+            ],
+            "tactic": [
+              "Initial Access",
+              "Command and Control"
+            ],
+            "technique": [
+              "Supply Chain Compromise",
+              "Web Protocols"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event3",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1707400000.400015",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "3",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "3",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-08 12:20:10.000",
+              "processGuid": "{T1195001-0001-0001-0001-000000000002}",
+              "processId": "6100",
+              "image": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+              "user": "CORP\\developer",
+              "protocol": "tcp",
+              "initiated": "true",
+              "sourceIsIpv6": "false",
+              "sourceIp": "198.51.100.20",
+              "sourceHostname": "WS01.corp.local",
+              "sourcePort": "52001",
+              "sourcePortName": "",
+              "destinationIsIpv6": "false",
+              "destinationIp": "198.51.100.110",
+              "destinationHostname": "",
+              "destinationPort": "443",
+              "destinationPortName": "https"
+            }
+          }
+        },
+        "_fomorian_batch": "PT-2026-003-batch1-initial-access",
+        "_fomorian_test": true,
+        "_fomorian_attack_id": "T1195.001",
+        "_fomorian_expected_detection": "Sigma: Supply Chain Package C2 Communication (T1195.001)"
+      }
+    }
+  ]
+}

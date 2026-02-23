@@ -1,0 +1,229 @@
+{
+  "_metadata": {
+    "attack_id": "T1021.003",
+    "variation": "001",
+    "name": "DCOM Lateral Movement via MMC20.Application",
+    "description": "Abuse MMC20.Application DCOM object to execute commands on remote host",
+    "expected_detection": "HIGH",
+    "kill_chain_phase": "lateral-movement",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Sysmon Event 1 - Process Creation: PowerShell invokes DCOM MMC20 on remote host",
+      "sequence": 1,
+      "timestamp": "2026-02-22T10:10:00.000Z",
+      "log": {
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 1: Process creation",
+          "id": "100101",
+          "mitre": {
+            "id": [
+              "T1021.003"
+            ],
+            "tactic": [
+              "Lateral Movement"
+            ],
+            "technique": [
+              "Remote Services: Distributed Component Object Model"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": true,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1709002400.000024",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-22 10:10:00.000",
+              "processGuid": "{12345678-2400-2400-2400-000000000024}",
+              "processId": "15100",
+              "image": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+              "commandLine": "powershell.exe -c \"$dcom = [System.Activator]::CreateInstance([type]::GetTypeFromProgID('MMC20.Application','198.51.100.11')); $dcom.Document.ActiveView.ExecuteShellCommand('cmd.exe',$null,'/c calc.exe','7')\"",
+              "currentDirectory": "C:\\Users\\Administrator\\",
+              "user": "CORP\\Administrator",
+              "integrityLevel": "High",
+              "hashes": "SHA256=D4E5F6A1B2C3D4E5F6A1B2C3D4E5F6A1B2C3D4E5F6A1B2C3D4E5F6A1B2C3D4E5",
+              "parentProcessGuid": "{12345678-2400-2400-2400-000000000000}",
+              "parentProcessId": "1234",
+              "parentImage": "C:\\Windows\\System32\\cmd.exe",
+              "parentCommandLine": "cmd.exe"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Sysmon Event 1 - Process Creation: mmc.exe spawns cmd on target (seen on FS01)",
+      "sequence": 2,
+      "timestamp": "2026-02-22T10:10:02.000Z",
+      "log": {
+        "rule": {
+          "level": 14,
+          "description": "Sysmon - Event 1: Process creation",
+          "id": "100101",
+          "mitre": {
+            "id": [
+              "T1021.003"
+            ],
+            "tactic": [
+              "Lateral Movement"
+            ],
+            "technique": [
+              "Remote Services: Distributed Component Object Model"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": true,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "011",
+          "name": "FS01",
+          "ip": "198.51.100.11"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1709002400.000025",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "FS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-22 10:10:02.000",
+              "processGuid": "{12345678-2400-2400-2400-000000000025}",
+              "processId": "8800",
+              "image": "C:\\Windows\\System32\\cmd.exe",
+              "commandLine": "cmd.exe /c calc.exe",
+              "currentDirectory": "C:\\Windows\\System32\\",
+              "user": "CORP\\Administrator",
+              "integrityLevel": "High",
+              "hashes": "SHA256=E5F6A1B2C3D4E5F6A1B2C3D4E5F6A1B2C3D4E5F6A1B2C3D4E5F6A1B2C3D4E5F6",
+              "parentProcessGuid": "{12345678-2400-2400-2400-000000000300}",
+              "parentProcessId": "3300",
+              "parentImage": "C:\\Windows\\System32\\mmc.exe",
+              "parentCommandLine": "C:\\Windows\\System32\\mmc.exe -Embedding"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Sysmon Event 3 - Network: DCOM RPC connection from WS01 to FS01",
+      "sequence": 3,
+      "timestamp": "2026-02-22T10:10:01.000Z",
+      "log": {
+        "rule": {
+          "level": 6,
+          "description": "Sysmon - Event 3: Network connection detected",
+          "id": "100103",
+          "mitre": {
+            "id": [
+              "T1021.003"
+            ],
+            "tactic": [
+              "Lateral Movement"
+            ],
+            "technique": [
+              "Remote Services: Distributed Component Object Model"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event3",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1709002400.000026",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "3",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "3",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-22 10:10:01.000",
+              "processGuid": "{12345678-2400-2400-2400-000000000024}",
+              "processId": "15100",
+              "image": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+              "user": "CORP\\Administrator",
+              "protocol": "tcp",
+              "initiated": "true",
+              "sourceIsIpv6": "false",
+              "sourceIp": "198.51.100.20",
+              "sourceHostname": "WS01.corp.local",
+              "sourcePort": "49721",
+              "destinationIsIpv6": "false",
+              "destinationIp": "198.51.100.11",
+              "destinationHostname": "FS01.corp.local",
+              "destinationPort": "135"
+            }
+          }
+        }
+      }
+    }
+  ]
+}

@@ -6,7 +6,9 @@
     "description": "LSASS memory dump via Task Manager GUI - creates minidump file",
     "expected_detection": "HIGH",
     "kill_chain_phase": "credential-access",
-    "references": ["https://github.com/yo-yo-yo-jbo/dumping_lsass"],
+    "references": [
+      "https://github.com/yo-yo-yo-jbo/dumping_lsass"
+    ],
     "format": "wazuh-native",
     "format_version": "1.0"
   },
@@ -20,20 +22,39 @@
         "rule": {
           "level": 12,
           "description": "Sysmon - Event 10: Task Manager accessing LSASS memory",
-          "id": "92052",
+          "id": "100905",
           "mitre": {
-            "id": ["T1003.001"],
-            "tactic": ["Credential Access"],
-            "technique": ["LSASS Memory"]
+            "id": [
+              "T1003.001"
+            ],
+            "tactic": [
+              "Credential Access"
+            ],
+            "technique": [
+              "LSASS Memory"
+            ]
           },
           "firedtimes": 1,
           "mail": false,
-          "groups": ["sysmon", "sysmon_event_10", "windows", "credential_access"]
+          "groups": [
+            "sysmon",
+            "sysmon_event_10",
+            "windows",
+            "credential_access"
+          ]
         },
-        "agent": {"id": "007", "name": "WS01", "ip": "10.1.0.20"},
-        "manager": {"name": "wazuh.manager"},
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
         "id": "1706880600.100001",
-        "decoder": {"name": "windows_eventchannel"},
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
         "location": "EventChannel",
         "data": {
           "win": {
@@ -78,20 +99,39 @@
         "rule": {
           "level": 14,
           "description": "Sysmon - Event 11: LSASS dump file created",
-          "id": "92101",
+          "id": "100910",
           "mitre": {
-            "id": ["T1003.001"],
-            "tactic": ["Credential Access"],
-            "technique": ["LSASS Memory"]
+            "id": [
+              "T1003.001"
+            ],
+            "tactic": [
+              "Credential Access"
+            ],
+            "technique": [
+              "LSASS Memory"
+            ]
           },
           "firedtimes": 1,
           "mail": false,
-          "groups": ["sysmon", "sysmon_event_11", "windows", "credential_access"]
+          "groups": [
+            "sysmon",
+            "sysmon_event_11",
+            "windows",
+            "credential_access"
+          ]
         },
-        "agent": {"id": "007", "name": "WS01", "ip": "10.1.0.20"},
-        "manager": {"name": "wazuh.manager"},
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
         "id": "1706880601.100002",
-        "decoder": {"name": "windows_eventchannel"},
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
         "location": "EventChannel",
         "data": {
           "win": {

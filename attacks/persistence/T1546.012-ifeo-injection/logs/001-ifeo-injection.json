@@ -1,0 +1,220 @@
+{
+  "_metadata": {
+    "attack_id": "T1546.012",
+    "variation": "001",
+    "name": "Image File Execution Options Injection",
+    "description": "Using IFEO debugger registry keys for persistence",
+    "expected_detection": "HIGH",
+    "kill_chain_phase": "persistence",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Sysmon Event 13 - IFEO debugger for notepad.exe",
+      "sequence": 1,
+      "timestamp": "2026-01-30T07:05:00.000Z",
+      "log": {
+        "rule": {
+          "level": 14,
+          "description": "Sysmon - Event 13: IFEO Debugger Persistence",
+          "id": "100100",
+          "mitre": {
+            "id": [
+              "T1546.012"
+            ],
+            "tactic": [
+              "Persistence",
+              "Privilege Escalation"
+            ],
+            "technique": [
+              "Image File Execution Options Injection"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event13",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000036.000001",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "13",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "13",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-01-30 07:05:00.000",
+              "processGuid": "{IFEO-001-0001-000000000001}",
+              "processId": "82000",
+              "image": "C:\\Windows\\System32\\reg.exe",
+              "eventType": "SetValue",
+              "targetObject": "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Image File Execution Options\\notepad.exe\\Debugger",
+              "details": "C:\\Tools\\backdoor.exe",
+              "user": "CORP\\attacker"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Sysmon Event 1 - Registry command for IFEO",
+      "sequence": 2,
+      "timestamp": "2026-01-30T07:04:59.000Z",
+      "log": {
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 1: IFEO Registry Modification",
+          "id": "100100",
+          "mitre": {
+            "id": [
+              "T1546.012"
+            ],
+            "tactic": [
+              "Persistence",
+              "Privilege Escalation"
+            ],
+            "technique": [
+              "Image File Execution Options Injection"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000036.000002",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-01-30 07:04:59.000",
+              "processGuid": "{IFEO-001-0001-000000000002}",
+              "processId": "82100",
+              "image": "C:\\Windows\\System32\\reg.exe",
+              "commandLine": "reg add \"HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Image File Execution Options\\notepad.exe\" /v Debugger /t REG_SZ /d \"C:\\Tools\\backdoor.exe\" /f",
+              "currentDirectory": "C:\\Users\\attacker\\",
+              "user": "CORP\\attacker",
+              "integrityLevel": "High",
+              "hashes": "SHA256=REG_HASH_1234567890ABCDEF1234567890ABCDEF12345678",
+              "parentProcessGuid": "{IFEO-001-0001-000000000000}",
+              "parentProcessId": "82000",
+              "parentImage": "C:\\Windows\\System32\\cmd.exe",
+              "parentCommandLine": "cmd.exe"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Sysmon Event 13 - GlobalFlag for silent process exit monitoring",
+      "sequence": 3,
+      "timestamp": "2026-01-30T07:05:10.000Z",
+      "log": {
+        "rule": {
+          "level": 14,
+          "description": "Sysmon - Event 13: Silent Process Exit Monitor Persistence",
+          "id": "100100",
+          "mitre": {
+            "id": [
+              "T1546.012"
+            ],
+            "tactic": [
+              "Persistence",
+              "Privilege Escalation"
+            ],
+            "technique": [
+              "Image File Execution Options Injection"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event13",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000036.000003",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "13",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "13",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-01-30 07:05:10.000",
+              "processGuid": "{IFEO-001-0001-000000000003}",
+              "processId": "82200",
+              "image": "C:\\Windows\\System32\\reg.exe",
+              "eventType": "SetValue",
+              "targetObject": "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Image File Execution Options\\calc.exe\\GlobalFlag",
+              "details": "DWORD (0x00000200)",
+              "user": "CORP\\attacker"
+            }
+          }
+        }
+      }
+    }
+  ]
+}

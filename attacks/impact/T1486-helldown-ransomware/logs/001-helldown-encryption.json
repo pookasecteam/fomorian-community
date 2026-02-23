@@ -1,0 +1,320 @@
+{
+  "_metadata": {
+    "attack_id": "T1486",
+    "variation": "001",
+    "name": "HellDown Ransomware Encryption",
+    "description": "HellDown ransomware execution with shadow copy deletion and file encryption",
+    "expected_detection": "CRITICAL",
+    "kill_chain_phase": "impact",
+    "references": [
+      "https://detect.fyi/helldown-donex-darktrace-ransomware-fd8683b7d135",
+      "https://blog.sekoia.io/helldown-ransomware-an-overview-of-this-emerging-threat/"
+    ],
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Sysmon Event 1 - Defender disabled via PowerShell",
+      "sequence": 1,
+      "timestamp": "",
+      "log": {
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 1: Windows Defender Disabled",
+          "id": "100916",
+          "mitre": {
+            "id": [
+              "T1562.001"
+            ],
+            "tactic": [
+              "Defense Evasion"
+            ],
+            "technique": [
+              "Impair Defenses: Disable or Modify Tools"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows",
+            "ransomware"
+          ]
+        },
+        "agent": {
+          "id": "{{agent_id}}",
+          "name": "{{agent_name}}",
+          "ip": "198.51.100.100"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000004.000001",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "{{computer_name}}.corp.local"
+            },
+            "eventdata": {
+              "processId": "8020",
+              "image": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+              "commandLine": "powershell.exe -c Set-MpPreference -DisableRealtimeMonitoring $true",
+              "user": "{{domain}}\\compromised_admin",
+              "parentImage": "C:\\Windows\\System32\\cmd.exe"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Sysmon Event 1 - Shadow copy deletion via vssadmin",
+      "sequence": 2,
+      "timestamp": "",
+      "log": {
+        "rule": {
+          "level": 14,
+          "description": "Sysmon - Event 1: Shadow Copy Deletion",
+          "id": "100916",
+          "mitre": {
+            "id": [
+              "T1490"
+            ],
+            "tactic": [
+              "Impact"
+            ],
+            "technique": [
+              "Inhibit System Recovery"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows",
+            "ransomware"
+          ]
+        },
+        "agent": {
+          "id": "{{agent_id}}",
+          "name": "{{agent_name}}",
+          "ip": "198.51.100.100"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000004.000002",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "{{computer_name}}.corp.local"
+            },
+            "eventdata": {
+              "processId": "8105",
+              "image": "C:\\Windows\\System32\\vssadmin.exe",
+              "commandLine": "vssadmin.exe delete shadows /all /quiet",
+              "user": "{{domain}}\\compromised_admin",
+              "parentImage": "C:\\Temp\\helldown.exe",
+              "parentProcessId": "8100"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Sysmon Event 1 - Recovery disabled via bcdedit",
+      "sequence": 3,
+      "timestamp": "",
+      "log": {
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 1: Windows Recovery Disabled",
+          "id": "100916",
+          "mitre": {
+            "id": [
+              "T1490"
+            ],
+            "tactic": [
+              "Impact"
+            ],
+            "technique": [
+              "Inhibit System Recovery"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows",
+            "ransomware"
+          ]
+        },
+        "agent": {
+          "id": "{{agent_id}}",
+          "name": "{{agent_name}}",
+          "ip": "198.51.100.100"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000004.000003",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "{{computer_name}}.corp.local"
+            },
+            "eventdata": {
+              "processId": "8115",
+              "image": "C:\\Windows\\System32\\bcdedit.exe",
+              "commandLine": "bcdedit.exe /set {default} recoveryenabled No",
+              "user": "{{domain}}\\compromised_admin",
+              "parentImage": "C:\\Temp\\helldown.exe"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Sysmon Event 11 - Ransom note created",
+      "sequence": 4,
+      "timestamp": "",
+      "log": {
+        "rule": {
+          "level": 15,
+          "description": "Sysmon - Event 11: HellDown Ransom Note Created",
+          "id": "100001",
+          "mitre": {
+            "id": [
+              "T1486"
+            ],
+            "tactic": [
+              "Impact"
+            ],
+            "technique": [
+              "Data Encrypted for Impact"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event11",
+            "windows",
+            "ransomware"
+          ]
+        },
+        "agent": {
+          "id": "{{agent_id}}",
+          "name": "{{agent_name}}",
+          "ip": "198.51.100.100"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000004.000004",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "11",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "{{computer_name}}.corp.local"
+            },
+            "eventdata": {
+              "targetFilename": "C:\\Users\\Public\\Documents\\Readme.HELLDOWN_ID.txt",
+              "image": "C:\\Temp\\helldown.exe",
+              "creationUtcTime": "{{timestamp}}"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Sysmon Event 11 - Encrypted file created",
+      "sequence": 5,
+      "timestamp": "",
+      "log": {
+        "rule": {
+          "level": 15,
+          "description": "Sysmon - Event 11: File Encrypted with .helldown Extension",
+          "id": "100001",
+          "mitre": {
+            "id": [
+              "T1486"
+            ],
+            "tactic": [
+              "Impact"
+            ],
+            "technique": [
+              "Data Encrypted for Impact"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event11",
+            "windows",
+            "ransomware"
+          ]
+        },
+        "agent": {
+          "id": "{{agent_id}}",
+          "name": "{{agent_name}}",
+          "ip": "198.51.100.100"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000004.000005",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "11",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "{{computer_name}}.corp.local"
+            },
+            "eventdata": {
+              "targetFilename": "C:\\ImportantData\\database.sql.helldown",
+              "image": "C:\\Temp\\helldown.exe",
+              "creationUtcTime": "{{timestamp}}"
+            }
+          }
+        }
+      }
+    }
+  ]
+}

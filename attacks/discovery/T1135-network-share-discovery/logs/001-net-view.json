@@ -7,8 +7,7 @@
     "expected_detection": "MEDIUM",
     "kill_chain_phase": "discovery",
     "format": "wazuh-native",
-    "format_version": "1.0",
-    "campaign": "27"
+    "format_version": "1.0"
   },
   "logs": [
     {
@@ -20,20 +19,30 @@
         "rule": {
           "level": 5,
           "description": "Sysmon - Event 1: Process Creation",
-          "id": "61603",
+          "id": "100603",
           "mitre": {
-            "id": ["T1135"],
-            "tactic": ["Discovery"],
-            "technique": ["Network Share Discovery"]
+            "id": [
+              "T1135"
+            ],
+            "tactic": [
+              "Discovery"
+            ],
+            "technique": [
+              "Network Share Discovery"
+            ]
           },
           "firedtimes": 1,
           "mail": false,
-          "groups": ["sysmon", "sysmon_event1", "windows"]
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
         },
         "agent": {
-          "id": "014",
+          "id": "020",
           "name": "WS01",
-          "ip": "10.1.0.20"
+          "ip": "198.51.100.20"
         },
         "manager": {
           "name": "wazuh.manager"
@@ -49,7 +58,7 @@
               "eventID": "1",
               "channel": "Microsoft-Windows-Sysmon/Operational",
               "providerName": "Microsoft-Windows-Sysmon",
-              "computer": "WS01.yourcompany.local",
+              "computer": "WS01.corp.local",
               "level": "4",
               "task": "1",
               "severityValue": "INFORMATION"
@@ -61,7 +70,7 @@
               "image": "C:\\Windows\\System32\\net.exe",
               "commandLine": "net view \\\\DC01 /all",
               "currentDirectory": "C:\\Users\\admin2\\",
-              "user": "YOURCOMPANY\\admin2",
+              "user": "CORP\\admin2",
               "integrityLevel": "Medium",
               "hashes": "SHA256=C9B4E36F8D2A1B7C5E3F4D6A8B9C0E1F2A3B4C5D6E7F8A9B0C1D2E3F4A5B6C7",
               "parentProcessGuid": "{8df8f34e-2710-65c7-0000-000000000400}",

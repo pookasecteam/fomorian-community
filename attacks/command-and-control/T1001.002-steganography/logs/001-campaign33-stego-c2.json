@@ -1,0 +1,198 @@
+{
+  "metadata": {
+    "technique_id": "T1001.002",
+    "technique_name": "Data Obfuscation: Steganography",
+    "tactic": "command-and-control",
+    "description": "C2 commands hidden in LSB of image files using steganography",
+    "campaign": "33",
+    "batch": "14",
+    "expected_detection": "LOW",
+    "attack_time": "2026-02-10T14:26:00.000Z",
+    "target_host": "WS01",
+    "simulated_c2": "100.100.100.100"
+  },
+  "logs": [
+    {
+      "timestamp": "2026-02-10T14:26:00.000Z",
+      "rule": {
+        "level": 3,
+        "description": "Sysmon - Event 1: Steganography tool execution",
+        "id": "100101",
+        "mitre": {
+          "id": [
+            "T1001.002"
+          ],
+          "tactic": [
+            "Command and Control"
+          ],
+          "technique": [
+            "Steganography"
+          ]
+        },
+        "groups": [
+          "sysmon",
+          "sysmon_event1"
+        ]
+      },
+      "agent": {
+        "id": "020",
+        "name": "WS01",
+        "ip": "198.51.100.20"
+      },
+      "manager": {
+        "name": "wazuh.manager"
+      },
+      "id": "1707578760.000001",
+      "decoder": {
+        "name": "windows_eventchannel"
+      },
+      "location": "EventChannel",
+      "data": {
+        "win": {
+          "system": {
+            "eventID": "1",
+            "channel": "Microsoft-Windows-Sysmon/Operational",
+            "computer": "WS01.corp.local",
+            "systemTime": "2026-02-10T14:26:00.000Z"
+          },
+          "eventdata": {
+            "utcTime": "2026-02-10 14:26:00.000",
+            "processGuid": "{A1B2C3D4-1234-5678-90AB-CDEF12345685}",
+            "processId": "7123",
+            "image": "C:\\Users\\Public\\Tools\\steghide.exe",
+            "commandLine": "steghide.exe embed -cf image.jpg -ef commands.txt -p secret123",
+            "currentDirectory": "C:\\Users\\Public\\",
+            "user": "CORP\\attacker",
+            "integrityLevel": "Medium",
+            "hashes": "SHA256=A1B2C3D4E5F6789012345678901234567890ABCDEF1234567890ABCDEF123456",
+            "parentProcessGuid": "{A1B2C3D4-1234-5678-90AB-CDEF12345670}",
+            "parentProcessId": "3456",
+            "parentImage": "C:\\Windows\\System32\\cmd.exe",
+            "parentCommandLine": "cmd.exe"
+          }
+        }
+      },
+      "fomorian_test": true,
+      "fomorian_batch": "14",
+      "fomorian_campaign": "33"
+    },
+    {
+      "timestamp": "2026-02-10T14:26:05.000Z",
+      "rule": {
+        "level": 3,
+        "description": "Sysmon - Event 11: Image file created",
+        "id": "100111",
+        "mitre": {
+          "id": [
+            "T1001.002"
+          ],
+          "tactic": [
+            "Command and Control"
+          ],
+          "technique": [
+            "Steganography"
+          ]
+        },
+        "groups": [
+          "sysmon",
+          "sysmon_event11"
+        ]
+      },
+      "agent": {
+        "id": "020",
+        "name": "WS01",
+        "ip": "198.51.100.20"
+      },
+      "manager": {
+        "name": "wazuh.manager"
+      },
+      "id": "1707578765.000001",
+      "decoder": {
+        "name": "windows_eventchannel"
+      },
+      "location": "EventChannel",
+      "data": {
+        "win": {
+          "system": {
+            "eventID": "11",
+            "channel": "Microsoft-Windows-Sysmon/Operational",
+            "computer": "WS01.corp.local",
+            "systemTime": "2026-02-10T14:26:05.000Z"
+          },
+          "eventdata": {
+            "utcTime": "2026-02-10 14:26:05.000",
+            "processGuid": "{A1B2C3D4-1234-5678-90AB-CDEF12345685}",
+            "processId": "7123",
+            "image": "C:\\Users\\Public\\Tools\\steghide.exe",
+            "targetFilename": "C:\\Users\\Public\\stego_image.jpg",
+            "creationUtcTime": "2026-02-10 14:26:05.000",
+            "user": "CORP\\attacker"
+          }
+        }
+      },
+      "fomorian_test": true,
+      "fomorian_batch": "14",
+      "fomorian_campaign": "33"
+    },
+    {
+      "timestamp": "2026-02-10T14:26:10.000Z",
+      "rule": {
+        "level": 3,
+        "description": "Zeek - HTTP image upload",
+        "id": "100001",
+        "mitre": {
+          "id": [
+            "T1001.002"
+          ],
+          "tactic": [
+            "Command and Control"
+          ],
+          "technique": [
+            "Steganography"
+          ]
+        },
+        "groups": [
+          "zeek",
+          "zeek_http"
+        ]
+      },
+      "agent": {
+        "id": "001",
+        "name": "GW01",
+        "ip": "198.51.100.1"
+      },
+      "manager": {
+        "name": "wazuh.manager"
+      },
+      "id": "1707578770.000001",
+      "decoder": {
+        "name": "zeek"
+      },
+      "location": "zeek_http",
+      "data": {
+        "zeek": {
+          "ts": "1707578770.000000",
+          "uid": "S1a2b3c4d5e6f7g8h9",
+          "id.orig_h": "198.51.100.20",
+          "id.orig_p": "65456",
+          "id.resp_h": "100.100.100.100",
+          "id.resp_p": "80",
+          "trans_depth": "1",
+          "method": "POST",
+          "host": "share.evil.com",
+          "uri": "/upload",
+          "version": "1.1",
+          "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)",
+          "request_body_len": "524288",
+          "response_body_len": "128",
+          "status_code": "200",
+          "status_msg": "OK",
+          "tags": "[]"
+        }
+      },
+      "fomorian_test": true,
+      "fomorian_batch": "14",
+      "fomorian_campaign": "33"
+    }
+  ]
+}

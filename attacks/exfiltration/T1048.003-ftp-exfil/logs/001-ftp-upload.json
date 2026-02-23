@@ -1,0 +1,58 @@
+{
+  "_metadata": {
+    "attack_id": "T1048.003",
+    "variation": "001",
+    "name": "Exfiltration Over Alternative Protocol - FTP",
+    "description": "Data exfiltration using FTP protocol",
+    "expected_detection": "MEDIUM",
+    "kill_chain_phase": "exfiltration",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Sysmon Event 3 - FTP connection outbound",
+      "sequence": 1,
+      "log": {
+        "rule": {
+          "level": 10,
+          "description": "Sysmon - Event 3: FTP Exfiltration",
+          "id": "100048",
+          "mitre": {
+            "id": [
+              "T1048.003"
+            ],
+            "tactic": [
+              "Exfiltration"
+            ],
+            "technique": [
+              "Exfiltration Over Alternative Protocol"
+            ]
+          },
+          "groups": [
+            "sysmon",
+            "sysmon_event3"
+          ]
+        },
+        "agent": {
+          "id": "010",
+          "name": "DC01"
+        },
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "3"
+            },
+            "eventdata": {
+              "image": "C:\\Windows\\System32\\ftp.exe",
+              "destinationIp": "185.220.101.45",
+              "destinationPort": "21",
+              "protocol": "tcp",
+              "user": "CORP\\Administrator"
+            }
+          }
+        }
+      }
+    }
+  ]
+}

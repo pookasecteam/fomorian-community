@@ -7,8 +7,6 @@
     "expected_detection": "MEDIUM",
     "kill_chain_phase": "credential-access",
     "tool": "impacket-getTGT",
-    "command": "impacket-getTGT yourcompany.local/Administrator:\"\" -dc-ip 10.1.0.10",
-    "impact": "TGT acquisition for offline cracking or pass-the-ticket attacks",
     "format": "wazuh-native",
     "format_version": "1.0"
   },
@@ -22,7 +20,7 @@
         "rule": {
           "level": 3,
           "description": "Windows Eventchannel event",
-          "id": "60009",
+          "id": "100600",
           "firedtimes": 1,
           "mail": false,
           "groups": [
@@ -31,9 +29,9 @@
           ]
         },
         "agent": {
-          "id": "012",
+          "id": "010",
           "name": "DC01",
-          "ip": "10.1.0.99"
+          "ip": "198.51.100.12"
         },
         "manager": {
           "name": "wazuh.manager"
@@ -49,7 +47,7 @@
               "eventID": "4768",
               "channel": "Security",
               "providerName": "Microsoft-Windows-Security-Auditing",
-              "computer": "DC01.yourcompany.local",
+              "computer": "DC01.corp.local",
               "level": "0",
               "keywords": "0x8020000000000000",
               "severityValue": "AUDIT_SUCCESS"
@@ -58,7 +56,7 @@
               "targetUserName": "Administrator",
               "ticketEncryptionType": "0x17",
               "preAuthType": "2",
-              "ipAddress": "10.1.0.50"
+              "ipAddress": "198.51.100.110"
             }
           }
         }

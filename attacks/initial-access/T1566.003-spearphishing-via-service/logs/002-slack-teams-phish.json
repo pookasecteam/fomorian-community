@@ -1,0 +1,315 @@
+{
+  "_metadata": {
+    "attack_id": "T1566.003",
+    "variation": "002",
+    "name": "Slack/Teams Spearphishing Attack",
+    "description": "Phishing attack delivered via Slack or Microsoft Teams message containing malicious link",
+    "expected_detection": "MEDIUM",
+    "kill_chain_phase": "initial-access",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Sysmon Event 22 - DNS query to phishing domain from Teams/Slack",
+      "sequence": 1,
+      "timestamp": "2026-02-08T12:50:00.000Z",
+      "log": {
+        "timestamp": "2026-02-08T12:50:00.000+0000",
+        "rule": {
+          "level": 8,
+          "description": "Sysmon - Event 22: DNS Query to Suspicious Domain",
+          "id": "100001",
+          "mitre": {
+            "id": [
+              "T1566.003"
+            ],
+            "tactic": [
+              "Initial Access"
+            ],
+            "technique": [
+              "Phishing: Spearphishing via Service"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event22",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1707400000.400032",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "22",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "22",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-08 12:50:00.000",
+              "processGuid": "{T1566003-0002-0001-0001-000000000001}",
+              "processId": "7100",
+              "image": "C:\\Users\\jsmith\\AppData\\Local\\Microsoft\\Teams\\current\\Teams.exe",
+              "queryName": "sharepoint-files-download.com",
+              "queryStatus": "0",
+              "queryResults": "198.51.100.110",
+              "user": "CORP\\jsmith"
+            }
+          }
+        },
+        "_fomorian_batch": "PT-2026-003-batch1-initial-access",
+        "_fomorian_test": true,
+        "_fomorian_attack_id": "T1566.003",
+        "_fomorian_expected_detection": "Sigma: Teams DNS Query to Suspicious Domain (T1566.003)"
+      }
+    },
+    {
+      "_comment": "Sysmon Event 11 - Payload downloaded via Teams link",
+      "sequence": 2,
+      "timestamp": "2026-02-08T12:50:10.000Z",
+      "log": {
+        "timestamp": "2026-02-08T12:50:10.000+0000",
+        "rule": {
+          "level": 10,
+          "description": "Sysmon - Event 11: File Downloaded via Teams",
+          "id": "100916",
+          "mitre": {
+            "id": [
+              "T1566.003",
+              "T1105"
+            ],
+            "tactic": [
+              "Initial Access",
+              "Command and Control"
+            ],
+            "technique": [
+              "Phishing: Spearphishing via Service",
+              "Ingress Tool Transfer"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event11",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1707400000.400033",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "11",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "11",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-08 12:50:10.000",
+              "processGuid": "{T1566003-0002-0001-0001-000000000001}",
+              "processId": "7100",
+              "image": "C:\\Users\\jsmith\\AppData\\Local\\Microsoft\\Teams\\current\\Teams.exe",
+              "targetFilename": "C:\\Users\\jsmith\\Downloads\\Q4_Budget_Review.iso",
+              "creationUtcTime": "2026-02-08 12:50:10.000",
+              "user": "CORP\\jsmith"
+            }
+          }
+        },
+        "_fomorian_batch": "PT-2026-003-batch1-initial-access",
+        "_fomorian_test": true,
+        "_fomorian_attack_id": "T1566.003",
+        "_fomorian_expected_detection": "Sigma: ISO File Downloaded via Messaging App (T1566.003)"
+      }
+    },
+    {
+      "_comment": "Sysmon Event 1 - User mounts ISO file",
+      "sequence": 3,
+      "timestamp": "2026-02-08T12:51:00.000Z",
+      "log": {
+        "timestamp": "2026-02-08T12:51:00.000+0000",
+        "rule": {
+          "level": 10,
+          "description": "Sysmon - Event 1: ISO Mount",
+          "id": "100910",
+          "mitre": {
+            "id": [
+              "T1566.003",
+              "T1553.005"
+            ],
+            "tactic": [
+              "Initial Access",
+              "Defense Evasion"
+            ],
+            "technique": [
+              "Phishing: Spearphishing via Service",
+              "Mark-of-the-Web Bypass"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1707400000.400034",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-08 12:51:00.000",
+              "processGuid": "{T1566003-0002-0001-0001-000000000002}",
+              "processId": "7200",
+              "image": "C:\\Windows\\explorer.exe",
+              "commandLine": "C:\\Windows\\Explorer.EXE /e,F:\\",
+              "currentDirectory": "C:\\Users\\jsmith\\Downloads\\",
+              "user": "CORP\\jsmith",
+              "integrityLevel": "Medium",
+              "parentProcessGuid": "{T1566003-0002-0001-0000-000000000001}",
+              "parentProcessId": "3456",
+              "parentImage": "C:\\Windows\\explorer.exe",
+              "parentCommandLine": "C:\\Windows\\Explorer.EXE"
+            }
+          }
+        },
+        "_fomorian_batch": "PT-2026-003-batch1-initial-access",
+        "_fomorian_test": true,
+        "_fomorian_attack_id": "T1566.003",
+        "_fomorian_expected_detection": "Sigma: ISO Mount from Download (T1566.003)"
+      }
+    },
+    {
+      "_comment": "Sysmon Event 1 - Payload execution from mounted ISO",
+      "sequence": 4,
+      "timestamp": "2026-02-08T12:51:30.000Z",
+      "log": {
+        "timestamp": "2026-02-08T12:51:30.000+0000",
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 1: Execution from Mounted ISO",
+          "id": "100910",
+          "mitre": {
+            "id": [
+              "T1566.003",
+              "T1204.002"
+            ],
+            "tactic": [
+              "Initial Access",
+              "Execution"
+            ],
+            "technique": [
+              "Phishing: Spearphishing via Service",
+              "User Execution: Malicious File"
+            ]
+          },
+          "firedtimes": 2,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1707400000.400035",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-08 12:51:30.000",
+              "processGuid": "{T1566003-0002-0001-0001-000000000003}",
+              "processId": "7300",
+              "image": "F:\\Q4_Budget_Review.exe",
+              "commandLine": "\"F:\\Q4_Budget_Review.exe\"",
+              "currentDirectory": "F:\\",
+              "user": "CORP\\jsmith",
+              "integrityLevel": "Medium",
+              "hashes": "SHA256=MALICIOUS_PAYLOAD_HASH",
+              "parentProcessGuid": "{T1566003-0002-0001-0001-000000000002}",
+              "parentProcessId": "7200",
+              "parentImage": "C:\\Windows\\explorer.exe",
+              "parentCommandLine": "C:\\Windows\\Explorer.EXE /e,F:\\"
+            }
+          }
+        },
+        "_fomorian_batch": "PT-2026-003-batch1-initial-access",
+        "_fomorian_test": true,
+        "_fomorian_attack_id": "T1566.003",
+        "_fomorian_expected_detection": "Sigma: Execution from Mounted ISO (T1566.003)"
+      }
+    }
+  ]
+}

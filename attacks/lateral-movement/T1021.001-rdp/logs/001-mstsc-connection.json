@@ -7,9 +7,7 @@
     "expected_detection": "MEDIUM",
     "kill_chain_phase": "lateral-movement",
     "format": "wazuh-native",
-    "format_version": "1.0",
-    "campaign": "Campaign 25",
-    "date_executed": "2026-02-09"
+    "format_version": "1.0"
   },
   "logs": [
     {
@@ -17,24 +15,41 @@
       "sequence": 1,
       "timestamp": "2026-02-09T14:14:00.000Z",
       "log": {
-        "timestamp": "",
         "rule": {
           "level": 8,
           "description": "Sysmon - Event 1: Process creation",
           "id": "100101",
           "mitre": {
-            "id": ["T1021.001"],
-            "tactic": ["Lateral Movement"],
-            "technique": ["Remote Services: Remote Desktop Protocol"]
+            "id": [
+              "T1021.001"
+            ],
+            "tactic": [
+              "Lateral Movement"
+            ],
+            "technique": [
+              "Remote Services: Remote Desktop Protocol"
+            ]
           },
           "firedtimes": 1,
           "mail": false,
-          "groups": ["sysmon", "sysmon_event1", "windows"]
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
         },
-        "agent": {"id": "014", "name": "WS01", "ip": "10.1.0.20"},
-        "manager": {"name": "wazuh.manager"},
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
         "id": "1709000207.000001",
-        "decoder": {"name": "windows_eventchannel"},
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
         "location": "EventChannel",
         "data": {
           "win": {
@@ -42,7 +57,7 @@
               "eventID": "1",
               "channel": "Microsoft-Windows-Sysmon/Operational",
               "providerName": "Microsoft-Windows-Sysmon",
-              "computer": "WS01.yourcompany.local",
+              "computer": "WS01.corp.local",
               "level": "4",
               "task": "1",
               "severityValue": "INFORMATION"
@@ -54,7 +69,7 @@
               "image": "C:\\Windows\\System32\\mstsc.exe",
               "commandLine": "mstsc  /v:DC01",
               "currentDirectory": "C:\\Users\\Administrator\\",
-              "user": "YOURCOMPANY\\Administrator",
+              "user": "CORP\\Administrator",
               "integrityLevel": "High",
               "hashes": "SHA256=B8C9D0E1F2A3B4C5D6E7F8A9B0C1D2E3F4A5B6C7D8E9F0A1B2C3D4E5F6A7B8C9",
               "parentProcessGuid": "{12345678-1234-1234-1234-000000207000}",
@@ -71,24 +86,41 @@
       "sequence": 2,
       "timestamp": "2026-02-09T14:14:01.000Z",
       "log": {
-        "timestamp": "",
         "rule": {
           "level": 8,
           "description": "Sysmon - Event 3: Network connection",
-          "id": "200152",
+          "id": "100103",
           "mitre": {
-            "id": ["T1021.001"],
-            "tactic": ["Lateral Movement"],
-            "technique": ["Remote Services: Remote Desktop Protocol"]
+            "id": [
+              "T1021.001"
+            ],
+            "tactic": [
+              "Lateral Movement"
+            ],
+            "technique": [
+              "Remote Services: Remote Desktop Protocol"
+            ]
           },
           "firedtimes": 1,
           "mail": false,
-          "groups": ["sysmon", "sysmon_event3", "windows"]
+          "groups": [
+            "sysmon",
+            "sysmon_event3",
+            "windows"
+          ]
         },
-        "agent": {"id": "014", "name": "WS01", "ip": "10.1.0.20"},
-        "manager": {"name": "wazuh.manager"},
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
         "id": "1709000207.000002",
-        "decoder": {"name": "windows_eventchannel"},
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
         "location": "EventChannel",
         "data": {
           "win": {
@@ -96,7 +128,7 @@
               "eventID": "3",
               "channel": "Microsoft-Windows-Sysmon/Operational",
               "providerName": "Microsoft-Windows-Sysmon",
-              "computer": "WS01.yourcompany.local",
+              "computer": "WS01.corp.local",
               "level": "4",
               "task": "3",
               "severityValue": "INFORMATION"
@@ -106,12 +138,12 @@
               "processGuid": "{12345678-1234-1234-1234-000000207001}",
               "processId": "13024",
               "image": "C:\\Windows\\System32\\mstsc.exe",
-              "user": "YOURCOMPANY\\Administrator",
+              "user": "CORP\\Administrator",
               "protocol": "tcp",
               "initiated": "true",
-              "sourceIp": "10.1.0.20",
+              "sourceIp": "198.51.100.20",
               "sourcePort": "50124",
-              "destinationIp": "10.1.0.10",
+              "destinationIp": "198.51.100.10",
               "destinationPort": "3389",
               "destinationPortName": "ms-wbt-server"
             }

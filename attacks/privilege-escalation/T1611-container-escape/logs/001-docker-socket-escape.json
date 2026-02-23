@@ -1,0 +1,314 @@
+{
+  "_metadata": {
+    "attack_id": "T1611",
+    "variation": "001",
+    "name": "Docker Socket Container Escape",
+    "description": "Adversary escapes container by abusing mounted Docker socket",
+    "expected_detection": "CRITICAL",
+    "kill_chain_phase": "privilege-escalation",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Auditd - Docker socket accessed from container",
+      "sequence": 1,
+      "timestamp": "2026-01-30T10:00:00.000Z",
+      "log": {
+        "rule": {
+          "level": 14,
+          "description": "Auditd - Docker Socket Access from Container",
+          "id": "100001",
+          "mitre": {
+            "id": [
+              "T1611"
+            ],
+            "tactic": [
+              "Privilege Escalation"
+            ],
+            "technique": [
+              "Escape to Host"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "audit",
+            "linux",
+            "container"
+          ]
+        },
+        "agent": {
+          "id": "030",
+          "name": "DVLNX01",
+          "ip": "198.51.100.30"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700001100.000001",
+        "decoder": {
+          "name": "auditd"
+        },
+        "location": "audit",
+        "data": {
+          "audit": {
+            "type": "SYSCALL",
+            "arch": "x86_64",
+            "syscall": "connect",
+            "success": "yes",
+            "pid": "12345",
+            "ppid": "12340",
+            "uid": "0",
+            "gid": "0",
+            "euid": "0",
+            "comm": "docker",
+            "exe": "/usr/bin/docker",
+            "key": "docker_socket"
+          },
+          "file": {
+            "path": "/var/run/docker.sock"
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Syslog - Docker container created with host privileges",
+      "sequence": 2,
+      "timestamp": "2026-01-30T10:00:05.000Z",
+      "log": {
+        "rule": {
+          "level": 15,
+          "description": "Docker - Privileged Container Created for Escape",
+          "id": "100001",
+          "mitre": {
+            "id": [
+              "T1611"
+            ],
+            "tactic": [
+              "Privilege Escalation"
+            ],
+            "technique": [
+              "Escape to Host"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "docker",
+            "linux",
+            "container"
+          ]
+        },
+        "agent": {
+          "id": "030",
+          "name": "DVLNX01",
+          "ip": "198.51.100.30"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700001100.000002",
+        "decoder": {
+          "name": "docker"
+        },
+        "location": "docker",
+        "data": {
+          "docker": {
+            "action": "create",
+            "type": "container",
+            "actor": {
+              "id": "abc123def456",
+              "attributes": {
+                "image": "alpine:latest",
+                "name": "escape-container",
+                "privileged": "true",
+                "pid_mode": "host",
+                "network_mode": "host"
+              }
+            },
+            "time": "1706608805",
+            "timeNano": "1706608805000000000"
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Auditd - nsenter to host namespace from container",
+      "sequence": 3,
+      "timestamp": "2026-01-30T10:00:10.000Z",
+      "log": {
+        "rule": {
+          "level": 15,
+          "description": "Auditd - nsenter Container Escape Attempt",
+          "id": "100001",
+          "mitre": {
+            "id": [
+              "T1611"
+            ],
+            "tactic": [
+              "Privilege Escalation"
+            ],
+            "technique": [
+              "Escape to Host"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "audit",
+            "linux",
+            "container"
+          ]
+        },
+        "agent": {
+          "id": "030",
+          "name": "DVLNX01",
+          "ip": "198.51.100.30"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700001100.000003",
+        "decoder": {
+          "name": "auditd"
+        },
+        "location": "audit",
+        "data": {
+          "audit": {
+            "type": "EXECVE",
+            "argc": "6",
+            "a0": "nsenter",
+            "a1": "--target",
+            "a2": "1",
+            "a3": "--mount",
+            "a4": "--uts",
+            "a5": "--ipc",
+            "pid": "12350",
+            "ppid": "12345",
+            "uid": "0",
+            "comm": "nsenter",
+            "exe": "/usr/bin/nsenter"
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Auditd - chroot escape to host filesystem",
+      "sequence": 4,
+      "timestamp": "2026-01-30T10:00:15.000Z",
+      "log": {
+        "rule": {
+          "level": 15,
+          "description": "Auditd - chroot Escape to Host Filesystem",
+          "id": "100001",
+          "mitre": {
+            "id": [
+              "T1611"
+            ],
+            "tactic": [
+              "Privilege Escalation"
+            ],
+            "technique": [
+              "Escape to Host"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "audit",
+            "linux",
+            "container"
+          ]
+        },
+        "agent": {
+          "id": "030",
+          "name": "DVLNX01",
+          "ip": "198.51.100.30"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700001100.000004",
+        "decoder": {
+          "name": "auditd"
+        },
+        "location": "audit",
+        "data": {
+          "audit": {
+            "type": "EXECVE",
+            "argc": "3",
+            "a0": "chroot",
+            "a1": "/host",
+            "a2": "/bin/bash",
+            "pid": "12360",
+            "ppid": "12350",
+            "uid": "0",
+            "comm": "chroot",
+            "exe": "/usr/sbin/chroot"
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Syslog - Command executed on host from escaped container",
+      "sequence": 5,
+      "timestamp": "2026-01-30T10:00:20.000Z",
+      "log": {
+        "rule": {
+          "level": 15,
+          "description": "Auditd - Post-Escape Command Execution on Host",
+          "id": "100001",
+          "mitre": {
+            "id": [
+              "T1611",
+              "T1059.004"
+            ],
+            "tactic": [
+              "Privilege Escalation",
+              "Execution"
+            ],
+            "technique": [
+              "Escape to Host",
+              "Unix Shell"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "audit",
+            "linux",
+            "container"
+          ]
+        },
+        "agent": {
+          "id": "030",
+          "name": "DVLNX01",
+          "ip": "198.51.100.30"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700001100.000005",
+        "decoder": {
+          "name": "auditd"
+        },
+        "location": "audit",
+        "data": {
+          "audit": {
+            "type": "EXECVE",
+            "argc": "3",
+            "a0": "/bin/bash",
+            "a1": "-c",
+            "a2": "cat /etc/shadow",
+            "pid": "12370",
+            "ppid": "12360",
+            "uid": "0",
+            "comm": "bash",
+            "exe": "/bin/bash"
+          }
+        }
+      }
+    }
+  ]
+}

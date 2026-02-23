@@ -1,0 +1,154 @@
+{
+  "_metadata": {
+    "attack_id": "T1558.004",
+    "name": "AS-REP Roasting LDAP Query Detection",
+    "description": "LDAP queries for accounts with Kerberos pre-auth disabled (userAccountControl&4194304)",
+    "expected_detection": "HIGH",
+    "kill_chain_phase": "credential-access",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "LDAP Event 1644 - AS-REP Roasting query with transformed OID",
+      "sequence": 1,
+      "timestamp": "2026-01-31T14:45:23.456Z",
+      "log": {
+        "timestamp": "2026-01-31T14:45:23.456+0000",
+        "rule": {
+          "level": 12,
+          "description": "Directory Service - LDAP Query for AS-REP Roastable Accounts",
+          "id": "100001",
+          "mitre": {
+            "id": [
+              "T1558.004"
+            ],
+            "tactic": [
+              "Credential Access"
+            ],
+            "technique": [
+              "AS-REP Roasting"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "windows",
+            "ldap",
+            "directory_service"
+          ]
+        },
+        "agent": {
+          "id": "001",
+          "name": "DC01",
+          "ip": "198.51.100.10"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000001.200001",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1644",
+              "channel": "Directory Service",
+              "providerName": "Microsoft-Windows-ActiveDirectory_DomainService",
+              "computer": "DC01.corp.local"
+            },
+            "eventdata": {
+              "clientIP": "198.51.100.105",
+              "clientPort": "52341",
+              "startingNode": "DC=corp,DC=local",
+              "ldapFilter": "(userAccountControl&4194304)",
+              "searchScope": "2",
+              "attributeSelection": "sAMAccountName,distinguishedName,userAccountControl",
+              "visitedEntries": "2500",
+              "returnedEntries": "12"
+            }
+          }
+        },
+        "_fomorian_batch": "threat-intel-2026-01-31",
+        "_fomorian_test": true,
+        "_fomorian_attack_id": "T1558.004",
+        "_fomorian_expected_detection": "Sigma: AS-REP Roasting LDAP Query (T1558.004)"
+      }
+    },
+    {
+      "_comment": "Sysmon Event 1 - GetNPUsers.py execution (Impacket)",
+      "sequence": 2,
+      "timestamp": "2026-01-31T14:45:20.123Z",
+      "log": {
+        "timestamp": "2026-01-31T14:45:20.123+0000",
+        "rule": {
+          "level": 14,
+          "description": "Sysmon - Event 1: Impacket GetNPUsers AS-REP Roasting Tool",
+          "id": "100916",
+          "mitre": {
+            "id": [
+              "T1558.004"
+            ],
+            "tactic": [
+              "Credential Access"
+            ],
+            "technique": [
+              "AS-REP Roasting"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000007.200001",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local"
+            },
+            "eventdata": {
+              "utcTime": "2026-01-31 14:45:20.123",
+              "processGuid": "{12345678-asrp-1234-asrp-123456789abc}",
+              "processId": "5678",
+              "image": "C:\\Python39\\python.exe",
+              "commandLine": "python.exe GetNPUsers.py corp.local/ -usersfile users.txt -format hashcat -outputfile asrep.txt -dc-ip 198.51.100.10",
+              "currentDirectory": "C:\\Tools\\impacket\\examples\\",
+              "user": "CORP\\attacker",
+              "integrityLevel": "Medium",
+              "hashes": "SHA256=ABCD1234567890ABCDEF1234567890ABCDEF1234567890ABCDEF1234567890AB",
+              "parentProcessGuid": "{12345678-asrp-1234-asrp-123456789000}",
+              "parentProcessId": "4567",
+              "parentImage": "C:\\Windows\\System32\\cmd.exe",
+              "parentCommandLine": "cmd.exe"
+            }
+          }
+        },
+        "_fomorian_batch": "threat-intel-2026-01-31",
+        "_fomorian_test": true,
+        "_fomorian_attack_id": "T1558.004",
+        "_fomorian_expected_detection": "Sigma: Impacket AS-REP Roasting Tool (T1558.004)"
+      }
+    }
+  ]
+}

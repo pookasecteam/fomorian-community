@@ -1,0 +1,130 @@
+{
+  "_metadata": {
+    "attack_id": "T1499.001",
+    "variation": "001",
+    "name": "OS Exhaustion Flood - Linux Fork Bomb",
+    "description": "Attacker executes fork bomb to exhaust system processes and cause denial of service",
+    "expected_detection": "HIGH",
+    "kill_chain_phase": "impact",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Sysmon Linux Event 1 - Fork bomb execution",
+      "sequence": 1,
+      "timestamp": "2026-02-08T21:10:00.000Z",
+      "log": {
+        "timestamp": "2026-02-08T21:10:00.000+0000",
+        "rule": {
+          "level": 15,
+          "description": "Sysmon - Event 1: Fork Bomb Detected",
+          "id": "100101",
+          "mitre": {
+            "id": [
+              "T1499.001"
+            ],
+            "tactic": [
+              "Impact"
+            ],
+            "technique": [
+              "OS Exhaustion Flood"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": true,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "linux"
+          ]
+        },
+        "agent": {
+          "id": "030",
+          "name": "VULN01",
+          "ip": "198.51.100.30"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1707400000.300072",
+        "decoder": {
+          "name": "sysmon-linux"
+        },
+        "location": "/var/log/sysmon/sysmon.log",
+        "data": {
+          "eventdata": {
+            "utcTime": "2026-02-08 21:10:00.000",
+            "processGuid": "{A1B2C3D4-IMPC-1499-0002-000000000001}",
+            "processId": "15000",
+            "image": "/bin/bash",
+            "commandLine": "/bin/bash -c ':(){:|:&};:'",
+            "currentDirectory": "/tmp",
+            "user": "www-data",
+            "parentProcessGuid": "{A1B2C3D4-IMPC-1499-0002-PARENT000001}",
+            "parentProcessId": "14999",
+            "parentImage": "/bin/bash",
+            "parentCommandLine": "/bin/bash -i"
+          }
+        },
+        "_fomorian_batch": "PT-2026-003-batch2-impact",
+        "_fomorian_test": true,
+        "_fomorian_attack_id": "T1499.001",
+        "_fomorian_expected_detection": "Sigma: Fork Bomb Execution (T1499.001)"
+      }
+    },
+    {
+      "_comment": "System log - Rapid process creation detected",
+      "sequence": 2,
+      "timestamp": "2026-02-08T21:10:01.000Z",
+      "log": {
+        "timestamp": "2026-02-08T21:10:01.000+0000",
+        "rule": {
+          "level": 14,
+          "description": "System - Process Table Exhaustion",
+          "id": "100001",
+          "mitre": {
+            "id": [
+              "T1499.001"
+            ],
+            "tactic": [
+              "Impact"
+            ],
+            "technique": [
+              "OS Exhaustion Flood"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": true,
+          "groups": [
+            "system",
+            "resource_exhaustion"
+          ]
+        },
+        "agent": {
+          "id": "030",
+          "name": "VULN01",
+          "ip": "198.51.100.30"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1707400000.300073",
+        "decoder": {
+          "name": "kernel"
+        },
+        "location": "/var/log/kern.log",
+        "full_log": "Feb  8 21:10:01 VULN01 kernel: [12345.678901] fork: max pids per namespace reached: 32768",
+        "data": {
+          "kernel_message": "fork: max pids per namespace reached: 32768",
+          "resource_type": "pids",
+          "limit_reached": 32768
+        },
+        "_fomorian_batch": "PT-2026-003-batch2-impact",
+        "_fomorian_test": true,
+        "_fomorian_attack_id": "T1499.001",
+        "_fomorian_expected_detection": "Wazuh: Process Limit Exhaustion (T1499.001)"
+      }
+    }
+  ]
+}

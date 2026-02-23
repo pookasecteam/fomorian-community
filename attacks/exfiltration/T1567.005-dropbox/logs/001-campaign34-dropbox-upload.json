@@ -1,0 +1,144 @@
+{
+  "metadata": {
+    "technique_id": "T1567.005",
+    "technique_name": "Exfiltration Over Web Service: Dropbox",
+    "tactic": "exfiltration",
+    "description": "Exfiltrate data via Dropbox API upload",
+    "campaign": "34",
+    "batch": "15",
+    "expected_detection": "MEDIUM",
+    "attack_time": "2026-02-10T15:10:00.000Z",
+    "target_host": "WS01",
+    "simulated_destination": "api.dropbox.com"
+  },
+  "logs": [
+    {
+      "timestamp": "2026-02-10T15:10:00.000Z",
+      "rule": {
+        "level": 3,
+        "description": "Sysmon - Event 3: Network Connection",
+        "id": "100103",
+        "mitre": {
+          "id": [
+            "T1567.005"
+          ],
+          "tactic": [
+            "Exfiltration"
+          ],
+          "technique": [
+            "Exfiltration Over Web Service: Dropbox"
+          ]
+        },
+        "groups": [
+          "sysmon",
+          "sysmon_event3"
+        ]
+      },
+      "agent": {
+        "id": "020",
+        "name": "WS01",
+        "ip": "198.51.100.20"
+      },
+      "manager": {
+        "name": "wazuh.manager"
+      },
+      "id": "1707575400.000001",
+      "decoder": {
+        "name": "windows_eventchannel"
+      },
+      "location": "EventChannel",
+      "data": {
+        "win": {
+          "system": {
+            "eventID": "3",
+            "channel": "Microsoft-Windows-Sysmon/Operational",
+            "computer": "WS01.corp.local",
+            "systemTime": "2026-02-10T15:10:00.000Z"
+          },
+          "eventdata": {
+            "utcTime": "2026-02-10 15:10:00.000",
+            "processGuid": "{a23d360c-1234-65c8-0000-0010e3ab3100}",
+            "processId": "6234",
+            "image": "C:\\Windows\\System32\\curl.exe",
+            "user": "CORP\\admin2",
+            "protocol": "tcp",
+            "initiated": "true",
+            "sourceIsIpv6": "false",
+            "sourceIp": "198.51.100.20",
+            "sourceHostname": "WS01.corp.local",
+            "sourcePort": "49967",
+            "sourcePortName": "-",
+            "destinationIsIpv6": "false",
+            "destinationIp": "162.125.65.1",
+            "destinationHostname": "api.dropbox.com",
+            "destinationPort": "443",
+            "destinationPortName": "https"
+          }
+        }
+      },
+      "fomorian_test": true,
+      "fomorian_batch": "15",
+      "fomorian_campaign": "34"
+    },
+    {
+      "timestamp": "2026-02-10T15:10:05.000Z",
+      "rule": {
+        "level": 5,
+        "description": "Zeek - HTTP POST to cloud storage",
+        "id": "100001",
+        "mitre": {
+          "id": [
+            "T1567.005"
+          ],
+          "tactic": [
+            "Exfiltration"
+          ],
+          "technique": [
+            "Exfiltration Over Web Service: Dropbox"
+          ]
+        },
+        "groups": [
+          "zeek",
+          "zeek_http"
+        ]
+      },
+      "agent": {
+        "id": "001",
+        "name": "GW01",
+        "ip": "198.51.100.1"
+      },
+      "manager": {
+        "name": "wazuh.manager"
+      },
+      "id": "1707575405.000002",
+      "decoder": {
+        "name": "zeek"
+      },
+      "location": "/var/log/zeek/http.log",
+      "data": {
+        "zeek": {
+          "http": {
+            "ts": "1707575405.000000",
+            "uid": "FCd5op6StUv8wXyz07",
+            "id.orig_h": "198.51.100.20",
+            "id.orig_p": "49967",
+            "id.resp_h": "162.125.65.1",
+            "id.resp_p": "443",
+            "trans_depth": "1",
+            "method": "POST",
+            "host": "api.dropbox.com",
+            "uri": "/2/files/upload",
+            "user_agent": "curl/7.83.1",
+            "request_body_len": "15728640",
+            "response_body_len": "256",
+            "status_code": "200",
+            "status_msg": "OK"
+          }
+        }
+      },
+      "fomorian_test": true,
+      "fomorian_batch": "15",
+      "fomorian_campaign": "34"
+    }
+  ]
+}

@@ -1,0 +1,157 @@
+{
+  "_metadata": {
+    "attack_id": "T1053.005",
+    "variation": "AMB-009",
+    "name": "Scheduled Task Creation via schtasks",
+    "description": "schtasks.exe creating a daily scheduled task running as SYSTEM that executes a PowerShell maintenance script",
+    "ground_truth": "AMBIGUOUS",
+    "legitimate_explanation": "IT deploying a standardized maintenance script via Group Policy that performs disk cleanup, temp file removal, and Windows Update checks. The task runs as SYSTEM because it needs admin access to clear system temp files.",
+    "suspicious_explanation": "Scheduled tasks running as SYSTEM provide persistent elevated code execution. Attackers commonly create scheduled tasks for persistence that survive reboots. The PowerShell script path could contain malicious code.",
+    "expected_detection": "MEDIUM",
+    "kill_chain_phase": "persistence",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Sysmon Event 1 - schtasks creating a daily scheduled task",
+      "sequence": 1,
+      "timestamp": "2026-01-29T09:00:00.000Z",
+      "log": {
+        "rule": {
+          "level": 10,
+          "description": "Sysmon - Event 1: Scheduled Task Creation",
+          "id": "100100",
+          "mitre": {
+            "id": [
+              "T1053.005"
+            ],
+            "tactic": [
+              "Persistence",
+              "Execution"
+            ],
+            "technique": [
+              "Scheduled Task"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "011",
+          "name": "FS01",
+          "ip": "198.51.100.25"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000000.100900001",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "FS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "opcode": "0",
+              "keywords": "0x8000000000000000",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-01-29 09:00:00.000",
+              "processGuid": "{AMB-009-0001-0001-000000000001}",
+              "processId": "4516",
+              "image": "C:\\Windows\\System32\\schtasks.exe",
+              "commandLine": "schtasks.exe /create /tn \"SystemMaintenance\" /tr \"powershell.exe -ExecutionPolicy Bypass -File C:\\Scripts\\maint.ps1\" /sc daily /st 03:00 /ru SYSTEM /f",
+              "currentDirectory": "C:\\Windows\\System32\\",
+              "user": "CORP\\it.admin",
+              "integrityLevel": "High",
+              "parentProcessGuid": "{AMB-009-0001-0001-000000000000}",
+              "parentProcessId": "3100",
+              "parentImage": "C:\\Windows\\System32\\cmd.exe",
+              "parentCommandLine": "C:\\Windows\\System32\\cmd.exe /c C:\\Scripts\\deploy-maintenance.cmd"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Sysmon Event 13 - Registry modification for task registration",
+      "sequence": 2,
+      "timestamp": "2026-01-29T09:00:01.000Z",
+      "log": {
+        "rule": {
+          "level": 10,
+          "description": "Sysmon - Event 13: Scheduled Task Registry Entry",
+          "id": "100100",
+          "mitre": {
+            "id": [
+              "T1053.005"
+            ],
+            "tactic": [
+              "Persistence"
+            ],
+            "technique": [
+              "Scheduled Task"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event13",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "011",
+          "name": "FS01",
+          "ip": "198.51.100.25"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000000.100900002",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "13",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "FS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "opcode": "0",
+              "keywords": "0x8000000000000000",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-01-29 09:00:01.000",
+              "processGuid": "{AMB-009-0001-0001-000000000001}",
+              "processId": "4516",
+              "image": "C:\\Windows\\System32\\schtasks.exe",
+              "eventType": "SetValue",
+              "targetObject": "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Schedule\\TaskCache\\Tree\\SystemMaintenance\\Id",
+              "details": "{AMB-009-TASK-0001-000000000001}"
+            }
+          }
+        }
+      }
+    }
+  ]
+}

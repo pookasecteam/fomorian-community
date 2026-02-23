@@ -1,0 +1,131 @@
+{
+  "_metadata": {
+    "attack_id": "T1053.003",
+    "variation": "002",
+    "name": "System Cron.d Persistence",
+    "description": "Attacker drops malicious cron job in /etc/cron.d/",
+    "expected_detection": "CRITICAL",
+    "kill_chain_phase": "persistence",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "File created in /etc/cron.d/",
+      "sequence": 1,
+      "timestamp": "2026-01-29T14:20:00.000Z",
+      "log": {
+        "rule": {
+          "level": 10,
+          "description": "System Cron.d Persistence",
+          "id": "100200",
+          "mitre": {
+            "id": [
+              "T1053.003"
+            ],
+            "tactic": [
+              "Persistence"
+            ]
+          },
+          "firedtimes": 1,
+          "groups": [
+            "syslog",
+            "linux"
+          ]
+        },
+        "agent": {
+          "id": "030",
+          "name": "DVLNX01",
+          "ip": "198.51.100.30"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000000.881210111",
+        "decoder": {
+          "name": "syslog"
+        },
+        "location": "/var/log/syslog",
+        "data": {
+          "facility": "authpriv",
+          "severity": "info",
+          "hostname": "DVLNX01",
+          "program": "auditd",
+          "message": "type=PATH msg=audit(1706538000.000:1040): item=0 name=\"/etc/cron.d/system-update\" inode=393250 dev=08:01 mode=0100644 ouid=0 ogid=0 rdev=00:00 nametype=CREATE"
+        },
+        "full_log": "type=PATH msg=audit(1706538000.000:1040): item=0 name=\"/etc/cron.d/system-update\" inode=393250 dev=08:01 mode=0100644 ouid=0 ogid=0 rdev=00:00 nametype=CREATE"
+      }
+    },
+    {
+      "_comment": "File write to new cron file",
+      "sequence": 2,
+      "timestamp": "2026-01-29T14:20:00.500Z",
+      "log": {
+        "rule": {
+          "level": 10,
+          "description": "System Cron.d Persistence",
+          "id": "100200",
+          "mitre": {
+            "id": [
+              "T1053.003"
+            ],
+            "tactic": [
+              "Persistence"
+            ]
+          },
+          "firedtimes": 1,
+          "groups": [
+            "syslog",
+            "linux"
+          ]
+        },
+        "agent": {
+          "id": "030",
+          "name": "DVLNX01",
+          "ip": "198.51.100.30"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000000.382066659",
+        "decoder": {
+          "name": "syslog"
+        },
+        "location": "/var/log/syslog",
+        "data": {
+          "facility": "authpriv",
+          "severity": "info",
+          "hostname": "DVLNX01",
+          "program": "auditd",
+          "message": "type=EXECVE msg=audit(1706538000.500:1041): argc=3 a0=\"/bin/bash\" a1=\"-c\" a2=\"echo '*/5 * * * * root /tmp/.hidden/beacon.sh' > /etc/cron.d/system-update\""
+        },
+        "full_log": "type=EXECVE msg=audit(1706538000.500:1041): argc=3 a0=\"/bin/bash\" a1=\"-c\" a2=\"echo '*/5 * * * * root /tmp/.hidden/beacon.sh' > /etc/cron.d/system-update\""
+      }
+    },
+    {
+      "_comment": "Tetragon file write detection",
+      "sequence": 3,
+      "timestamp": "2026-01-29T14:20:01.000Z",
+      "log": {
+        "tetragon": {
+          "process_exec": {
+            "process": {
+              "binary": "/bin/bash",
+              "pid": 15600,
+              "uid": 0,
+              "cwd": "/tmp"
+            }
+          },
+          "file_write": {
+            "path": "/etc/cron.d/system-update",
+            "mode": "0644"
+          }
+        },
+        "agent": {
+          "name": "DVLNX01",
+          "id": "030"
+        }
+      }
+    }
+  ]
+}

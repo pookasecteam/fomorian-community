@@ -1,0 +1,90 @@
+{
+  "_metadata": {
+    "attack_id": "T1680",
+    "variation": "002",
+    "name": "Local Storage Discovery - PowerShell Get-PSDrive",
+    "description": "Using PowerShell Get-PSDrive cmdlet to enumerate local storage drives",
+    "expected_detection": "LOW",
+    "kill_chain_phase": "discovery",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Sysmon Event 1 - PowerShell storage enumeration",
+      "sequence": 1,
+      "timestamp": "2026-02-08T10:34:00.000Z",
+      "log": {
+        "timestamp": "2026-02-08T10:34:00.000+0000",
+        "rule": {
+          "level": 4,
+          "description": "Sysmon - Event 1: Process Create",
+          "id": "100916",
+          "mitre": {
+            "id": [
+              "T1680"
+            ],
+            "tactic": [
+              "Discovery"
+            ],
+            "technique": [
+              "Local Storage Discovery"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1707400000.200037",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-08 10:34:00.000",
+              "processGuid": "{A1B2C3D4-DISC-1680-0002-000000000001}",
+              "processId": "5912",
+              "image": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+              "commandLine": "powershell.exe -c \"Get-PSDrive -PSProvider FileSystem | Select-Object Name, Used, Free, Root\"",
+              "currentDirectory": "C:\\Users\\attacker\\",
+              "user": "CORP\\admin.user",
+              "integrityLevel": "Medium",
+              "hashes": "SHA256=DE96A6E69944335375DC1AC238336066889D9FFC7D73628EF4FE1B1B160AB32C",
+              "parentProcessGuid": "{A1B2C3D4-DISC-1680-0002-PARENT000001}",
+              "parentProcessId": "3200",
+              "parentImage": "C:\\Windows\\System32\\cmd.exe",
+              "parentCommandLine": "cmd.exe"
+            }
+          }
+        },
+        "_fomorian_batch": "PT-2026-003-batch1-discovery",
+        "_fomorian_test": true,
+        "_fomorian_attack_id": "T1680",
+        "_fomorian_expected_detection": "Sigma: Local Storage Discovery via PowerShell (T1680)"
+      }
+    }
+  ]
+}

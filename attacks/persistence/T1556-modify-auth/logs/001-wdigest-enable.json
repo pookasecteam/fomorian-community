@@ -1,0 +1,80 @@
+{
+  "_metadata": {
+    "attack_id": "T1556",
+    "variation": "001",
+    "name": "WDigest Credential Caching Enable",
+    "description": "Enabling WDigest to cache plaintext credentials",
+    "expected_detection": "CRITICAL",
+    "kill_chain_phase": "persistence",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Sysmon Event 13 - WDigest registry modification",
+      "sequence": 1,
+      "timestamp": "2026-02-04T10:11:00.000Z",
+      "log": {
+        "timestamp": "2026-02-04T10:11:00.000+0000",
+        "rule": {
+          "level": 14,
+          "description": "Sysmon - Event 13: WDigest Credential Caching Enabled",
+          "id": "100001",
+          "mitre": {
+            "id": [
+              "T1556"
+            ],
+            "tactic": [
+              "Credential Access",
+              "Defense Evasion",
+              "Persistence"
+            ],
+            "technique": [
+              "Modify Authentication Process"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": true,
+          "groups": [
+            "sysmon",
+            "sysmon_event13",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000001.100012",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "13",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-04 10:11:00.000",
+              "eventType": "SetValue",
+              "processGuid": "{A1B2C3D4-1556-0001-0001-000000000001}",
+              "processId": "8901",
+              "image": "C:\\Windows\\System32\\reg.exe",
+              "targetObject": "HKLM\\SYSTEM\\CurrentControlSet\\Control\\SecurityProviders\\WDigest\\UseLogonCredential",
+              "details": "DWORD (0x00000001)",
+              "user": "CORP\\attacker"
+            }
+          }
+        }
+      }
+    }
+  ]
+}

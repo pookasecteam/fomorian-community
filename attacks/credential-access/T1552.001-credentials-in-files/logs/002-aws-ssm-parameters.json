@@ -1,0 +1,283 @@
+{
+  "_metadata": {
+    "attack_id": "T1552.001",
+    "variation": "002",
+    "name": "AWS SSM Parameter Store Credential Enumeration",
+    "description": "Attacker enumerates SSM Parameter Store for stored credentials and configuration secrets. DescribeParameters reveals parameter names and metadata, then GetParameter and GetParameters retrieve actual values including SecureString parameters with withDecryption. SSM Parameter Store is commonly used to store database connection strings, API keys, and service passwords.",
+    "expected_detection": "HIGH",
+    "kill_chain_phase": "credential-access",
+    "format": "wazuh-native",
+    "format_version": "1.0",
+    "cloud_provider": "aws",
+    "data_source": "cloudtrail"
+  },
+  "logs": [
+    {
+      "_comment": "CloudTrail: DescribeParameters - Attacker enumerates all SSM parameters to find credential stores",
+      "sequence": 1,
+      "timestamp": "2026-02-23T10:38:00.000Z",
+      "log": {
+        "rule": {
+          "level": 3,
+          "description": "Amazon AWS Cloudtrail - DescribeParameters",
+          "id": "100802",
+          "mitre": {
+            "id": [
+              "T1552.001"
+            ],
+            "tactic": [
+              "Credential Access"
+            ],
+            "technique": [
+              "Unsecured Credentials: Credentials In Files"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "amazon",
+            "aws",
+            "aws-cloudtrail"
+          ],
+          "pci_dss": [
+            "10.6.1"
+          ],
+          "hipaa": [
+            "164.312.b"
+          ],
+          "nist_800_53": [
+            "AU.6"
+          ],
+          "tsc": [
+            "CC7.2",
+            "CC7.3"
+          ],
+          "gdpr": [
+            "IV_35.7.d"
+          ]
+        },
+        "agent": {
+          "id": "040",
+          "name": "wazuh.manager",
+          "ip": "any"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1708700100.280008",
+        "decoder": {
+          "name": "json"
+        },
+        "location": "wodles_aws",
+        "data": {
+          "aws": {
+            "source": "cloudtrail",
+            "eventVersion": "1.09",
+            "eventTime": "2026-02-23T10:38:00Z",
+            "eventSource": "ssm.amazonaws.com",
+            "eventName": "DescribeParameters",
+            "awsRegion": "us-east-1",
+            "sourceIPAddress": "203.0.113.42",
+            "userAgent": "Boto3/1.26.165 Python/3.13.9 Linux/6.16.8+kali-amd64 Botocore/1.29.165",
+            "requestParameters": "{\"parameterFilters\":[],\"maxResults\":50}",
+            "responseElements": "null",
+            "userIdentity": {
+              "type": "IAMUser",
+              "arn": "arn:aws:iam::123456789012:user/compromised-user",
+              "accountId": "123456789012",
+              "userName": "compromised-user",
+              "principalId": "AIDACKCEVSQ6C2EXAMPLE",
+              "accessKeyId": "AKIAIOSFODNN7EXAMPLE"
+            },
+            "eventID": "c28f9a01-b008-4e28-a008-000000280008",
+            "requestID": "req-28008-a008-4e28-b008-000000280008",
+            "readOnly": "true",
+            "eventType": "AwsApiCall",
+            "managementEvent": "true",
+            "recipientAccountId": "123456789012",
+            "eventCategory": "Management",
+            "aws_account_id": "123456789012"
+          }
+        }
+      }
+    },
+    {
+      "_comment": "CloudTrail: GetParameter - Attacker retrieves a SecureString parameter containing database credentials",
+      "sequence": 2,
+      "timestamp": "2026-02-23T10:38:05.000Z",
+      "log": {
+        "rule": {
+          "level": 3,
+          "description": "Amazon AWS Cloudtrail - GetParameter",
+          "id": "100802",
+          "mitre": {
+            "id": [
+              "T1552.001"
+            ],
+            "tactic": [
+              "Credential Access"
+            ],
+            "technique": [
+              "Unsecured Credentials: Credentials In Files"
+            ]
+          },
+          "firedtimes": 2,
+          "mail": false,
+          "groups": [
+            "amazon",
+            "aws",
+            "aws-cloudtrail"
+          ],
+          "pci_dss": [
+            "10.6.1"
+          ],
+          "hipaa": [
+            "164.312.b"
+          ],
+          "nist_800_53": [
+            "AU.6"
+          ],
+          "tsc": [
+            "CC7.2",
+            "CC7.3"
+          ],
+          "gdpr": [
+            "IV_35.7.d"
+          ]
+        },
+        "agent": {
+          "id": "040",
+          "name": "wazuh.manager",
+          "ip": "any"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1708700100.280009",
+        "decoder": {
+          "name": "json"
+        },
+        "location": "wodles_aws",
+        "data": {
+          "aws": {
+            "source": "cloudtrail",
+            "eventVersion": "1.09",
+            "eventTime": "2026-02-23T10:38:05Z",
+            "eventSource": "ssm.amazonaws.com",
+            "eventName": "GetParameter",
+            "awsRegion": "us-east-1",
+            "sourceIPAddress": "203.0.113.42",
+            "userAgent": "Boto3/1.26.165 Python/3.13.9 Linux/6.16.8+kali-amd64 Botocore/1.29.165",
+            "requestParameters": "{\"name\":\"/prod/database/master-password\",\"withDecryption\":true}",
+            "responseElements": "null",
+            "userIdentity": {
+              "type": "IAMUser",
+              "arn": "arn:aws:iam::123456789012:user/compromised-user",
+              "accountId": "123456789012",
+              "userName": "compromised-user",
+              "principalId": "AIDACKCEVSQ6C2EXAMPLE",
+              "accessKeyId": "AKIAIOSFODNN7EXAMPLE"
+            },
+            "eventID": "c28f9a01-b009-4e28-a009-000000280009",
+            "requestID": "req-28009-a009-4e28-b009-000000280009",
+            "readOnly": "true",
+            "eventType": "AwsApiCall",
+            "managementEvent": "true",
+            "recipientAccountId": "123456789012",
+            "eventCategory": "Management",
+            "aws_account_id": "123456789012"
+          }
+        }
+      }
+    },
+    {
+      "_comment": "CloudTrail: GetParameters - Attacker bulk retrieves multiple SSM parameters including secrets",
+      "sequence": 3,
+      "timestamp": "2026-02-23T10:38:12.000Z",
+      "log": {
+        "rule": {
+          "level": 3,
+          "description": "Amazon AWS Cloudtrail - GetParameters",
+          "id": "100802",
+          "mitre": {
+            "id": [
+              "T1552.001"
+            ],
+            "tactic": [
+              "Credential Access"
+            ],
+            "technique": [
+              "Unsecured Credentials: Credentials In Files"
+            ]
+          },
+          "firedtimes": 3,
+          "mail": false,
+          "groups": [
+            "amazon",
+            "aws",
+            "aws-cloudtrail"
+          ],
+          "pci_dss": [
+            "10.6.1"
+          ],
+          "hipaa": [
+            "164.312.b"
+          ],
+          "nist_800_53": [
+            "AU.6"
+          ],
+          "tsc": [
+            "CC7.2",
+            "CC7.3"
+          ],
+          "gdpr": [
+            "IV_35.7.d"
+          ]
+        },
+        "agent": {
+          "id": "040",
+          "name": "wazuh.manager",
+          "ip": "any"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1708700100.280010",
+        "decoder": {
+          "name": "json"
+        },
+        "location": "wodles_aws",
+        "data": {
+          "aws": {
+            "source": "cloudtrail",
+            "eventVersion": "1.09",
+            "eventTime": "2026-02-23T10:38:12Z",
+            "eventSource": "ssm.amazonaws.com",
+            "eventName": "GetParameters",
+            "awsRegion": "us-east-1",
+            "sourceIPAddress": "203.0.113.42",
+            "userAgent": "Boto3/1.26.165 Python/3.13.9 Linux/6.16.8+kali-amd64 Botocore/1.29.165",
+            "requestParameters": "{\"names\":[\"/prod/database/master-password\",\"/prod/api/stripe-key\",\"/prod/smtp/credentials\"],\"withDecryption\":true}",
+            "responseElements": "null",
+            "userIdentity": {
+              "type": "IAMUser",
+              "arn": "arn:aws:iam::123456789012:user/compromised-user",
+              "accountId": "123456789012",
+              "userName": "compromised-user",
+              "principalId": "AIDACKCEVSQ6C2EXAMPLE",
+              "accessKeyId": "AKIAIOSFODNN7EXAMPLE"
+            },
+            "eventID": "c28f9a01-b010-4e28-a010-000000280010",
+            "requestID": "req-28010-a010-4e28-b010-000000280010",
+            "readOnly": "true",
+            "eventType": "AwsApiCall",
+            "managementEvent": "true",
+            "recipientAccountId": "123456789012",
+            "eventCategory": "Management",
+            "aws_account_id": "123456789012"
+          }
+        }
+      }
+    }
+  ]
+}

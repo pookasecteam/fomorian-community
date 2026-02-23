@@ -7,8 +7,7 @@
     "expected_detection": "CRITICAL",
     "kill_chain_phase": "credential-access",
     "format": "wazuh-native",
-    "format_version": "1.0",
-    "campaign": "operation-shadow-domain"
+    "format_version": "1.0"
   },
   "logs": [
     {
@@ -23,12 +22,23 @@
           "id": "100688",
           "firedtimes": 1,
           "mail": false,
-          "groups": ["windows", "active_directory"]
+          "groups": [
+            "windows",
+            "active_directory"
+          ]
         },
-        "agent": {"id": "003", "name": "DC01", "ip": "10.0.10.10"},
-        "manager": {"name": "wazuh.manager"},
+        "agent": {
+          "id": "010",
+          "name": "DC01",
+          "ip": "198.51.100.10"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
         "id": "1706900003.000001",
-        "decoder": {"name": "windows_eventchannel"},
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
         "location": "EventChannel",
         "data": {
           "win": {

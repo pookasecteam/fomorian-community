@@ -1,0 +1,78 @@
+{
+  "_metadata": {
+    "attack_id": "T1071.001",
+    "variation": "001",
+    "name": "Sliver C2 Implant Execution",
+    "description": "Sliver C2 framework implant execution from temp directory",
+    "expected_detection": "Sigma: Sliver C2 Framework Indicators (T1071.001)",
+    "kill_chain_phase": "command-and-control",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Sysmon Event 1 - Sliver implant process creation",
+      "sequence": 1,
+      "timestamp": "2026-01-31T15:00:00.000Z",
+      "log": {
+        "timestamp": "2026-01-31T15:00:00.000Z",
+        "rule": {
+          "level": 14,
+          "description": "Sysmon - Event 1: Suspicious Process Execution",
+          "id": "100916",
+          "mitre": {
+            "id": [
+              "T1071.001"
+            ],
+            "tactic": [
+              "Command and Control"
+            ],
+            "technique": [
+              "Application Layer Protocol"
+            ]
+          },
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "c2"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000006.000001",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local"
+            },
+            "eventdata": {
+              "utcTime": "2026-01-31 15:00:00.000",
+              "processGuid": "{12345678-1234-1234-1234-123456789016}",
+              "processId": "7890",
+              "image": "C:\\Users\\attacker\\AppData\\Local\\Temp\\JKLMNOPQ.exe",
+              "commandLine": "C:\\Users\\attacker\\AppData\\Local\\Temp\\JKLMNOPQ.exe",
+              "currentDirectory": "C:\\Users\\attacker\\",
+              "user": "CORP\\attacker",
+              "hashes": "SHA256=ABC123DEF456789012345678901234567890123456789012345678901234ABCD",
+              "parentImage": "C:\\Windows\\System32\\cmd.exe",
+              "parentCommandLine": "cmd.exe"
+            }
+          }
+        }
+      }
+    }
+  ]
+}

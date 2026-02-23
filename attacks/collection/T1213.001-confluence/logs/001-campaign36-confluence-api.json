@@ -1,0 +1,195 @@
+{
+  "_metadata": {
+    "attack_id": "T1213.001",
+    "variation": "001",
+    "name": "Confluence - REST API Data Exfiltration",
+    "description": "Use curl to access Confluence REST API and download sensitive wiki content in bulk",
+    "expected_detection": "MEDIUM",
+    "kill_chain_phase": "collection",
+    "format": "wazuh-native",
+    "format_version": "1.0",
+    "os": "Ubuntu 24.04 (Linux Sysmon)"
+  },
+  "logs": [
+    {
+      "_comment": "Linux Sysmon Event 1 - Process Create: curl to Confluence REST API",
+      "sequence": 1,
+      "timestamp": "2026-02-10T18:30:00.000Z",
+      "log": {
+        "timestamp": "2026-02-10T18:30:00.000+0000",
+        "rule": {
+          "level": 11,
+          "description": "Sysmon - Event 1: Confluence API Access via curl",
+          "id": "100101",
+          "mitre": {
+            "id": [
+              "T1213.001"
+            ],
+            "tactic": [
+              "Collection"
+            ],
+            "technique": [
+              "Confluence"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "linux"
+          ]
+        },
+        "agent": {
+          "id": "030",
+          "name": "VULN01",
+          "ip": "198.51.100.30"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000001.000016",
+        "decoder": {
+          "name": "sysmon"
+        },
+        "location": "sysmon",
+        "data": {
+          "eventdata": {
+            "utcTime": "2026-02-10 18:30:00.000",
+            "processGuid": "{11111111-AAAA-BBBB-CCCC-DDDDEEEEEEEE}",
+            "processId": "12345",
+            "image": "/usr/bin/curl",
+            "commandLine": "curl -u attacker:password123 https://confluence.corp.local/rest/api/content?limit=1000 -o confluence_dump.json",
+            "currentDirectory": "/home/admin2",
+            "user": "admin2",
+            "logonGuid": "{11111111-0000-0000-0000-000000000000}",
+            "logonId": "1001",
+            "terminalSessionId": "5",
+            "integrityLevel": "no level",
+            "hashes": "SHA256=1234567890ABCDEF1234567890ABCDEF1234567890ABCDEF1234567890ABCDEF",
+            "parentProcessGuid": "{11111111-FFFF-EEEE-DDDD-CCCCBBBBAAAA}",
+            "parentProcessId": "11111",
+            "parentImage": "/bin/bash",
+            "parentCommandLine": "/bin/bash"
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Linux Sysmon Event 3 - Network Connection: Multiple HTTP GET to /rest/api/content",
+      "sequence": 2,
+      "timestamp": "2026-02-10T18:32:00.000Z",
+      "log": {
+        "timestamp": "2026-02-10T18:32:00.000+0000",
+        "rule": {
+          "level": 10,
+          "description": "Sysmon - Event 3: Bulk Confluence API Requests",
+          "id": "100103",
+          "mitre": {
+            "id": [
+              "T1213.001"
+            ],
+            "tactic": [
+              "Collection"
+            ],
+            "technique": [
+              "Confluence"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event3",
+            "linux"
+          ]
+        },
+        "agent": {
+          "id": "030",
+          "name": "VULN01",
+          "ip": "198.51.100.30"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000001.000017",
+        "decoder": {
+          "name": "sysmon"
+        },
+        "location": "sysmon",
+        "data": {
+          "eventdata": {
+            "utcTime": "2026-02-10 18:32:00.000",
+            "processGuid": "{11111111-AAAA-BBBB-CCCC-DDDDEEEEEEEE}",
+            "processId": "12345",
+            "image": "/usr/bin/curl",
+            "user": "admin2",
+            "protocol": "tcp",
+            "initiated": "true",
+            "sourceIsIpv6": "false",
+            "sourceIp": "198.51.100.30",
+            "sourcePort": "54321",
+            "destinationIsIpv6": "false",
+            "destinationIp": "198.51.100.200",
+            "destinationPort": "443"
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Linux Sysmon Event 11 - File Create: confluence_dump.json created",
+      "sequence": 3,
+      "timestamp": "2026-02-10T18:34:00.000Z",
+      "log": {
+        "timestamp": "2026-02-10T18:34:00.000+0000",
+        "rule": {
+          "level": 10,
+          "description": "Sysmon - Event 11: Large Confluence Data File Created",
+          "id": "100111",
+          "mitre": {
+            "id": [
+              "T1213.001"
+            ],
+            "tactic": [
+              "Collection"
+            ],
+            "technique": [
+              "Confluence"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event11",
+            "linux"
+          ]
+        },
+        "agent": {
+          "id": "030",
+          "name": "VULN01",
+          "ip": "198.51.100.30"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000001.000018",
+        "decoder": {
+          "name": "sysmon"
+        },
+        "location": "sysmon",
+        "data": {
+          "eventdata": {
+            "utcTime": "2026-02-10 18:34:00.000",
+            "processGuid": "{11111111-AAAA-BBBB-CCCC-DDDDEEEEEEEE}",
+            "processId": "12345",
+            "image": "/usr/bin/curl",
+            "targetFilename": "/home/admin2/confluence_dump.json",
+            "creationUtcTime": "2026-02-10 18:34:00.000",
+            "user": "admin2"
+          }
+        }
+      }
+    }
+  ]
+}

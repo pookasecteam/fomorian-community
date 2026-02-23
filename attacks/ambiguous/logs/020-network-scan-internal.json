@@ -1,0 +1,234 @@
+{
+  "_metadata": {
+    "attack_id": "T1046",
+    "variation": "AMB-020",
+    "name": "Nmap Network Scan from IT Admin Workstation",
+    "description": "nmap performing service version scan of internal subnet from IT admin workstation - could be authorized audit or reconnaissance",
+    "ground_truth": "AMBIGUOUS",
+    "legitimate_explanation": "IT administrator is running an authorized quarterly network audit to verify service inventory and identify unauthorized services. The scan is documented in the change management system with ticket CHG-2026-0412.",
+    "suspicious_explanation": "Network scanning with service version detection (-sV) from an internal workstation is a key reconnaissance technique. An attacker with access to an IT admin workstation would scan the network to identify vulnerable services for lateral movement.",
+    "expected_detection": "MEDIUM",
+    "kill_chain_phase": "discovery",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Sysmon Event 1 - nmap.exe launched with service version scanning",
+      "sequence": 1,
+      "timestamp": "2026-02-08T13:30:00.000Z",
+      "log": {
+        "rule": {
+          "level": 10,
+          "description": "Sysmon - Event 1: Network scanning tool execution",
+          "id": "100100",
+          "mitre": {
+            "id": [
+              "T1046"
+            ],
+            "tactic": [
+              "Discovery"
+            ],
+            "technique": [
+              "Network Service Discovery"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1707400006.345678901",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "opcode": "0",
+              "keywords": "0x8000000000000000",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-08 13:30:00.000",
+              "processGuid": "{AMB-020-0001-0001-000000000001}",
+              "processId": "7744",
+              "image": "C:\\Program Files (x86)\\Nmap\\nmap.exe",
+              "commandLine": "nmap.exe -sV -p 1-1024 198.51.100.0/24 -oX C:\\Reports\\network-audit-2026Q1.xml",
+              "currentDirectory": "C:\\Program Files (x86)\\Nmap\\",
+              "user": "CORP\\it.admin",
+              "integrityLevel": "High",
+              "hashes": "SHA256=D4E5F6A7B8C9D0E1F2A3B4C5D6E7F8A9B0C1D2E3F4A5B6C7D8E9F0A1B2C3D4E5",
+              "parentProcessGuid": "{AMB-020-0001-0001-000000000000}",
+              "parentProcessId": "6120",
+              "parentImage": "C:\\Windows\\System32\\cmd.exe",
+              "parentCommandLine": "cmd.exe"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Sysmon Event 3 - nmap connecting to multiple IPs on various ports",
+      "sequence": 2,
+      "timestamp": "2026-02-08T13:30:02.000Z",
+      "log": {
+        "rule": {
+          "level": 6,
+          "description": "Sysmon - Event 3: Network scanner probing multiple hosts",
+          "id": "100100",
+          "mitre": {
+            "id": [
+              "T1046"
+            ],
+            "tactic": [
+              "Discovery"
+            ],
+            "technique": [
+              "Network Service Discovery"
+            ]
+          },
+          "firedtimes": 45,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event3",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1707400006.414213562",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "3",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "opcode": "0",
+              "keywords": "0x8000000000000000",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-08 13:30:02.000",
+              "processGuid": "{AMB-020-0001-0001-000000000001}",
+              "processId": "7744",
+              "image": "C:\\Program Files (x86)\\Nmap\\nmap.exe",
+              "user": "CORP\\it.admin",
+              "protocol": "tcp",
+              "initiated": "true",
+              "sourceIp": "198.51.100.20",
+              "sourcePort": "61234",
+              "destinationIp": "198.51.100.10",
+              "destinationHostname": "DC01.corp.local",
+              "destinationPort": "445"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Sysmon Event 3 - nmap probing another host on different port",
+      "sequence": 3,
+      "timestamp": "2026-02-08T13:30:03.000Z",
+      "log": {
+        "rule": {
+          "level": 6,
+          "description": "Sysmon - Event 3: Network scanner probing multiple hosts",
+          "id": "100100",
+          "mitre": {
+            "id": [
+              "T1046"
+            ],
+            "tactic": [
+              "Discovery"
+            ],
+            "technique": [
+              "Network Service Discovery"
+            ]
+          },
+          "firedtimes": 46,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event3",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1707400006.449489742",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "3",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "opcode": "0",
+              "keywords": "0x8000000000000000",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-08 13:30:03.000",
+              "processGuid": "{AMB-020-0001-0001-000000000001}",
+              "processId": "7744",
+              "image": "C:\\Program Files (x86)\\Nmap\\nmap.exe",
+              "user": "CORP\\it.admin",
+              "protocol": "tcp",
+              "initiated": "true",
+              "sourceIp": "198.51.100.20",
+              "sourcePort": "61235",
+              "destinationIp": "198.51.100.12",
+              "destinationHostname": "FS01.corp.local",
+              "destinationPort": "3389"
+            }
+          }
+        }
+      }
+    }
+  ]
+}

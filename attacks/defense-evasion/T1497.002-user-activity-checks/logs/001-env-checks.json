@@ -1,0 +1,56 @@
+{
+  "_metadata": {
+    "attack_id": "T1497.002",
+    "variation": "001",
+    "name": "User Activity Based Obfuscation",
+    "description": "Malware checking for user activity before execution",
+    "expected_detection": "LOW",
+    "kill_chain_phase": "defense-evasion",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Sysmon Event 1 - Environment reconnaissance for user activity",
+      "sequence": 1,
+      "log": {
+        "rule": {
+          "level": 8,
+          "description": "Sysmon - Event 1: User Activity Checks",
+          "id": "100497",
+          "mitre": {
+            "id": [
+              "T1497.002"
+            ],
+            "tactic": [
+              "Defense Evasion"
+            ],
+            "technique": [
+              "Virtualization/Sandbox Evasion"
+            ]
+          },
+          "groups": [
+            "sysmon",
+            "sysmon_event1"
+          ]
+        },
+        "agent": {
+          "id": "010",
+          "name": "DC01"
+        },
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1"
+            },
+            "eventdata": {
+              "commandLine": "powershell.exe -c \"if((Get-Process).Count -gt 50){.\\malware.exe}\"",
+              "image": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+              "user": "CORP\\Administrator"
+            }
+          }
+        }
+      }
+    }
+  ]
+}

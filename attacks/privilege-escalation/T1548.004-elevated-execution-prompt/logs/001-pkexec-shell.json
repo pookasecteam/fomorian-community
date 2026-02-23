@@ -1,0 +1,144 @@
+{
+  "_metadata": {
+    "attack_id": "T1548.004",
+    "variation": "001",
+    "name": "Elevated Execution with Prompt - pkexec",
+    "description": "Use pkexec to spawn root shell after authentication prompt",
+    "expected_detection": "MEDIUM",
+    "kill_chain_phase": "privilege-escalation",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Linux Sysmon Event 1 - pkexec /bin/bash",
+      "sequence": 1,
+      "timestamp": "2026-02-10T19:22:00.000Z",
+      "log": {
+        "timestamp": "2026-02-10T19:22:00.000+0000",
+        "rule": {
+          "level": 10,
+          "description": "Sysmon for Linux - Event 1: Process Create",
+          "id": "100101",
+          "mitre": {
+            "id": [
+              "T1548.004"
+            ],
+            "tactic": [
+              "Privilege Escalation",
+              "Defense Evasion"
+            ],
+            "technique": [
+              "Abuse Elevation Control Mechanism: Elevated Execution with Prompt"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "linux"
+          ]
+        },
+        "agent": {
+          "id": "001",
+          "name": "GW01",
+          "ip": "198.51.100.1"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1707589320.000001",
+        "decoder": {
+          "name": "sysmon-linux"
+        },
+        "location": "/var/log/sysmon/syslog",
+        "data": {
+          "eventdata": {
+            "utcTime": "2026-02-10 19:22:00.000",
+            "processGuid": "{A1B2C3D4-2910-65c9-0022-000000029022}",
+            "processId": "29000",
+            "image": "/usr/bin/pkexec",
+            "commandLine": "pkexec /bin/bash",
+            "currentDirectory": "/home/admin2",
+            "user": "admin2",
+            "parentProcessGuid": "{A1B2C3D4-2910-65c9-0000-000000029000}",
+            "parentProcessId": "28900",
+            "parentImage": "/bin/bash",
+            "parentCommandLine": "bash"
+          }
+        },
+        "_fomorian_test": true,
+        "fomorian_batch": 10,
+        "fomorian_campaign": 29,
+        "fomorian_technique": "T1548.004",
+        "fomorian_technique_name": "Elevated Execution with Prompt - pkexec"
+      }
+    },
+    {
+      "_comment": "Linux Sysmon Event 1 - bash spawned as root via pkexec",
+      "sequence": 2,
+      "timestamp": "2026-02-10T19:22:05.000Z",
+      "log": {
+        "timestamp": "2026-02-10T19:22:05.000+0000",
+        "rule": {
+          "level": 12,
+          "description": "Sysmon for Linux - Event 1: Process Create",
+          "id": "100101",
+          "mitre": {
+            "id": [
+              "T1548.004"
+            ],
+            "tactic": [
+              "Privilege Escalation",
+              "Defense Evasion"
+            ],
+            "technique": [
+              "Abuse Elevation Control Mechanism: Elevated Execution with Prompt"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": true,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "linux"
+          ]
+        },
+        "agent": {
+          "id": "001",
+          "name": "GW01",
+          "ip": "198.51.100.1"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1707589325.000002",
+        "decoder": {
+          "name": "sysmon-linux"
+        },
+        "location": "/var/log/sysmon/syslog",
+        "data": {
+          "eventdata": {
+            "utcTime": "2026-02-10 19:22:05.000",
+            "processGuid": "{A1B2C3D4-2910-65c9-0022-000000029023}",
+            "processId": "29100",
+            "image": "/bin/bash",
+            "commandLine": "/bin/bash",
+            "currentDirectory": "/home/admin2",
+            "user": "root",
+            "parentProcessGuid": "{A1B2C3D4-2910-65c9-0022-000000029022}",
+            "parentProcessId": "29000",
+            "parentImage": "/usr/bin/pkexec",
+            "parentCommandLine": "pkexec /bin/bash"
+          }
+        },
+        "_fomorian_test": true,
+        "fomorian_batch": 10,
+        "fomorian_campaign": 29,
+        "fomorian_technique": "T1548.004",
+        "fomorian_technique_name": "Elevated Execution with Prompt - pkexec"
+      }
+    }
+  ]
+}

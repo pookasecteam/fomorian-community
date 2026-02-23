@@ -1,0 +1,162 @@
+{
+  "_metadata": {
+    "attack_id": "T1105",
+    "variation": "AMB-008",
+    "name": "Certutil Downloading a File",
+    "description": "certutil.exe used with -urlcache -f to download a CRL file from an internal PKI server",
+    "ground_truth": "AMBIGUOUS",
+    "legitimate_explanation": "PKI administrator refreshing the certificate revocation list (CRL) from the internal corporate CA server. The destination is an internal IP (pki.corp.local) and the file is a standard CRL format. This is a routine certificate management task.",
+    "suspicious_explanation": "certutil.exe is a well-known living-off-the-land binary (LOLBin). The -urlcache -f flags are specifically used by attackers to download malicious payloads while evading detection. This exact command pattern appears in numerous threat reports.",
+    "expected_detection": "MEDIUM",
+    "kill_chain_phase": "command-and-control",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Sysmon Event 1 - Certutil downloading CRL from internal PKI",
+      "sequence": 1,
+      "timestamp": "2026-01-29T15:00:00.000Z",
+      "log": {
+        "rule": {
+          "level": 10,
+          "description": "Sysmon - Event 1: Certutil File Download",
+          "id": "100100",
+          "mitre": {
+            "id": [
+              "T1105"
+            ],
+            "tactic": [
+              "Command and Control"
+            ],
+            "technique": [
+              "Ingress Tool Transfer"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "010",
+          "name": "DC01",
+          "ip": "198.51.100.10"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000000.100800001",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "DC01.corp.local",
+              "level": "4",
+              "task": "1",
+              "opcode": "0",
+              "keywords": "0x8000000000000000",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-01-29 15:00:00.000",
+              "processGuid": "{AMB-008-0001-0001-000000000001}",
+              "processId": "8844",
+              "image": "C:\\Windows\\System32\\certutil.exe",
+              "commandLine": "certutil.exe -urlcache -f http://pki.corp.local/rootca.crl C:\\Temp\\rootca.crl",
+              "currentDirectory": "C:\\Users\\pki.admin\\Desktop\\",
+              "user": "CORP\\pki.admin",
+              "integrityLevel": "High",
+              "hashes": "SHA256=FB540AA9A2F2CDA0E7C8556D1D1C4F3E5A6B7C8D9E0F1A2B3C4D5E6F7A8B9C0",
+              "parentProcessGuid": "{AMB-008-0001-0001-000000000000}",
+              "parentProcessId": "6600",
+              "parentImage": "C:\\Windows\\System32\\cmd.exe",
+              "parentCommandLine": "\"C:\\Windows\\System32\\cmd.exe\""
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Sysmon Event 3 - Certutil connecting to internal PKI server",
+      "sequence": 2,
+      "timestamp": "2026-01-29T15:00:01.000Z",
+      "log": {
+        "rule": {
+          "level": 10,
+          "description": "Sysmon - Event 3: Certutil Network Connection",
+          "id": "100100",
+          "mitre": {
+            "id": [
+              "T1105"
+            ],
+            "tactic": [
+              "Command and Control"
+            ],
+            "technique": [
+              "Ingress Tool Transfer"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event3",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "010",
+          "name": "DC01",
+          "ip": "198.51.100.10"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000000.100800002",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "3",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "DC01.corp.local",
+              "level": "4",
+              "task": "1",
+              "opcode": "0",
+              "keywords": "0x8000000000000000",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-01-29 15:00:01.000",
+              "processGuid": "{AMB-008-0001-0001-000000000001}",
+              "processId": "8844",
+              "image": "C:\\Windows\\System32\\certutil.exe",
+              "user": "CORP\\pki.admin",
+              "protocol": "tcp",
+              "initiated": "true",
+              "sourceIp": "198.51.100.10",
+              "sourcePort": "49920",
+              "destinationIp": "198.51.100.40",
+              "destinationHostname": "pki.corp.local",
+              "destinationPort": "80"
+            }
+          }
+        }
+      }
+    }
+  ]
+}

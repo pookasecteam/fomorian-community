@@ -1,0 +1,172 @@
+{
+  "_metadata": {
+    "attack_id": "T1091",
+    "variation": "001",
+    "name": "Replication Through Removable Media - USB Payload Execution",
+    "description": "Adversary uses USB removable media to spread malware. Real malware: Stuxnet (USB worm via LNK exploit), Agent.BTZ (USB autorun), USBStealer (targeted USB exfil), Gauss (USB-based data collection), Flame (USB propagation). Detection focuses on process execution from removable media paths and suspicious file creation on USB drives.",
+    "expected_detection": "HIGH",
+    "kill_chain_phase": "lateral-movement",
+    "references": [
+      "https://attack.mitre.org/techniques/T1091/"
+    ],
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Sysmon Event 1 - Executable launched from removable media drive (E:). Real-world: USB-dropped payloads execute when user opens drive.",
+      "sequence": 1,
+      "timestamp": "2026-02-08T11:25:00.000Z",
+      "log": {
+        "timestamp": "2026-02-08T11:25:00.000+0000",
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 1: Process Create",
+          "id": "100916",
+          "mitre": {
+            "id": [
+              "T1091"
+            ],
+            "tactic": [
+              "Lateral Movement",
+              "Initial Access"
+            ],
+            "technique": [
+              "Replication Through Removable Media"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1707400000.300030",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-08 11:25:00.000",
+              "processGuid": "{A1B2C3D4-LAT1-1091-0001-000000000001}",
+              "processId": "7210",
+              "image": "E:\\USB_Drive\\setup.exe",
+              "fileVersion": "1.0.0.0",
+              "description": "",
+              "product": "",
+              "company": "",
+              "originalFileName": "setup.exe",
+              "commandLine": "\"E:\\USB_Drive\\setup.exe\"",
+              "currentDirectory": "E:\\USB_Drive\\",
+              "user": "CORP\\admin.user",
+              "integrityLevel": "Medium",
+              "hashes": "SHA256=3A4B5C6D7E8F9A0B1C2D3E4F5A6B7C8D9E0F1A2B3C4D5E6F7A8B9C0D1E2F3A4",
+              "parentProcessGuid": "{A1B2C3D4-LAT1-1091-0001-PARENT000001}",
+              "parentProcessId": "4100",
+              "parentImage": "C:\\Windows\\explorer.exe",
+              "parentCommandLine": "C:\\Windows\\explorer.exe",
+              "parentUser": "CORP\\admin.user"
+            }
+          }
+        },
+        "_fomorian_batch": "PT-2026-003-batch1-lateral",
+        "_fomorian_test": true,
+        "_fomorian_attack_id": "T1091",
+        "_fomorian_expected_detection": "Sigma: Process Execution from Removable Media (T1091)"
+      }
+    },
+    {
+      "_comment": "Sysmon Event 11 - Autorun.inf file written to USB drive. Classic USB worm propagation technique used by Agent.BTZ and Stuxnet variants.",
+      "sequence": 2,
+      "timestamp": "2026-02-08T11:25:30.000Z",
+      "log": {
+        "timestamp": "2026-02-08T11:25:30.000+0000",
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 11: File Create",
+          "id": "100920",
+          "mitre": {
+            "id": [
+              "T1091"
+            ],
+            "tactic": [
+              "Lateral Movement",
+              "Initial Access"
+            ],
+            "technique": [
+              "Replication Through Removable Media"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event11",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1707400000.300031",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "11",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "11",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-08 11:25:30.000",
+              "processGuid": "{A1B2C3D4-LAT1-1091-0001-000000000001}",
+              "processId": "7210",
+              "image": "E:\\USB_Drive\\setup.exe",
+              "targetFilename": "E:\\autorun.inf",
+              "creationUtcTime": "2026-02-08 11:25:30.000",
+              "user": "CORP\\admin.user",
+              "hashes": "SHA256=4B5C6D7E8F9A0B1C2D3E4F5A6B7C8D9E0F1A2B3C4D5E6F7A8B9C0D1E2F3A4B5"
+            }
+          }
+        },
+        "_fomorian_batch": "PT-2026-003-batch1-lateral",
+        "_fomorian_test": true,
+        "_fomorian_attack_id": "T1091",
+        "_fomorian_expected_detection": "Sigma: Autorun File Created on Removable Media (T1091)"
+      }
+    }
+  ]
+}

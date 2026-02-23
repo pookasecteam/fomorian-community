@@ -1,0 +1,226 @@
+{
+  "_metadata": {
+    "attack_id": "NONE",
+    "variation": "FP-020",
+    "name": "Group Policy Refresh",
+    "description": "gpupdate.exe forcing Group Policy refresh and connecting to domain controller",
+    "expected_detection": "NONE",
+    "kill_chain_phase": "none",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "gpupdate.exe /force executed by IT admin - LEGITIMATE",
+      "sequence": 1,
+      "timestamp": "2026-01-29T10:45:00.000Z",
+      "log": {
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 1: Group Policy Refresh",
+          "id": "100100",
+          "mitre": {
+            "id": [
+              "NONE"
+            ],
+            "tactic": [
+              "None"
+            ],
+            "technique": [
+              "Group Policy Refresh"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS02",
+          "ip": "198.51.100.52"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000000.200100001",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS02.corp.local",
+              "level": "4",
+              "task": "1",
+              "opcode": "0",
+              "keywords": "0x8000000000000000",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-01-29 10:45:00.000",
+              "processGuid": "{FP-020-C9D0-E1F2-000000000001}",
+              "processId": "7200",
+              "image": "C:\\Windows\\System32\\gpupdate.exe",
+              "commandLine": "gpupdate.exe /force",
+              "currentDirectory": "C:\\Users\\it.admin\\",
+              "user": "CORP\\it.admin",
+              "integrityLevel": "High",
+              "parentProcessGuid": "{FP-020-C9D0-E1F2-000000000000}",
+              "parentProcessId": "6800",
+              "parentImage": "C:\\Windows\\System32\\cmd.exe",
+              "parentCommandLine": "\"C:\\Windows\\System32\\cmd.exe\""
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "gpupdate connecting to DC01 over LDAP - LEGITIMATE",
+      "sequence": 2,
+      "timestamp": "2026-01-29T10:45:02.000Z",
+      "log": {
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 3: Group Policy Refresh",
+          "id": "100100",
+          "mitre": {
+            "id": [
+              "NONE"
+            ],
+            "tactic": [
+              "None"
+            ],
+            "technique": [
+              "Group Policy Refresh"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event3",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS02",
+          "ip": "198.51.100.52"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000000.200100002",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "3",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS02.corp.local",
+              "level": "4",
+              "task": "1",
+              "opcode": "0",
+              "keywords": "0x8000000000000000",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-01-29 10:45:02.000",
+              "processGuid": "{FP-020-C9D0-E1F2-000000000001}",
+              "processId": "7200",
+              "image": "C:\\Windows\\System32\\gpupdate.exe",
+              "user": "CORP\\it.admin",
+              "protocol": "tcp",
+              "initiated": "true",
+              "sourceIp": "198.51.100.52",
+              "sourcePort": "52800",
+              "destinationIp": "198.51.100.10",
+              "destinationHostname": "DC01.corp.local",
+              "destinationPort": "389"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Registry modification for GP settings - LEGITIMATE",
+      "sequence": 3,
+      "timestamp": "2026-01-29T10:45:10.000Z",
+      "log": {
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 13: Group Policy Refresh",
+          "id": "100100",
+          "mitre": {
+            "id": [
+              "NONE"
+            ],
+            "tactic": [
+              "None"
+            ],
+            "technique": [
+              "Group Policy Refresh"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event13",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS02",
+          "ip": "198.51.100.52"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000000.200100003",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "13",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS02.corp.local",
+              "level": "4",
+              "task": "1",
+              "opcode": "0",
+              "keywords": "0x8000000000000000",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-01-29 10:45:10.000",
+              "processGuid": "{FP-020-C9D0-E1F2-000000000002}",
+              "processId": "1200",
+              "image": "C:\\Windows\\System32\\svchost.exe",
+              "eventType": "SetValue",
+              "targetObject": "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Group Policy\\History\\{31B2F340-016D-11D2-945F-00C04FB984F9}\\0006\\lParam",
+              "details": "DWORD (0x00000001)",
+              "user": "NT AUTHORITY\\SYSTEM"
+            }
+          }
+        }
+      }
+    }
+  ]
+}

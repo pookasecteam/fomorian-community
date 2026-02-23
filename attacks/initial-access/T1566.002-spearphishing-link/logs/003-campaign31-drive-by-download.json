@@ -1,0 +1,162 @@
+{
+  "_metadata": {
+    "attack_id": "T1566.002",
+    "variation": "003",
+    "name": "Spearphishing Link - Drive-by Download",
+    "description": "User clicks malicious link in email, browser downloads payload which is then executed",
+    "expected_detection": "MEDIUM",
+    "kill_chain_phase": "initial-access",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Sysmon Event 11 - Browser downloading suspicious executable",
+      "sequence": 1,
+      "timestamp": "2026-02-10T21:02:00.000Z",
+      "log": {
+        "timestamp": "2026-02-10T21:02:00.000Z",
+        "rule": {
+          "level": 8,
+          "description": "Sysmon - Event 11: File Created in Downloads Folder",
+          "id": "100111",
+          "mitre": {
+            "id": [
+              "T1566.002"
+            ],
+            "tactic": [
+              "Initial Access"
+            ],
+            "technique": [
+              "Spearphishing Link"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event11",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1710000002.000001",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "11",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "11",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-10 21:02:00.000",
+              "processGuid": "{a23d45b8-c8f2-65e7-1234-000000002200}",
+              "processId": "2344",
+              "image": "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
+              "targetFilename": "C:\\Users\\analyst\\Downloads\\Security_Update_Feb2026.exe",
+              "creationUtcTime": "2026-02-10 21:02:00.000",
+              "user": "CORP\\analyst"
+            }
+          }
+        },
+        "_fomorian_test": true,
+        "fomorian_campaign": 31,
+        "fomorian_batch": 12
+      }
+    },
+    {
+      "_comment": "Sysmon Event 1 - User executing downloaded file",
+      "sequence": 2,
+      "timestamp": "2026-02-10T21:02:30.000Z",
+      "log": {
+        "timestamp": "2026-02-10T21:02:30.000Z",
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 1: Execution from Downloads Folder",
+          "id": "100100",
+          "mitre": {
+            "id": [
+              "T1566.002",
+              "T1204.002"
+            ],
+            "tactic": [
+              "Initial Access",
+              "Execution"
+            ],
+            "technique": [
+              "Spearphishing Link",
+              "Malicious File"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows",
+            "attack"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1710000002.000002",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-10 21:02:30.000",
+              "processGuid": "{a23d45b8-c8f2-65e7-1234-000000002300}",
+              "processId": "5688",
+              "image": "C:\\Users\\analyst\\Downloads\\Security_Update_Feb2026.exe",
+              "commandLine": "\"C:\\Users\\analyst\\Downloads\\Security_Update_Feb2026.exe\"",
+              "currentDirectory": "C:\\Users\\analyst\\Downloads\\",
+              "user": "CORP\\analyst",
+              "integrityLevel": "Medium",
+              "hashes": "SHA256=DEADBEEF0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF01234567",
+              "parentProcessGuid": "{a23d45b8-c8f2-65e7-1234-000000002200}",
+              "parentProcessId": "4532",
+              "parentImage": "C:\\Windows\\explorer.exe",
+              "parentCommandLine": "C:\\Windows\\explorer.exe"
+            }
+          }
+        },
+        "_fomorian_test": true,
+        "fomorian_campaign": 31,
+        "fomorian_batch": 12
+      }
+    }
+  ]
+}

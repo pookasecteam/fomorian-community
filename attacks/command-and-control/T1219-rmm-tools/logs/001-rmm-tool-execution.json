@@ -1,0 +1,456 @@
+{
+  "_metadata": {
+    "attack_id": "T1219",
+    "name": "Generic RMM Tool Detection",
+    "description": "Detects processes associated with common Remote Monitoring and Management (RMM) tools",
+    "expected_detection": "MEDIUM",
+    "kill_chain_phase": "command-and-control",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Sysmon Event 1 - AnyDesk execution",
+      "sequence": 1,
+      "timestamp": "2026-01-31T20:15:30.123Z",
+      "log": {
+        "timestamp": "2026-01-31T20:15:30.123+0000",
+        "rule": {
+          "level": 8,
+          "description": "Sysmon - Event 1: RMM Tool Execution - AnyDesk",
+          "id": "100916",
+          "mitre": {
+            "id": [
+              "T1219"
+            ],
+            "tactic": [
+              "Command and Control"
+            ],
+            "technique": [
+              "Remote Access Software"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000007.800001",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local"
+            },
+            "eventdata": {
+              "utcTime": "2026-01-31 20:15:30.123",
+              "processGuid": "{12345678-rmm1-1234-rmm1-123456789abc}",
+              "processId": "4321",
+              "image": "C:\\Users\\attacker\\Downloads\\AnyDesk.exe",
+              "commandLine": "AnyDesk.exe --service",
+              "currentDirectory": "C:\\Users\\attacker\\Downloads\\",
+              "user": "CORP\\attacker",
+              "integrityLevel": "High",
+              "hashes": "SHA256=1234567890ABCDEF1234567890ABCDEF1234567890ABCDEF1234567890ABCDEF",
+              "parentProcessGuid": "{12345678-rmm1-1234-rmm1-123456789000}",
+              "parentProcessId": "3210",
+              "parentImage": "C:\\Windows\\explorer.exe",
+              "parentCommandLine": "C:\\Windows\\explorer.exe"
+            }
+          }
+        },
+        "_fomorian_batch": "threat-intel-2026-01-31",
+        "_fomorian_test": true,
+        "_fomorian_attack_id": "T1219",
+        "_fomorian_expected_detection": "Sigma: Generic RMM Tool Detection (T1219)"
+      }
+    },
+    {
+      "_comment": "Sysmon Event 1 - TeamViewer execution",
+      "sequence": 2,
+      "timestamp": "2026-01-31T20:16:45.456Z",
+      "log": {
+        "timestamp": "2026-01-31T20:16:45.456+0000",
+        "rule": {
+          "level": 8,
+          "description": "Sysmon - Event 1: RMM Tool Execution - TeamViewer",
+          "id": "100916",
+          "mitre": {
+            "id": [
+              "T1219"
+            ],
+            "tactic": [
+              "Command and Control"
+            ],
+            "technique": [
+              "Remote Access Software"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000007.800002",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local"
+            },
+            "eventdata": {
+              "utcTime": "2026-01-31 20:16:45.456",
+              "processGuid": "{12345678-rmm2-1234-rmm2-123456789abc}",
+              "processId": "5432",
+              "image": "C:\\Program Files\\TeamViewer\\teamviewer_service.exe",
+              "commandLine": "\"C:\\Program Files\\TeamViewer\\teamviewer_service.exe\"",
+              "currentDirectory": "C:\\Program Files\\TeamViewer\\",
+              "user": "NT AUTHORITY\\SYSTEM",
+              "integrityLevel": "System",
+              "hashes": "SHA256=ABCD1234567890ABCDEF1234567890ABCDEF1234567890ABCDEF1234567890AB",
+              "parentProcessGuid": "{12345678-rmm2-1234-rmm2-123456789000}",
+              "parentProcessId": "4321",
+              "parentImage": "C:\\Windows\\System32\\services.exe",
+              "parentCommandLine": "C:\\Windows\\System32\\services.exe"
+            }
+          }
+        },
+        "_fomorian_batch": "threat-intel-2026-01-31",
+        "_fomorian_test": true,
+        "_fomorian_attack_id": "T1219",
+        "_fomorian_expected_detection": "Sigma: Generic RMM Tool Detection (T1219)"
+      }
+    },
+    {
+      "_comment": "Sysmon Event 1 - ScreenConnect execution",
+      "sequence": 3,
+      "timestamp": "2026-01-31T20:18:00.789Z",
+      "log": {
+        "timestamp": "2026-01-31T20:18:00.789+0000",
+        "rule": {
+          "level": 10,
+          "description": "Sysmon - Event 1: RMM Tool Execution - ScreenConnect",
+          "id": "100916",
+          "mitre": {
+            "id": [
+              "T1219"
+            ],
+            "tactic": [
+              "Command and Control"
+            ],
+            "technique": [
+              "Remote Access Software"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000007.800003",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local"
+            },
+            "eventdata": {
+              "utcTime": "2026-01-31 20:18:00.789",
+              "processGuid": "{12345678-rmm3-1234-rmm3-123456789abc}",
+              "processId": "6543",
+              "image": "C:\\Program Files (x86)\\ScreenConnect Client (abc123)\\ScreenConnect.ClientService.exe",
+              "commandLine": "\"C:\\Program Files (x86)\\ScreenConnect Client (abc123)\\ScreenConnect.ClientService.exe\" \"?e=Access&y=Guest\"",
+              "currentDirectory": "C:\\Program Files (x86)\\ScreenConnect Client (abc123)\\",
+              "user": "NT AUTHORITY\\SYSTEM",
+              "integrityLevel": "System",
+              "hashes": "SHA256=DEF01234567890ABCDEF1234567890ABCDEF1234567890ABCDEF1234567890CD",
+              "parentProcessGuid": "{12345678-rmm3-1234-rmm3-123456789000}",
+              "parentProcessId": "5432",
+              "parentImage": "C:\\Windows\\System32\\services.exe",
+              "parentCommandLine": "C:\\Windows\\System32\\services.exe"
+            }
+          }
+        },
+        "_fomorian_batch": "threat-intel-2026-01-31",
+        "_fomorian_test": true,
+        "_fomorian_attack_id": "T1219",
+        "_fomorian_expected_detection": "Sigma: Generic RMM Tool Detection (T1219)"
+      }
+    },
+    {
+      "_comment": "Sysmon Event 1 - RustDesk execution",
+      "sequence": 4,
+      "timestamp": "2026-01-31T20:19:15.012Z",
+      "log": {
+        "timestamp": "2026-01-31T20:19:15.012+0000",
+        "rule": {
+          "level": 10,
+          "description": "Sysmon - Event 1: RMM Tool Execution - RustDesk",
+          "id": "100916",
+          "mitre": {
+            "id": [
+              "T1219"
+            ],
+            "tactic": [
+              "Command and Control"
+            ],
+            "technique": [
+              "Remote Access Software"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000007.800004",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local"
+            },
+            "eventdata": {
+              "utcTime": "2026-01-31 20:19:15.012",
+              "processGuid": "{12345678-rmm4-1234-rmm4-123456789abc}",
+              "processId": "7654",
+              "image": "C:\\Users\\attacker\\AppData\\Local\\rustdesk\\rustdesk.exe",
+              "commandLine": "rustdesk.exe",
+              "currentDirectory": "C:\\Users\\attacker\\AppData\\Local\\rustdesk\\",
+              "user": "CORP\\attacker",
+              "integrityLevel": "Medium",
+              "hashes": "SHA256=EFG01234567890ABCDEF1234567890ABCDEF1234567890ABCDEF1234567890EF",
+              "parentProcessGuid": "{12345678-rmm4-1234-rmm4-123456789000}",
+              "parentProcessId": "6543",
+              "parentImage": "C:\\Windows\\explorer.exe",
+              "parentCommandLine": "C:\\Windows\\explorer.exe"
+            }
+          }
+        },
+        "_fomorian_batch": "threat-intel-2026-01-31",
+        "_fomorian_test": true,
+        "_fomorian_attack_id": "T1219",
+        "_fomorian_expected_detection": "Sigma: Generic RMM Tool Detection (T1219)"
+      }
+    },
+    {
+      "_comment": "Sysmon Event 1 - ngrok tunnel execution",
+      "sequence": 5,
+      "timestamp": "2026-01-31T20:20:30.345Z",
+      "log": {
+        "timestamp": "2026-01-31T20:20:30.345+0000",
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 1: RMM Tool Execution - ngrok",
+          "id": "100916",
+          "mitre": {
+            "id": [
+              "T1219",
+              "T1572"
+            ],
+            "tactic": [
+              "Command and Control"
+            ],
+            "technique": [
+              "Remote Access Software",
+              "Protocol Tunneling"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000007.800005",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local"
+            },
+            "eventdata": {
+              "utcTime": "2026-01-31 20:20:30.345",
+              "processGuid": "{12345678-rmm5-1234-rmm5-123456789abc}",
+              "processId": "8765",
+              "image": "C:\\Users\\attacker\\Downloads\\ngrok.exe",
+              "commandLine": "ngrok.exe tcp 3389",
+              "currentDirectory": "C:\\Users\\attacker\\Downloads\\",
+              "user": "CORP\\attacker",
+              "integrityLevel": "Medium",
+              "hashes": "SHA256=HIJ01234567890ABCDEF1234567890ABCDEF1234567890ABCDEF1234567890HI",
+              "parentProcessGuid": "{12345678-rmm5-1234-rmm5-123456789000}",
+              "parentProcessId": "7654",
+              "parentImage": "C:\\Windows\\System32\\cmd.exe",
+              "parentCommandLine": "cmd.exe"
+            }
+          }
+        },
+        "_fomorian_batch": "threat-intel-2026-01-31",
+        "_fomorian_test": true,
+        "_fomorian_attack_id": "T1219",
+        "_fomorian_expected_detection": "Sigma: Generic RMM Tool Detection (T1219)"
+      }
+    },
+    {
+      "_comment": "Sysmon Event 1 - PSExec execution",
+      "sequence": 6,
+      "timestamp": "2026-01-31T20:21:45.678Z",
+      "log": {
+        "timestamp": "2026-01-31T20:21:45.678+0000",
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 1: RMM Tool Execution - PSExec",
+          "id": "100916",
+          "mitre": {
+            "id": [
+              "T1219",
+              "T1021.002"
+            ],
+            "tactic": [
+              "Command and Control",
+              "Lateral Movement"
+            ],
+            "technique": [
+              "Remote Access Software",
+              "SMB/Windows Admin Shares"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000007.800006",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local"
+            },
+            "eventdata": {
+              "utcTime": "2026-01-31 20:21:45.678",
+              "processGuid": "{12345678-rmm6-1234-rmm6-123456789abc}",
+              "processId": "9876",
+              "image": "C:\\Users\\attacker\\Tools\\psexec.exe",
+              "commandLine": "psexec.exe \\\\DC01 -accepteula -s cmd.exe",
+              "currentDirectory": "C:\\Users\\attacker\\Tools\\",
+              "user": "CORP\\attacker",
+              "integrityLevel": "High",
+              "hashes": "SHA256=KLM01234567890ABCDEF1234567890ABCDEF1234567890ABCDEF1234567890KL",
+              "parentProcessGuid": "{12345678-rmm6-1234-rmm6-123456789000}",
+              "parentProcessId": "8765",
+              "parentImage": "C:\\Windows\\System32\\cmd.exe",
+              "parentCommandLine": "cmd.exe"
+            }
+          }
+        },
+        "_fomorian_batch": "threat-intel-2026-01-31",
+        "_fomorian_test": true,
+        "_fomorian_attack_id": "T1219",
+        "_fomorian_expected_detection": "Sigma: Generic RMM Tool Detection (T1219)"
+      }
+    }
+  ]
+}

@@ -1,0 +1,221 @@
+{
+  "_metadata": {
+    "attack_id": "T1553.006",
+    "variation": "001",
+    "name": "Code Signing Policy Modification via bcdedit",
+    "description": "Attacker uses bcdedit to enable test signing mode and disable integrity checks, then disables UAC via registry. This allows loading unsigned kernel drivers and bypassing Windows code integrity enforcement.",
+    "expected_detection": "HIGH",
+    "kill_chain_phase": "defense-evasion",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Sysmon Event 1 - bcdedit enabling test signing mode",
+      "sequence": 1,
+      "timestamp": "2026-02-21T03:10:00.000Z",
+      "log": {
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 1: bcdedit enabling test signing mode",
+          "id": "100100",
+          "mitre": {
+            "id": [
+              "T1553.006"
+            ],
+            "tactic": [
+              "Defense Evasion"
+            ],
+            "technique": [
+              "Subvert Trust Controls: Code Signing Policy Modification"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000020.3000005",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-21 03:10:00.000",
+              "processGuid": "{c4d396b5-2c30-67b8-0000-0010a1070300}",
+              "processId": "7104",
+              "image": "C:\\Windows\\System32\\bcdedit.exe",
+              "commandLine": "bcdedit.exe /set testsigning on",
+              "currentDirectory": "C:\\Users\\Administrator\\",
+              "user": "CORP\\Administrator",
+              "integrityLevel": "High",
+              "hashes": "SHA256=c7d1e5d7a78d6b9d5c35f3a67e0f42c8da1b5e7890a2d4f6b8c0e2a4d6f8012",
+              "parentProcessGuid": "{c4d396b5-2c1e-67b8-0000-001055f40200}",
+              "parentProcessId": "6788",
+              "parentImage": "C:\\Windows\\System32\\cmd.exe",
+              "parentCommandLine": "cmd.exe"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Sysmon Event 1 - bcdedit disabling integrity checks",
+      "sequence": 2,
+      "timestamp": "2026-02-21T03:10:05.000Z",
+      "log": {
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 1: bcdedit disabling driver integrity checks",
+          "id": "100101",
+          "mitre": {
+            "id": [
+              "T1553.006"
+            ],
+            "tactic": [
+              "Defense Evasion"
+            ],
+            "technique": [
+              "Subvert Trust Controls: Code Signing Policy Modification"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000020.3000006",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-21 03:10:05.000",
+              "processGuid": "{c4d396b5-2c35-67b8-0000-0010b2180300}",
+              "processId": "7228",
+              "image": "C:\\Windows\\System32\\bcdedit.exe",
+              "commandLine": "bcdedit.exe /set nointegritychecks on",
+              "currentDirectory": "C:\\Users\\Administrator\\",
+              "user": "CORP\\Administrator",
+              "integrityLevel": "High",
+              "hashes": "SHA256=c7d1e5d7a78d6b9d5c35f3a67e0f42c8da1b5e7890a2d4f6b8c0e2a4d6f8012",
+              "parentProcessGuid": "{c4d396b5-2c1e-67b8-0000-001055f40200}",
+              "parentProcessId": "6788",
+              "parentImage": "C:\\Windows\\System32\\cmd.exe",
+              "parentCommandLine": "cmd.exe"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Sysmon Event 13 - Registry: UAC EnableLUA disabled",
+      "sequence": 3,
+      "timestamp": "2026-02-21T03:10:10.000Z",
+      "log": {
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 13: UAC EnableLUA disabled via registry",
+          "id": "100102",
+          "mitre": {
+            "id": [
+              "T1553.006"
+            ],
+            "tactic": [
+              "Defense Evasion"
+            ],
+            "technique": [
+              "Subvert Trust Controls: Code Signing Policy Modification"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event13",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000020.3000007",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "13",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "13",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-21 03:10:10.000",
+              "processGuid": "{c4d396b5-2c3a-67b8-0000-0010c3290300}",
+              "processId": "7356",
+              "image": "C:\\Windows\\System32\\reg.exe",
+              "targetObject": "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\System\\EnableLUA",
+              "details": "DWORD(0x00000000)",
+              "eventType": "SetValue"
+            }
+          }
+        }
+      }
+    }
+  ]
+}

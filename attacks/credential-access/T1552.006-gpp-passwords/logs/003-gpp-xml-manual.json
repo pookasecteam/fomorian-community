@@ -1,0 +1,218 @@
+{
+  "_metadata": {
+    "attack_id": "T1552.006",
+    "variation": "003",
+    "name": "Manual Groups.xml GPP Credential Extraction",
+    "description": "Adversary manually browses SYSVOL and copies Groups.xml to extract GPP passwords",
+    "expected_detection": "HIGH",
+    "kill_chain_phase": "credential-access",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Sysmon Event 1 - dir command enumerating SYSVOL policies",
+      "sequence": 1,
+      "timestamp": "2026-01-30T11:25:00.000Z",
+      "log": {
+        "rule": {
+          "level": 10,
+          "description": "Sysmon - Event 1: SYSVOL Policy Enumeration",
+          "id": "100620",
+          "mitre": {
+            "id": [
+              "T1552.006",
+              "T1083"
+            ],
+            "tactic": [
+              "Credential Access",
+              "Discovery"
+            ],
+            "technique": [
+              "Group Policy Preferences",
+              "File and Directory Discovery"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000620.000001",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local"
+            },
+            "eventdata": {
+              "utcTime": "2026-01-30 11:25:00.000",
+              "processGuid": "{A1B2C3D4-1552-0006-0020-000000000003}",
+              "processId": "9500",
+              "image": "C:\\Windows\\System32\\cmd.exe",
+              "commandLine": "cmd.exe /c dir /s /b \\\\DC01.corp.local\\SYSVOL\\corp.local\\Policies\\*.xml",
+              "currentDirectory": "C:\\Users\\attacker\\",
+              "user": "CORP\\attacker",
+              "integrityLevel": "Medium",
+              "parentProcessGuid": "{A1B2C3D4-1552-0006-0019-000000000003}",
+              "parentProcessId": "9400",
+              "parentImage": "C:\\Windows\\explorer.exe",
+              "parentCommandLine": "explorer.exe"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Sysmon Event 1 - copy command extracting Groups.xml",
+      "sequence": 2,
+      "timestamp": "2026-01-30T11:25:10.000Z",
+      "log": {
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 1: Groups.xml Copy from SYSVOL",
+          "id": "100621",
+          "mitre": {
+            "id": [
+              "T1552.006"
+            ],
+            "tactic": [
+              "Credential Access"
+            ],
+            "technique": [
+              "Group Policy Preferences"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000620.000002",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local"
+            },
+            "eventdata": {
+              "utcTime": "2026-01-30 11:25:10.000",
+              "processGuid": "{A1B2C3D4-1552-0006-0021-000000000003}",
+              "processId": "9510",
+              "image": "C:\\Windows\\System32\\xcopy.exe",
+              "commandLine": "xcopy \\\\DC01.corp.local\\SYSVOL\\corp.local\\Policies\\{31B2F340-016D-11D2-945F-00C04FB984F9}\\Machine\\Preferences\\Groups\\Groups.xml C:\\Users\\attacker\\loot\\",
+              "currentDirectory": "C:\\Users\\attacker\\",
+              "user": "CORP\\attacker",
+              "integrityLevel": "Medium",
+              "parentProcessGuid": "{A1B2C3D4-1552-0006-0019-000000000003}",
+              "parentProcessId": "9400",
+              "parentImage": "C:\\Windows\\System32\\cmd.exe",
+              "parentCommandLine": "cmd.exe"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Sysmon Event 1 - type command reading cpassword",
+      "sequence": 3,
+      "timestamp": "2026-01-30T11:25:20.000Z",
+      "log": {
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 1: Reading cpassword from Groups.xml",
+          "id": "100622",
+          "mitre": {
+            "id": [
+              "T1552.006"
+            ],
+            "tactic": [
+              "Credential Access"
+            ],
+            "technique": [
+              "Group Policy Preferences"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000620.000003",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local"
+            },
+            "eventdata": {
+              "utcTime": "2026-01-30 11:25:20.000",
+              "processGuid": "{A1B2C3D4-1552-0006-0022-000000000003}",
+              "processId": "9520",
+              "image": "C:\\Windows\\System32\\findstr.exe",
+              "commandLine": "findstr /i cpassword C:\\Users\\attacker\\loot\\Groups.xml",
+              "currentDirectory": "C:\\Users\\attacker\\",
+              "user": "CORP\\attacker",
+              "integrityLevel": "Medium",
+              "parentProcessGuid": "{A1B2C3D4-1552-0006-0019-000000000003}",
+              "parentProcessId": "9400",
+              "parentImage": "C:\\Windows\\System32\\cmd.exe",
+              "parentCommandLine": "cmd.exe"
+            }
+          }
+        }
+      }
+    }
+  ]
+}

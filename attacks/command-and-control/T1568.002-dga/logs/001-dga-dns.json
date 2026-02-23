@@ -1,0 +1,78 @@
+{
+  "_metadata": {
+    "attack_id": "T1568.002",
+    "variation": "001",
+    "name": "Domain Generation Algorithm",
+    "description": "DNS queries to DGA-generated domains",
+    "expected_detection": "HIGH",
+    "kill_chain_phase": "command-and-control",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Sysmon Event 22 - DGA DNS query",
+      "sequence": 1,
+      "timestamp": "2026-02-04T10:22:00.000Z",
+      "log": {
+        "timestamp": "2026-02-04T10:22:00.000+0000",
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 22: Suspicious DGA Domain Query",
+          "id": "100001",
+          "mitre": {
+            "id": [
+              "T1568.002"
+            ],
+            "tactic": [
+              "Command and Control"
+            ],
+            "technique": [
+              "Domain Generation Algorithms"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event22",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000001.100023",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "22",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-04 10:22:00.000",
+              "processGuid": "{A1B2C3D4-1568-0002-0001-000000000001}",
+              "processId": "8901",
+              "image": "C:\\Users\\attacker\\malware.exe",
+              "queryName": "xkqjw9dk3mxl2.com",
+              "queryStatus": "0",
+              "queryResults": "185.141.27.98",
+              "user": "CORP\\attacker"
+            }
+          }
+        }
+      }
+    }
+  ]
+}

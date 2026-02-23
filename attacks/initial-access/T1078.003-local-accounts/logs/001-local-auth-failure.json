@@ -1,0 +1,172 @@
+{
+  "_metadata": {
+    "attack_id": "T1078.003",
+    "variation": "001",
+    "name": "Local Account Brute Force Authentication Failures",
+    "description": "Attacker attempts to authenticate using local accounts from KALI01 via SMB. Multiple failed logon attempts (Event 4625) with different local accounts indicate brute force or password spraying activity.",
+    "expected_detection": "HIGH",
+    "kill_chain_phase": "initial-access",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Windows Security Event 4625 - Failed logon for local Administrator account from attack network",
+      "sequence": 1,
+      "timestamp": "2026-02-21T01:20:00.000Z",
+      "log": {
+        "rule": {
+          "level": 12,
+          "description": "Windows Security - Event 4625: Failed logon attempt for local account from attack network",
+          "id": "100350",
+          "mitre": {
+            "id": [
+              "T1078.003"
+            ],
+            "tactic": [
+              "Initial Access"
+            ],
+            "technique": [
+              "Local Accounts"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "windows",
+            "windows_security",
+            "authentication_failed"
+          ]
+        },
+        "agent": {
+          "id": "010",
+          "name": "DC01",
+          "ip": "198.51.100.10"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1708471200.100350",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "4625",
+              "channel": "Security",
+              "providerName": "Microsoft-Windows-Security-Auditing",
+              "computer": "DC01.corp.local",
+              "level": "0",
+              "task": "12544",
+              "severityValue": "AUDIT_FAILURE"
+            },
+            "eventdata": {
+              "subjectUserSid": "S-1-0-0",
+              "subjectUserName": "-",
+              "subjectDomainName": "-",
+              "subjectLogonId": "0x0",
+              "targetUserSid": "S-1-0-0",
+              "targetUserName": "localadmin",
+              "targetDomainName": "DC01",
+              "status": "0xc000006d",
+              "failureReason": "%%2313",
+              "subStatus": "0xc000006a",
+              "logonType": "3",
+              "logonProcessName": "NtLmSsp",
+              "authenticationPackageName": "NTLM",
+              "workstationName": "KALI01",
+              "transmittedServices": "-",
+              "lmPackageName": "-",
+              "keyLength": "0",
+              "processId": "0x0",
+              "processName": "-",
+              "ipAddress": "198.51.100.40",
+              "ipPort": "50122"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Windows Security Event 4625 - Second failed logon with different local account (password spray pattern)",
+      "sequence": 2,
+      "timestamp": "2026-02-21T01:20:03.000Z",
+      "log": {
+        "rule": {
+          "level": 12,
+          "description": "Windows Security - Event 4625: Failed logon attempt for second local account - password spray indicator",
+          "id": "100351",
+          "mitre": {
+            "id": [
+              "T1078.003"
+            ],
+            "tactic": [
+              "Initial Access"
+            ],
+            "technique": [
+              "Local Accounts"
+            ]
+          },
+          "firedtimes": 2,
+          "mail": false,
+          "groups": [
+            "windows",
+            "windows_security",
+            "authentication_failed"
+          ]
+        },
+        "agent": {
+          "id": "010",
+          "name": "DC01",
+          "ip": "198.51.100.10"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1708471203.100351",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "4625",
+              "channel": "Security",
+              "providerName": "Microsoft-Windows-Security-Auditing",
+              "computer": "DC01.corp.local",
+              "level": "0",
+              "task": "12544",
+              "severityValue": "AUDIT_FAILURE"
+            },
+            "eventdata": {
+              "subjectUserSid": "S-1-0-0",
+              "subjectUserName": "-",
+              "subjectDomainName": "-",
+              "subjectLogonId": "0x0",
+              "targetUserSid": "S-1-0-0",
+              "targetUserName": "svc_backup",
+              "targetDomainName": "DC01",
+              "status": "0xc000006d",
+              "failureReason": "%%2313",
+              "subStatus": "0xc000006a",
+              "logonType": "3",
+              "logonProcessName": "NtLmSsp",
+              "authenticationPackageName": "NTLM",
+              "workstationName": "KALI01",
+              "transmittedServices": "-",
+              "lmPackageName": "-",
+              "keyLength": "0",
+              "processId": "0x0",
+              "processName": "-",
+              "ipAddress": "198.51.100.40",
+              "ipPort": "50124"
+            }
+          }
+        }
+      }
+    }
+  ]
+}

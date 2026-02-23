@@ -7,8 +7,7 @@
     "expected_detection": "HIGH",
     "kill_chain_phase": "defense-evasion",
     "format": "wazuh-native",
-    "format_version": "1.0",
-    "campaign": "operation-celtic-storm"
+    "format_version": "1.0"
   },
   "logs": [
     {
@@ -20,15 +19,26 @@
         "rule": {
           "level": 3,
           "description": "Sysmon - Event 1: Process Create",
-          "id": "92000",
+          "id": "100900",
           "firedtimes": 1,
           "mail": false,
-          "groups": ["sysmon", "sysmon_event1"]
+          "groups": [
+            "sysmon",
+            "sysmon_event1"
+          ]
         },
-        "agent": {"id": "003", "name": "DC01", "ip": "10.0.10.10"},
-        "manager": {"name": "wazuh.manager"},
+        "agent": {
+          "id": "010",
+          "name": "DC01",
+          "ip": "198.51.100.10"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
         "id": "1707081600.000001",
-        "decoder": {"name": "windows_eventchannel"},
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
         "location": "EventChannel",
         "data": {
           "win": {
@@ -64,15 +74,26 @@
         "rule": {
           "level": 3,
           "description": "Sysmon - Event 1: Process Create",
-          "id": "92000",
+          "id": "100900",
           "firedtimes": 1,
           "mail": false,
-          "groups": ["sysmon", "sysmon_event1"]
+          "groups": [
+            "sysmon",
+            "sysmon_event1"
+          ]
         },
-        "agent": {"id": "003", "name": "DC01", "ip": "10.0.10.10"},
-        "manager": {"name": "wazuh.manager"},
+        "agent": {
+          "id": "010",
+          "name": "DC01",
+          "ip": "198.51.100.10"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
         "id": "1707081605.000001",
-        "decoder": {"name": "windows_eventchannel"},
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
         "location": "EventChannel",
         "data": {
           "win": {

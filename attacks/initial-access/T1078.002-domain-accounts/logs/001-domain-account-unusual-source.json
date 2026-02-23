@@ -1,0 +1,176 @@
+{
+  "_metadata": {
+    "attack_id": "T1078.002",
+    "variation": "001",
+    "name": "Domain Account Login from Unusual Source",
+    "description": "Domain account authentication from external or unusual source IP",
+    "expected_detection": "HIGH",
+    "kill_chain_phase": "initial-access",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Windows Security Event 4624 - Domain account logon from external IP",
+      "sequence": 1,
+      "timestamp": "2026-02-08T12:05:00.000Z",
+      "log": {
+        "timestamp": "2026-02-08T12:05:00.000+0000",
+        "rule": {
+          "level": 10,
+          "description": "Windows - Event 4624: Successful Logon",
+          "id": "100624",
+          "mitre": {
+            "id": [
+              "T1078.002"
+            ],
+            "tactic": [
+              "Initial Access",
+              "Defense Evasion",
+              "Persistence",
+              "Privilege Escalation"
+            ],
+            "technique": [
+              "Valid Accounts: Domain Accounts"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "windows",
+            "authentication_success"
+          ]
+        },
+        "agent": {
+          "id": "010",
+          "name": "DC01",
+          "ip": "198.51.100.10"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1707400000.400003",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "4624",
+              "channel": "Security",
+              "providerName": "Microsoft-Windows-Security-Auditing",
+              "computer": "DC01.corp.local",
+              "level": "0",
+              "task": "12544",
+              "severityValue": "AUDIT_SUCCESS"
+            },
+            "eventdata": {
+              "subjectUserSid": "S-1-0-0",
+              "subjectUserName": "-",
+              "subjectDomainName": "-",
+              "targetUserSid": "S-1-5-21-1234567890-1234567890-1234567890-1105",
+              "targetUserName": "svc_backup",
+              "targetDomainName": "CORP",
+              "logonType": "3",
+              "logonProcessName": "NtLmSsp",
+              "authenticationPackageName": "NTLM",
+              "workstationName": "KALI01",
+              "logonGuid": "{00000000-0000-0000-0000-000000000000}",
+              "transmittedServices": "-",
+              "lmPackageName": "NTLM V2",
+              "keyLength": "128",
+              "processId": "0x0",
+              "processName": "-",
+              "ipAddress": "198.51.100.110",
+              "ipPort": "49501"
+            }
+          }
+        },
+        "_fomorian_batch": "PT-2026-003-batch1-initial-access",
+        "_fomorian_test": true,
+        "_fomorian_attack_id": "T1078.002",
+        "_fomorian_expected_detection": "Sigma: Domain Account Login from Unusual Source (T1078.002)"
+      }
+    },
+    {
+      "_comment": "Windows Security Event 4768 - Kerberos TGT request from external IP",
+      "sequence": 2,
+      "timestamp": "2026-02-08T12:05:05.000Z",
+      "log": {
+        "timestamp": "2026-02-08T12:05:05.000+0000",
+        "rule": {
+          "level": 8,
+          "description": "Windows - Event 4768: Kerberos TGT Request",
+          "id": "100001",
+          "mitre": {
+            "id": [
+              "T1078.002"
+            ],
+            "tactic": [
+              "Initial Access",
+              "Defense Evasion",
+              "Persistence",
+              "Privilege Escalation"
+            ],
+            "technique": [
+              "Valid Accounts: Domain Accounts"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "windows",
+            "authentication_success"
+          ]
+        },
+        "agent": {
+          "id": "010",
+          "name": "DC01",
+          "ip": "198.51.100.10"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1707400000.400004",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "4768",
+              "channel": "Security",
+              "providerName": "Microsoft-Windows-Security-Auditing",
+              "computer": "DC01.corp.local",
+              "level": "0",
+              "task": "14339",
+              "severityValue": "AUDIT_SUCCESS"
+            },
+            "eventdata": {
+              "targetUserName": "admin.thompson",
+              "targetDomainName": "CORP.LOCAL",
+              "targetSid": "S-1-5-21-1234567890-1234567890-1234567890-1110",
+              "serviceName": "krbtgt",
+              "servicesSid": "S-1-5-21-1234567890-1234567890-1234567890-502",
+              "ticketOptions": "0x40810010",
+              "status": "0x0",
+              "ticketEncryptionType": "0x12",
+              "preAuthType": "2",
+              "ipAddress": "::ffff:198.51.100.110",
+              "ipPort": "49502",
+              "certIssuerName": "",
+              "certSerialNumber": "",
+              "certThumbprint": ""
+            }
+          }
+        },
+        "_fomorian_batch": "PT-2026-003-batch1-initial-access",
+        "_fomorian_test": true,
+        "_fomorian_attack_id": "T1078.002",
+        "_fomorian_expected_detection": "Sigma: Domain Account Login from Unusual Source (T1078.002)"
+      }
+    }
+  ]
+}

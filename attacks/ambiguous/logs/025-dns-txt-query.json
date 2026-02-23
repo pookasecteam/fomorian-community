@@ -1,0 +1,226 @@
+{
+  "_metadata": {
+    "attack_id": "T1071.004",
+    "variation": "AMB-025",
+    "name": "DNS TXT Record Queries to External Domain",
+    "description": "DNS TXT queries for DMARC verification and external vendor domain - could be legitimate email authentication or DNS-based C2/exfiltration",
+    "ground_truth": "AMBIGUOUS",
+    "legitimate_explanation": "The DNS server is processing standard DMARC/SPF verification queries for email authentication. The external vendor TXT query is for service discovery as documented in the vendor's integration guide for their update mechanism.",
+    "suspicious_explanation": "DNS TXT records can carry arbitrary data and are commonly used for C2 communication and data exfiltration. The query to updates.external-vendor.com could be a beacon checking in with a C2 server or exfiltrating data encoded in DNS TXT responses.",
+    "expected_detection": "MEDIUM",
+    "kill_chain_phase": "command-and-control",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Sysmon Event 22 - DNS TXT query for _dmarc record (legitimate pattern)",
+      "sequence": 1,
+      "timestamp": "2026-02-08T06:00:05.000Z",
+      "log": {
+        "rule": {
+          "level": 4,
+          "description": "Sysmon - Event 22: DNS TXT record query",
+          "id": "100100",
+          "mitre": {
+            "id": [
+              "T1071.004"
+            ],
+            "tactic": [
+              "Command and Control"
+            ],
+            "technique": [
+              "DNS"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event22",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "010",
+          "name": "DC01",
+          "ip": "198.51.100.10"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1707400011.772453850",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "22",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "DC01.corp.local",
+              "level": "4",
+              "task": "22",
+              "opcode": "0",
+              "keywords": "0x8000000000000000",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-08 06:00:05.000",
+              "processGuid": "{AMB-025-0001-0001-000000000001}",
+              "processId": "1888",
+              "image": "C:\\Windows\\System32\\dns.exe",
+              "queryName": "_dmarc.corp.local",
+              "queryType": "16",
+              "queryStatus": "0",
+              "queryResults": "type: 16 v=DMARC1; p=quarantine; rua=mailto:dmarc@corp.local;",
+              "user": "NT AUTHORITY\\SYSTEM"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Sysmon Event 22 - DNS TXT query to external vendor domain (ambiguous)",
+      "sequence": 2,
+      "timestamp": "2026-02-08T06:00:30.000Z",
+      "log": {
+        "rule": {
+          "level": 6,
+          "description": "Sysmon - Event 22: DNS TXT query to external domain",
+          "id": "100100",
+          "mitre": {
+            "id": [
+              "T1071.004"
+            ],
+            "tactic": [
+              "Command and Control"
+            ],
+            "technique": [
+              "DNS"
+            ]
+          },
+          "firedtimes": 2,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event22",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "010",
+          "name": "DC01",
+          "ip": "198.51.100.10"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1707400011.801893963",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "22",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "DC01.corp.local",
+              "level": "4",
+              "task": "22",
+              "opcode": "0",
+              "keywords": "0x8000000000000000",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-08 06:00:30.000",
+              "processGuid": "{AMB-025-0001-0001-000000000001}",
+              "processId": "1888",
+              "image": "C:\\Windows\\System32\\dns.exe",
+              "queryName": "updates.external-vendor.com",
+              "queryType": "16",
+              "queryStatus": "0",
+              "queryResults": "type: 16 aHR0cHM6Ly9jZG4uZXh0ZXJuYWwtdmVuZG9yLmNvbS92Mi9hZ2VudC9jb25maWcuanNvbg==;",
+              "user": "NT AUTHORITY\\SYSTEM"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Sysmon Event 3 - dns.exe processing recursive query to external resolver",
+      "sequence": 3,
+      "timestamp": "2026-02-08T06:00:30.500Z",
+      "log": {
+        "rule": {
+          "level": 4,
+          "description": "Sysmon - Event 3: DNS server forwarding query",
+          "id": "100100",
+          "mitre": {
+            "id": [
+              "T1071.004"
+            ],
+            "tactic": [
+              "Command and Control"
+            ],
+            "technique": [
+              "DNS"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event3",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "010",
+          "name": "DC01",
+          "ip": "198.51.100.10"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1707400011.828318530",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "3",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "DC01.corp.local",
+              "level": "4",
+              "task": "1",
+              "opcode": "0",
+              "keywords": "0x8000000000000000",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-08 06:00:30.500",
+              "processGuid": "{AMB-025-0001-0001-000000000001}",
+              "processId": "1888",
+              "image": "C:\\Windows\\System32\\dns.exe",
+              "user": "NT AUTHORITY\\SYSTEM",
+              "protocol": "udp",
+              "initiated": "true",
+              "sourceIp": "198.51.100.10",
+              "sourcePort": "53122",
+              "destinationIp": "8.8.8.8",
+              "destinationPort": "53"
+            }
+          }
+        }
+      }
+    }
+  ]
+}

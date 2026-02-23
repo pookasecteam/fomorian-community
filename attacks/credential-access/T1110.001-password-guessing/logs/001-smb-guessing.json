@@ -1,0 +1,76 @@
+{
+  "_metadata": {
+    "attack_id": "T1110.001",
+    "variation": "001",
+    "name": "Password Guessing",
+    "description": "SMB password guessing attack against domain accounts",
+    "expected_detection": "HIGH",
+    "kill_chain_phase": "credential-access",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Windows Security - Multiple failed logons",
+      "sequence": 1,
+      "timestamp": "2026-02-04T11:07:00.000Z",
+      "log": {
+        "timestamp": "2026-02-04T11:07:00.000+0000",
+        "rule": {
+          "level": 12,
+          "description": "Windows: Password Guessing Attack Detected",
+          "id": "100001",
+          "mitre": {
+            "id": [
+              "T1110.001"
+            ],
+            "tactic": [
+              "Credential Access"
+            ],
+            "technique": [
+              "Password Guessing"
+            ]
+          },
+          "firedtimes": 50,
+          "mail": false,
+          "groups": [
+            "windows",
+            "authentication_failed"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000002.100008",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "4625",
+              "channel": "Security",
+              "providerName": "Microsoft-Windows-Security-Auditing",
+              "computer": "WS01.corp.local"
+            },
+            "eventdata": {
+              "targetUserName": "administrator",
+              "targetDomainName": "CORP",
+              "status": "0xc000006d",
+              "subStatus": "0xc000006a",
+              "logonType": "3",
+              "ipAddress": "198.51.100.100",
+              "failureReason": "%%2313"
+            }
+          }
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,69 @@
+{
+  "_metadata": {
+    "attack_id": "T1082",
+    "variation": "001",
+    "name": "System Information Discovery",
+    "description": "Attacker uses systeminfo.exe to gather system details for reconnaissance",
+    "expected_detection": "LOW",
+    "kill_chain_phase": "discovery",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Sysmon Event 1 - Systeminfo execution",
+      "sequence": 1,
+      "timestamp": "2026-02-04T22:38:31.000Z",
+      "log": {
+        "timestamp": "2026-02-04T22:38:31.000Z",
+        "rule": {
+          "level": 3,
+          "description": "Sysmon - Event 1: Process Create",
+          "id": "100900",
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1"
+          ]
+        },
+        "agent": {
+          "id": "010",
+          "name": "DC01",
+          "ip": "198.51.100.10"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1707081540.000013",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "DC01.Pooka.local"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-04 22:38:31.000",
+              "processGuid": "{DC01-CS04-0001-0013-000000000001}",
+              "processId": "6600",
+              "image": "C:\\Windows\\System32\\systeminfo.exe",
+              "commandLine": "systeminfo",
+              "currentDirectory": "C:\\Windows\\System32\\",
+              "user": "POOKA\\Administrator",
+              "integrityLevel": "High",
+              "parentProcessGuid": "{DC01-CS04-0001-0001-000000000000}",
+              "parentProcessId": "1234",
+              "parentImage": "C:\\Windows\\System32\\cmd.exe"
+            }
+          }
+        }
+      }
+    }
+  ]
+}

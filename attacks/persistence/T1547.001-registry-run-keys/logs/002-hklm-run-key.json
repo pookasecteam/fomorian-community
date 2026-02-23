@@ -5,9 +5,7 @@
     "name": "HKLM Run Key Persistence (Admin)",
     "description": "Machine-level registry run key persistence requiring elevated privileges",
     "expected_detection": "CRITICAL",
-    "expected_soar": "persistence-detection",
     "kill_chain_phase": "persistence",
-    "notes": "Machine-level persistence affects all users - higher severity",
     "format": "wazuh-native",
     "format_version": "1.0"
   },
@@ -17,7 +15,6 @@
       "sequence": 1,
       "timestamp": "2026-01-29T12:15:00.000Z",
       "log": {
-        "timestamp": "",
         "rule": {
           "level": 12,
           "description": "Sysmon - Event 1: HKLM Run Key Persistence (Admin)",
@@ -42,9 +39,9 @@
           ]
         },
         "agent": {
-          "id": "007",
+          "id": "020",
           "name": "WS01",
-          "ip": "10.1.0.20"
+          "ip": "198.51.100.20"
         },
         "manager": {
           "name": "wazuh.manager"
@@ -90,7 +87,6 @@
       "sequence": 2,
       "timestamp": "2026-01-29T12:15:01.000Z",
       "log": {
-        "timestamp": "",
         "rule": {
           "level": 12,
           "description": "Sysmon - Event 13: HKLM Run Key Persistence (Admin)",
@@ -115,9 +111,9 @@
           ]
         },
         "agent": {
-          "id": "007",
+          "id": "020",
           "name": "WS01",
-          "ip": "10.1.0.20"
+          "ip": "198.51.100.20"
         },
         "manager": {
           "name": "wazuh.manager"

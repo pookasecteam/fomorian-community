@@ -1,0 +1,140 @@
+{
+  "_metadata": {
+    "attack_id": "T1561.002",
+    "variation": "001",
+    "name": "Disk Structure Wipe - MBR Overwrite via dd",
+    "description": "Attacker overwrites Master Boot Record to render system unbootable - WhisperGate/NotPetya style",
+    "expected_detection": "HIGH",
+    "kill_chain_phase": "impact",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Sysmon Linux Event 1 - dd overwriting MBR",
+      "sequence": 1,
+      "timestamp": "2026-02-08T22:30:00.000Z",
+      "log": {
+        "timestamp": "2026-02-08T22:30:00.000+0000",
+        "rule": {
+          "level": 15,
+          "description": "Sysmon - Event 1: MBR Overwrite Detected",
+          "id": "100101",
+          "mitre": {
+            "id": [
+              "T1561.002"
+            ],
+            "tactic": [
+              "Impact"
+            ],
+            "technique": [
+              "Disk Structure Wipe"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": true,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "linux"
+          ]
+        },
+        "agent": {
+          "id": "030",
+          "name": "VULN01",
+          "ip": "198.51.100.30"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1707400000.300100",
+        "decoder": {
+          "name": "sysmon-linux"
+        },
+        "location": "/var/log/sysmon/sysmon.log",
+        "data": {
+          "eventdata": {
+            "utcTime": "2026-02-08 22:30:00.000",
+            "processGuid": "{A1B2C3D4-IMPC-1561-0003-000000000001}",
+            "processId": "25100",
+            "image": "/bin/dd",
+            "commandLine": "dd if=/dev/zero of=/dev/sda bs=512 count=1",
+            "currentDirectory": "/root",
+            "user": "root",
+            "parentProcessGuid": "{A1B2C3D4-IMPC-1561-0003-PARENT000001}",
+            "parentProcessId": "25000",
+            "parentImage": "/bin/bash",
+            "parentCommandLine": "/bin/bash -c './whispergate.sh'"
+          }
+        },
+        "_fomorian_batch": "PT-2026-003-batch2-impact",
+        "_fomorian_test": true,
+        "_fomorian_attack_id": "T1561.002",
+        "_fomorian_expected_detection": "Sigma: MBR Overwrite Attack (T1561.002)"
+      }
+    },
+    {
+      "_comment": "Sysmon Linux Event 1 - GPT partition table destruction",
+      "sequence": 2,
+      "timestamp": "2026-02-08T22:30:05.000Z",
+      "log": {
+        "timestamp": "2026-02-08T22:30:05.000+0000",
+        "rule": {
+          "level": 15,
+          "description": "Sysmon - Event 1: Partition Table Destruction",
+          "id": "100101",
+          "mitre": {
+            "id": [
+              "T1561.002"
+            ],
+            "tactic": [
+              "Impact"
+            ],
+            "technique": [
+              "Disk Structure Wipe"
+            ]
+          },
+          "firedtimes": 2,
+          "mail": true,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "linux"
+          ]
+        },
+        "agent": {
+          "id": "030",
+          "name": "VULN01",
+          "ip": "198.51.100.30"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1707400000.300101",
+        "decoder": {
+          "name": "sysmon-linux"
+        },
+        "location": "/var/log/sysmon/sysmon.log",
+        "data": {
+          "eventdata": {
+            "utcTime": "2026-02-08 22:30:05.000",
+            "processGuid": "{A1B2C3D4-IMPC-1561-0003-000000000002}",
+            "processId": "25150",
+            "image": "/sbin/sgdisk",
+            "commandLine": "sgdisk --zap-all /dev/sda",
+            "currentDirectory": "/root",
+            "user": "root",
+            "parentProcessGuid": "{A1B2C3D4-IMPC-1561-0003-PARENT000001}",
+            "parentProcessId": "25000",
+            "parentImage": "/bin/bash",
+            "parentCommandLine": "/bin/bash -c './whispergate.sh'"
+          }
+        },
+        "_fomorian_batch": "PT-2026-003-batch2-impact",
+        "_fomorian_test": true,
+        "_fomorian_attack_id": "T1561.002",
+        "_fomorian_expected_detection": "Sigma: Partition Table Destruction (T1561.002)"
+      }
+    }
+  ]
+}

@@ -1,0 +1,96 @@
+{
+  "_metadata": {
+    "attack_id": "T1078.002",
+    "variation": "002",
+    "name": "Valid Accounts: Domain Accounts - Unusual Host Login",
+    "description": "Domain account login from unusual host/time pattern indicating compromised credentials",
+    "expected_detection": "MEDIUM",
+    "kill_chain_phase": "initial-access",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Windows Security Event 4624 - Successful domain account logon from unusual source",
+      "sequence": 1,
+      "timestamp": "2026-02-10T21:08:00.000Z",
+      "log": {
+        "timestamp": "2026-02-10T21:08:00.000Z",
+        "rule": {
+          "level": 10,
+          "description": "Windows - Successful Domain Account Logon from Unusual Source",
+          "id": "100001",
+          "mitre": {
+            "id": [
+              "T1078.002"
+            ],
+            "tactic": [
+              "Initial Access"
+            ],
+            "technique": [
+              "Valid Accounts: Domain Accounts"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "windows",
+            "authentication",
+            "logon_success"
+          ]
+        },
+        "agent": {
+          "id": "010",
+          "name": "DC01",
+          "ip": "198.51.100.10"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1710000005.000001",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "4624",
+              "channel": "Security",
+              "providerName": "Microsoft-Windows-Security-Auditing",
+              "computer": "DC01.corp.local",
+              "level": "0",
+              "task": "12544",
+              "severityValue": "AUDIT_SUCCESS"
+            },
+            "eventdata": {
+              "subjectUserSid": "S-1-5-18",
+              "subjectUserName": "DC01$",
+              "subjectDomainName": "CORP",
+              "subjectLogonId": "0x3e7",
+              "targetUserSid": "S-1-5-21-1234567890-1234567890-1234567890-1105",
+              "targetUserName": "svc_backup",
+              "targetDomainName": "CORP",
+              "targetLogonId": "0x5a8c3d",
+              "logonType": "3",
+              "logonProcessName": "NtLmSsp",
+              "authenticationPackageName": "NTLM",
+              "workstationName": "ATTACKER-PC",
+              "logonGuid": "{00000000-0000-0000-0000-000000000000}",
+              "transmittedServices": "-",
+              "lmPackageName": "NTLM V2",
+              "keyLength": "0",
+              "processId": "0x0",
+              "processName": "-",
+              "ipAddress": "185.220.101.50",
+              "ipPort": "54321"
+            }
+          }
+        },
+        "_fomorian_test": true,
+        "fomorian_campaign": 31,
+        "fomorian_batch": 12
+      }
+    }
+  ]
+}

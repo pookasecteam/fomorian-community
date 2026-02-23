@@ -1,0 +1,230 @@
+{
+  "_metadata": {
+    "attack_id": "T1039",
+    "variation": "001",
+    "name": "Data from Network Shared Drive",
+    "description": "Collecting data from network shares",
+    "expected_detection": "MEDIUM",
+    "kill_chain_phase": "collection",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Sysmon Event 1 - Copying from network share",
+      "sequence": 1,
+      "timestamp": "2026-01-30T09:30:00.000Z",
+      "log": {
+        "rule": {
+          "level": 10,
+          "description": "Sysmon - Event 1: Network Share Data Collection",
+          "id": "100100",
+          "mitre": {
+            "id": [
+              "T1039"
+            ],
+            "tactic": [
+              "Collection"
+            ],
+            "technique": [
+              "Data from Network Shared Drive"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000061.000001",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-01-30 09:30:00.000",
+              "processGuid": "{NETSHARE-001-0001-000000000001}",
+              "processId": "10200",
+              "image": "C:\\Windows\\System32\\xcopy.exe",
+              "commandLine": "xcopy \\\\fileserver\\finance\\*.xlsx C:\\Temp\\exfil\\ /s /e /h",
+              "currentDirectory": "C:\\Users\\attacker\\",
+              "user": "CORP\\attacker",
+              "integrityLevel": "Medium",
+              "hashes": "SHA256=XCOPY_HASH_1234567890ABCDEF1234567890ABCDEF12345",
+              "parentProcessGuid": "{NETSHARE-001-0001-000000000000}",
+              "parentProcessId": "10200",
+              "parentImage": "C:\\Windows\\System32\\cmd.exe",
+              "parentCommandLine": "cmd.exe"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Sysmon Event 1 - PowerShell network share access",
+      "sequence": 2,
+      "timestamp": "2026-01-30T09:30:05.000Z",
+      "log": {
+        "rule": {
+          "level": 10,
+          "description": "Sysmon - Event 1: PowerShell Network Share Collection",
+          "id": "100100",
+          "mitre": {
+            "id": [
+              "T1039"
+            ],
+            "tactic": [
+              "Collection"
+            ],
+            "technique": [
+              "Data from Network Shared Drive"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000061.000002",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-01-30 09:30:05.000",
+              "processGuid": "{NETSHARE-001-0001-000000000002}",
+              "processId": "10300",
+              "image": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+              "commandLine": "powershell.exe -c \"Get-ChildItem -Path '\\\\fileserver\\hr\\' -Recurse -Include *.docx,*.pdf | Copy-Item -Destination C:\\Temp\\exfil\"",
+              "currentDirectory": "C:\\Users\\attacker\\",
+              "user": "CORP\\attacker",
+              "integrityLevel": "Medium",
+              "hashes": "SHA256=PS_HASH_1234567890ABCDEF1234567890ABCDEF1234567890",
+              "parentProcessGuid": "{NETSHARE-001-0001-000000000000}",
+              "parentProcessId": "10200",
+              "parentImage": "C:\\Windows\\System32\\cmd.exe",
+              "parentCommandLine": "cmd.exe"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Sysmon Event 3 - SMB connection to file server",
+      "sequence": 3,
+      "timestamp": "2026-01-30T09:29:58.000Z",
+      "log": {
+        "rule": {
+          "level": 8,
+          "description": "Sysmon - Event 3: SMB Connection to File Server",
+          "id": "100100",
+          "mitre": {
+            "id": [
+              "T1039"
+            ],
+            "tactic": [
+              "Collection"
+            ],
+            "technique": [
+              "Data from Network Shared Drive"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event3",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000061.000003",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "3",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "3",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-01-30 09:29:58.000",
+              "processGuid": "{NETSHARE-001-0001-000000000001}",
+              "processId": "10200",
+              "image": "C:\\Windows\\System32\\xcopy.exe",
+              "user": "CORP\\attacker",
+              "protocol": "tcp",
+              "initiated": "true",
+              "sourceIsIpv6": "false",
+              "sourceIp": "198.51.100.20",
+              "sourceHostname": "WS01.corp.local",
+              "sourcePort": "54321",
+              "destinationIsIpv6": "false",
+              "destinationIp": "198.51.100.50",
+              "destinationHostname": "fileserver.corp.local",
+              "destinationPort": "445",
+              "destinationPortName": "microsoft-ds"
+            }
+          }
+        }
+      }
+    }
+  ]
+}

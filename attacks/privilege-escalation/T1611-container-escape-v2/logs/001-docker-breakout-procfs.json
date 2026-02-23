@@ -1,0 +1,137 @@
+{
+  "_metadata": {
+    "attack_id": "T1611",
+    "variation": "002",
+    "name": "Container Escape - Docker Privileged procfs Breakout",
+    "description": "Escape Docker container using privileged mode and /proc/self/exe host filesystem access",
+    "expected_detection": "HIGH",
+    "kill_chain_phase": "privilege-escalation",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Linux Sysmon Event 1 - docker run --privileged with host volume mount",
+      "sequence": 1,
+      "timestamp": "2026-02-10T19:28:00.000Z",
+      "log": {
+        "timestamp": "2026-02-10T19:28:00.000+0000",
+        "rule": {
+          "level": 14,
+          "description": "Sysmon for Linux - Event 1: Process Create",
+          "id": "100101",
+          "mitre": {
+            "id": [
+              "T1611"
+            ],
+            "tactic": [
+              "Privilege Escalation"
+            ],
+            "technique": [
+              "Escape to Host"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": true,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "linux"
+          ]
+        },
+        "agent": {
+          "id": "030",
+          "name": "VULN01",
+          "ip": "198.51.100.30"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1707589680.000001",
+        "decoder": {
+          "name": "sysmon-linux"
+        },
+        "location": "/var/log/sysmon/syslog",
+        "data": {
+          "eventdata": {
+            "utcTime": "2026-02-10 19:28:00.000",
+            "processGuid": "{A1B2C3D4-2910-65c9-0028-000000029028}",
+            "processId": "32000",
+            "image": "/usr/bin/docker",
+            "commandLine": "docker run --privileged -v /:/host alpine chroot /host",
+            "currentDirectory": "/home/admin2",
+            "user": "admin2",
+            "parentProcessGuid": "{A1B2C3D4-2910-65c9-0000-000000029000}",
+            "parentProcessId": "31900",
+            "parentImage": "/bin/bash",
+            "parentCommandLine": "bash"
+          }
+        },
+        "_fomorian_test": true,
+        "fomorian_batch": 10,
+        "fomorian_campaign": 29,
+        "fomorian_technique": "T1611",
+        "fomorian_technique_name": "Container Escape - Docker Privileged procfs Breakout"
+      }
+    },
+    {
+      "_comment": "Linux Sysmon Event 11 - File access to host filesystem from container",
+      "sequence": 2,
+      "timestamp": "2026-02-10T19:28:05.000Z",
+      "log": {
+        "timestamp": "2026-02-10T19:28:05.000+0000",
+        "rule": {
+          "level": 12,
+          "description": "Sysmon for Linux - Event 11: File Create",
+          "id": "100111",
+          "mitre": {
+            "id": [
+              "T1611"
+            ],
+            "tactic": [
+              "Privilege Escalation"
+            ],
+            "technique": [
+              "Escape to Host"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": true,
+          "groups": [
+            "sysmon",
+            "sysmon_event11",
+            "linux"
+          ]
+        },
+        "agent": {
+          "id": "030",
+          "name": "VULN01",
+          "ip": "198.51.100.30"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1707589685.000002",
+        "decoder": {
+          "name": "sysmon-linux"
+        },
+        "location": "/var/log/sysmon/syslog",
+        "data": {
+          "eventdata": {
+            "utcTime": "2026-02-10 19:28:05.000",
+            "processGuid": "{A1B2C3D4-2910-65c9-0028-000000029029}",
+            "processId": "32100",
+            "image": "/bin/chroot",
+            "targetFilename": "/host/tmp/container-escape-proof.txt",
+            "user": "root"
+          }
+        },
+        "_fomorian_test": true,
+        "fomorian_batch": 10,
+        "fomorian_campaign": 29,
+        "fomorian_technique": "T1611",
+        "fomorian_technique_name": "Container Escape - Docker Privileged procfs Breakout"
+      }
+    }
+  ]
+}

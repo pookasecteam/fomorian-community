@@ -1,0 +1,170 @@
+{
+  "_metadata": {
+    "attack_id": "T1055.013",
+    "variation": "001",
+    "name": "Process Doppelg\u00e4nging - TxF NTFS Injection",
+    "description": "Use NTFS Transactional File (TxF) APIs for process injection and privilege escalation",
+    "expected_detection": "MEDIUM",
+    "kill_chain_phase": "privilege-escalation",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Sysmon Event 1 - PowerShell invoking TxF APIs",
+      "sequence": 1,
+      "timestamp": "2026-02-10T19:06:00.000Z",
+      "log": {
+        "timestamp": "2026-02-10T19:06:00.000+0000",
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 1: Process creation",
+          "id": "100101",
+          "mitre": {
+            "id": [
+              "T1055.013"
+            ],
+            "tactic": [
+              "Privilege Escalation",
+              "Defense Evasion"
+            ],
+            "technique": [
+              "Process Injection: Process Doppelg\u00e4nging"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": true,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1707588360.000001",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-10 19:06:00.000",
+              "processGuid": "{8df8f34e-2910-65c9-0006-000000029006}",
+              "processId": "16800",
+              "image": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+              "commandLine": "powershell.exe -File C:\\scripts\\doppelganger.ps1 -Target lsass.exe",
+              "currentDirectory": "C:\\Users\\admin2\\",
+              "user": "CORP\\admin2",
+              "integrityLevel": "Medium",
+              "hashes": "SHA256=A8FDBA9DF15E41B6F5C69C79F66A26A9D48E174F9F1D8F7E6A5B4C3D2E1F0A9B",
+              "parentProcessGuid": "{8df8f34e-2910-65c9-0000-000000029000}",
+              "parentProcessId": "8456",
+              "parentImage": "C:\\Windows\\System32\\cmd.exe",
+              "parentCommandLine": "cmd.exe"
+            }
+          }
+        },
+        "_fomorian_test": true,
+        "fomorian_batch": 10,
+        "fomorian_campaign": 29,
+        "fomorian_technique": "T1055.013",
+        "fomorian_technique_name": "Process Doppelg\u00e4nging - TxF NTFS Injection"
+      }
+    },
+    {
+      "_comment": "Sysmon Event 10 - ProcessAccess to lsass.exe",
+      "sequence": 2,
+      "timestamp": "2026-02-10T19:06:02.000Z",
+      "log": {
+        "timestamp": "2026-02-10T19:06:02.000+0000",
+        "rule": {
+          "level": 14,
+          "description": "Sysmon - Event 10: ProcessAccess detected",
+          "id": "100110",
+          "mitre": {
+            "id": [
+              "T1055.013",
+              "T1003.001"
+            ],
+            "tactic": [
+              "Privilege Escalation",
+              "Defense Evasion",
+              "Credential Access"
+            ],
+            "technique": [
+              "Process Injection: Process Doppelg\u00e4nging",
+              "LSASS Memory"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": true,
+          "groups": [
+            "sysmon",
+            "sysmon_event10",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1707588362.000002",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "10",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "10",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-10 19:06:02.000",
+              "sourceProcessGuid": "{8df8f34e-2910-65c9-0006-000000029006}",
+              "sourceProcessId": "16800",
+              "sourceThreadId": "17000",
+              "sourceImage": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+              "targetProcessGuid": "{8df8f34e-2910-65c9-0006-000000000500}",
+              "targetProcessId": "688",
+              "targetImage": "C:\\Windows\\System32\\lsass.exe",
+              "grantedAccess": "0x1fffff",
+              "callTrace": "UNKNOWN"
+            }
+          }
+        },
+        "_fomorian_test": true,
+        "fomorian_batch": 10,
+        "fomorian_campaign": 29,
+        "fomorian_technique": "T1055.013",
+        "fomorian_technique_name": "Process Doppelg\u00e4nging - TxF NTFS Injection"
+      }
+    }
+  ]
+}

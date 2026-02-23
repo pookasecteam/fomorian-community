@@ -1,0 +1,232 @@
+{
+  "metadata": {
+    "campaign": "35",
+    "batch": "16",
+    "format": "wazuh-native",
+    "attack_id": "T1133",
+    "variation": "001",
+    "name": "External Remote Services - RDP Enable",
+    "description": "Enable RDP and configure firewall for persistent remote access",
+    "expected_detection": "MEDIUM",
+    "kill_chain_phase": "persistence"
+  },
+  "logs": [
+    {
+      "sequence": 1,
+      "timestamp": "2026-02-10T16:08:00.000Z",
+      "log": {
+        "timestamp": "2026-02-10T16:08:00.000-0500",
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 13: RDP enabled via registry",
+          "id": "100107",
+          "mitre": {
+            "id": [
+              "T1133"
+            ],
+            "tactic": [
+              "Persistence",
+              "Initial Access"
+            ],
+            "technique": [
+              "External Remote Services"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event13",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1707581280.000001",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "13",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "13",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-10 16:08:00.000",
+              "processGuid": "{c1d2e3f4-1010-65a8-0000-001000000000}",
+              "processId": "7890",
+              "image": "C:\\Windows\\System32\\reg.exe",
+              "eventType": "SetValue",
+              "targetObject": "HKLM\\System\\CurrentControlSet\\Control\\Terminal Server\\fDenyTSConnections",
+              "details": "DWORD (0x00000000)"
+            }
+          }
+        },
+        "_fomorian_batch": "16",
+        "_fomorian_campaign": "35"
+      }
+    },
+    {
+      "sequence": 2,
+      "timestamp": "2026-02-10T16:08:05.000Z",
+      "log": {
+        "timestamp": "2026-02-10T16:08:05.000-0500",
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 1: Firewall rule to allow RDP",
+          "id": "100101",
+          "mitre": {
+            "id": [
+              "T1133",
+              "T1562.004"
+            ],
+            "tactic": [
+              "Persistence",
+              "Defense Evasion"
+            ],
+            "technique": [
+              "External Remote Services",
+              "Disable or Modify System Firewall"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1707581285.000001",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-10 16:08:05.000",
+              "processGuid": "{c1d2e3f4-1011-65a8-0000-001000000000}",
+              "processId": "7895",
+              "image": "C:\\Windows\\System32\\netsh.exe",
+              "commandLine": "netsh advfirewall firewall add rule name=\"Remote Desktop\" protocol=TCP dir=in localport=3389 action=allow",
+              "currentDirectory": "C:\\Users\\attacker\\",
+              "user": "CORP\\attacker",
+              "integrityLevel": "High",
+              "hashes": "SHA256=D3E4F5A6B7C8D9E0F1A2B3C4D5E6F7A8B9C0D1E2F3A4B5C6D7E8F9A0B1C2D3E4",
+              "parentProcessGuid": "{c1d2e3f4-1000-65a8-0000-001000000000}",
+              "parentProcessId": "7850",
+              "parentImage": "C:\\Windows\\System32\\cmd.exe",
+              "parentCommandLine": "cmd.exe"
+            }
+          }
+        },
+        "_fomorian_batch": "16",
+        "_fomorian_campaign": "35"
+      }
+    },
+    {
+      "sequence": 3,
+      "timestamp": "2026-02-10T16:08:30.000Z",
+      "log": {
+        "timestamp": "2026-02-10T16:08:30.000-0500",
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 3: RDP connection established",
+          "id": "100103",
+          "mitre": {
+            "id": [
+              "T1133"
+            ],
+            "tactic": [
+              "Persistence",
+              "Lateral Movement"
+            ],
+            "technique": [
+              "External Remote Services"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event3",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1707581310.000001",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "3",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "3",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-10 16:08:30.000",
+              "processGuid": "{c1d2e3f4-1012-65a8-0000-001000000000}",
+              "processId": "1234",
+              "image": "C:\\Windows\\System32\\svchost.exe",
+              "user": "NT AUTHORITY\\SYSTEM",
+              "protocol": "tcp",
+              "initiated": "false",
+              "sourceIp": "198.51.100.110",
+              "sourcePort": "54321",
+              "destinationIp": "198.51.100.20",
+              "destinationPort": "3389",
+              "destinationHostname": "WS01.corp.local"
+            }
+          }
+        },
+        "_fomorian_batch": "16",
+        "_fomorian_campaign": "35"
+      }
+    }
+  ]
+}

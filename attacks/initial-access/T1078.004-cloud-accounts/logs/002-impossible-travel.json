@@ -5,9 +5,7 @@
     "name": "Impossible Travel Detection",
     "description": "Account accessed from two geographically distant locations in impossible timeframe",
     "expected_detection": "CRITICAL",
-    "expected_soar": "credential-compromise-response",
     "kill_chain_phase": "initial-access",
-    "notes": "Credential theft indicator - simultaneous use",
     "format": "wazuh-native",
     "format_version": "1.0"
   },
@@ -24,7 +22,7 @@
             "properties": {
               "id": "signin-legit-001",
               "userPrincipalName": "john.doe@corp.local",
-              "ipAddress": "192.168.1.100",
+              "ipAddress": "198.51.100.100",
               "clientAppUsed": "Browser",
               "status": {
                 "errorCode": 0

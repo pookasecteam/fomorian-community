@@ -1,0 +1,239 @@
+{
+  "_metadata": {
+    "attack_id": "T1219",
+    "variation": "001",
+    "name": "SillyRAT Execution",
+    "description": "SillyRAT Python RAT payload execution and C2 connection",
+    "expected_detection": "HIGH",
+    "kill_chain_phase": "command_and_control",
+    "format": "wazuh-native",
+    "format_version": "1.0",
+    "tool": "SillyRAT",
+    "tool_url": "https://github.com/hash3liZer/SillyRAT",
+    "mitre_techniques": [
+      "T1219",
+      "T1059.006",
+      "T1571"
+    ]
+  },
+  "logs": [
+    {
+      "_comment": "Sysmon Event 1 - Python executing SillyRAT payload",
+      "sequence": 1,
+      "timestamp": "2026-01-31T14:00:00.000Z",
+      "log": {
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 1: Python RAT Execution Detected",
+          "id": "100200",
+          "mitre": {
+            "id": [
+              "T1219",
+              "T1059.006"
+            ],
+            "tactic": [
+              "Command and Control",
+              "Execution"
+            ],
+            "technique": [
+              "Remote Access Software",
+              "Python"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows",
+            "rat"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000001.000001",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-01-31 14:00:00.000",
+              "processGuid": "{A1B2C3D4-1234-5678-9ABC-DEF012345678}",
+              "processId": "4532",
+              "image": "C:\\Users\\victim\\AppData\\Local\\Programs\\Python\\Python311\\python.exe",
+              "commandLine": "python.exe client.py",
+              "currentDirectory": "C:\\Users\\victim\\Downloads\\",
+              "user": "CORP\\victim",
+              "integrityLevel": "Medium",
+              "hashes": "SHA256=8a7b9c0d1e2f3a4b5c6d7e8f9a0b1c2d3e4f5a6b7c8d9e0f1a2b3c4d5e6f7a8b",
+              "parentProcessGuid": "{A1B2C3D4-1111-2222-3333-444455556666}",
+              "parentProcessId": "1234",
+              "parentImage": "C:\\Windows\\explorer.exe",
+              "parentCommandLine": "C:\\Windows\\explorer.exe"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Sysmon Event 3 - Outbound C2 connection to attacker server",
+      "sequence": 2,
+      "timestamp": "2026-01-31T14:00:05.000Z",
+      "log": {
+        "rule": {
+          "level": 14,
+          "description": "Sysmon - Event 3: Suspicious Outbound Connection on Non-Standard Port",
+          "id": "100201",
+          "mitre": {
+            "id": [
+              "T1571",
+              "T1219"
+            ],
+            "tactic": [
+              "Command and Control"
+            ],
+            "technique": [
+              "Non-Standard Port",
+              "Remote Access Software"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event3",
+            "windows",
+            "c2"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000001.000002",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "3",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local"
+            },
+            "eventdata": {
+              "utcTime": "2026-01-31 14:00:05.000",
+              "processGuid": "{A1B2C3D4-1234-5678-9ABC-DEF012345678}",
+              "processId": "4532",
+              "image": "C:\\Users\\victim\\AppData\\Local\\Programs\\Python\\Python311\\python.exe",
+              "user": "CORP\\victim",
+              "protocol": "tcp",
+              "initiated": "true",
+              "sourceIsIpv6": "false",
+              "sourceIp": "198.51.100.20",
+              "sourceHostname": "WS01.corp.local",
+              "sourcePort": "49152",
+              "sourcePortName": "",
+              "destinationIsIpv6": "false",
+              "destinationIp": "45.33.32.156",
+              "destinationHostname": "",
+              "destinationPort": "2999",
+              "destinationPortName": ""
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Sysmon Event 1 - cmd.exe spawned by Python (shell access)",
+      "sequence": 3,
+      "timestamp": "2026-01-31T14:02:00.000Z",
+      "log": {
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 1: Python spawned cmd.exe",
+          "id": "100202",
+          "mitre": {
+            "id": [
+              "T1059.003"
+            ],
+            "tactic": [
+              "Execution"
+            ],
+            "technique": [
+              "Windows Command Shell"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000001.000003",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local"
+            },
+            "eventdata": {
+              "utcTime": "2026-01-31 14:02:00.000",
+              "processGuid": "{A1B2C3D4-2345-6789-ABCD-EF0123456789}",
+              "processId": "5678",
+              "image": "C:\\Windows\\System32\\cmd.exe",
+              "commandLine": "cmd.exe /c whoami",
+              "currentDirectory": "C:\\Users\\victim\\Downloads\\",
+              "user": "CORP\\victim",
+              "integrityLevel": "Medium",
+              "hashes": "SHA256=b99d61d874728edc0918ca0eb10eab93d381e7367e377406e65963366c874450",
+              "parentProcessGuid": "{A1B2C3D4-1234-5678-9ABC-DEF012345678}",
+              "parentProcessId": "4532",
+              "parentImage": "C:\\Users\\victim\\AppData\\Local\\Programs\\Python\\Python311\\python.exe",
+              "parentCommandLine": "python.exe client.py"
+            }
+          }
+        }
+      }
+    }
+  ]
+}

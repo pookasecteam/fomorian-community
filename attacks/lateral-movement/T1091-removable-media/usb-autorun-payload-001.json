@@ -1,0 +1,246 @@
+{
+  "_metadata": {
+    "attack_id": "T1091",
+    "variation": "001",
+    "name": "USB Autorun Payload Deployment",
+    "description": "Lateral movement via removable media with autorun.inf to execute malicious payload when USB is inserted",
+    "expected_detection": "HIGH",
+    "kill_chain_phase": "lateral-movement",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Sysmon Event 11 - Autorun.inf creation on removable drive",
+      "sequence": 1,
+      "timestamp": "2026-02-08T12:00:00.000Z",
+      "log": {
+        "timestamp": "2026-02-08T12:00:00.000+0000",
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 11: Autorun.inf created on removable media",
+          "id": "100919",
+          "mitre": {
+            "id": [
+              "T1091",
+              "T1052.001"
+            ],
+            "tactic": [
+              "Lateral Movement",
+              "Initial Access"
+            ],
+            "technique": [
+              "Replication Through Removable Media",
+              "Exfiltration Over Physical Medium: Exfiltration over USB"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": true,
+          "groups": [
+            "sysmon",
+            "sysmon_event11",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1707400000.300022",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "11",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "11",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-08 12:00:00.000",
+              "processGuid": "{A1B2C3D4-LAT-1091-0001-000000000001}",
+              "processId": "6789",
+              "image": "C:\\Windows\\System32\\cmd.exe",
+              "targetFilename": "E:\\autorun.inf",
+              "creationUtcTime": "2026-02-08 12:00:00.000",
+              "user": "CORP\\admin.user",
+              "hashes": "SHA256=6F7A8B9C0D1E2F3A4B5C6D7E8F9A0B1C2D3E4F5A6B7C8D9E0F1A2B3C4D5E6F7A"
+            }
+          }
+        },
+        "_fomorian_batch": "PT-2026-003-batch1-lateral",
+        "_fomorian_test": true,
+        "_fomorian_attack_id": "T1091",
+        "_fomorian_expected_detection": "Sigma: Autorun.inf Creation on Removable Media (T1091)"
+      }
+    },
+    {
+      "_comment": "Sysmon Event 11 - Payload executable on USB",
+      "sequence": 2,
+      "timestamp": "2026-02-08T12:00:05.000Z",
+      "log": {
+        "timestamp": "2026-02-08T12:00:05.000+0000",
+        "rule": {
+          "level": 10,
+          "description": "Sysmon - Event 11: Executable file created on removable media",
+          "id": "100919",
+          "mitre": {
+            "id": [
+              "T1091"
+            ],
+            "tactic": [
+              "Lateral Movement"
+            ],
+            "technique": [
+              "Replication Through Removable Media"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event11",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1707400000.300023",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "11",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "11",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-08 12:00:05.000",
+              "processGuid": "{A1B2C3D4-LAT-1091-0001-000000000001}",
+              "processId": "6789",
+              "image": "C:\\Windows\\System32\\cmd.exe",
+              "targetFilename": "E:\\setup.exe",
+              "creationUtcTime": "2026-02-08 12:00:05.000",
+              "user": "CORP\\admin.user",
+              "hashes": "SHA256=7A8B9C0D1E2F3A4B5C6D7E8F9A0B1C2D3E4F5A6B7C8D9E0F1A2B3C4D5E6F7A8B"
+            }
+          }
+        },
+        "_fomorian_batch": "PT-2026-003-batch1-lateral",
+        "_fomorian_test": true,
+        "_fomorian_attack_id": "T1091",
+        "_fomorian_expected_detection": "Sigma: Executable on Removable Media (T1091)"
+      }
+    },
+    {
+      "_comment": "Sysmon Event 1 - USB payload execution on victim",
+      "sequence": 3,
+      "timestamp": "2026-02-08T12:15:00.000Z",
+      "log": {
+        "timestamp": "2026-02-08T12:15:00.000+0000",
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 1: Process execution from removable media",
+          "id": "100915",
+          "mitre": {
+            "id": [
+              "T1091",
+              "T1204.002"
+            ],
+            "tactic": [
+              "Lateral Movement",
+              "Execution"
+            ],
+            "technique": [
+              "Replication Through Removable Media",
+              "User Execution: Malicious File"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": true,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1707400000.300024",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "FS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-08 12:15:00.000",
+              "processGuid": "{A1B2C3D4-LAT-1091-0002-000000000001}",
+              "processId": "12345",
+              "image": "F:\\setup.exe",
+              "fileVersion": "1.0.0.0",
+              "description": "System Setup Utility",
+              "product": "System Tools",
+              "company": "Unknown",
+              "originalFileName": "setup.exe",
+              "commandLine": "\"F:\\setup.exe\"",
+              "currentDirectory": "F:\\",
+              "user": "CORP\\victim.user",
+              "logonGuid": "{A1B2C3D4-0001-0001-0004-000000000001}",
+              "logonId": "0x8f7",
+              "terminalSessionId": "1",
+              "integrityLevel": "Medium",
+              "hashes": "SHA256=7A8B9C0D1E2F3A4B5C6D7E8F9A0B1C2D3E4F5A6B7C8D9E0F1A2B3C4D5E6F7A8B",
+              "parentProcessGuid": "{A1B2C3D4-0001-0001-0002-000000000001}",
+              "parentProcessId": "4512",
+              "parentImage": "C:\\Windows\\explorer.exe",
+              "parentCommandLine": "C:\\Windows\\explorer.exe"
+            }
+          }
+        },
+        "_fomorian_batch": "PT-2026-003-batch1-lateral",
+        "_fomorian_test": true,
+        "_fomorian_attack_id": "T1091",
+        "_fomorian_expected_detection": "Sigma: Process Execution from Removable Media (T1091)"
+      }
+    }
+  ]
+}

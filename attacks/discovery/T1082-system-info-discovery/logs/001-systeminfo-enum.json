@@ -5,7 +5,6 @@
     "name": "System Information Discovery",
     "description": "Attacker gathering system information for reconnaissance",
     "expected_detection": "LOW",
-    "expected_soar": "discovery-detection",
     "kill_chain_phase": "discovery",
     "format": "wazuh-native",
     "format_version": "1.0"
@@ -16,7 +15,6 @@
       "sequence": 1,
       "timestamp": "2026-01-29T14:10:00.000Z",
       "log": {
-        "timestamp": "",
         "rule": {
           "level": 12,
           "description": "Sysmon - Event 1: System Information Discovery",
@@ -41,9 +39,9 @@
           ]
         },
         "agent": {
-          "id": "007",
+          "id": "020",
           "name": "WS01",
-          "ip": "10.1.0.20"
+          "ip": "198.51.100.20"
         },
         "manager": {
           "name": "wazuh.manager"
@@ -89,7 +87,6 @@
       "sequence": 2,
       "timestamp": "2026-01-29T14:10:02.000Z",
       "log": {
-        "timestamp": "",
         "rule": {
           "level": 12,
           "description": "Sysmon - Event 1: System Information Discovery",
@@ -114,9 +111,9 @@
           ]
         },
         "agent": {
-          "id": "007",
+          "id": "020",
           "name": "WS01",
-          "ip": "10.1.0.20"
+          "ip": "198.51.100.20"
         },
         "manager": {
           "name": "wazuh.manager"
@@ -162,7 +159,6 @@
       "sequence": 3,
       "timestamp": "2026-01-29T14:10:04.000Z",
       "log": {
-        "timestamp": "",
         "rule": {
           "level": 12,
           "description": "Sysmon - Event 1: System Information Discovery",
@@ -187,9 +183,9 @@
           ]
         },
         "agent": {
-          "id": "007",
+          "id": "020",
           "name": "WS01",
-          "ip": "10.1.0.20"
+          "ip": "198.51.100.20"
         },
         "manager": {
           "name": "wazuh.manager"

@@ -1,0 +1,223 @@
+{
+  "_metadata": {
+    "attack_id": "T1648",
+    "variation": "001",
+    "name": "Serverless Execution - AWS Lambda",
+    "description": "Adversary creates or modifies AWS Lambda function for malicious execution",
+    "expected_detection": "HIGH",
+    "kill_chain_phase": "execution",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "AWS CloudTrail - CreateFunction for crypto mining",
+      "sequence": 1,
+      "timestamp": "2026-02-08T16:20:00.000Z",
+      "log": {
+        "timestamp": "2026-02-08T16:20:00.000+0000",
+        "rule": {
+          "level": 12,
+          "description": "AWS CloudTrail - Lambda CreateFunction",
+          "id": "100001",
+          "mitre": {
+            "id": [
+              "T1648"
+            ],
+            "tactic": [
+              "Execution"
+            ],
+            "technique": [
+              "Serverless Execution"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "aws",
+            "cloudtrail",
+            "lambda"
+          ]
+        },
+        "agent": {
+          "id": "040",
+          "name": "wazuh.manager",
+          "ip": "198.51.100.10"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1707400100.300067",
+        "decoder": {
+          "name": "aws-cloudtrail"
+        },
+        "location": "CloudTrail",
+        "data": {
+          "aws": {
+            "eventSource": "lambda.amazonaws.com",
+            "eventName": "CreateFunction20150331",
+            "eventTime": "2026-02-08T16:20:00Z",
+            "awsRegion": "us-east-1",
+            "sourceIPAddress": "198.51.100.110",
+            "userIdentity": {
+              "type": "IAMUser",
+              "userName": "compromised-dev",
+              "arn": "arn:aws:iam::123456789012:user/compromised-dev"
+            },
+            "requestParameters": {
+              "functionName": "xmrig-worker",
+              "runtime": "python3.9",
+              "handler": "lambda_function.lambda_handler",
+              "timeout": 900,
+              "memorySize": 3008,
+              "description": "Data processing worker"
+            },
+            "responseElements": {
+              "functionArn": "arn:aws:lambda:us-east-1:123456789012:function:xmrig-worker"
+            }
+          }
+        },
+        "_fomorian_batch": "PT-2026-003-batch2-execution",
+        "_fomorian_test": true,
+        "_fomorian_attack_id": "T1648",
+        "_fomorian_expected_detection": "Sigma: AWS Lambda Function Created with High Resources (T1648)"
+      }
+    },
+    {
+      "_comment": "AWS CloudTrail - UpdateFunctionCode for backdoor",
+      "sequence": 2,
+      "timestamp": "2026-02-08T16:21:00.000Z",
+      "log": {
+        "timestamp": "2026-02-08T16:21:00.000+0000",
+        "rule": {
+          "level": 12,
+          "description": "AWS CloudTrail - Lambda UpdateFunctionCode",
+          "id": "100803",
+          "mitre": {
+            "id": [
+              "T1648"
+            ],
+            "tactic": [
+              "Execution"
+            ],
+            "technique": [
+              "Serverless Execution"
+            ]
+          },
+          "firedtimes": 2,
+          "mail": false,
+          "groups": [
+            "aws",
+            "cloudtrail",
+            "lambda"
+          ]
+        },
+        "agent": {
+          "id": "040",
+          "name": "wazuh.manager",
+          "ip": "198.51.100.10"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1707400100.300068",
+        "decoder": {
+          "name": "aws-cloudtrail"
+        },
+        "location": "CloudTrail",
+        "data": {
+          "aws": {
+            "eventSource": "lambda.amazonaws.com",
+            "eventName": "UpdateFunctionCode20150331v2",
+            "eventTime": "2026-02-08T16:21:00Z",
+            "awsRegion": "us-east-1",
+            "sourceIPAddress": "198.51.100.110",
+            "userIdentity": {
+              "type": "IAMUser",
+              "userName": "compromised-dev",
+              "arn": "arn:aws:iam::123456789012:user/compromised-dev"
+            },
+            "requestParameters": {
+              "functionName": "production-api-handler",
+              "s3Bucket": "attacker-controlled-bucket",
+              "s3Key": "backdoored-lambda.zip"
+            }
+          }
+        },
+        "_fomorian_batch": "PT-2026-003-batch2-execution",
+        "_fomorian_test": true,
+        "_fomorian_attack_id": "T1648",
+        "_fomorian_expected_detection": "Sigma: AWS Lambda Code Updated from External Bucket (T1648)"
+      }
+    },
+    {
+      "_comment": "AWS CloudTrail - InvokeFunction with suspicious payload",
+      "sequence": 3,
+      "timestamp": "2026-02-08T16:22:00.000Z",
+      "log": {
+        "timestamp": "2026-02-08T16:22:00.000+0000",
+        "rule": {
+          "level": 10,
+          "description": "AWS CloudTrail - Lambda Invoke",
+          "id": "100001",
+          "mitre": {
+            "id": [
+              "T1648"
+            ],
+            "tactic": [
+              "Execution"
+            ],
+            "technique": [
+              "Serverless Execution"
+            ]
+          },
+          "firedtimes": 3,
+          "mail": false,
+          "groups": [
+            "aws",
+            "cloudtrail",
+            "lambda"
+          ]
+        },
+        "agent": {
+          "id": "040",
+          "name": "wazuh.manager",
+          "ip": "198.51.100.10"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1707400100.300069",
+        "decoder": {
+          "name": "aws-cloudtrail"
+        },
+        "location": "CloudTrail",
+        "data": {
+          "aws": {
+            "eventSource": "lambda.amazonaws.com",
+            "eventName": "Invoke",
+            "eventTime": "2026-02-08T16:22:00Z",
+            "awsRegion": "us-east-1",
+            "sourceIPAddress": "198.51.100.110",
+            "userIdentity": {
+              "type": "IAMUser",
+              "userName": "compromised-dev",
+              "arn": "arn:aws:iam::123456789012:user/compromised-dev"
+            },
+            "requestParameters": {
+              "functionName": "data-exfil-function",
+              "invocationType": "RequestResponse"
+            },
+            "additionalEventData": {
+              "functionVersion": "$LATEST"
+            }
+          }
+        },
+        "_fomorian_batch": "PT-2026-003-batch2-execution",
+        "_fomorian_test": true,
+        "_fomorian_attack_id": "T1648",
+        "_fomorian_expected_detection": "Sigma: AWS Lambda Invoked by Compromised User (T1648)"
+      }
+    }
+  ]
+}

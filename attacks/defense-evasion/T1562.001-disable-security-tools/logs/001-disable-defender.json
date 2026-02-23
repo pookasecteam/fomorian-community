@@ -5,9 +5,7 @@
     "name": "Disable Windows Defender",
     "description": "Attacker disabling Windows Defender via PowerShell and registry",
     "expected_detection": "CRITICAL",
-    "expected_soar": "defense-evasion-response",
     "kill_chain_phase": "defense-evasion",
-    "notes": "Defense evasion technique - generates both Sysmon and Windows Security logs plus Defender-specific events",
     "format": "wazuh-native",
     "format_version": "1.0"
   },
@@ -17,7 +15,6 @@
       "sequence": 1,
       "timestamp": "",
       "log": {
-        "timestamp": "",
         "rule": {
           "level": 12,
           "description": "Sysmon - Event 1: Disable Windows Defender",
@@ -44,7 +41,7 @@
         "agent": {
           "id": "{{agent_id}}",
           "name": "{{agent_name}}",
-          "ip": "10.1.0.20"
+          "ip": "198.51.100.20"
         },
         "manager": {
           "name": "wazuh.manager"
@@ -91,7 +88,6 @@
       "sequence": 2,
       "timestamp": "",
       "log": {
-        "timestamp": "",
         "rule": {
           "level": 12,
           "description": "Sysmon - Event 4688: Disable Windows Defender",
@@ -118,7 +114,7 @@
         "agent": {
           "id": "{{agent_id}}",
           "name": "{{agent_name}}",
-          "ip": "10.1.0.20"
+          "ip": "198.51.100.20"
         },
         "manager": {
           "name": "wazuh.manager"
@@ -167,7 +163,6 @@
       "sequence": 3,
       "timestamp": "",
       "log": {
-        "timestamp": "",
         "rule": {
           "level": 12,
           "description": "Sysmon - Event 4104: Disable Windows Defender",
@@ -194,7 +189,7 @@
         "agent": {
           "id": "{{agent_id}}",
           "name": "{{agent_name}}",
-          "ip": "10.1.0.20"
+          "ip": "198.51.100.20"
         },
         "manager": {
           "name": "wazuh.manager"
@@ -233,7 +228,6 @@
       "sequence": 4,
       "timestamp": "",
       "log": {
-        "timestamp": "",
         "rule": {
           "level": 12,
           "description": "Sysmon - Event 13: Disable Windows Defender",
@@ -260,7 +254,7 @@
         "agent": {
           "id": "{{agent_id}}",
           "name": "{{agent_name}}",
-          "ip": "10.1.0.20"
+          "ip": "198.51.100.20"
         },
         "manager": {
           "name": "wazuh.manager"
@@ -302,7 +296,6 @@
       "sequence": 5,
       "timestamp": "",
       "log": {
-        "timestamp": "",
         "rule": {
           "level": 12,
           "description": "Sysmon - Event 13: Disable Windows Defender",
@@ -329,7 +322,7 @@
         "agent": {
           "id": "{{agent_id}}",
           "name": "{{agent_name}}",
-          "ip": "10.1.0.20"
+          "ip": "198.51.100.20"
         },
         "manager": {
           "name": "wazuh.manager"
@@ -371,7 +364,6 @@
       "sequence": 6,
       "timestamp": "",
       "log": {
-        "timestamp": "",
         "rule": {
           "level": 12,
           "description": "Sysmon - Event 5001: Disable Windows Defender",
@@ -398,7 +390,7 @@
         "agent": {
           "id": "{{agent_id}}",
           "name": "{{agent_name}}",
-          "ip": "10.1.0.20"
+          "ip": "198.51.100.20"
         },
         "manager": {
           "name": "wazuh.manager"
@@ -436,7 +428,6 @@
       "sequence": 7,
       "timestamp": "",
       "log": {
-        "timestamp": "",
         "rule": {
           "level": 12,
           "description": "Sysmon - Event 1: Disable Windows Defender",
@@ -463,7 +454,7 @@
         "agent": {
           "id": "{{agent_id}}",
           "name": "{{agent_name}}",
-          "ip": "10.1.0.20"
+          "ip": "198.51.100.20"
         },
         "manager": {
           "name": "wazuh.manager"
@@ -510,7 +501,6 @@
       "sequence": 8,
       "timestamp": "",
       "log": {
-        "timestamp": "",
         "rule": {
           "level": 12,
           "description": "Sysmon - Event 4688: Disable Windows Defender",
@@ -537,7 +527,7 @@
         "agent": {
           "id": "{{agent_id}}",
           "name": "{{agent_name}}",
-          "ip": "10.1.0.20"
+          "ip": "198.51.100.20"
         },
         "manager": {
           "name": "wazuh.manager"

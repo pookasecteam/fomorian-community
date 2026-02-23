@@ -1,0 +1,221 @@
+{
+  "_metadata": {
+    "attack_id": "T1563.002",
+    "variation": "003",
+    "name": "PsExec SYSTEM tscon Hijacking",
+    "description": "Adversary uses PsExec to run tscon as SYSTEM to hijack disconnected sessions",
+    "expected_detection": "CRITICAL",
+    "kill_chain_phase": "lateral-movement",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Sysmon Event 1 - PsExec launching as SYSTEM",
+      "sequence": 1,
+      "timestamp": "2026-01-30T11:35:00.000Z",
+      "log": {
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 1: PsExec SYSTEM Execution",
+          "id": "100720",
+          "mitre": {
+            "id": [
+              "T1563.002",
+              "T1569.002"
+            ],
+            "tactic": [
+              "Lateral Movement",
+              "Execution"
+            ],
+            "technique": [
+              "RDP Hijacking",
+              "Service Execution"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "DC01",
+          "ip": "198.51.100.10"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000720.000001",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "DC01.corp.local"
+            },
+            "eventdata": {
+              "utcTime": "2026-01-30 11:35:00.000",
+              "processGuid": "{A1B2C3D4-1563-0002-0020-000000000003}",
+              "processId": "5500",
+              "image": "C:\\Windows\\System32\\PsExec.exe",
+              "commandLine": "PsExec.exe -s -i 2 tscon 3 /dest:console",
+              "currentDirectory": "C:\\Users\\attacker\\Tools\\",
+              "user": "CORP\\attacker",
+              "integrityLevel": "High",
+              "parentProcessGuid": "{A1B2C3D4-1563-0002-0019-000000000003}",
+              "parentProcessId": "5400",
+              "parentImage": "C:\\Windows\\System32\\cmd.exe",
+              "parentCommandLine": "cmd.exe"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Sysmon Event 1 - PsExesvc service created",
+      "sequence": 2,
+      "timestamp": "2026-01-30T11:35:01.000Z",
+      "log": {
+        "rule": {
+          "level": 10,
+          "description": "Sysmon - Event 1: PsExesvc Service Process",
+          "id": "100721",
+          "mitre": {
+            "id": [
+              "T1563.002",
+              "T1569.002"
+            ],
+            "tactic": [
+              "Lateral Movement",
+              "Execution"
+            ],
+            "technique": [
+              "RDP Hijacking",
+              "Service Execution"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "DC01",
+          "ip": "198.51.100.10"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000720.000002",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "DC01.corp.local"
+            },
+            "eventdata": {
+              "utcTime": "2026-01-30 11:35:01.000",
+              "processGuid": "{A1B2C3D4-1563-0002-0021-000000000003}",
+              "processId": "5510",
+              "image": "C:\\Windows\\PSEXESVC.exe",
+              "commandLine": "C:\\Windows\\PSEXESVC.exe",
+              "currentDirectory": "C:\\Windows\\System32\\",
+              "user": "NT AUTHORITY\\SYSTEM",
+              "integrityLevel": "System",
+              "parentProcessGuid": "{A1B2C3D4-0000-0000-0000-000000000000}",
+              "parentProcessId": "680",
+              "parentImage": "C:\\Windows\\System32\\services.exe",
+              "parentCommandLine": "services.exe"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Sysmon Event 1 - tscon executed as SYSTEM",
+      "sequence": 3,
+      "timestamp": "2026-01-30T11:35:02.000Z",
+      "log": {
+        "rule": {
+          "level": 15,
+          "description": "Sysmon - Event 1: SYSTEM tscon Session Hijack",
+          "id": "100722",
+          "mitre": {
+            "id": [
+              "T1563.002"
+            ],
+            "tactic": [
+              "Lateral Movement"
+            ],
+            "technique": [
+              "RDP Hijacking"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "DC01",
+          "ip": "198.51.100.10"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000720.000003",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "DC01.corp.local"
+            },
+            "eventdata": {
+              "utcTime": "2026-01-30 11:35:02.000",
+              "processGuid": "{A1B2C3D4-1563-0002-0022-000000000003}",
+              "processId": "5520",
+              "image": "C:\\Windows\\System32\\tscon.exe",
+              "commandLine": "tscon 3 /dest:console",
+              "currentDirectory": "C:\\Windows\\System32\\",
+              "user": "NT AUTHORITY\\SYSTEM",
+              "integrityLevel": "System",
+              "parentProcessGuid": "{A1B2C3D4-1563-0002-0021-000000000003}",
+              "parentProcessId": "5510",
+              "parentImage": "C:\\Windows\\PSEXESVC.exe",
+              "parentCommandLine": "C:\\Windows\\PSEXESVC.exe"
+            }
+          }
+        }
+      }
+    }
+  ]
+}

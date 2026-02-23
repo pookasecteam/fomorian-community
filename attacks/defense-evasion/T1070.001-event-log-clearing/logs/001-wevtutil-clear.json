@@ -1,0 +1,155 @@
+{
+  "_metadata": {
+    "attack_id": "T1070.001",
+    "variation": "001",
+    "name": "Event Log Clearing via wevtutil",
+    "description": "Clearing Windows event logs using wevtutil.exe to cover tracks",
+    "expected_detection": "HIGH",
+    "kill_chain_phase": "defense-evasion",
+    "references": [
+      "https://github.com/a2awais/Threat-Hunting/tree/main/CrowdStrike"
+    ],
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Sysmon Event 1 - wevtutil clearing Security log",
+      "sequence": 1,
+      "timestamp": "2026-02-03T15:00:00.000Z",
+      "log": {
+        "timestamp": "2026-02-03T15:00:00.000+0000",
+        "rule": {
+          "level": 14,
+          "description": "Sysmon - Event 1: wevtutil event log clearing",
+          "id": "100916",
+          "mitre": {
+            "id": [
+              "T1070.001"
+            ],
+            "tactic": [
+              "Defense Evasion"
+            ],
+            "technique": [
+              "Clear Windows Event Logs"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1706972400.100001",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-03 15:00:00.000",
+              "processGuid": "{12345678-1234-1234-1234-123456789300}",
+              "processId": "14500",
+              "image": "C:\\Windows\\System32\\wevtutil.exe",
+              "commandLine": "wevtutil.exe cl Security",
+              "currentDirectory": "C:\\Users\\attacker\\",
+              "user": "CORP\\attacker",
+              "integrityLevel": "High",
+              "parentImage": "C:\\Windows\\System32\\cmd.exe"
+            }
+          }
+        },
+        "_fomorian_batch": "crowdstrike-th",
+        "_fomorian_test": true,
+        "_fomorian_attack_id": "T1070.001",
+        "_fomorian_technique": "wevtutil-clear"
+      }
+    },
+    {
+      "_comment": "Sysmon Event 1 - wevtutil clearing System log",
+      "sequence": 2,
+      "timestamp": "2026-02-03T15:00:05.000Z",
+      "log": {
+        "timestamp": "2026-02-03T15:00:05.000+0000",
+        "rule": {
+          "level": 14,
+          "description": "Sysmon - Event 1: wevtutil event log clearing",
+          "id": "100916",
+          "mitre": {
+            "id": [
+              "T1070.001"
+            ],
+            "tactic": [
+              "Defense Evasion"
+            ],
+            "technique": [
+              "Clear Windows Event Logs"
+            ]
+          },
+          "firedtimes": 2,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1706972405.100002",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-03 15:00:05.000",
+              "processGuid": "{12345678-1234-1234-1234-123456789301}",
+              "processId": "14512",
+              "image": "C:\\Windows\\System32\\wevtutil.exe",
+              "commandLine": "wevtutil.exe clear-log System",
+              "currentDirectory": "C:\\Users\\attacker\\",
+              "user": "CORP\\attacker",
+              "integrityLevel": "High",
+              "parentImage": "C:\\Windows\\System32\\cmd.exe"
+            }
+          }
+        },
+        "_fomorian_batch": "crowdstrike-th",
+        "_fomorian_test": true,
+        "_fomorian_attack_id": "T1070.001",
+        "_fomorian_technique": "wevtutil-clear"
+      }
+    }
+  ]
+}

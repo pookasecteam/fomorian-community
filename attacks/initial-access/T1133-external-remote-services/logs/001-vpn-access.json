@@ -1,0 +1,77 @@
+{
+  "_metadata": {
+    "attack_id": "T1133",
+    "variation": "001",
+    "name": "External Remote Services - VPN",
+    "description": "Suspicious VPN access from external IP",
+    "expected_detection": "MEDIUM",
+    "kill_chain_phase": "initial-access",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Windows Security Event 4624 - VPN logon",
+      "sequence": 1,
+      "timestamp": "2026-02-04T10:10:00.000Z",
+      "log": {
+        "timestamp": "2026-02-04T10:10:00.000+0000",
+        "rule": {
+          "level": 6,
+          "description": "Windows: Successful VPN/Remote Logon",
+          "id": "100926",
+          "mitre": {
+            "id": [
+              "T1133"
+            ],
+            "tactic": [
+              "Initial Access",
+              "Persistence"
+            ],
+            "technique": [
+              "External Remote Services"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "windows",
+            "authentication_success"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000001.100011",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "4624",
+              "channel": "Security",
+              "providerName": "Microsoft-Windows-Security-Auditing",
+              "computer": "WS01.corp.local"
+            },
+            "eventdata": {
+              "targetUserName": "jsmith",
+              "targetDomainName": "CORP",
+              "logonType": "10",
+              "ipAddress": "185.220.101.42",
+              "ipPort": "55555",
+              "authenticationPackageName": "NTLM",
+              "logonProcessName": "NtLmSsp"
+            }
+          }
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,76 @@
+{
+  "_metadata": {
+    "attack_id": "T1134.005",
+    "variation": "001",
+    "name": "SID-History Injection",
+    "description": "Injecting SID into account for privilege escalation",
+    "expected_detection": "CRITICAL",
+    "kill_chain_phase": "privilege-escalation",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Windows Security - SID History modification",
+      "sequence": 1,
+      "timestamp": "2026-02-04T11:12:00.000Z",
+      "log": {
+        "timestamp": "2026-02-04T11:12:00.000+0000",
+        "rule": {
+          "level": 14,
+          "description": "Windows: SID History Injection Detected",
+          "id": "100001",
+          "mitre": {
+            "id": [
+              "T1134.005"
+            ],
+            "tactic": [
+              "Defense Evasion",
+              "Privilege Escalation"
+            ],
+            "technique": [
+              "SID-History Injection"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": true,
+          "groups": [
+            "windows",
+            "security",
+            "privilege_escalation"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "DC01",
+          "ip": "198.51.100.10"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000002.100013",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "4765",
+              "channel": "Security",
+              "providerName": "Microsoft-Windows-Security-Auditing",
+              "computer": "DC01.corp.local"
+            },
+            "eventdata": {
+              "subjectUserSid": "S-1-5-21-xxx-500",
+              "subjectUserName": "attacker",
+              "subjectDomainName": "CORP",
+              "targetUserName": "compromised_user",
+              "sidHistory": "S-1-5-21-xxx-512"
+            }
+          }
+        }
+      }
+    }
+  ]
+}

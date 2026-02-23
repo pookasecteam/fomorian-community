@@ -1,0 +1,143 @@
+{
+  "_metadata": {
+    "attack_id": "T1027.004",
+    "variation": "001",
+    "name": "CSC.exe Compile After Delivery",
+    "description": "Adversary compiles C# code on target using csc.exe to evade detection",
+    "expected_detection": "HIGH",
+    "kill_chain_phase": "defense-evasion",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Sysmon Event 1 - csc.exe compiling dropped source code",
+      "sequence": 1,
+      "timestamp": "2026-01-30T10:00:00.000Z",
+      "log": {
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 1: Suspicious CSC.exe Compilation",
+          "id": "100201",
+          "mitre": {
+            "id": [
+              "T1027.004"
+            ],
+            "tactic": [
+              "Defense Evasion"
+            ],
+            "technique": [
+              "Compile After Delivery"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000100.000001",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local"
+            },
+            "eventdata": {
+              "utcTime": "2026-01-30 10:00:00.000",
+              "processGuid": "{A1B2C3D4-1004-0001-0001-000000000001}",
+              "processId": "4521",
+              "image": "C:\\Windows\\Microsoft.NET\\Framework64\\v4.0.30319\\csc.exe",
+              "commandLine": "csc.exe /target:library /out:C:\\Users\\Public\\payload.dll C:\\Users\\Public\\Downloads\\source.cs",
+              "currentDirectory": "C:\\Users\\Public\\",
+              "user": "CORP\\john.doe",
+              "integrityLevel": "Medium",
+              "hashes": "SHA256=68D35B1BF8C1E8C75D091EBE7DE3AE26F0BCE7F8D5FF0B32E36E3BAD7E36E3A3",
+              "parentProcessGuid": "{A1B2C3D4-1004-0001-0000-000000000001}",
+              "parentProcessId": "3200",
+              "parentImage": "C:\\Windows\\System32\\cmd.exe",
+              "parentCommandLine": "cmd.exe /c csc.exe"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Sysmon Event 11 - Compiled DLL created",
+      "sequence": 2,
+      "timestamp": "2026-01-30T10:00:02.000Z",
+      "log": {
+        "rule": {
+          "level": 10,
+          "description": "Sysmon - Event 11: Suspicious DLL Created by Compiler",
+          "id": "100202",
+          "mitre": {
+            "id": [
+              "T1027.004"
+            ],
+            "tactic": [
+              "Defense Evasion"
+            ],
+            "technique": [
+              "Compile After Delivery"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event11",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000100.000002",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "11",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local"
+            },
+            "eventdata": {
+              "utcTime": "2026-01-30 10:00:02.000",
+              "processGuid": "{A1B2C3D4-1004-0001-0001-000000000001}",
+              "processId": "4521",
+              "image": "C:\\Windows\\Microsoft.NET\\Framework64\\v4.0.30319\\csc.exe",
+              "targetFilename": "C:\\Users\\Public\\payload.dll",
+              "creationUtcTime": "2026-01-30 10:00:02.000"
+            }
+          }
+        }
+      }
+    }
+  ]
+}

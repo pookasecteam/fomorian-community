@@ -1,0 +1,318 @@
+{
+  "_metadata": {
+    "attack_id": "T1574.005",
+    "variation": "001",
+    "name": "AlwaysInstallElevated MSI Privilege Escalation",
+    "description": "Attacker checks registry for AlwaysInstallElevated policy in both HKLM and HKCU, confirming the misconfiguration exists in both locations. Then uses msiexec to install a malicious MSI package that executes a payload as SYSTEM.",
+    "expected_detection": "HIGH",
+    "kill_chain_phase": "privilege-escalation",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Sysmon Event 1 - reg.exe querying HKLM AlwaysInstallElevated policy",
+      "sequence": 1,
+      "timestamp": "2026-02-21T14:10:00.000Z",
+      "log": {
+        "timestamp": "2026-02-21T14:10:00.000+0000",
+        "rule": {
+          "level": 6,
+          "description": "Sysmon - Event 1: Process creation - reg.exe querying AlwaysInstallElevated policy",
+          "id": "100101",
+          "mitre": {
+            "id": [
+              "T1574.005"
+            ],
+            "tactic": [
+              "Privilege Escalation"
+            ],
+            "technique": [
+              "Executable Installer File Permissions Weakness"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1740147000.200001",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "severityValue": "INFORMATION",
+              "systemTime": "2026-02-21T14:10:00.000000000Z"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-21 14:10:00.000",
+              "processGuid": "{C23-0002-BB01-0001-000000002001}",
+              "processId": "7100",
+              "image": "C:\\Windows\\System32\\reg.exe",
+              "commandLine": "reg query HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\Installer /v AlwaysInstallElevated",
+              "currentDirectory": "C:\\Users\\attacker\\Desktop\\",
+              "user": "CORP\\attacker",
+              "integrityLevel": "Medium",
+              "hashes": "SHA256=C3D4E5F6A1B2C3D4E5F6A1B2C3D4E5F6A1B2C3D4E5F6A1B2C3D4E5F6A1B2C3D4",
+              "parentProcessGuid": "{C23-0002-BB01-0001-000000001901}",
+              "parentProcessId": "7000",
+              "parentImage": "C:\\Windows\\System32\\cmd.exe",
+              "parentCommandLine": "cmd.exe",
+              "logonGuid": "{C23-0002-BB01-0001-000000001801}",
+              "logonId": "0x3E7A2",
+              "originalFileName": "reg.exe"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Sysmon Event 1 - reg.exe querying HKCU AlwaysInstallElevated policy",
+      "sequence": 2,
+      "timestamp": "2026-02-21T14:10:05.000Z",
+      "log": {
+        "timestamp": "2026-02-21T14:10:05.000+0000",
+        "rule": {
+          "level": 6,
+          "description": "Sysmon - Event 1: Process creation - reg.exe querying HKCU AlwaysInstallElevated policy",
+          "id": "100101",
+          "mitre": {
+            "id": [
+              "T1574.005"
+            ],
+            "tactic": [
+              "Privilege Escalation"
+            ],
+            "technique": [
+              "Executable Installer File Permissions Weakness"
+            ]
+          },
+          "firedtimes": 2,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1740147005.200002",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "severityValue": "INFORMATION",
+              "systemTime": "2026-02-21T14:10:05.000000000Z"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-21 14:10:05.000",
+              "processGuid": "{C23-0002-BB01-0002-000000002002}",
+              "processId": "7108",
+              "image": "C:\\Windows\\System32\\reg.exe",
+              "commandLine": "reg query HKCU\\SOFTWARE\\Policies\\Microsoft\\Windows\\Installer /v AlwaysInstallElevated",
+              "currentDirectory": "C:\\Users\\attacker\\Desktop\\",
+              "user": "CORP\\attacker",
+              "integrityLevel": "Medium",
+              "hashes": "SHA256=C3D4E5F6A1B2C3D4E5F6A1B2C3D4E5F6A1B2C3D4E5F6A1B2C3D4E5F6A1B2C3D4",
+              "parentProcessGuid": "{C23-0002-BB01-0001-000000001901}",
+              "parentProcessId": "7000",
+              "parentImage": "C:\\Windows\\System32\\cmd.exe",
+              "parentCommandLine": "cmd.exe",
+              "logonGuid": "{C23-0002-BB01-0001-000000001801}",
+              "logonId": "0x3E7A2",
+              "originalFileName": "reg.exe"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Sysmon Event 1 - msiexec.exe silently installing malicious MSI package with elevated privileges",
+      "sequence": 3,
+      "timestamp": "2026-02-21T14:10:30.000Z",
+      "log": {
+        "timestamp": "2026-02-21T14:10:30.000+0000",
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 1: Process creation - msiexec.exe silent install from Public directory",
+          "id": "100101",
+          "mitre": {
+            "id": [
+              "T1574.005"
+            ],
+            "tactic": [
+              "Privilege Escalation"
+            ],
+            "technique": [
+              "Executable Installer File Permissions Weakness"
+            ]
+          },
+          "firedtimes": 3,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1740147030.200003",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "severityValue": "INFORMATION",
+              "systemTime": "2026-02-21T14:10:30.000000000Z"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-21 14:10:30.000",
+              "processGuid": "{C23-0002-BB01-0003-000000002003}",
+              "processId": "7220",
+              "image": "C:\\Windows\\System32\\msiexec.exe",
+              "commandLine": "msiexec /quiet /qn /i C:\\Users\\Public\\exploit.msi",
+              "currentDirectory": "C:\\Users\\attacker\\Desktop\\",
+              "user": "CORP\\attacker",
+              "integrityLevel": "Medium",
+              "hashes": "SHA256=D4E5F6A1B2C3D4E5F6A1B2C3D4E5F6A1B2C3D4E5F6A1B2C3D4E5F6A1B2C3D4E5",
+              "parentProcessGuid": "{C23-0002-BB01-0001-000000001901}",
+              "parentProcessId": "7000",
+              "parentImage": "C:\\Windows\\System32\\cmd.exe",
+              "parentCommandLine": "cmd.exe",
+              "logonGuid": "{C23-0002-BB01-0001-000000001801}",
+              "logonId": "0x3E7A2",
+              "originalFileName": "msiexec.exe"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Sysmon Event 1 - Payload executing as SYSTEM spawned by msiexec.exe MSI custom action",
+      "sequence": 4,
+      "timestamp": "2026-02-21T14:10:35.000Z",
+      "log": {
+        "timestamp": "2026-02-21T14:10:35.000+0000",
+        "rule": {
+          "level": 14,
+          "description": "Sysmon - Event 1: Process creation - suspicious payload executing as SYSTEM via MSI install",
+          "id": "100101",
+          "mitre": {
+            "id": [
+              "T1574.005"
+            ],
+            "tactic": [
+              "Privilege Escalation"
+            ],
+            "technique": [
+              "Executable Installer File Permissions Weakness"
+            ]
+          },
+          "firedtimes": 4,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1740147035.200004",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "severityValue": "INFORMATION",
+              "systemTime": "2026-02-21T14:10:35.000000000Z"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-21 14:10:35.000",
+              "processGuid": "{C23-0002-BB01-0004-000000002004}",
+              "processId": "7344",
+              "image": "C:\\Windows\\Temp\\payload.exe",
+              "commandLine": "C:\\Windows\\Temp\\payload.exe",
+              "currentDirectory": "C:\\Windows\\Temp\\",
+              "user": "NT AUTHORITY\\SYSTEM",
+              "integrityLevel": "System",
+              "hashes": "SHA256=CAFEBABE01234567CAFEBABE01234567CAFEBABE01234567CAFEBABE01234567",
+              "parentProcessGuid": "{C23-0002-BB01-0003-000000002003}",
+              "parentProcessId": "7220",
+              "parentImage": "C:\\Windows\\System32\\msiexec.exe",
+              "parentCommandLine": "C:\\Windows\\System32\\msiexec.exe /V",
+              "logonGuid": "{C23-0002-BB01-0001-000000000001}",
+              "logonId": "0x3E7",
+              "originalFileName": "payload.exe"
+            }
+          }
+        }
+      }
+    }
+  ]
+}

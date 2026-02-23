@@ -1,0 +1,100 @@
+{
+  "_metadata": {
+    "attack_id": "T1070.007",
+    "variation": "001",
+    "name": "Clear Network History",
+    "description": "Clear DNS cache and ARP table",
+    "expected_detection": "LOW",
+    "kill_chain_phase": "defense-evasion",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Sysmon Event 1 - ipconfig /flushdns",
+      "sequence": 1,
+      "log": {
+        "rule": {
+          "level": 4,
+          "description": "Sysmon - Event 1: DNS Cache Flush",
+          "id": "100001",
+          "mitre": {
+            "id": [
+              "T1070.007"
+            ],
+            "tactic": [
+              "Defense Evasion"
+            ],
+            "technique": [
+              "Indicator Removal: Clear Network Connection History"
+            ]
+          },
+          "groups": [
+            "sysmon",
+            "sysmon_event1"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01"
+        },
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1"
+            },
+            "eventdata": {
+              "commandLine": "ipconfig /flushdns",
+              "image": "C:\\Windows\\System32\\ipconfig.exe",
+              "parentImage": "C:\\Windows\\System32\\cmd.exe",
+              "user": "CORP\\admin2"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Sysmon Event 1 - arp -d",
+      "sequence": 2,
+      "log": {
+        "rule": {
+          "level": 4,
+          "description": "Sysmon - Event 1: ARP Cache Clear",
+          "id": "100001",
+          "mitre": {
+            "id": [
+              "T1070.007"
+            ],
+            "tactic": [
+              "Defense Evasion"
+            ],
+            "technique": [
+              "Indicator Removal: Clear Network Connection History"
+            ]
+          },
+          "groups": [
+            "sysmon",
+            "sysmon_event1"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01"
+        },
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1"
+            },
+            "eventdata": {
+              "commandLine": "arp -d",
+              "image": "C:\\Windows\\System32\\arp.exe",
+              "parentImage": "C:\\Windows\\System32\\cmd.exe",
+              "user": "CORP\\admin2"
+            }
+          }
+        }
+      }
+    }
+  ]
+}

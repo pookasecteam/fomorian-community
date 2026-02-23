@@ -1,0 +1,227 @@
+{
+  "_metadata": {
+    "attack_id": "T1114.001",
+    "variation": "001",
+    "name": "Email Collection: Local Email Collection",
+    "description": "Collecting emails from local Outlook data",
+    "expected_detection": "MEDIUM",
+    "kill_chain_phase": "collection",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Sysmon Event 1 - Copying Outlook PST files",
+      "sequence": 1,
+      "timestamp": "2026-01-30T10:00:00.000Z",
+      "log": {
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 1: Outlook PST File Access",
+          "id": "100100",
+          "mitre": {
+            "id": [
+              "T1114.001"
+            ],
+            "tactic": [
+              "Collection"
+            ],
+            "technique": [
+              "Local Email Collection"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000067.000001",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-01-30 10:00:00.000",
+              "processGuid": "{EMAIL-001-0001-000000000001}",
+              "processId": "11800",
+              "image": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+              "commandLine": "powershell.exe -c \"Copy-Item -Path 'C:\\Users\\*\\AppData\\Local\\Microsoft\\Outlook\\*.pst' -Destination 'C:\\Temp\\exfil\\' -Recurse\"",
+              "currentDirectory": "C:\\Users\\attacker\\",
+              "user": "CORP\\attacker",
+              "integrityLevel": "High",
+              "hashes": "SHA256=PS_HASH_1234567890ABCDEF1234567890ABCDEF1234567890",
+              "parentProcessGuid": "{EMAIL-001-0001-000000000000}",
+              "parentProcessId": "11800",
+              "parentImage": "C:\\Windows\\System32\\cmd.exe",
+              "parentCommandLine": "cmd.exe"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Sysmon Event 1 - Accessing OST files",
+      "sequence": 2,
+      "timestamp": "2026-01-30T10:00:05.000Z",
+      "log": {
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 1: Outlook OST File Collection",
+          "id": "100100",
+          "mitre": {
+            "id": [
+              "T1114.001"
+            ],
+            "tactic": [
+              "Collection"
+            ],
+            "technique": [
+              "Local Email Collection"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000067.000002",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-01-30 10:00:05.000",
+              "processGuid": "{EMAIL-001-0001-000000000002}",
+              "processId": "11900",
+              "image": "C:\\Windows\\System32\\xcopy.exe",
+              "commandLine": "xcopy \"C:\\Users\\target\\AppData\\Local\\Microsoft\\Outlook\\*.ost\" C:\\Temp\\exfil\\ /y",
+              "currentDirectory": "C:\\Users\\attacker\\",
+              "user": "CORP\\attacker",
+              "integrityLevel": "High",
+              "hashes": "SHA256=XCOPY_HASH_1234567890ABCDEF1234567890ABCDEF12345",
+              "parentProcessGuid": "{EMAIL-001-0001-000000000000}",
+              "parentProcessId": "11800",
+              "parentImage": "C:\\Windows\\System32\\cmd.exe",
+              "parentCommandLine": "cmd.exe"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Sysmon Event 1 - Export-OutlookMessages script",
+      "sequence": 3,
+      "timestamp": "2026-01-30T10:00:10.000Z",
+      "log": {
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 1: Outlook COM Email Export",
+          "id": "100100",
+          "mitre": {
+            "id": [
+              "T1114.001"
+            ],
+            "tactic": [
+              "Collection"
+            ],
+            "technique": [
+              "Local Email Collection"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000067.000003",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-01-30 10:00:10.000",
+              "processGuid": "{EMAIL-001-0001-000000000003}",
+              "processId": "12000",
+              "image": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+              "commandLine": "powershell.exe -c \"$outlook = New-Object -ComObject Outlook.Application; $inbox = $outlook.GetNamespace('MAPI').GetDefaultFolder(6); $inbox.Items | ForEach-Object { $_.SaveAs('C:\\Temp\\exfil\\' + $_.Subject + '.msg') }\"",
+              "currentDirectory": "C:\\Users\\attacker\\",
+              "user": "CORP\\attacker",
+              "integrityLevel": "Medium",
+              "hashes": "SHA256=PS_HASH_1234567890ABCDEF1234567890ABCDEF1234567890",
+              "parentProcessGuid": "{EMAIL-001-0001-000000000000}",
+              "parentProcessId": "11800",
+              "parentImage": "C:\\Windows\\System32\\cmd.exe",
+              "parentCommandLine": "cmd.exe"
+            }
+          }
+        }
+      }
+    }
+  ]
+}

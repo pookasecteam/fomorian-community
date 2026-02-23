@@ -1,0 +1,419 @@
+{
+  "_metadata": {
+    "attack_id": "T1486",
+    "variation": "001",
+    "name": "AWS KMS Ransomware Attack",
+    "description": "Attacker creates their own KMS key, re-encrypts an S3 bucket with the attacker-controlled key using PutBucketEncryption, then schedules deletion and disables the victim's original KMS key to make data irrecoverable without paying ransom",
+    "expected_detection": "HIGH",
+    "kill_chain_phase": "impact",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "CloudTrail: CreateKey - Create attacker-controlled KMS key for ransomware encryption",
+      "sequence": 1,
+      "timestamp": "2026-02-23T14:18:00.000Z",
+      "log": {
+        "timestamp": "2026-02-23T14:18:01.000+0000",
+        "rule": {
+          "level": 5,
+          "description": "AWS Cloudtrail: kms.amazonaws.com - CreateKey.",
+          "id": "100802",
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "amazon",
+            "aws",
+            "aws_cloudtrail"
+          ],
+          "pci_dss": [
+            "10.6.1"
+          ],
+          "hipaa": [
+            "164.312.b"
+          ],
+          "nist_800_53": [
+            "AU.6"
+          ],
+          "tsc": [
+            "CC7.2",
+            "CC7.3"
+          ],
+          "mitre": {
+            "id": [
+              "T1486"
+            ],
+            "tactic": [
+              "Impact"
+            ],
+            "technique": [
+              "Data Encrypted for Impact"
+            ]
+          },
+          "gdpr": [
+            "IV_35.7.d"
+          ]
+        },
+        "agent": {
+          "id": "000",
+          "name": "wazuh.manager"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000029.010001",
+        "decoder": {
+          "name": "json"
+        },
+        "location": "Wazuh-AWS",
+        "data": {
+          "integration": "aws",
+          "aws": {
+            "eventVersion": "1.11",
+            "eventTime": "2026-02-23T14:18:00Z",
+            "eventSource": "kms.amazonaws.com",
+            "eventName": "CreateKey",
+            "awsRegion": "us-east-2",
+            "sourceIPAddress": "198.51.100.77",
+            "userAgent": "aws-cli/2.15.0 Python/3.11.6 Linux/6.1.0-kali amd64",
+            "userIdentity": {
+              "type": "IAMUser",
+              "arn": "arn:aws:iam::575084400239:user/compromised-dev",
+              "accountId": "575084400239",
+              "userName": "compromised-dev",
+              "principalId": "AIDACKCEVSQ6C2EXAMPLE",
+              "accessKeyId": "AKIAIOSFODNN7EXAMPLE"
+            },
+            "requestParameters": {
+              "description": "Data protection key",
+              "keyUsage": "ENCRYPT_DECRYPT",
+              "keySpec": "SYMMETRIC_DEFAULT",
+              "origin": "AWS_KMS",
+              "tags": [
+                {
+                  "tagKey": "Purpose",
+                  "tagValue": "backup-encryption"
+                }
+              ]
+            },
+            "responseElements": {
+              "keyMetadata": {
+                "keyId": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+                "arn": "arn:aws:kms:us-east-2:575084400239:key/a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+                "creationDate": "2026-02-23T14:18:00Z",
+                "enabled": true,
+                "keyState": "Enabled",
+                "keyUsage": "ENCRYPT_DECRYPT",
+                "keyManager": "CUSTOMER",
+                "origin": "AWS_KMS"
+              }
+            },
+            "eventID": "a7e2f8b6-15cd-5d02-b9a7-2d6f0a3c1e43",
+            "requestID": "c1f6b2d5-7e8c-9f0a-3b4c-5d6e7f8a9b03",
+            "readOnly": "false",
+            "eventType": "AwsApiCall",
+            "managementEvent": "true",
+            "recipientAccountId": "575084400239",
+            "eventCategory": "Management",
+            "source": "cloudtrail",
+            "aws_account_id": "575084400239"
+          }
+        }
+      }
+    },
+    {
+      "_comment": "CloudTrail: PutBucketEncryption - Re-encrypt production S3 bucket with attacker's KMS key",
+      "sequence": 2,
+      "timestamp": "2026-02-23T14:18:11.000Z",
+      "log": {
+        "timestamp": "2026-02-23T14:18:12.000+0000",
+        "rule": {
+          "level": 5,
+          "description": "AWS Cloudtrail: s3.amazonaws.com - PutBucketEncryption.",
+          "id": "100802",
+          "firedtimes": 2,
+          "mail": false,
+          "groups": [
+            "amazon",
+            "aws",
+            "aws_cloudtrail"
+          ],
+          "pci_dss": [
+            "10.6.1"
+          ],
+          "hipaa": [
+            "164.312.b"
+          ],
+          "nist_800_53": [
+            "AU.6"
+          ],
+          "tsc": [
+            "CC7.2",
+            "CC7.3"
+          ],
+          "mitre": {
+            "id": [
+              "T1486"
+            ],
+            "tactic": [
+              "Impact"
+            ],
+            "technique": [
+              "Data Encrypted for Impact"
+            ]
+          },
+          "gdpr": [
+            "IV_35.7.d"
+          ]
+        },
+        "agent": {
+          "id": "000",
+          "name": "wazuh.manager"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000029.010002",
+        "decoder": {
+          "name": "json"
+        },
+        "location": "Wazuh-AWS",
+        "data": {
+          "integration": "aws",
+          "aws": {
+            "eventVersion": "1.11",
+            "eventTime": "2026-02-23T14:18:11Z",
+            "eventSource": "s3.amazonaws.com",
+            "eventName": "PutBucketEncryption",
+            "awsRegion": "us-east-2",
+            "sourceIPAddress": "198.51.100.77",
+            "userAgent": "aws-cli/2.15.0 Python/3.11.6 Linux/6.1.0-kali amd64",
+            "userIdentity": {
+              "type": "IAMUser",
+              "arn": "arn:aws:iam::575084400239:user/compromised-dev",
+              "accountId": "575084400239",
+              "userName": "compromised-dev",
+              "principalId": "AIDACKCEVSQ6C2EXAMPLE",
+              "accessKeyId": "AKIAIOSFODNN7EXAMPLE"
+            },
+            "requestParameters": {
+              "bucketName": "prod-data-lake-575084400239",
+              "ServerSideEncryptionConfiguration": {
+                "Rules": [
+                  {
+                    "ApplyServerSideEncryptionByDefault": {
+                      "SSEAlgorithm": "aws:kms",
+                      "KMSMasterKeyID": "arn:aws:kms:us-east-2:575084400239:key/a1b2c3d4-e5f6-7890-abcd-ef1234567890"
+                    },
+                    "BucketKeyEnabled": true
+                  }
+                ]
+              },
+              "Host": "prod-data-lake-575084400239.s3.us-east-2.amazonaws.com"
+            },
+            "responseElements": null,
+            "eventID": "b8f3a9c7-26de-6e13-c0b8-3e7a1b4d2f54",
+            "requestID": "d2a7c3e6-8f9d-0a1b-4c5d-6e7f8a9b0c14",
+            "readOnly": "false",
+            "eventType": "AwsApiCall",
+            "managementEvent": "true",
+            "recipientAccountId": "575084400239",
+            "eventCategory": "Management",
+            "source": "cloudtrail",
+            "aws_account_id": "575084400239"
+          }
+        }
+      }
+    },
+    {
+      "_comment": "CloudTrail: ScheduleKeyDeletion - Schedule victim's original KMS key for deletion (7-day minimum)",
+      "sequence": 3,
+      "timestamp": "2026-02-23T14:18:22.000Z",
+      "log": {
+        "timestamp": "2026-02-23T14:18:23.000+0000",
+        "rule": {
+          "level": 10,
+          "description": "AWS Cloudtrail: kms.amazonaws.com - ScheduleKeyDeletion.",
+          "id": "100802",
+          "firedtimes": 3,
+          "mail": false,
+          "groups": [
+            "amazon",
+            "aws",
+            "aws_cloudtrail"
+          ],
+          "pci_dss": [
+            "10.6.1"
+          ],
+          "hipaa": [
+            "164.312.b"
+          ],
+          "nist_800_53": [
+            "AU.6"
+          ],
+          "tsc": [
+            "CC7.2",
+            "CC7.3"
+          ],
+          "mitre": {
+            "id": [
+              "T1486"
+            ],
+            "tactic": [
+              "Impact"
+            ],
+            "technique": [
+              "Data Encrypted for Impact"
+            ]
+          },
+          "gdpr": [
+            "IV_35.7.d"
+          ]
+        },
+        "agent": {
+          "id": "000",
+          "name": "wazuh.manager"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000029.010003",
+        "decoder": {
+          "name": "json"
+        },
+        "location": "Wazuh-AWS",
+        "data": {
+          "integration": "aws",
+          "aws": {
+            "eventVersion": "1.11",
+            "eventTime": "2026-02-23T14:18:22Z",
+            "eventSource": "kms.amazonaws.com",
+            "eventName": "ScheduleKeyDeletion",
+            "awsRegion": "us-east-2",
+            "sourceIPAddress": "198.51.100.77",
+            "userAgent": "aws-cli/2.15.0 Python/3.11.6 Linux/6.1.0-kali amd64",
+            "userIdentity": {
+              "type": "IAMUser",
+              "arn": "arn:aws:iam::575084400239:user/compromised-dev",
+              "accountId": "575084400239",
+              "userName": "compromised-dev",
+              "principalId": "AIDACKCEVSQ6C2EXAMPLE",
+              "accessKeyId": "AKIAIOSFODNN7EXAMPLE"
+            },
+            "requestParameters": {
+              "keyId": "f9e8d7c6-b5a4-3210-9876-543210fedcba",
+              "pendingWindowInDays": 7
+            },
+            "responseElements": {
+              "keyId": "arn:aws:kms:us-east-2:575084400239:key/f9e8d7c6-b5a4-3210-9876-543210fedcba",
+              "keyState": "PendingDeletion",
+              "deletionDate": "2026-03-02T14:18:22Z"
+            },
+            "eventID": "c9a4b0d8-37ef-7f24-d1c9-4f8b2c5e3a65",
+            "requestID": "e3b8d4f7-9a0e-1b2c-5d6e-7f8a9b0c1d25",
+            "readOnly": "false",
+            "eventType": "AwsApiCall",
+            "managementEvent": "true",
+            "recipientAccountId": "575084400239",
+            "eventCategory": "Management",
+            "source": "cloudtrail",
+            "aws_account_id": "575084400239"
+          }
+        }
+      }
+    },
+    {
+      "_comment": "CloudTrail: DisableKey - Immediately disable original key to prevent data access before deletion date",
+      "sequence": 4,
+      "timestamp": "2026-02-23T14:18:33.000Z",
+      "log": {
+        "timestamp": "2026-02-23T14:18:34.000+0000",
+        "rule": {
+          "level": 10,
+          "description": "AWS Cloudtrail: kms.amazonaws.com - DisableKey.",
+          "id": "100802",
+          "firedtimes": 4,
+          "mail": false,
+          "groups": [
+            "amazon",
+            "aws",
+            "aws_cloudtrail"
+          ],
+          "pci_dss": [
+            "10.6.1"
+          ],
+          "hipaa": [
+            "164.312.b"
+          ],
+          "nist_800_53": [
+            "AU.6"
+          ],
+          "tsc": [
+            "CC7.2",
+            "CC7.3"
+          ],
+          "mitre": {
+            "id": [
+              "T1486"
+            ],
+            "tactic": [
+              "Impact"
+            ],
+            "technique": [
+              "Data Encrypted for Impact"
+            ]
+          },
+          "gdpr": [
+            "IV_35.7.d"
+          ]
+        },
+        "agent": {
+          "id": "000",
+          "name": "wazuh.manager"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000029.010004",
+        "decoder": {
+          "name": "json"
+        },
+        "location": "Wazuh-AWS",
+        "data": {
+          "integration": "aws",
+          "aws": {
+            "eventVersion": "1.11",
+            "eventTime": "2026-02-23T14:18:33Z",
+            "eventSource": "kms.amazonaws.com",
+            "eventName": "DisableKey",
+            "awsRegion": "us-east-2",
+            "sourceIPAddress": "198.51.100.77",
+            "userAgent": "aws-cli/2.15.0 Python/3.11.6 Linux/6.1.0-kali amd64",
+            "userIdentity": {
+              "type": "IAMUser",
+              "arn": "arn:aws:iam::575084400239:user/compromised-dev",
+              "accountId": "575084400239",
+              "userName": "compromised-dev",
+              "principalId": "AIDACKCEVSQ6C2EXAMPLE",
+              "accessKeyId": "AKIAIOSFODNN7EXAMPLE"
+            },
+            "requestParameters": {
+              "keyId": "f9e8d7c6-b5a4-3210-9876-543210fedcba"
+            },
+            "responseElements": null,
+            "eventID": "d0b5c1e9-48fa-8a35-e2d0-5a9c3d6f4b76",
+            "requestID": "f4c9e5a8-0b1f-2c3d-6e7f-8a9b0c1d2e36",
+            "readOnly": "false",
+            "eventType": "AwsApiCall",
+            "managementEvent": "true",
+            "recipientAccountId": "575084400239",
+            "eventCategory": "Management",
+            "source": "cloudtrail",
+            "aws_account_id": "575084400239"
+          }
+        }
+      }
+    }
+  ]
+}

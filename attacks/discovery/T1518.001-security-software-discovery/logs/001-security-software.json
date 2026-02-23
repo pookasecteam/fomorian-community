@@ -1,0 +1,227 @@
+{
+  "_metadata": {
+    "attack_id": "T1518.001",
+    "variation": "001",
+    "name": "Security Software Discovery",
+    "description": "Identifying security software for evasion planning",
+    "expected_detection": "MEDIUM",
+    "kill_chain_phase": "discovery",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Sysmon Event 1 - WMIC for AV products",
+      "sequence": 1,
+      "timestamp": "2026-01-30T04:40:00.000Z",
+      "log": {
+        "rule": {
+          "level": 10,
+          "description": "Sysmon - Event 1: Security Software Discovery via WMIC",
+          "id": "100100",
+          "mitre": {
+            "id": [
+              "T1518.001"
+            ],
+            "tactic": [
+              "Discovery"
+            ],
+            "technique": [
+              "Security Software Discovery"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000030.900001",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-01-30 04:40:00.000",
+              "processGuid": "{SECSW-001-0001-000000000001}",
+              "processId": "57000",
+              "image": "C:\\Windows\\System32\\wbem\\WMIC.exe",
+              "commandLine": "wmic /namespace:\\\\root\\SecurityCenter2 path AntiVirusProduct get displayName,productState",
+              "currentDirectory": "C:\\Users\\attacker\\",
+              "user": "CORP\\attacker",
+              "integrityLevel": "Medium",
+              "hashes": "SHA256=WMIC_HASH_1234567890ABCDEF1234567890ABCDEF1234567",
+              "parentProcessGuid": "{SECSW-001-0001-000000000000}",
+              "parentProcessId": "57000",
+              "parentImage": "C:\\Windows\\System32\\cmd.exe",
+              "parentCommandLine": "cmd.exe"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Sysmon Event 1 - PowerShell Get-WmiObject for firewall",
+      "sequence": 2,
+      "timestamp": "2026-01-30T04:40:05.000Z",
+      "log": {
+        "rule": {
+          "level": 8,
+          "description": "Sysmon - Event 1: Firewall Product Discovery via PowerShell",
+          "id": "100100",
+          "mitre": {
+            "id": [
+              "T1518.001"
+            ],
+            "tactic": [
+              "Discovery"
+            ],
+            "technique": [
+              "Security Software Discovery"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000030.900002",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-01-30 04:40:05.000",
+              "processGuid": "{SECSW-001-0001-000000000002}",
+              "processId": "57100",
+              "image": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+              "commandLine": "powershell.exe -c \"Get-WmiObject -Namespace 'root\\SecurityCenter2' -Class FirewallProduct\"",
+              "currentDirectory": "C:\\Users\\attacker\\",
+              "user": "CORP\\attacker",
+              "integrityLevel": "Medium",
+              "hashes": "SHA256=PS_EXE_HASH_1234567890ABCDEF1234567890ABCDEF1234567",
+              "parentProcessGuid": "{SECSW-001-0001-000000000000}",
+              "parentProcessId": "57000",
+              "parentImage": "C:\\Windows\\System32\\cmd.exe",
+              "parentCommandLine": "cmd.exe"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Sysmon Event 1 - Check for EDR processes",
+      "sequence": 3,
+      "timestamp": "2026-01-30T04:40:10.000Z",
+      "log": {
+        "rule": {
+          "level": 10,
+          "description": "Sysmon - Event 1: EDR Process Discovery",
+          "id": "100100",
+          "mitre": {
+            "id": [
+              "T1518.001"
+            ],
+            "tactic": [
+              "Discovery"
+            ],
+            "technique": [
+              "Security Software Discovery"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000030.900003",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-01-30 04:40:10.000",
+              "processGuid": "{SECSW-001-0001-000000000003}",
+              "processId": "57200",
+              "image": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+              "commandLine": "powershell.exe -c \"Get-Process | Where-Object {$_.ProcessName -match 'carbon|crowd|sentinel|defender|cylance|sophos|symantec|mcafee'}\"",
+              "currentDirectory": "C:\\Users\\attacker\\",
+              "user": "CORP\\attacker",
+              "integrityLevel": "Medium",
+              "hashes": "SHA256=PS_EXE_HASH_1234567890ABCDEF1234567890ABCDEF1234567",
+              "parentProcessGuid": "{SECSW-001-0001-000000000000}",
+              "parentProcessId": "57000",
+              "parentImage": "C:\\Windows\\System32\\cmd.exe",
+              "parentCommandLine": "cmd.exe"
+            }
+          }
+        }
+      }
+    }
+  ]
+}

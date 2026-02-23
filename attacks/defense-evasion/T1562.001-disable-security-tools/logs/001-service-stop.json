@@ -6,7 +6,9 @@
     "description": "Stopping Windows Defender and security services via sc.exe and net.exe",
     "expected_detection": "HIGH",
     "kill_chain_phase": "defense-evasion",
-    "references": ["https://github.com/a2awais/Threat-Hunting/tree/main/CrowdStrike"],
+    "references": [
+      "https://github.com/a2awais/Threat-Hunting/tree/main/CrowdStrike"
+    ],
     "format": "wazuh-native",
     "format_version": "1.0"
   },
@@ -20,20 +22,38 @@
         "rule": {
           "level": 14,
           "description": "Sysmon - Event 1: Security service stop attempt",
-          "id": "92151",
+          "id": "100916",
           "mitre": {
-            "id": ["T1562.001"],
-            "tactic": ["Defense Evasion"],
-            "technique": ["Disable or Modify Tools"]
+            "id": [
+              "T1562.001"
+            ],
+            "tactic": [
+              "Defense Evasion"
+            ],
+            "technique": [
+              "Disable or Modify Tools"
+            ]
           },
           "firedtimes": 1,
           "mail": false,
-          "groups": ["sysmon", "sysmon_event1", "windows"]
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
         },
-        "agent": {"id": "007", "name": "WS01", "ip": "10.1.0.20"},
-        "manager": {"name": "wazuh.manager"},
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
         "id": "1706973000.100001",
-        "decoder": {"name": "windows_eventchannel"},
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
         "location": "EventChannel",
         "data": {
           "win": {
@@ -71,20 +91,38 @@
         "rule": {
           "level": 14,
           "description": "Sysmon - Event 1: Security service stop attempt",
-          "id": "92151",
+          "id": "100916",
           "mitre": {
-            "id": ["T1562.001"],
-            "tactic": ["Defense Evasion"],
-            "technique": ["Disable or Modify Tools"]
+            "id": [
+              "T1562.001"
+            ],
+            "tactic": [
+              "Defense Evasion"
+            ],
+            "technique": [
+              "Disable or Modify Tools"
+            ]
           },
           "firedtimes": 2,
           "mail": false,
-          "groups": ["sysmon", "sysmon_event1", "windows"]
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
         },
-        "agent": {"id": "007", "name": "WS01", "ip": "10.1.0.20"},
-        "manager": {"name": "wazuh.manager"},
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
         "id": "1706973010.100002",
-        "decoder": {"name": "windows_eventchannel"},
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
         "location": "EventChannel",
         "data": {
           "win": {

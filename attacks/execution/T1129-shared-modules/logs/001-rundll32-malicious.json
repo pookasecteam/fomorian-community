@@ -1,0 +1,237 @@
+{
+  "_metadata": {
+    "attack_id": "T1129",
+    "variation": "001",
+    "name": "Shared Modules - rundll32 Loading Malicious DLL",
+    "description": "Adversary uses rundll32.exe to load and execute malicious DLL modules",
+    "expected_detection": "HIGH",
+    "kill_chain_phase": "execution",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Sysmon Event 1 - rundll32 loading DLL from suspicious path",
+      "sequence": 1,
+      "timestamp": "2026-02-08T15:15:00.000Z",
+      "log": {
+        "timestamp": "2026-02-08T15:15:00.000+0000",
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 1: Process Create",
+          "id": "100916",
+          "mitre": {
+            "id": [
+              "T1129"
+            ],
+            "tactic": [
+              "Execution"
+            ],
+            "technique": [
+              "Shared Modules"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1707400100.300032",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-08 15:15:00.000",
+              "processGuid": "{A1B2C3D4-EXEC-1129-0001-000000000001}",
+              "processId": "11234",
+              "image": "C:\\Windows\\System32\\rundll32.exe",
+              "commandLine": "rundll32.exe C:\\Users\\user.victim\\AppData\\Local\\Temp\\payload.dll,DllMain",
+              "currentDirectory": "C:\\Users\\user.victim\\",
+              "user": "CORP\\user.victim",
+              "integrityLevel": "Medium",
+              "hashes": "SHA256=B0C1D2E3F4A5B6C7D8E9F0A1B2C3D4E5F6A7B8C9D0E1F2A3B4C5D6E7F8A9B0C1",
+              "parentProcessGuid": "{A1B2C3D4-EXEC-1129-0001-PARENT000001}",
+              "parentProcessId": "6540",
+              "parentImage": "C:\\Windows\\explorer.exe",
+              "parentCommandLine": "C:\\Windows\\explorer.exe"
+            }
+          }
+        },
+        "_fomorian_batch": "PT-2026-003-batch2-execution",
+        "_fomorian_test": true,
+        "_fomorian_attack_id": "T1129",
+        "_fomorian_expected_detection": "Sigma: Rundll32 Loading DLL from Temp (T1129)"
+      }
+    },
+    {
+      "_comment": "Sysmon Event 7 - DLL loaded by rundll32",
+      "sequence": 2,
+      "timestamp": "2026-02-08T15:15:01.000Z",
+      "log": {
+        "timestamp": "2026-02-08T15:15:01.000+0000",
+        "rule": {
+          "level": 10,
+          "description": "Sysmon - Event 7: Image Load",
+          "id": "100922",
+          "mitre": {
+            "id": [
+              "T1129"
+            ],
+            "tactic": [
+              "Execution"
+            ],
+            "technique": [
+              "Shared Modules"
+            ]
+          },
+          "firedtimes": 2,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event7",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1707400100.300033",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "7",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-08 15:15:01.000",
+              "processGuid": "{A1B2C3D4-EXEC-1129-0001-000000000001}",
+              "processId": "11234",
+              "image": "C:\\Windows\\System32\\rundll32.exe",
+              "imageLoaded": "C:\\Users\\user.victim\\AppData\\Local\\Temp\\payload.dll",
+              "signed": "false",
+              "signatureStatus": "Unavailable",
+              "hashes": "SHA256=C1D2E3F4A5B6C7D8E9F0A1B2C3D4E5F6A7B8C9D0E1F2A3B4C5D6E7F8A9B0C1D2"
+            }
+          }
+        },
+        "_fomorian_batch": "PT-2026-003-batch2-execution",
+        "_fomorian_test": true,
+        "_fomorian_attack_id": "T1129",
+        "_fomorian_expected_detection": "Sigma: Unsigned DLL Loaded by Rundll32 (T1129)"
+      }
+    },
+    {
+      "_comment": "Sysmon Event 1 - rundll32 with JavaScript protocol handler",
+      "sequence": 3,
+      "timestamp": "2026-02-08T15:16:00.000Z",
+      "log": {
+        "timestamp": "2026-02-08T15:16:00.000+0000",
+        "rule": {
+          "level": 14,
+          "description": "Sysmon - Event 1: Process Create",
+          "id": "100916",
+          "mitre": {
+            "id": [
+              "T1129",
+              "T1218.011"
+            ],
+            "tactic": [
+              "Execution",
+              "Defense Evasion"
+            ],
+            "technique": [
+              "Shared Modules",
+              "Signed Binary Proxy Execution: Rundll32"
+            ]
+          },
+          "firedtimes": 3,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1707400100.300034",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-08 15:16:00.000",
+              "processGuid": "{A1B2C3D4-EXEC-1129-0001-000000000002}",
+              "processId": "11456",
+              "image": "C:\\Windows\\System32\\rundll32.exe",
+              "commandLine": "rundll32.exe javascript:\"\\..\\mshtml,RunHTMLApplication\";document.write();h=new%20ActiveXObject(\"WScript.Shell\").Run(\"powershell -ep bypass -c IEX(gc C:\\Users\\Public\\p.ps1)\")",
+              "currentDirectory": "C:\\Users\\user.victim\\",
+              "user": "CORP\\user.victim",
+              "integrityLevel": "Medium",
+              "hashes": "SHA256=B0C1D2E3F4A5B6C7D8E9F0A1B2C3D4E5F6A7B8C9D0E1F2A3B4C5D6E7F8A9B0C1",
+              "parentProcessGuid": "{A1B2C3D4-EXEC-1129-0001-PARENT000002}",
+              "parentProcessId": "4520",
+              "parentImage": "C:\\Windows\\System32\\cmd.exe",
+              "parentCommandLine": "cmd.exe"
+            }
+          }
+        },
+        "_fomorian_batch": "PT-2026-003-batch2-execution",
+        "_fomorian_test": true,
+        "_fomorian_attack_id": "T1129",
+        "_fomorian_expected_detection": "Sigma: Rundll32 JavaScript Protocol Handler (T1129)"
+      }
+    }
+  ]
+}

@@ -1,0 +1,162 @@
+{
+  "_metadata": {
+    "attack_id": "T1218.011",
+    "variation": "AMB-011",
+    "name": "Rundll32 Loading comsvcs.dll",
+    "description": "rundll32.exe executing comsvcs.dll export function #24 (MiniDump) with a minidump file created in Windows Temp",
+    "ground_truth": "AMBIGUOUS",
+    "legitimate_explanation": "Windows COM+ Services diagnostic tool collecting a process dump for troubleshooting a crashing application. IT support may use comsvcs.dll MiniDump to capture crash diagnostics without installing third-party tools.",
+    "suspicious_explanation": "rundll32.exe + comsvcs.dll + MiniDump is a well-documented LSASS credential dumping technique. Export #24 maps to MiniDump which can target lsass.exe PID to extract credentials. This is flagged by most EDR solutions.",
+    "expected_detection": "MEDIUM",
+    "kill_chain_phase": "credential-access",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Sysmon Event 1 - rundll32 executing comsvcs.dll MiniDump",
+      "sequence": 1,
+      "timestamp": "2026-01-29T11:45:00.000Z",
+      "log": {
+        "rule": {
+          "level": 10,
+          "description": "Sysmon - Event 1: Rundll32 comsvcs.dll Execution",
+          "id": "100100",
+          "mitre": {
+            "id": [
+              "T1218.011",
+              "T1003.001"
+            ],
+            "tactic": [
+              "Defense Evasion",
+              "Credential Access"
+            ],
+            "technique": [
+              "Rundll32",
+              "LSASS Memory"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "011",
+          "name": "FS01",
+          "ip": "198.51.100.25"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000000.101100001",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "FS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "opcode": "0",
+              "keywords": "0x8000000000000000",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-01-29 11:45:00.000",
+              "processGuid": "{AMB-011-0001-0001-000000000001}",
+              "processId": "7720",
+              "image": "C:\\Windows\\System32\\rundll32.exe",
+              "commandLine": "rundll32.exe C:\\Windows\\System32\\comsvcs.dll, #24 3184 C:\\Windows\\Temp\\diag_dump.dmp full",
+              "currentDirectory": "C:\\Windows\\System32\\",
+              "user": "CORP\\it.admin",
+              "integrityLevel": "High",
+              "hashes": "SHA256=D4E5F6A7B8C9D0E1F2A3B4C5D6E7F8A9B0C1D2E3F4A5B6C7D8E9F0A1B2C3D4",
+              "parentProcessGuid": "{AMB-011-0001-0001-000000000000}",
+              "parentProcessId": "6400",
+              "parentImage": "C:\\Windows\\System32\\cmd.exe",
+              "parentCommandLine": "\"C:\\Windows\\System32\\cmd.exe\""
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Sysmon Event 11 - Minidump file created in Windows Temp",
+      "sequence": 2,
+      "timestamp": "2026-01-29T11:45:05.000Z",
+      "log": {
+        "rule": {
+          "level": 10,
+          "description": "Sysmon - Event 11: Minidump File Created",
+          "id": "100100",
+          "mitre": {
+            "id": [
+              "T1218.011",
+              "T1003.001"
+            ],
+            "tactic": [
+              "Defense Evasion",
+              "Credential Access"
+            ],
+            "technique": [
+              "Rundll32",
+              "LSASS Memory"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event11",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "011",
+          "name": "FS01",
+          "ip": "198.51.100.25"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000000.101100002",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "11",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "FS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "opcode": "0",
+              "keywords": "0x8000000000000000",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-01-29 11:45:05.000",
+              "processGuid": "{AMB-011-0001-0001-000000000001}",
+              "processId": "7720",
+              "image": "C:\\Windows\\System32\\rundll32.exe",
+              "targetFilename": "C:\\Windows\\Temp\\diag_dump.dmp",
+              "creationUtcTime": "2026-01-29 11:45:05.000"
+            }
+          }
+        }
+      }
+    }
+  ]
+}

@@ -1,10 +1,8 @@
 {
   "_metadata": {
     "attack_id": "T1087.002",
-    "batch": "threat-intel-2026-01-31",
     "name": "Impacket GetADUsers Domain Enumeration",
     "description": "Domain account enumeration via GetADUsers.py with distinctive 4-attribute LDAP query",
-    "source": "https://www.huntress.com/blog/ldap-active-directory-detection-part-one",
     "expected_detection": "HIGH",
     "kill_chain_phase": "discovery",
     "format": "wazuh-native",
@@ -20,20 +18,30 @@
         "rule": {
           "level": 10,
           "description": "Sysmon - Event 1: Impacket GetADUsers Enumeration Tool",
-          "id": "92151",
+          "id": "100916",
           "mitre": {
-            "id": ["T1087.002"],
-            "tactic": ["Discovery"],
-            "technique": ["Domain Account"]
+            "id": [
+              "T1087.002"
+            ],
+            "tactic": [
+              "Discovery"
+            ],
+            "technique": [
+              "Domain Account"
+            ]
           },
           "firedtimes": 1,
           "mail": false,
-          "groups": ["sysmon", "sysmon_event1", "windows"]
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
         },
         "agent": {
-          "id": "007",
+          "id": "020",
           "name": "WS01",
-          "ip": "10.1.0.20"
+          "ip": "198.51.100.20"
         },
         "manager": {
           "name": "wazuh.manager"
@@ -56,7 +64,7 @@
               "processGuid": "{12345678-gadu-1234-gadu-123456789abc}",
               "processId": "6789",
               "image": "C:\\Python39\\python.exe",
-              "commandLine": "python.exe GetADUsers.py -all corp.local/jsmith:Password123 -dc-ip 10.0.10.10",
+              "commandLine": "python.exe GetADUsers.py -all corp.local/jsmith:Password123 -dc-ip 198.51.100.10",
               "currentDirectory": "C:\\Tools\\impacket\\examples\\",
               "user": "CORP\\attacker",
               "integrityLevel": "Medium",
@@ -83,20 +91,30 @@
         "rule": {
           "level": 10,
           "description": "Directory Service - LDAP Query for User Enumeration",
-          "id": "60012",
+          "id": "100001",
           "mitre": {
-            "id": ["T1087.002"],
-            "tactic": ["Discovery"],
-            "technique": ["Domain Account"]
+            "id": [
+              "T1087.002"
+            ],
+            "tactic": [
+              "Discovery"
+            ],
+            "technique": [
+              "Domain Account"
+            ]
           },
           "firedtimes": 1,
           "mail": false,
-          "groups": ["windows", "ldap", "directory_service"]
+          "groups": [
+            "windows",
+            "ldap",
+            "directory_service"
+          ]
         },
         "agent": {
           "id": "001",
           "name": "DC01",
-          "ip": "10.0.10.10"
+          "ip": "198.51.100.10"
         },
         "manager": {
           "name": "wazuh.manager"
@@ -115,7 +133,7 @@
               "computer": "DC01.corp.local"
             },
             "eventdata": {
-              "clientIP": "192.168.1.105",
+              "clientIP": "198.51.100.105",
               "clientPort": "52456",
               "startingNode": "DC=corp,DC=local",
               "ldapFilter": "(&(objectCategory=person)(objectClass=user))",

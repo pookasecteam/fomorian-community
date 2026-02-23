@@ -1,0 +1,76 @@
+{
+  "_metadata": {
+    "attack_id": "T1557.001",
+    "variation": "001",
+    "name": "NTLM Relay with RelayKing",
+    "description": "NTLM relay attack using RelayKing tool",
+    "expected_detection": "Sigma: NTLM Relay Tool Execution (T1557.001)",
+    "kill_chain_phase": "credential-access",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Sysmon Event 1 - RelayKing execution",
+      "sequence": 1,
+      "timestamp": "2026-01-31T15:00:00.000Z",
+      "log": {
+        "timestamp": "2026-01-31T15:00:00.000Z",
+        "rule": {
+          "level": 14,
+          "description": "Sysmon - Event 1: NTLM Relay Tool",
+          "id": "100916",
+          "mitre": {
+            "id": [
+              "T1557.001"
+            ],
+            "tactic": [
+              "Credential Access"
+            ],
+            "technique": [
+              "LLMNR/NBT-NS Poisoning and SMB Relay"
+            ]
+          },
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "relay"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000008.000001",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local"
+            },
+            "eventdata": {
+              "utcTime": "2026-01-31 15:00:00.000",
+              "processGuid": "{12345678-1234-1234-1234-123456789018}",
+              "processId": "9012",
+              "image": "C:\\Users\\attacker\\tools\\python.exe",
+              "commandLine": "python.exe ntlmrelayx.py -t ldap://DC01 -smb2support --escalate-user attacker",
+              "currentDirectory": "C:\\Users\\attacker\\tools\\",
+              "user": "CORP\\attacker",
+              "parentImage": "C:\\Windows\\System32\\cmd.exe"
+            }
+          }
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,224 @@
+{
+  "_metadata": {
+    "attack_id": "T1547.009",
+    "variation": "001",
+    "name": "Shortcut Modification",
+    "description": "Modifying shortcuts for persistence",
+    "expected_detection": "MEDIUM",
+    "kill_chain_phase": "persistence",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Sysmon Event 11 - Malicious shortcut created",
+      "sequence": 1,
+      "timestamp": "2026-01-30T08:55:00.000Z",
+      "log": {
+        "rule": {
+          "level": 10,
+          "description": "Sysmon - Event 11: Startup Shortcut Created",
+          "id": "100100",
+          "mitre": {
+            "id": [
+              "T1547.009"
+            ],
+            "tactic": [
+              "Persistence",
+              "Privilege Escalation"
+            ],
+            "technique": [
+              "Shortcut Modification"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event11",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000050.000001",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "11",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "11",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-01-30 08:55:00.000",
+              "processGuid": "{SHORTCUT-001-0001-000000000001}",
+              "processId": "95000",
+              "image": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+              "targetFilename": "C:\\Users\\attacker\\AppData\\Roaming\\Microsoft\\Windows\\Start Menu\\Programs\\Startup\\updater.lnk",
+              "creationUtcTime": "2026-01-30 08:55:00.000",
+              "user": "CORP\\attacker"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Sysmon Event 1 - PowerShell creating malicious shortcut",
+      "sequence": 2,
+      "timestamp": "2026-01-30T08:54:59.000Z",
+      "log": {
+        "rule": {
+          "level": 10,
+          "description": "Sysmon - Event 1: PowerShell Shortcut Creation",
+          "id": "100100",
+          "mitre": {
+            "id": [
+              "T1547.009"
+            ],
+            "tactic": [
+              "Persistence",
+              "Privilege Escalation"
+            ],
+            "technique": [
+              "Shortcut Modification"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000050.000002",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-01-30 08:54:59.000",
+              "processGuid": "{SHORTCUT-001-0001-000000000001}",
+              "processId": "95000",
+              "image": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+              "commandLine": "powershell.exe -c \"$ws = New-Object -ComObject WScript.Shell; $s = $ws.CreateShortcut('C:\\Users\\attacker\\AppData\\Roaming\\Microsoft\\Windows\\Start Menu\\Programs\\Startup\\updater.lnk'); $s.TargetPath = 'C:\\Temp\\payload.exe'; $s.Save()\"",
+              "currentDirectory": "C:\\Users\\attacker\\",
+              "user": "CORP\\attacker",
+              "integrityLevel": "Medium",
+              "hashes": "SHA256=PS_HASH_1234567890ABCDEF1234567890ABCDEF1234567890",
+              "parentProcessGuid": "{SHORTCUT-001-0001-000000000000}",
+              "parentProcessId": "95000",
+              "parentImage": "C:\\Windows\\System32\\cmd.exe",
+              "parentCommandLine": "cmd.exe"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Sysmon Event 1 - Modifying existing shortcut target",
+      "sequence": 3,
+      "timestamp": "2026-01-30T08:55:05.000Z",
+      "log": {
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 1: Desktop Shortcut Modification",
+          "id": "100100",
+          "mitre": {
+            "id": [
+              "T1547.009"
+            ],
+            "tactic": [
+              "Persistence",
+              "Privilege Escalation"
+            ],
+            "technique": [
+              "Shortcut Modification"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000050.000003",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-01-30 08:55:05.000",
+              "processGuid": "{SHORTCUT-001-0001-000000000002}",
+              "processId": "95100",
+              "image": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+              "commandLine": "powershell.exe -c \"$ws = New-Object -ComObject WScript.Shell; $s = $ws.CreateShortcut('C:\\Users\\Public\\Desktop\\Chrome.lnk'); $s.TargetPath = 'C:\\Temp\\fake-chrome.exe'; $s.IconLocation = 'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe,0'; $s.Save()\"",
+              "currentDirectory": "C:\\Users\\attacker\\",
+              "user": "CORP\\attacker",
+              "integrityLevel": "High",
+              "hashes": "SHA256=PS_HASH_1234567890ABCDEF1234567890ABCDEF1234567890",
+              "parentProcessGuid": "{SHORTCUT-001-0001-000000000000}",
+              "parentProcessId": "95000",
+              "parentImage": "C:\\Windows\\System32\\cmd.exe",
+              "parentCommandLine": "cmd.exe"
+            }
+          }
+        }
+      }
+    }
+  ]
+}

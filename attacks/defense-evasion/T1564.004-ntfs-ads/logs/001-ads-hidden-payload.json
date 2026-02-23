@@ -1,0 +1,283 @@
+{
+  "_metadata": {
+    "attack_id": "T1564.004",
+    "variation": "001",
+    "name": "NTFS Alternate Data Stream Payload Hiding",
+    "description": "Adversary hides malicious payload in NTFS Alternate Data Stream",
+    "expected_detection": "HIGH",
+    "kill_chain_phase": "defense-evasion",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Sysmon Event 15 - ADS created with payload",
+      "sequence": 1,
+      "timestamp": "2026-01-30T10:00:00.000Z",
+      "log": {
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 15: Alternate Data Stream Created",
+          "id": "100001",
+          "mitre": {
+            "id": [
+              "T1564.004"
+            ],
+            "tactic": [
+              "Defense Evasion"
+            ],
+            "technique": [
+              "NTFS File Attributes"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event15",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700001000.000001",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "15",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local"
+            },
+            "eventdata": {
+              "utcTime": "2026-01-30 10:00:00.000",
+              "processGuid": "{A1B2C3D4-1564-0004-0001-000000000001}",
+              "processId": "5234",
+              "image": "C:\\Windows\\System32\\cmd.exe",
+              "targetFilename": "C:\\Users\\Public\\legit.txt:payload.exe",
+              "creationUtcTime": "2026-01-30 10:00:00.000",
+              "hash": "SHA256=BADBEEF1234567890ABCDEF1234567890ABCDEF1234567890ABCDEF12345678"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Sysmon Event 1 - echo command writing to ADS",
+      "sequence": 2,
+      "timestamp": "2026-01-30T10:00:01.000Z",
+      "log": {
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 1: Command Writing to Alternate Data Stream",
+          "id": "100001",
+          "mitre": {
+            "id": [
+              "T1564.004"
+            ],
+            "tactic": [
+              "Defense Evasion"
+            ],
+            "technique": [
+              "NTFS File Attributes"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700001000.000002",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local"
+            },
+            "eventdata": {
+              "utcTime": "2026-01-30 10:00:01.000",
+              "processGuid": "{A1B2C3D4-1564-0004-0002-000000000001}",
+              "processId": "5240",
+              "image": "C:\\Windows\\System32\\cmd.exe",
+              "commandLine": "cmd.exe /c type C:\\Users\\Public\\Downloads\\malware.exe > C:\\Users\\Public\\legit.txt:hidden.exe",
+              "currentDirectory": "C:\\Users\\attacker\\",
+              "user": "CORP\\attacker",
+              "integrityLevel": "Medium",
+              "parentProcessGuid": "{A1B2C3D4-1564-0004-0000-000000000001}",
+              "parentProcessId": "5100",
+              "parentImage": "C:\\Windows\\System32\\cmd.exe",
+              "parentCommandLine": "cmd.exe"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Sysmon Event 1 - wmic executing ADS payload",
+      "sequence": 3,
+      "timestamp": "2026-01-30T10:00:10.000Z",
+      "log": {
+        "rule": {
+          "level": 14,
+          "description": "Sysmon - Event 1: WMIC Executing ADS Payload",
+          "id": "100001",
+          "mitre": {
+            "id": [
+              "T1564.004",
+              "T1047"
+            ],
+            "tactic": [
+              "Defense Evasion",
+              "Execution"
+            ],
+            "technique": [
+              "NTFS File Attributes",
+              "WMI"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700001000.000003",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local"
+            },
+            "eventdata": {
+              "utcTime": "2026-01-30 10:00:10.000",
+              "processGuid": "{A1B2C3D4-1564-0004-0003-000000000001}",
+              "processId": "5260",
+              "image": "C:\\Windows\\System32\\wbem\\WMIC.exe",
+              "commandLine": "wmic process call create \"C:\\Users\\Public\\legit.txt:hidden.exe\"",
+              "currentDirectory": "C:\\Users\\attacker\\",
+              "user": "CORP\\attacker",
+              "integrityLevel": "High",
+              "parentProcessGuid": "{A1B2C3D4-1564-0004-0000-000000000001}",
+              "parentProcessId": "5100",
+              "parentImage": "C:\\Windows\\System32\\cmd.exe",
+              "parentCommandLine": "cmd.exe"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Sysmon Event 1 - PowerShell reading from ADS",
+      "sequence": 4,
+      "timestamp": "2026-01-30T10:00:15.000Z",
+      "log": {
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 1: PowerShell Reading Alternate Data Stream",
+          "id": "100001",
+          "mitre": {
+            "id": [
+              "T1564.004",
+              "T1059.001"
+            ],
+            "tactic": [
+              "Defense Evasion",
+              "Execution"
+            ],
+            "technique": [
+              "NTFS File Attributes",
+              "PowerShell"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700001000.000004",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local"
+            },
+            "eventdata": {
+              "utcTime": "2026-01-30 10:00:15.000",
+              "processGuid": "{A1B2C3D4-1564-0004-0004-000000000001}",
+              "processId": "5280",
+              "image": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+              "commandLine": "powershell.exe -Command \"Get-Content -Path 'C:\\Users\\Public\\legit.txt' -Stream hidden.exe -Raw | IEX\"",
+              "currentDirectory": "C:\\Users\\attacker\\",
+              "user": "CORP\\attacker",
+              "integrityLevel": "Medium",
+              "parentProcessGuid": "{A1B2C3D4-1564-0004-0000-000000000001}",
+              "parentProcessId": "5100",
+              "parentImage": "C:\\Windows\\System32\\cmd.exe",
+              "parentCommandLine": "cmd.exe"
+            }
+          }
+        }
+      }
+    }
+  ]
+}

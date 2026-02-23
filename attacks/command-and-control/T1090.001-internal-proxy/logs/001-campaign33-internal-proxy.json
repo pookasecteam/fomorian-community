@@ -1,0 +1,143 @@
+{
+  "metadata": {
+    "technique_id": "T1090.001",
+    "technique_name": "Proxy: Internal Proxy",
+    "tactic": "command-and-control",
+    "description": "Using compromised GW01 as internal proxy for C2 communication",
+    "campaign": "33",
+    "batch": "14",
+    "expected_detection": "MEDIUM",
+    "attack_time": "2026-02-10T14:10:00.000Z",
+    "target_host": "WS01, GW01",
+    "simulated_c2": "100.100.100.100"
+  },
+  "logs": [
+    {
+      "timestamp": "2026-02-10T14:10:00.000Z",
+      "rule": {
+        "level": 3,
+        "description": "Sysmon - Event 3: Network Connection to internal proxy",
+        "id": "100103",
+        "mitre": {
+          "id": [
+            "T1090.001"
+          ],
+          "tactic": [
+            "Command and Control"
+          ],
+          "technique": [
+            "Internal Proxy"
+          ]
+        },
+        "groups": [
+          "sysmon",
+          "sysmon_event3"
+        ]
+      },
+      "agent": {
+        "id": "020",
+        "name": "WS01",
+        "ip": "198.51.100.20"
+      },
+      "manager": {
+        "name": "wazuh.manager"
+      },
+      "id": "1707577800.000001",
+      "decoder": {
+        "name": "windows_eventchannel"
+      },
+      "location": "EventChannel",
+      "data": {
+        "win": {
+          "system": {
+            "eventID": "3",
+            "channel": "Microsoft-Windows-Sysmon/Operational",
+            "computer": "WS01.corp.local",
+            "systemTime": "2026-02-10T14:10:00.000Z"
+          },
+          "eventdata": {
+            "utcTime": "2026-02-10 14:10:00.000",
+            "processGuid": "{A1B2C3D4-1234-5678-90AB-CDEF12345680}",
+            "processId": "5432",
+            "image": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+            "user": "CORP\\attacker",
+            "protocol": "tcp",
+            "initiated": "true",
+            "sourceIsIpv6": "false",
+            "sourceIp": "198.51.100.20",
+            "sourcePort": "60123",
+            "destinationIsIpv6": "false",
+            "destinationIp": "198.51.100.1",
+            "destinationPort": "1080"
+          }
+        }
+      },
+      "fomorian_test": true,
+      "fomorian_batch": "14",
+      "fomorian_campaign": "33"
+    },
+    {
+      "timestamp": "2026-02-10T14:10:02.000Z",
+      "rule": {
+        "level": 3,
+        "description": "Zeek - SOCKS proxy connection from GW01",
+        "id": "100001",
+        "mitre": {
+          "id": [
+            "T1090.001"
+          ],
+          "tactic": [
+            "Command and Control"
+          ],
+          "technique": [
+            "Internal Proxy"
+          ]
+        },
+        "groups": [
+          "zeek",
+          "zeek_conn"
+        ]
+      },
+      "agent": {
+        "id": "001",
+        "name": "GW01",
+        "ip": "198.51.100.1"
+      },
+      "manager": {
+        "name": "wazuh.manager"
+      },
+      "id": "1707577802.000001",
+      "decoder": {
+        "name": "zeek"
+      },
+      "location": "zeek_conn",
+      "data": {
+        "zeek": {
+          "ts": "1707577802.000000",
+          "uid": "P1a2b3c4d5e6f7g8h9",
+          "id.orig_h": "198.51.100.1",
+          "id.orig_p": "61234",
+          "id.resp_h": "100.100.100.100",
+          "id.resp_p": "8443",
+          "proto": "tcp",
+          "service": "-",
+          "duration": "120.456",
+          "orig_bytes": "1234",
+          "resp_bytes": "5678",
+          "conn_state": "SF",
+          "local_orig": "true",
+          "local_resp": "false",
+          "missed_bytes": "0",
+          "history": "ShADadFf",
+          "orig_pkts": "25",
+          "orig_ip_bytes": "1834",
+          "resp_pkts": "30",
+          "resp_ip_bytes": "6278"
+        }
+      },
+      "fomorian_test": true,
+      "fomorian_batch": "14",
+      "fomorian_campaign": "33"
+    }
+  ]
+}

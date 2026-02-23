@@ -1,0 +1,243 @@
+{
+  "_metadata": {
+    "attack_id": "T1550.004",
+    "variation": "001",
+    "name": "Browser Cookie Theft and Session Replay",
+    "description": "Lateral movement by stealing browser session cookies and replaying them to access authenticated web applications",
+    "expected_detection": "MEDIUM",
+    "kill_chain_phase": "lateral-movement",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Sysmon Event 1 - Cookie extraction tool execution",
+      "sequence": 1,
+      "timestamp": "2026-02-08T12:45:00.000Z",
+      "log": {
+        "timestamp": "2026-02-08T12:45:00.000+0000",
+        "rule": {
+          "level": 10,
+          "description": "Sysmon - Event 1: Cookie extraction tool executed",
+          "id": "100915",
+          "mitre": {
+            "id": [
+              "T1550.004",
+              "T1555.003"
+            ],
+            "tactic": [
+              "Lateral Movement",
+              "Credential Access"
+            ],
+            "technique": [
+              "Web Session Cookie",
+              "Credentials from Web Browsers"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1707400000.300034",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-08 12:45:00.000",
+              "processGuid": "{A1B2C3D4-LAT-1550-0001-000000000001}",
+              "processId": "10123",
+              "image": "C:\\Tools\\SharpChromium.exe",
+              "fileVersion": "1.0.0.0",
+              "description": "Chromium Cookie Dumper",
+              "product": "SharpChromium",
+              "company": "Unknown",
+              "originalFileName": "SharpChromium.exe",
+              "commandLine": "C:\\Tools\\SharpChromium.exe cookies",
+              "currentDirectory": "C:\\Tools\\",
+              "user": "CORP\\admin.user",
+              "logonGuid": "{A1B2C3D4-0001-0001-0001-000000000001}",
+              "logonId": "0x3e7",
+              "terminalSessionId": "1",
+              "integrityLevel": "High",
+              "hashes": "SHA256=A0B1C2D3E4F5A6B7C8D9E0F1A2B3C4D5E6F7A8B9C0D1E2F3A4B5C6D7E8F9A0B1",
+              "parentProcessGuid": "{A1B2C3D4-0001-0001-0002-000000000001}",
+              "parentProcessId": "7890",
+              "parentImage": "C:\\Windows\\System32\\cmd.exe",
+              "parentCommandLine": "cmd.exe"
+            }
+          }
+        },
+        "_fomorian_batch": "PT-2026-003-batch1-lateral",
+        "_fomorian_test": true,
+        "_fomorian_attack_id": "T1550.004",
+        "_fomorian_expected_detection": "Sigma: Browser Cookie Extraction Tool (T1550.004)"
+      }
+    },
+    {
+      "_comment": "Sysmon Event 11 - Access to Chrome cookies database",
+      "sequence": 2,
+      "timestamp": "2026-02-08T12:45:01.000Z",
+      "log": {
+        "timestamp": "2026-02-08T12:45:01.000+0000",
+        "rule": {
+          "level": 10,
+          "description": "Sysmon - Event 11: Access to browser cookie database",
+          "id": "100919",
+          "mitre": {
+            "id": [
+              "T1550.004",
+              "T1555.003"
+            ],
+            "tactic": [
+              "Lateral Movement",
+              "Credential Access"
+            ],
+            "technique": [
+              "Web Session Cookie",
+              "Credentials from Web Browsers"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event11",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1707400000.300035",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "11",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "11",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-08 12:45:01.000",
+              "processGuid": "{A1B2C3D4-LAT-1550-0001-000000000001}",
+              "processId": "10123",
+              "image": "C:\\Tools\\SharpChromium.exe",
+              "targetFilename": "C:\\Users\\victim.user\\AppData\\Local\\Google\\Chrome\\User Data\\Default\\Cookies",
+              "creationUtcTime": "2026-02-08 12:45:01.000",
+              "user": "CORP\\admin.user"
+            }
+          }
+        },
+        "_fomorian_batch": "PT-2026-003-batch1-lateral",
+        "_fomorian_test": true,
+        "_fomorian_attack_id": "T1550.004",
+        "_fomorian_expected_detection": "Sigma: Chrome Cookie Database Access (T1550.004)"
+      }
+    },
+    {
+      "_comment": "Proxy/Web Log - Cookie replay to internal application",
+      "sequence": 3,
+      "timestamp": "2026-02-08T12:50:00.000Z",
+      "log": {
+        "timestamp": "2026-02-08T12:50:00.000+0000",
+        "rule": {
+          "level": 12,
+          "description": "Web Proxy: Session cookie replayed from different source IP",
+          "id": "100001",
+          "mitre": {
+            "id": [
+              "T1550.004"
+            ],
+            "tactic": [
+              "Lateral Movement"
+            ],
+            "technique": [
+              "Web Session Cookie"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": true,
+          "groups": [
+            "web",
+            "proxy",
+            "session_hijacking"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1707400000.300036",
+        "decoder": {
+          "name": "json"
+        },
+        "location": "proxy-logs",
+        "data": {
+          "proxy": {
+            "timestamp": "2026-02-08T12:50:00.000Z",
+            "client_ip": "198.51.100.20",
+            "method": "GET",
+            "url": "https://intranet.corp.local/admin/dashboard",
+            "status_code": 200,
+            "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36",
+            "referrer": "-",
+            "cookie_session_id": "session=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoidmljdGltLnVzZXIiLCJyb2xlIjoiYWRtaW4ifQ",
+            "original_session_ip": "198.51.100.11",
+            "content_type": "text/html",
+            "bytes_sent": 45678,
+            "response_time_ms": 234,
+            "ssl_protocol": "TLSv1.3",
+            "ssl_cipher": "TLS_AES_256_GCM_SHA384",
+            "x_forwarded_for": "-",
+            "category": "internal_application",
+            "action": "ALLOWED"
+          }
+        },
+        "_fomorian_batch": "PT-2026-003-batch1-lateral",
+        "_fomorian_test": true,
+        "_fomorian_attack_id": "T1550.004",
+        "_fomorian_expected_detection": "Sigma: Web Session Cookie Replay Attack (T1550.004)"
+      }
+    }
+  ]
+}

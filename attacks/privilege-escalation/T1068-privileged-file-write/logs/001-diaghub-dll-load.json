@@ -1,0 +1,239 @@
+{
+  "_metadata": {
+    "attack_id": "T1068",
+    "variation": "001",
+    "name": "DiagHub Privileged File Write DLL Load",
+    "description": "Attacker uses DiagHub (Microsoft Diagnostics Hub Standard Collector) to load a malicious DLL from System32. First copies DLL to System32 using privileged write, then triggers DiagHub to load it for SYSTEM execution.",
+    "expected_detection": "HIGH",
+    "kill_chain_phase": "privilege-escalation",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Sysmon Event 11 - Malicious DLL created in System32 via privileged write",
+      "sequence": 1,
+      "timestamp": "2026-02-21T14:00:00.000Z",
+      "log": {
+        "timestamp": "2026-02-21T14:00:00.000+0000",
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 11: File created in System32 by svchost",
+          "id": "100111",
+          "mitre": {
+            "id": [
+              "T1068"
+            ],
+            "tactic": [
+              "Privilege Escalation"
+            ],
+            "technique": [
+              "Exploitation for Privilege Escalation"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event11",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1708523200.100001",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "11",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "11",
+              "severityValue": "INFORMATION",
+              "systemTime": "2026-02-21T14:00:00.000000000Z"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-21 14:00:00.000",
+              "processGuid": "{A1B2C3D4-1111-6600-0000-000000001001}",
+              "processId": "912",
+              "image": "C:\\Windows\\System32\\svchost.exe",
+              "targetFilename": "C:\\Windows\\System32\\windowscoredeviceinfo.dll",
+              "creationUtcTime": "2026-02-21 14:00:00.000",
+              "user": "NT AUTHORITY\\SYSTEM",
+              "hashes": "SHA256=8a3f2e9b1c4d5e6f7a8b9c0d1e2f3a4b5c6d7e8f9a0b1c2d3e4f5a6b7c8d9e0f"
+            }
+          }
+        },
+        "_fomorian_test": true,
+        "_fomorian_campaign": "Campaign 23"
+      }
+    },
+    {
+      "_comment": "Sysmon Event 7 - DiagHub loads the malicious DLL from System32",
+      "sequence": 2,
+      "timestamp": "2026-02-21T14:00:05.000Z",
+      "log": {
+        "timestamp": "2026-02-21T14:00:05.000+0000",
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 7: Unsigned DLL loaded by svchost from System32",
+          "id": "100001",
+          "mitre": {
+            "id": [
+              "T1068"
+            ],
+            "tactic": [
+              "Privilege Escalation"
+            ],
+            "technique": [
+              "Exploitation for Privilege Escalation"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event7",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1708523200.100002",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "7",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "7",
+              "severityValue": "INFORMATION",
+              "systemTime": "2026-02-21T14:00:05.000000000Z"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-21 14:00:05.000",
+              "processGuid": "{A1B2C3D4-1111-6600-0000-000000001001}",
+              "processId": "912",
+              "image": "C:\\Windows\\System32\\svchost.exe",
+              "imageLoaded": "C:\\Windows\\System32\\windowscoredeviceinfo.dll",
+              "fileVersion": "1.0.0.0",
+              "description": "Windows Core Device Info",
+              "product": "-",
+              "company": "-",
+              "originalFileName": "windowscoredeviceinfo.dll",
+              "hashes": "SHA256=8a3f2e9b1c4d5e6f7a8b9c0d1e2f3a4b5c6d7e8f9a0b1c2d3e4f5a6b7c8d9e0f",
+              "signed": "false",
+              "signature": "-",
+              "signatureStatus": "Unavailable",
+              "user": "NT AUTHORITY\\SYSTEM"
+            }
+          }
+        },
+        "_fomorian_test": true,
+        "_fomorian_campaign": "Campaign 23"
+      }
+    },
+    {
+      "_comment": "Sysmon Event 1 - Payload executing as SYSTEM after DLL load",
+      "sequence": 3,
+      "timestamp": "2026-02-21T14:00:08.000Z",
+      "log": {
+        "timestamp": "2026-02-21T14:00:08.000+0000",
+        "rule": {
+          "level": 14,
+          "description": "Sysmon - Event 1: SYSTEM shell spawned by svchost (DiagHub exploitation)",
+          "id": "100101",
+          "mitre": {
+            "id": [
+              "T1068"
+            ],
+            "tactic": [
+              "Privilege Escalation"
+            ],
+            "technique": [
+              "Exploitation for Privilege Escalation"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1708523200.100003",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "severityValue": "INFORMATION",
+              "systemTime": "2026-02-21T14:00:08.000000000Z"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-21 14:00:08.000",
+              "processGuid": "{A1B2C3D4-1111-6600-0000-000000001002}",
+              "processId": "6840",
+              "image": "C:\\Windows\\System32\\cmd.exe",
+              "commandLine": "cmd.exe /c whoami",
+              "currentDirectory": "C:\\Windows\\System32\\",
+              "user": "NT AUTHORITY\\SYSTEM",
+              "logonGuid": "{A1B2C3D4-0000-0000-0000-000000000000}",
+              "logonId": "0x3e7",
+              "terminalSessionId": "0",
+              "integrityLevel": "System",
+              "hashes": "SHA256=b99d61d874728edc0918ca0eb10eab93d381e7367e377406e65963366c874714",
+              "parentProcessGuid": "{A1B2C3D4-1111-6600-0000-000000001001}",
+              "parentProcessId": "912",
+              "parentImage": "C:\\Windows\\System32\\svchost.exe",
+              "parentCommandLine": "C:\\Windows\\System32\\svchost.exe -k netsvcs -p"
+            }
+          }
+        },
+        "_fomorian_test": true,
+        "_fomorian_campaign": "Campaign 23"
+      }
+    }
+  ]
+}

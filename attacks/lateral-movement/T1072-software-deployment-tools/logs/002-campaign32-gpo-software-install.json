@@ -1,0 +1,161 @@
+{
+  "_metadata": {
+    "attack_id": "T1072",
+    "variation": "002",
+    "name": "Software Deployment Tools - GPO",
+    "description": "Lateral movement via Group Policy software deployment",
+    "expected_detection": "LOW",
+    "kill_chain_phase": "lateral-movement",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Sysmon Event 1 - msiexec.exe installing via GPO",
+      "sequence": 1,
+      "timestamp": "2026-02-10T14:14:00.000Z",
+      "log": {
+        "rule": {
+          "level": 8,
+          "description": "Sysmon - Event 1: MSI Installation via Group Policy",
+          "id": "100100",
+          "mitre": {
+            "id": [
+              "T1072"
+            ],
+            "tactic": [
+              "Lateral Movement",
+              "Execution"
+            ],
+            "technique": [
+              "Software Deployment Tools"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1707575640.100014",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "opcode": "0",
+              "keywords": "0x8000000000000000",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-10 14:14:00.000",
+              "processGuid": "{A1B2C3D4-0003-0003-0003-000000080001}",
+              "processId": "9678",
+              "image": "C:\\Windows\\System32\\msiexec.exe",
+              "commandLine": "C:\\Windows\\System32\\msiexec.exe /i \\\\DC01\\SYSVOL\\corp.local\\Policies\\{12345678-1234-1234-1234-123456789ABC}\\Machine\\RemoteManagementTool.msi /quiet",
+              "currentDirectory": "C:\\Windows\\System32\\",
+              "user": "NT AUTHORITY\\SYSTEM",
+              "integrityLevel": "System",
+              "parentProcessGuid": "{A1B2C3D4-0003-0003-0003-000000000001}",
+              "parentProcessId": "668",
+              "parentImage": "C:\\Windows\\System32\\services.exe",
+              "parentCommandLine": "C:\\Windows\\System32\\services.exe"
+            }
+          }
+        },
+        "_fomorian_test": true,
+        "fomorian_campaign": 32,
+        "fomorian_batch": 13
+      }
+    },
+    {
+      "_comment": "Sysmon Event 13 - Registry changes for software deployment",
+      "sequence": 2,
+      "timestamp": "2026-02-10T14:14:05.000Z",
+      "log": {
+        "rule": {
+          "level": 8,
+          "description": "Sysmon - Event 13: Registry Modification for GPO Software Install",
+          "id": "100100",
+          "mitre": {
+            "id": [
+              "T1072"
+            ],
+            "tactic": [
+              "Lateral Movement"
+            ],
+            "technique": [
+              "Software Deployment Tools"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event13",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1707575645.100015",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "13",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "opcode": "0",
+              "keywords": "0x8000000000000000",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-10 14:14:05.000",
+              "processGuid": "{A1B2C3D4-0003-0003-0003-000000080001}",
+              "processId": "9678",
+              "image": "C:\\Windows\\System32\\msiexec.exe",
+              "targetObject": "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\{ABC12345-ABCD-ABCD-ABCD-ABCDEF123456}\\DisplayName",
+              "eventType": "SetValue",
+              "details": "Remote Management Tool",
+              "user": "NT AUTHORITY\\SYSTEM"
+            }
+          }
+        },
+        "_fomorian_test": true,
+        "fomorian_campaign": 32,
+        "fomorian_batch": 13
+      }
+    }
+  ]
+}

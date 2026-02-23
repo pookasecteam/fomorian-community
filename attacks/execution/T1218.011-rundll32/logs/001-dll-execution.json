@@ -5,9 +5,7 @@
     "name": "Rundll32 Malicious DLL Execution",
     "description": "Attacker uses rundll32.exe to execute malicious DLL",
     "expected_detection": "HIGH",
-    "expected_soar": "lolbins-abuse-detection",
     "kill_chain_phase": "execution",
-    "notes": "Common LOLBin technique for execution",
     "format": "wazuh-native",
     "format_version": "1.0"
   },
@@ -17,7 +15,6 @@
       "sequence": 1,
       "timestamp": "2026-01-29T15:00:00.000Z",
       "log": {
-        "timestamp": "",
         "rule": {
           "level": 12,
           "description": "Sysmon - Event 1: Rundll32 Malicious DLL Execution",
@@ -42,9 +39,9 @@
           ]
         },
         "agent": {
-          "id": "007",
+          "id": "020",
           "name": "WS01",
-          "ip": "10.1.0.20"
+          "ip": "198.51.100.20"
         },
         "manager": {
           "name": "wazuh.manager"
@@ -90,7 +87,6 @@
       "sequence": 2,
       "timestamp": "2026-01-29T15:00:00.500Z",
       "log": {
-        "timestamp": "",
         "rule": {
           "level": 12,
           "description": "Sysmon - Event 7: Rundll32 Malicious DLL Execution",
@@ -115,9 +111,9 @@
           ]
         },
         "agent": {
-          "id": "007",
+          "id": "020",
           "name": "WS01",
-          "ip": "10.1.0.20"
+          "ip": "198.51.100.20"
         },
         "manager": {
           "name": "wazuh.manager"
@@ -158,7 +154,6 @@
       "sequence": 3,
       "timestamp": "2026-01-29T15:00:01.000Z",
       "log": {
-        "timestamp": "",
         "rule": {
           "level": 12,
           "description": "Sysmon - Event 3: Rundll32 Malicious DLL Execution",
@@ -183,9 +178,9 @@
           ]
         },
         "agent": {
-          "id": "007",
+          "id": "020",
           "name": "WS01",
-          "ip": "10.1.0.20"
+          "ip": "198.51.100.20"
         },
         "manager": {
           "name": "wazuh.manager"
@@ -216,7 +211,7 @@
               "user": "CORP\\john.doe",
               "protocol": "tcp",
               "initiated": "true",
-              "sourceIp": "10.1.1.50",
+              "sourceIp": "198.51.100.50",
               "sourcePort": "55000",
               "destinationIp": "185.220.101.45",
               "destinationPort": "443"

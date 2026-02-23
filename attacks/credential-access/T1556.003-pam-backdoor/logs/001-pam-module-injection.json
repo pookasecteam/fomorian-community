@@ -1,0 +1,195 @@
+{
+  "_metadata": {
+    "attack_id": "T1556.003",
+    "variation": "001",
+    "name": "PAM Backdoor Module Injection (Linux)",
+    "description": "Attacker drops a malicious PAM shared object to /lib/x86_64-linux-gnu/security/, then modifies /etc/pam.d/common-auth to prepend the backdoor module, allowing authentication bypass",
+    "expected_detection": "HIGH",
+    "kill_chain_phase": "credential-access",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Sysmon Event 11 - File Create: Malicious PAM module dropped to security directory",
+      "sequence": 1,
+      "timestamp": "2026-02-22T14:05:00.000Z",
+      "log": {
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 11: File created",
+          "id": "100111",
+          "mitre": {
+            "id": [
+              "T1556.003"
+            ],
+            "tactic": [
+              "Credential Access",
+              "Defense Evasion",
+              "Persistence"
+            ],
+            "technique": [
+              "Modify Authentication Process: Pluggable Authentication Modules"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": true,
+          "groups": [
+            "sysmon",
+            "sysmon_event11",
+            "linux"
+          ]
+        },
+        "agent": {
+          "id": "030",
+          "name": "VULN01",
+          "ip": "198.51.100.30"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1709100300.270003",
+        "decoder": {
+          "name": "json"
+        },
+        "location": "/var/log/sysmon/sysmon.log",
+        "data": {
+          "eventdata": {
+            "utcTime": "2026-02-22 14:05:00.000",
+            "processGuid": "{A3F2B1C4-D5E6-4A7B-8C9D-0E1F2A3B4C5D}",
+            "processId": "18742",
+            "image": "/usr/bin/cp",
+            "targetFilename": "/lib/x86_64-linux-gnu/security/pam_evil.so",
+            "creationUtcTime": "2026-02-22 14:05:00.000",
+            "user": "root"
+          }
+        },
+        "_fomorian_test": true,
+        "fomorian_campaign": "campaign_27",
+        "fomorian_batch": "27"
+      }
+    },
+    {
+      "_comment": "Sysmon Event 1 - Process Creation: sed modifying PAM config to add malicious module",
+      "sequence": 2,
+      "timestamp": "2026-02-22T14:05:03.000Z",
+      "log": {
+        "rule": {
+          "level": 14,
+          "description": "Sysmon - Event 1: Process creation",
+          "id": "100101",
+          "mitre": {
+            "id": [
+              "T1556.003"
+            ],
+            "tactic": [
+              "Credential Access",
+              "Defense Evasion",
+              "Persistence"
+            ],
+            "technique": [
+              "Modify Authentication Process: Pluggable Authentication Modules"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": true,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "linux"
+          ]
+        },
+        "agent": {
+          "id": "030",
+          "name": "VULN01",
+          "ip": "198.51.100.30"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1709100303.270004",
+        "decoder": {
+          "name": "json"
+        },
+        "location": "/var/log/sysmon/sysmon.log",
+        "data": {
+          "eventdata": {
+            "utcTime": "2026-02-22 14:05:03.000",
+            "processGuid": "{B4C3D2E1-F0A1-4B2C-3D4E-5F6A7B8C9D0E}",
+            "processId": "18749",
+            "image": "/usr/bin/sed",
+            "commandLine": "sed -i '1i auth sufficient pam_evil.so' /etc/pam.d/common-auth",
+            "currentDirectory": "/root/",
+            "user": "root",
+            "parentProcessGuid": "{A3F2B1C4-D5E6-4A7B-8C9D-0E1F2A3B4C5D}",
+            "parentProcessId": "18740",
+            "parentImage": "/bin/bash",
+            "parentCommandLine": "bash -c ./deploy-backdoor.sh"
+          }
+        },
+        "_fomorian_test": true,
+        "fomorian_campaign": "campaign_27",
+        "fomorian_batch": "27"
+      }
+    },
+    {
+      "_comment": "Sysmon Event 11 - File Create: PAM config file modified by sed",
+      "sequence": 3,
+      "timestamp": "2026-02-22T14:05:04.000Z",
+      "log": {
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 11: File created",
+          "id": "100111",
+          "mitre": {
+            "id": [
+              "T1556.003"
+            ],
+            "tactic": [
+              "Credential Access",
+              "Defense Evasion",
+              "Persistence"
+            ],
+            "technique": [
+              "Modify Authentication Process: Pluggable Authentication Modules"
+            ]
+          },
+          "firedtimes": 2,
+          "mail": true,
+          "groups": [
+            "sysmon",
+            "sysmon_event11",
+            "linux"
+          ]
+        },
+        "agent": {
+          "id": "030",
+          "name": "VULN01",
+          "ip": "198.51.100.30"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1709100304.270005",
+        "decoder": {
+          "name": "json"
+        },
+        "location": "/var/log/sysmon/sysmon.log",
+        "data": {
+          "eventdata": {
+            "utcTime": "2026-02-22 14:05:04.000",
+            "processGuid": "{B4C3D2E1-F0A1-4B2C-3D4E-5F6A7B8C9D0E}",
+            "processId": "18749",
+            "image": "/usr/bin/sed",
+            "targetFilename": "/etc/pam.d/common-auth",
+            "creationUtcTime": "2026-02-22 14:05:04.000",
+            "user": "root"
+          }
+        },
+        "_fomorian_test": true,
+        "fomorian_campaign": "campaign_27",
+        "fomorian_batch": "27"
+      }
+    }
+  ]
+}

@@ -1,0 +1,149 @@
+{
+  "_metadata": {
+    "attack_id": "T1498.001",
+    "variation": "001",
+    "name": "Direct Network Flood - SYN Flood Detection",
+    "description": "DEFENSIVE - Detecting SYN flood attack against our infrastructure via Zeek network analysis",
+    "expected_detection": "HIGH",
+    "kill_chain_phase": "impact",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Zeek notice.log - SYN flood detected",
+      "sequence": 1,
+      "timestamp": "2026-02-08T20:00:00.000Z",
+      "log": {
+        "timestamp": "2026-02-08T20:00:00.000+0000",
+        "rule": {
+          "level": 14,
+          "description": "Zeek - SYN Flood Attack Detected",
+          "id": "100001",
+          "mitre": {
+            "id": [
+              "T1498.001"
+            ],
+            "tactic": [
+              "Impact"
+            ],
+            "technique": [
+              "Direct Network Flood"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": true,
+          "groups": [
+            "zeek",
+            "ddos",
+            "network_attack"
+          ]
+        },
+        "agent": {
+          "id": "001",
+          "name": "GW01",
+          "ip": "198.51.100.1"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1707400000.300050",
+        "decoder": {
+          "name": "zeek-notice"
+        },
+        "location": "/opt/zeek/logs/current/notice.log",
+        "data": {
+          "zeek": {
+            "ts": "1707422400.000000",
+            "uid": "CXyZaB3vWn4TpKmNq1",
+            "note": "Scan::Port_Scan",
+            "msg": "198.51.100.110 scanned at least 15 unique ports of host 198.51.100.1 in 0m0s",
+            "src": "185.220.101.42",
+            "dst": "198.51.100.1",
+            "p": 80,
+            "proto": "tcp",
+            "n": 50000,
+            "actions": [
+              "Notice::ACTION_LOG"
+            ],
+            "suppress_for": 3600.0,
+            "peer_descr": "zeek"
+          }
+        },
+        "_fomorian_batch": "PT-2026-003-batch2-impact",
+        "_fomorian_test": true,
+        "_fomorian_attack_id": "T1498.001",
+        "_fomorian_expected_detection": "Wazuh: Zeek SYN Flood Detection (T1498.001)"
+      }
+    },
+    {
+      "_comment": "Zeek conn.log - High volume half-open connections",
+      "sequence": 2,
+      "timestamp": "2026-02-08T20:00:05.000Z",
+      "log": {
+        "timestamp": "2026-02-08T20:00:05.000+0000",
+        "rule": {
+          "level": 12,
+          "description": "Zeek - Excessive Half-Open TCP Connections",
+          "id": "100001",
+          "mitre": {
+            "id": [
+              "T1498.001"
+            ],
+            "tactic": [
+              "Impact"
+            ],
+            "technique": [
+              "Direct Network Flood"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "zeek",
+            "ddos",
+            "network_attack"
+          ]
+        },
+        "agent": {
+          "id": "001",
+          "name": "GW01",
+          "ip": "198.51.100.1"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1707400000.300051",
+        "decoder": {
+          "name": "zeek-conn"
+        },
+        "location": "/opt/zeek/logs/current/conn.log",
+        "data": {
+          "zeek": {
+            "ts": "1707422405.000000",
+            "uid": "CZaB3vWn4TpKmNq12",
+            "id_orig_h": "185.220.101.42",
+            "id_orig_p": "12345",
+            "id_resp_h": "198.51.100.1",
+            "id_resp_p": "80",
+            "proto": "tcp",
+            "service": "-",
+            "duration": "0.000001",
+            "orig_bytes": 0,
+            "resp_bytes": 0,
+            "conn_state": "S0",
+            "missed_bytes": 0,
+            "orig_pkts": 1,
+            "orig_ip_bytes": 40,
+            "resp_pkts": 0,
+            "resp_ip_bytes": 0
+          }
+        },
+        "_fomorian_batch": "PT-2026-003-batch2-impact",
+        "_fomorian_test": true,
+        "_fomorian_attack_id": "T1498.001",
+        "_fomorian_expected_detection": "Wazuh: Half-Open Connection Flood (T1498.001)"
+      }
+    }
+  ]
+}

@@ -1,0 +1,140 @@
+{
+  "metadata": {
+    "technique_id": "T1132.001",
+    "technique_name": "Data Encoding: Standard Encoding",
+    "tactic": "command-and-control",
+    "description": "Base64-encoded C2 beacons in HTTP parameters and headers",
+    "campaign": "33",
+    "batch": "14",
+    "expected_detection": "MEDIUM",
+    "attack_time": "2026-02-10T14:20:00.000Z",
+    "target_host": "WS01",
+    "simulated_c2": "100.100.100.100"
+  },
+  "logs": [
+    {
+      "timestamp": "2026-02-10T14:20:00.000Z",
+      "rule": {
+        "level": 3,
+        "description": "Zeek - HTTP POST with high entropy data",
+        "id": "100001",
+        "mitre": {
+          "id": [
+            "T1132.001"
+          ],
+          "tactic": [
+            "Command and Control"
+          ],
+          "technique": [
+            "Standard Encoding"
+          ]
+        },
+        "groups": [
+          "zeek",
+          "zeek_http"
+        ]
+      },
+      "agent": {
+        "id": "001",
+        "name": "GW01",
+        "ip": "198.51.100.1"
+      },
+      "manager": {
+        "name": "wazuh.manager"
+      },
+      "id": "1707578400.000001",
+      "decoder": {
+        "name": "zeek"
+      },
+      "location": "zeek_http",
+      "data": {
+        "zeek": {
+          "ts": "1707578400.000000",
+          "uid": "B1a2b3c4d5e6f7g8h9",
+          "id.orig_h": "198.51.100.20",
+          "id.orig_p": "65123",
+          "id.resp_h": "100.100.100.100",
+          "id.resp_p": "80",
+          "trans_depth": "1",
+          "method": "POST",
+          "host": "c2server.evil.com",
+          "uri": "/api/v1/data?id=VGVzdGRhdGE=",
+          "version": "1.1",
+          "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)",
+          "request_body_len": "256",
+          "response_body_len": "128",
+          "status_code": "200",
+          "status_msg": "OK",
+          "tags": "[]"
+        }
+      },
+      "fomorian_test": true,
+      "fomorian_batch": "14",
+      "fomorian_campaign": "33"
+    },
+    {
+      "timestamp": "2026-02-10T14:20:02.000Z",
+      "rule": {
+        "level": 3,
+        "description": "Sysmon - Event 3: HTTP connection with encoded data",
+        "id": "100103",
+        "mitre": {
+          "id": [
+            "T1132.001"
+          ],
+          "tactic": [
+            "Command and Control"
+          ],
+          "technique": [
+            "Standard Encoding"
+          ]
+        },
+        "groups": [
+          "sysmon",
+          "sysmon_event3"
+        ]
+      },
+      "agent": {
+        "id": "020",
+        "name": "WS01",
+        "ip": "198.51.100.20"
+      },
+      "manager": {
+        "name": "wazuh.manager"
+      },
+      "id": "1707578402.000001",
+      "decoder": {
+        "name": "windows_eventchannel"
+      },
+      "location": "EventChannel",
+      "data": {
+        "win": {
+          "system": {
+            "eventID": "3",
+            "channel": "Microsoft-Windows-Sysmon/Operational",
+            "computer": "WS01.corp.local",
+            "systemTime": "2026-02-10T14:20:02.000Z"
+          },
+          "eventdata": {
+            "utcTime": "2026-02-10 14:20:02.000",
+            "processGuid": "{A1B2C3D4-1234-5678-90AB-CDEF12345683}",
+            "processId": "6543",
+            "image": "C:\\Windows\\System32\\curl.exe",
+            "user": "CORP\\attacker",
+            "protocol": "tcp",
+            "initiated": "true",
+            "sourceIsIpv6": "false",
+            "sourceIp": "198.51.100.20",
+            "sourcePort": "65123",
+            "destinationIsIpv6": "false",
+            "destinationIp": "100.100.100.100",
+            "destinationPort": "80"
+          }
+        }
+      },
+      "fomorian_test": true,
+      "fomorian_batch": "14",
+      "fomorian_campaign": "33"
+    }
+  ]
+}

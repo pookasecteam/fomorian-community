@@ -1,0 +1,228 @@
+{
+  "_metadata": {
+    "attack_id": "T1027.009",
+    "variation": "001",
+    "name": "Embedded Payloads - Polyglot File",
+    "description": "Creation and execution of polyglot file (PNG+PE) containing embedded malicious payload",
+    "expected_detection": "HIGH",
+    "kill_chain_phase": "defense-evasion",
+    "tactic": "Defense Evasion",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Sysmon Event 11 - Polyglot file creation (PNG header + PE payload)",
+      "sequence": 1,
+      "timestamp": "2026-02-10T20:00:00.000Z",
+      "log": {
+        "timestamp": "2026-02-10T20:00:00.000Z",
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 11: Suspicious file creation with polyglot signature",
+          "id": "100001",
+          "mitre": {
+            "id": [
+              "T1027.009"
+            ],
+            "tactic": [
+              "Defense Evasion"
+            ],
+            "technique": [
+              "Obfuscated Files or Information: Embedded Payloads"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event11",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1707598800.000001",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "11",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "11",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-10 20:00:00.000",
+              "processGuid": "{B5A2D3E4-1234-5678-9ABC-DEF012345678}",
+              "processId": "4532",
+              "image": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+              "targetFilename": "C:\\Users\\Public\\Documents\\report.png",
+              "creationUtcTime": "2026-02-10 20:00:00.000",
+              "user": "CORP\\attacker"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Sysmon Event 1 - Extraction of embedded PE from polyglot file",
+      "sequence": 2,
+      "timestamp": "2026-02-10T20:00:15.000Z",
+      "log": {
+        "timestamp": "2026-02-10T20:00:15.000Z",
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 1: PowerShell reading file with Get-Content -Encoding Byte",
+          "id": "100001",
+          "mitre": {
+            "id": [
+              "T1027.009"
+            ],
+            "tactic": [
+              "Defense Evasion"
+            ],
+            "technique": [
+              "Obfuscated Files or Information: Embedded Payloads"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1707598815.000001",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-10 20:00:15.000",
+              "processGuid": "{B5A2D3E4-1234-5678-9ABC-DEF012345679}",
+              "processId": "4532",
+              "image": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+              "commandLine": "powershell.exe -Command \"$bytes = Get-Content C:\\Users\\Public\\Documents\\report.png -Encoding Byte; $payload = $bytes[5000..12000]; [IO.File]::WriteAllBytes('C:\\Users\\Public\\payload.exe', $payload)\"",
+              "currentDirectory": "C:\\Users\\attacker\\",
+              "user": "CORP\\attacker",
+              "integrityLevel": "Medium",
+              "hashes": "SHA256=4E5A6B7C8D9E0F1A2B3C4D5E6F7A8B9C0D1E2F3A4B5C6D7E8F9A0B1C2D3E4F5A",
+              "parentProcessGuid": "{B5A2D3E4-1234-5678-9ABC-DEF012345670}",
+              "parentProcessId": "3248",
+              "parentImage": "C:\\Windows\\System32\\cmd.exe",
+              "parentCommandLine": "cmd.exe"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Sysmon Event 1 - Execution of extracted payload",
+      "sequence": 3,
+      "timestamp": "2026-02-10T20:00:30.000Z",
+      "log": {
+        "timestamp": "2026-02-10T20:00:30.000Z",
+        "rule": {
+          "level": 15,
+          "description": "Sysmon - Event 1: Execution of payload extracted from polyglot file",
+          "id": "100001",
+          "mitre": {
+            "id": [
+              "T1027.009",
+              "T1204.002"
+            ],
+            "tactic": [
+              "Defense Evasion",
+              "Execution"
+            ],
+            "technique": [
+              "Obfuscated Files or Information: Embedded Payloads",
+              "User Execution: Malicious File"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1707598830.000001",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-10 20:00:30.000",
+              "processGuid": "{B5A2D3E4-1234-5678-9ABC-DEF012345680}",
+              "processId": "5124",
+              "image": "C:\\Users\\Public\\payload.exe",
+              "commandLine": "C:\\Users\\Public\\payload.exe",
+              "currentDirectory": "C:\\Users\\Public\\",
+              "user": "CORP\\attacker",
+              "integrityLevel": "Medium",
+              "hashes": "SHA256=9F8E7D6C5B4A3928170615243F2E1D0C9B8A7968574635241302918273645546",
+              "parentProcessGuid": "{B5A2D3E4-1234-5678-9ABC-DEF012345679}",
+              "parentProcessId": "4532",
+              "parentImage": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+              "parentCommandLine": "powershell.exe"
+            }
+          }
+        }
+      }
+    }
+  ]
+}

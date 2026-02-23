@@ -1,0 +1,82 @@
+{
+  "_metadata": {
+    "attack_id": "T1055",
+    "variation": "001",
+    "name": "CreateRemoteThread Injection",
+    "description": "Process injection via CreateRemoteThread into explorer.exe",
+    "expected_detection": "CRITICAL",
+    "kill_chain_phase": "privilege-escalation",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Sysmon Event 8 - CreateRemoteThread",
+      "sequence": 1,
+      "timestamp": "2026-02-04T10:02:00.000Z",
+      "log": {
+        "timestamp": "2026-02-04T10:02:00.000+0000",
+        "rule": {
+          "level": 14,
+          "description": "Sysmon - Event 8: CreateRemoteThread Injection",
+          "id": "100918",
+          "mitre": {
+            "id": [
+              "T1055"
+            ],
+            "tactic": [
+              "Privilege Escalation",
+              "Defense Evasion"
+            ],
+            "technique": [
+              "Process Injection"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event8",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000001.100003",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "8",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-04 10:02:00.000",
+              "sourceProcessGuid": "{A1B2C3D4-1055-0001-0001-000000000001}",
+              "sourceProcessId": "6789",
+              "sourceImage": "C:\\Users\\attacker\\malware.exe",
+              "targetProcessGuid": "{A1B2C3D4-1055-0001-0002-000000000001}",
+              "targetProcessId": "2048",
+              "targetImage": "C:\\Windows\\explorer.exe",
+              "newThreadId": "7890",
+              "startAddress": "0x00007FFB12340000",
+              "startModule": "",
+              "startFunction": ""
+            }
+          }
+        }
+      }
+    }
+  ]
+}

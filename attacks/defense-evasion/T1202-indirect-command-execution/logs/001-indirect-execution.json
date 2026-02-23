@@ -1,0 +1,227 @@
+{
+  "_metadata": {
+    "attack_id": "T1202",
+    "variation": "001",
+    "name": "Indirect Command Execution",
+    "description": "Executing commands through indirect methods to evade detection",
+    "expected_detection": "HIGH",
+    "kill_chain_phase": "defense-evasion",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Sysmon Event 1 - pcalua.exe proxy execution",
+      "sequence": 1,
+      "timestamp": "2026-01-30T08:15:00.000Z",
+      "log": {
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 1: Indirect Execution via pcalua",
+          "id": "100100",
+          "mitre": {
+            "id": [
+              "T1202"
+            ],
+            "tactic": [
+              "Defense Evasion"
+            ],
+            "technique": [
+              "Indirect Command Execution"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000043.000001",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-01-30 08:15:00.000",
+              "processGuid": "{INDIRECT-001-0001-000000000001}",
+              "processId": "88000",
+              "image": "C:\\Windows\\System32\\pcalua.exe",
+              "commandLine": "pcalua.exe -a C:\\Windows\\System32\\calc.exe",
+              "currentDirectory": "C:\\Users\\attacker\\",
+              "user": "CORP\\attacker",
+              "integrityLevel": "Medium",
+              "hashes": "SHA256=PCALUA_HASH_1234567890ABCDEF1234567890ABCDEF1234",
+              "parentProcessGuid": "{INDIRECT-001-0001-000000000000}",
+              "parentProcessId": "88000",
+              "parentImage": "C:\\Windows\\System32\\cmd.exe",
+              "parentCommandLine": "cmd.exe"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Sysmon Event 1 - forfiles.exe proxy execution",
+      "sequence": 2,
+      "timestamp": "2026-01-30T08:15:05.000Z",
+      "log": {
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 1: Indirect Execution via forfiles",
+          "id": "100100",
+          "mitre": {
+            "id": [
+              "T1202"
+            ],
+            "tactic": [
+              "Defense Evasion"
+            ],
+            "technique": [
+              "Indirect Command Execution"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000043.000002",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-01-30 08:15:05.000",
+              "processGuid": "{INDIRECT-001-0001-000000000002}",
+              "processId": "88100",
+              "image": "C:\\Windows\\System32\\forfiles.exe",
+              "commandLine": "forfiles /p C:\\Windows\\System32 /m notepad.exe /c \"cmd /c @path\"",
+              "currentDirectory": "C:\\Users\\attacker\\",
+              "user": "CORP\\attacker",
+              "integrityLevel": "Medium",
+              "hashes": "SHA256=FORFILES_HASH_1234567890ABCDEF1234567890ABCDEF12",
+              "parentProcessGuid": "{INDIRECT-001-0001-000000000000}",
+              "parentProcessId": "88000",
+              "parentImage": "C:\\Windows\\System32\\cmd.exe",
+              "parentCommandLine": "cmd.exe"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Sysmon Event 1 - SyncAppvPublishingServer.exe proxy execution",
+      "sequence": 3,
+      "timestamp": "2026-01-30T08:15:10.000Z",
+      "log": {
+        "rule": {
+          "level": 14,
+          "description": "Sysmon - Event 1: Indirect Execution via SyncAppvPublishingServer",
+          "id": "100100",
+          "mitre": {
+            "id": [
+              "T1202"
+            ],
+            "tactic": [
+              "Defense Evasion"
+            ],
+            "technique": [
+              "Indirect Command Execution"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000043.000003",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-01-30 08:15:10.000",
+              "processGuid": "{INDIRECT-001-0001-000000000003}",
+              "processId": "88200",
+              "image": "C:\\Windows\\System32\\SyncAppvPublishingServer.exe",
+              "commandLine": "SyncAppvPublishingServer.exe \"n; Start-Process cmd\"",
+              "currentDirectory": "C:\\Users\\attacker\\",
+              "user": "CORP\\attacker",
+              "integrityLevel": "Medium",
+              "hashes": "SHA256=SYNCAPPV_HASH_1234567890ABCDEF1234567890ABCDEF1",
+              "parentProcessGuid": "{INDIRECT-001-0001-000000000000}",
+              "parentProcessId": "88000",
+              "parentImage": "C:\\Windows\\System32\\cmd.exe",
+              "parentCommandLine": "cmd.exe"
+            }
+          }
+        }
+      }
+    }
+  ]
+}

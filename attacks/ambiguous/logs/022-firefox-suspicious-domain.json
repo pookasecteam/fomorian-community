@@ -1,0 +1,157 @@
+{
+  "_metadata": {
+    "attack_id": "T1071.001",
+    "variation": "AMB-022",
+    "name": "Firefox Connecting to Suspicious .top TLD Domain",
+    "description": "Firefox making DNS query and HTTPS connection to a .top TLD domain - could be user browsing or phishing/C2 communication",
+    "ground_truth": "AMBIGUOUS",
+    "legitimate_explanation": "User browsing a deals website with a .top TLD domain. While .top domains have higher abuse rates, there are legitimate businesses using this TLD. The user may have found the site through a search engine or advertisement.",
+    "suspicious_explanation": ".top TLD domains are among the most abused TLDs for phishing, malware distribution, and C2 infrastructure. The domain deals-electronics.top could be a phishing site harvesting credentials or a C2 beacon endpoint disguised as an e-commerce site.",
+    "expected_detection": "MEDIUM",
+    "kill_chain_phase": "command-and-control",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Sysmon Event 22 - DNS query for .top TLD domain",
+      "sequence": 1,
+      "timestamp": "2026-02-08T12:45:10.000Z",
+      "log": {
+        "rule": {
+          "level": 6,
+          "description": "Sysmon - Event 22: DNS query to suspicious TLD domain",
+          "id": "100100",
+          "mitre": {
+            "id": [
+              "T1071.001"
+            ],
+            "tactic": [
+              "Command and Control"
+            ],
+            "technique": [
+              "Web Protocols"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event22",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1707400008.577215664",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "22",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "22",
+              "opcode": "0",
+              "keywords": "0x8000000000000000",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-08 12:45:10.000",
+              "processGuid": "{AMB-022-0001-0001-000000000001}",
+              "processId": "11532",
+              "image": "C:\\Program Files\\Mozilla Firefox\\firefox.exe",
+              "queryName": "deals-electronics.top",
+              "queryStatus": "0",
+              "queryResults": "type: 5 cdn-edge.deals-electronics.top;198.51.100.77;",
+              "user": "CORP\\sarah.jones"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Sysmon Event 3 - Firefox HTTPS connection to resolved IP",
+      "sequence": 2,
+      "timestamp": "2026-02-08T12:45:11.000Z",
+      "log": {
+        "rule": {
+          "level": 4,
+          "description": "Sysmon - Event 3: Firefox HTTPS connection to .top domain",
+          "id": "100100",
+          "mitre": {
+            "id": [
+              "T1071.001"
+            ],
+            "tactic": [
+              "Command and Control"
+            ],
+            "technique": [
+              "Web Protocols"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event3",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1707400008.602059991",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "3",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "opcode": "0",
+              "keywords": "0x8000000000000000",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-08 12:45:11.000",
+              "processGuid": "{AMB-022-0001-0001-000000000001}",
+              "processId": "11532",
+              "image": "C:\\Program Files\\Mozilla Firefox\\firefox.exe",
+              "user": "CORP\\sarah.jones",
+              "protocol": "tcp",
+              "initiated": "true",
+              "sourceIp": "198.51.100.20",
+              "sourcePort": "55123",
+              "destinationIp": "198.51.100.77",
+              "destinationHostname": "deals-electronics.top",
+              "destinationPort": "443"
+            }
+          }
+        }
+      }
+    }
+  ]
+}

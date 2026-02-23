@@ -1,0 +1,299 @@
+{
+  "_metadata": {
+    "attack_id": "T1666",
+    "variation": "001",
+    "name": "AWS Organizations Manipulation",
+    "description": "Attacker manipulates AWS Organizations structure to move accounts out of governed OUs, bypassing SCPs and compliance controls",
+    "expected_detection": "HIGH",
+    "kill_chain_phase": "defense-evasion",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "CloudTrail: CreateOrganizationalUnit - Create rogue OU with no SCPs",
+      "sequence": 1,
+      "timestamp": "2026-02-23T14:02:00.000Z",
+      "log": {
+        "timestamp": "2026-02-23T14:02:01.000+0000",
+        "rule": {
+          "level": 5,
+          "description": "AWS Cloudtrail: organizations.amazonaws.com - CreateOrganizationalUnit.",
+          "id": "100802",
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "amazon",
+            "aws",
+            "aws_cloudtrail"
+          ],
+          "pci_dss": [
+            "10.6.1"
+          ],
+          "hipaa": [
+            "164.312.b"
+          ],
+          "nist_800_53": [
+            "AU.6"
+          ],
+          "tsc": [
+            "CC7.2",
+            "CC7.3"
+          ],
+          "mitre": {
+            "id": [
+              "T1666"
+            ],
+            "tactic": [
+              "Defense Evasion"
+            ],
+            "technique": [
+              "Modify Cloud Resource Hierarchy"
+            ]
+          },
+          "gdpr": [
+            "IV_35.7.d"
+          ]
+        },
+        "agent": {
+          "id": "000",
+          "name": "wazuh.manager"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000029.290005",
+        "decoder": {
+          "name": "json"
+        },
+        "location": "Wazuh-AWS",
+        "data": {
+          "integration": "aws",
+          "aws": {
+            "eventVersion": "1.11",
+            "eventTime": "2026-02-23T14:02:00Z",
+            "eventSource": "organizations.amazonaws.com",
+            "eventName": "CreateOrganizationalUnit",
+            "awsRegion": "us-east-2",
+            "sourceIPAddress": "198.51.100.77",
+            "userAgent": "aws-cli/2.15.0 Python/3.11.6 Linux/6.1.0-kali amd64",
+            "userIdentity": {
+              "type": "IAMUser",
+              "arn": "arn:aws:iam::575084400239:user/compromised-dev",
+              "accountId": "575084400239",
+              "userName": "compromised-dev",
+              "principalId": "AIDACKCEVSQ6C2EXAMPLE",
+              "accessKeyId": "AKIAIOSFODNN7EXAMPLE"
+            },
+            "requestParameters": {
+              "parentId": "r-ab12",
+              "name": "Temporary-Migration"
+            },
+            "responseElements": {
+              "organizationalUnit": {
+                "id": "ou-ab12-z9y8x7w6",
+                "arn": "arn:aws:organizations::575084400239:ou/o-exampleorg/ou-ab12-z9y8x7w6",
+                "name": "Temporary-Migration"
+              }
+            },
+            "eventID": "e7a1b5c6-d8f0-4b2c-e5a7-1j0i6h4d8f25",
+            "requestID": "b8c9d0e1-f2a3-4b4c-e5d6-a7b8c9d0e1f2",
+            "readOnly": "false",
+            "eventType": "AwsApiCall",
+            "managementEvent": "true",
+            "recipientAccountId": "575084400239",
+            "eventCategory": "Management",
+            "source": "cloudtrail",
+            "aws_account_id": "575084400239"
+          }
+        }
+      }
+    },
+    {
+      "_comment": "CloudTrail: MoveAccount - Move production account to unprotected OU",
+      "sequence": 2,
+      "timestamp": "2026-02-23T14:02:11.000Z",
+      "log": {
+        "timestamp": "2026-02-23T14:02:12.000+0000",
+        "rule": {
+          "level": 8,
+          "description": "AWS Cloudtrail: organizations.amazonaws.com - MoveAccount.",
+          "id": "100802",
+          "firedtimes": 2,
+          "mail": false,
+          "groups": [
+            "amazon",
+            "aws",
+            "aws_cloudtrail"
+          ],
+          "pci_dss": [
+            "10.6.1"
+          ],
+          "hipaa": [
+            "164.312.b"
+          ],
+          "nist_800_53": [
+            "AU.6"
+          ],
+          "tsc": [
+            "CC7.2",
+            "CC7.3"
+          ],
+          "mitre": {
+            "id": [
+              "T1666"
+            ],
+            "tactic": [
+              "Defense Evasion"
+            ],
+            "technique": [
+              "Modify Cloud Resource Hierarchy"
+            ]
+          },
+          "gdpr": [
+            "IV_35.7.d"
+          ]
+        },
+        "agent": {
+          "id": "000",
+          "name": "wazuh.manager"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000029.290006",
+        "decoder": {
+          "name": "json"
+        },
+        "location": "Wazuh-AWS",
+        "data": {
+          "integration": "aws",
+          "aws": {
+            "eventVersion": "1.11",
+            "eventTime": "2026-02-23T14:02:11Z",
+            "eventSource": "organizations.amazonaws.com",
+            "eventName": "MoveAccount",
+            "awsRegion": "us-east-2",
+            "sourceIPAddress": "198.51.100.77",
+            "userAgent": "aws-cli/2.15.0 Python/3.11.6 Linux/6.1.0-kali amd64",
+            "userIdentity": {
+              "type": "IAMUser",
+              "arn": "arn:aws:iam::575084400239:user/compromised-dev",
+              "accountId": "575084400239",
+              "userName": "compromised-dev",
+              "principalId": "AIDACKCEVSQ6C2EXAMPLE",
+              "accessKeyId": "AKIAIOSFODNN7EXAMPLE"
+            },
+            "requestParameters": {
+              "accountId": "575084400239",
+              "sourceParentId": "ou-ab12-prodou01",
+              "destinationParentId": "ou-ab12-z9y8x7w6"
+            },
+            "responseElements": null,
+            "eventID": "f8b2c6d7-e9a1-4c3d-f6b8-2k1j7i5e9a36",
+            "requestID": "c9d0e1f2-a3b4-4c5d-f6e7-b8c9d0e1f2a3",
+            "readOnly": "false",
+            "eventType": "AwsApiCall",
+            "managementEvent": "true",
+            "recipientAccountId": "575084400239",
+            "eventCategory": "Management",
+            "source": "cloudtrail",
+            "aws_account_id": "575084400239"
+          }
+        }
+      }
+    },
+    {
+      "_comment": "CloudTrail: RemoveAccountFromOrganization - Remove account from org entirely",
+      "sequence": 3,
+      "timestamp": "2026-02-23T14:02:24.000Z",
+      "log": {
+        "timestamp": "2026-02-23T14:02:25.000+0000",
+        "rule": {
+          "level": 10,
+          "description": "AWS Cloudtrail: organizations.amazonaws.com - RemoveAccountFromOrganization.",
+          "id": "100802",
+          "firedtimes": 3,
+          "mail": false,
+          "groups": [
+            "amazon",
+            "aws",
+            "aws_cloudtrail"
+          ],
+          "pci_dss": [
+            "10.6.1"
+          ],
+          "hipaa": [
+            "164.312.b"
+          ],
+          "nist_800_53": [
+            "AU.6"
+          ],
+          "tsc": [
+            "CC7.2",
+            "CC7.3"
+          ],
+          "mitre": {
+            "id": [
+              "T1666"
+            ],
+            "tactic": [
+              "Defense Evasion"
+            ],
+            "technique": [
+              "Modify Cloud Resource Hierarchy"
+            ]
+          },
+          "gdpr": [
+            "IV_35.7.d"
+          ]
+        },
+        "agent": {
+          "id": "000",
+          "name": "wazuh.manager"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000029.290007",
+        "decoder": {
+          "name": "json"
+        },
+        "location": "Wazuh-AWS",
+        "data": {
+          "integration": "aws",
+          "aws": {
+            "eventVersion": "1.11",
+            "eventTime": "2026-02-23T14:02:24Z",
+            "eventSource": "organizations.amazonaws.com",
+            "eventName": "RemoveAccountFromOrganization",
+            "awsRegion": "us-east-2",
+            "sourceIPAddress": "198.51.100.77",
+            "userAgent": "aws-cli/2.15.0 Python/3.11.6 Linux/6.1.0-kali amd64",
+            "userIdentity": {
+              "type": "IAMUser",
+              "arn": "arn:aws:iam::575084400239:user/compromised-dev",
+              "accountId": "575084400239",
+              "userName": "compromised-dev",
+              "principalId": "AIDACKCEVSQ6C2EXAMPLE",
+              "accessKeyId": "AKIAIOSFODNN7EXAMPLE"
+            },
+            "requestParameters": {
+              "accountId": "575084400239"
+            },
+            "responseElements": null,
+            "eventID": "a9c3d7e8-f0b2-4d4e-a7c9-3l2k8j6f0b47",
+            "requestID": "d0e1f2a3-b4c5-4d6e-a7f8-c9d0e1f2a3b4",
+            "readOnly": "false",
+            "eventType": "AwsApiCall",
+            "managementEvent": "true",
+            "recipientAccountId": "575084400239",
+            "eventCategory": "Management",
+            "source": "cloudtrail",
+            "aws_account_id": "575084400239"
+          }
+        }
+      }
+    }
+  ]
+}

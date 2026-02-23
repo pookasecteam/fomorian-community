@@ -1,0 +1,177 @@
+{
+  "_metadata": {
+    "attack_id": "T1070.002",
+    "variation": "001",
+    "name": "Linux Log Tampering",
+    "description": "Attacker clears or modifies Linux system logs",
+    "expected_detection": "CRITICAL",
+    "kill_chain_phase": "defense-evasion",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Clearing auth.log",
+      "sequence": 1,
+      "timestamp": "2026-01-29T14:35:00.000Z",
+      "log": {
+        "rule": {
+          "level": 10,
+          "description": "Linux Log Tampering",
+          "id": "100200",
+          "mitre": {
+            "id": [
+              "T1070.002"
+            ],
+            "tactic": [
+              "Defense Evasion"
+            ]
+          },
+          "firedtimes": 1,
+          "groups": [
+            "syslog",
+            "linux"
+          ]
+        },
+        "agent": {
+          "id": "030",
+          "name": "DVLNX01",
+          "ip": "198.51.100.30"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000000.533183955",
+        "decoder": {
+          "name": "syslog"
+        },
+        "location": "/var/log/syslog",
+        "data": {
+          "facility": "authpriv",
+          "severity": "info",
+          "hostname": "DVLNX01",
+          "program": "auditd",
+          "message": "type=EXECVE msg=audit(1706538900.000:1070): argc=2 a0=\"truncate\" a1=\"-s 0\" a2=\"/var/log/auth.log\""
+        },
+        "full_log": "type=EXECVE msg=audit(1706538900.000:1070): argc=2 a0=\"truncate\" a1=\"-s 0\" a2=\"/var/log/auth.log\""
+      }
+    },
+    {
+      "_comment": "Clearing wtmp (login records)",
+      "sequence": 2,
+      "timestamp": "2026-01-29T14:35:01.000Z",
+      "log": {
+        "rule": {
+          "level": 10,
+          "description": "Linux Log Tampering",
+          "id": "100200",
+          "mitre": {
+            "id": [
+              "T1070.002"
+            ],
+            "tactic": [
+              "Defense Evasion"
+            ]
+          },
+          "firedtimes": 1,
+          "groups": [
+            "syslog",
+            "linux"
+          ]
+        },
+        "agent": {
+          "id": "030",
+          "name": "DVLNX01",
+          "ip": "198.51.100.30"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000000.399085887",
+        "decoder": {
+          "name": "syslog"
+        },
+        "location": "/var/log/syslog",
+        "data": {
+          "facility": "authpriv",
+          "severity": "info",
+          "hostname": "DVLNX01",
+          "program": "auditd",
+          "message": "type=EXECVE msg=audit(1706538901.000:1071): argc=3 a0=\"/bin/bash\" a1=\"-c\" a2=\"cat /dev/null > /var/log/wtmp\""
+        },
+        "full_log": "type=EXECVE msg=audit(1706538901.000:1071): argc=3 a0=\"/bin/bash\" a1=\"-c\" a2=\"cat /dev/null > /var/log/wtmp\""
+      }
+    },
+    {
+      "_comment": "Removing bash history",
+      "sequence": 3,
+      "timestamp": "2026-01-29T14:35:02.000Z",
+      "log": {
+        "rule": {
+          "level": 10,
+          "description": "Linux Log Tampering",
+          "id": "100200",
+          "mitre": {
+            "id": [
+              "T1070.002"
+            ],
+            "tactic": [
+              "Defense Evasion"
+            ]
+          },
+          "firedtimes": 1,
+          "groups": [
+            "syslog",
+            "linux"
+          ]
+        },
+        "agent": {
+          "id": "030",
+          "name": "DVLNX01",
+          "ip": "198.51.100.30"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000000.502925285",
+        "decoder": {
+          "name": "syslog"
+        },
+        "location": "/var/log/syslog",
+        "data": {
+          "facility": "authpriv",
+          "severity": "info",
+          "hostname": "DVLNX01",
+          "program": "auditd",
+          "message": "type=EXECVE msg=audit(1706538902.000:1072): argc=2 a0=\"rm\" a1=\"-f\" a2=\"/root/.bash_history\""
+        },
+        "full_log": "type=EXECVE msg=audit(1706538902.000:1072): argc=2 a0=\"rm\" a1=\"-f\" a2=\"/root/.bash_history\""
+      }
+    },
+    {
+      "_comment": "Tetragon detection of log tampering",
+      "sequence": 4,
+      "timestamp": "2026-01-29T14:35:02.500Z",
+      "log": {
+        "tetragon": {
+          "process_exec": {
+            "process": {
+              "binary": "/bin/rm",
+              "arguments": "-f /root/.bash_history",
+              "pid": 15800,
+              "uid": 0,
+              "cwd": "/root"
+            }
+          },
+          "file_delete": {
+            "path": "/root/.bash_history"
+          }
+        },
+        "agent": {
+          "name": "DVLNX01",
+          "id": "030"
+        }
+      }
+    }
+  ]
+}

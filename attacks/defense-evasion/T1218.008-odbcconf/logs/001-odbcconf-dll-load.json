@@ -1,0 +1,169 @@
+{
+  "_metadata": {
+    "attack_id": "T1218.008",
+    "variation": "001",
+    "name": "Odbcconf DLL Proxy Load",
+    "description": "Adversary uses odbcconf.exe with REGSVR action to load and execute an unsigned DLL, bypassing application whitelisting via a trusted Microsoft binary",
+    "expected_detection": "HIGH",
+    "kill_chain_phase": "defense-evasion",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Sysmon Event 1 - odbcconf.exe executing REGSVR action to load DLL",
+      "sequence": 1,
+      "timestamp": "2026-02-22T14:35:00.000Z",
+      "log": {
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 1: odbcconf.exe REGSVR action loading DLL from user-writable path",
+          "id": "100220",
+          "mitre": {
+            "id": [
+              "T1218.008"
+            ],
+            "tactic": [
+              "Defense Evasion"
+            ],
+            "technique": [
+              "System Binary Proxy Execution: Odbcconf"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1708613700.900003",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "severityValue": "INFORMATION",
+              "systemTime": "2026-02-22T14:35:00.000Z"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-22 14:35:00.219",
+              "processGuid": "{8B4C3D2E-5F6A-7B8C-9D0E-1F2A3B4C5D6E}",
+              "processId": "5916",
+              "image": "C:\\Windows\\System32\\odbcconf.exe",
+              "fileVersion": "10.0.20348.1",
+              "description": "ODBC Driver Configuration Program",
+              "product": "Microsoft Windows Operating System",
+              "company": "Microsoft Corporation",
+              "originalFileName": "odbcconf.exe",
+              "commandLine": "odbcconf.exe /S /A {REGSVR \"C:\\Users\\Public\\Documents\\driver.dll\"}",
+              "currentDirectory": "C:\\Users\\jsmith\\Desktop\\",
+              "user": "CORP\\jsmith",
+              "logonGuid": "{8B4C3D2E-1111-2222-3333-444455556666}",
+              "logonId": "0x5E4A3",
+              "terminalSessionId": "1",
+              "integrityLevel": "Medium",
+              "hashes": "SHA256=C3D4E5F6A7B8C9D0E1F2A3B4C5D6E7F8A9B0C1D2E3F4A5B6C7D8E9F0A1B2C3D4",
+              "parentProcessGuid": "{8B4C3D2E-4E5F-6A7B-8C9D-0E1F2A3B4C5D}",
+              "parentProcessId": "3148",
+              "parentImage": "C:\\Windows\\System32\\cmd.exe",
+              "parentCommandLine": "cmd.exe",
+              "parentUser": "CORP\\jsmith"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Sysmon Event 7 - Unsigned DLL loaded by odbcconf.exe via REGSVR",
+      "sequence": 2,
+      "timestamp": "2026-02-22T14:35:01.000Z",
+      "log": {
+        "rule": {
+          "level": 10,
+          "description": "Sysmon - Event 7: Unsigned DLL loaded by odbcconf.exe from user-writable path",
+          "id": "100221",
+          "mitre": {
+            "id": [
+              "T1218.008"
+            ],
+            "tactic": [
+              "Defense Evasion"
+            ],
+            "technique": [
+              "System Binary Proxy Execution: Odbcconf"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event7",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1708613701.900004",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "7",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "7",
+              "severityValue": "INFORMATION",
+              "systemTime": "2026-02-22T14:35:01.000Z"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-22 14:35:01.342",
+              "processGuid": "{8B4C3D2E-5F6A-7B8C-9D0E-1F2A3B4C5D6E}",
+              "processId": "5916",
+              "image": "C:\\Windows\\System32\\odbcconf.exe",
+              "imageLoaded": "C:\\Users\\Public\\Documents\\driver.dll",
+              "fileVersion": "-",
+              "description": "-",
+              "product": "-",
+              "company": "-",
+              "originalFileName": "-",
+              "hashes": "SHA256=D4E5F6A7B8C9D0E1F2A3B4C5D6E7F8A9B0C1D2E3F4A5B6C7D8E9F0A1B2C3D4E5",
+              "signed": "false",
+              "signature": "-",
+              "signatureStatus": "Unavailable",
+              "user": "CORP\\jsmith"
+            }
+          }
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,86 @@
+{
+  "_metadata": {
+    "attack_id": "T1059.004",
+    "variation": "002",
+    "name": "Python PTY Shell Spawn",
+    "description": "Attacker upgrades shell to interactive PTY via Python",
+    "expected_detection": "HIGH",
+    "kill_chain_phase": "execution",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Python spawning interactive shell",
+      "sequence": 1,
+      "timestamp": "2026-01-29T14:05:00.000Z",
+      "log": {
+        "rule": {
+          "level": 10,
+          "description": "Python PTY Shell Spawn",
+          "id": "100200",
+          "mitre": {
+            "id": [
+              "T1059.004"
+            ],
+            "tactic": [
+              "Execution"
+            ]
+          },
+          "firedtimes": 1,
+          "groups": [
+            "syslog",
+            "linux"
+          ]
+        },
+        "agent": {
+          "id": "030",
+          "name": "DVLNX01",
+          "ip": "198.51.100.30"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000000.745311781",
+        "decoder": {
+          "name": "syslog"
+        },
+        "location": "/var/log/syslog",
+        "data": {
+          "facility": "authpriv",
+          "severity": "info",
+          "hostname": "DVLNX01",
+          "program": "auditd",
+          "message": "type=EXECVE msg=audit(1706537100.000:1010): argc=3 a0=\"python3\" a1=\"-c\" a2=\"import pty;pty.spawn('/bin/bash')\""
+        },
+        "full_log": "type=EXECVE msg=audit(1706537100.000:1010): argc=3 a0=\"python3\" a1=\"-c\" a2=\"import pty;pty.spawn('/bin/bash')\""
+      }
+    },
+    {
+      "_comment": "Tetragon detection",
+      "sequence": 2,
+      "timestamp": "2026-01-29T14:05:00.500Z",
+      "log": {
+        "tetragon": {
+          "process_exec": {
+            "process": {
+              "binary": "/usr/bin/python3",
+              "arguments": "-c import pty;pty.spawn('/bin/bash')",
+              "pid": 15500,
+              "uid": 33,
+              "cwd": "/var/www/html"
+            },
+            "parent": {
+              "binary": "/bin/sh",
+              "pid": 15432
+            }
+          }
+        },
+        "agent": {
+          "name": "DVLNX01",
+          "id": "030"
+        }
+      }
+    }
+  ]
+}

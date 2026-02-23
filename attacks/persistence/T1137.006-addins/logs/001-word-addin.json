@@ -1,0 +1,76 @@
+{
+  "_metadata": {
+    "attack_id": "T1137.006",
+    "variation": "001",
+    "name": "Office Add-ins Persistence",
+    "description": "Malicious Word add-in for persistence",
+    "expected_detection": "MEDIUM",
+    "kill_chain_phase": "persistence",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Sysmon Event 11 - Add-in file created",
+      "sequence": 1,
+      "timestamp": "2026-02-04T11:14:00.000Z",
+      "log": {
+        "timestamp": "2026-02-04T11:14:00.000+0000",
+        "rule": {
+          "level": 10,
+          "description": "Sysmon - Event 11: Office Add-in Created",
+          "id": "100001",
+          "mitre": {
+            "id": [
+              "T1137.006"
+            ],
+            "tactic": [
+              "Persistence"
+            ],
+            "technique": [
+              "Add-ins"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event11",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000002.100015",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "11",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-04 11:14:00.000",
+              "processGuid": "{A1B2C3D4-1137-0006-0001-000000000001}",
+              "processId": "3456",
+              "image": "C:\\Windows\\explorer.exe",
+              "targetFilename": "C:\\Users\\attacker\\AppData\\Roaming\\Microsoft\\Word\\STARTUP\\evil.wll",
+              "user": "CORP\\attacker"
+            }
+          }
+        }
+      }
+    }
+  ]
+}

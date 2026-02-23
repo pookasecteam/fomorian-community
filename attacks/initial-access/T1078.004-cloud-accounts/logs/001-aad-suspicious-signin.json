@@ -5,9 +5,7 @@
     "name": "Azure AD Suspicious Sign-in",
     "description": "Attacker uses compromised cloud credentials from unusual location",
     "expected_detection": "CRITICAL",
-    "expected_soar": "credential-compromise-response",
     "kill_chain_phase": "initial-access",
-    "notes": "Sign-in from new location after credential theft",
     "format": "wazuh-native",
     "format_version": "1.0"
   },

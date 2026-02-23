@@ -1,0 +1,170 @@
+{
+  "_metadata": {
+    "attack_id": "T1496",
+    "variation": "001",
+    "name": "Resource Hijacking - Cryptomining (XMRig)",
+    "description": "XMRig cryptocurrency miner execution for resource hijacking",
+    "expected_detection": "LOW",
+    "kill_chain_phase": "impact",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Sysmon Event 1 - XMRig miner execution",
+      "sequence": 1,
+      "timestamp": "2026-02-10T20:14:00.000Z",
+      "log": {
+        "timestamp": "2026-02-10T20:14:00.000+0000",
+        "rule": {
+          "level": 10,
+          "description": "Sysmon - Event 1: Process Create - Cryptominer",
+          "id": "100101",
+          "mitre": {
+            "id": [
+              "T1496"
+            ],
+            "tactic": [
+              "Impact"
+            ],
+            "technique": [
+              "Resource Hijacking"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": true,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1707596040.000001",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-10 20:14:00.000",
+              "processGuid": "{A1B2C3D4-3001-65c9-0008-000000030008}",
+              "processId": "5800",
+              "image": "C:\\Users\\Public\\xmrig.exe",
+              "commandLine": "xmrig.exe --url pool.supportxmr.com:443 --user WALLET_ADDRESS --tls --donate-level 1",
+              "currentDirectory": "C:\\Users\\Public\\",
+              "user": "CORP\\admin2",
+              "integrityLevel": "Medium",
+              "hashes": "SHA256=3C4D5E6F7A8B9C0D1E2F3A4B5C6D7E8F9A0B1C2D3E4F5A6B7C8D9E0F1A2B3C4D",
+              "parentProcessGuid": "{A1B2C3D4-3001-65c9-0000-000000030000}",
+              "parentProcessId": "4800",
+              "parentImage": "C:\\Windows\\System32\\cmd.exe",
+              "parentCommandLine": "cmd.exe"
+            }
+          }
+        },
+        "_fomorian_test": true,
+        "fomorian_batch": 11,
+        "fomorian_campaign": 30,
+        "fomorian_technique": "T1496",
+        "fomorian_technique_name": "Resource Hijacking"
+      }
+    },
+    {
+      "_comment": "Sysmon Event 3 - Network connection to mining pool",
+      "sequence": 2,
+      "timestamp": "2026-02-10T20:14:05.000Z",
+      "log": {
+        "timestamp": "2026-02-10T20:14:05.000+0000",
+        "rule": {
+          "level": 10,
+          "description": "Sysmon - Event 3: Network Connection - Mining Pool",
+          "id": "100103",
+          "mitre": {
+            "id": [
+              "T1496"
+            ],
+            "tactic": [
+              "Impact"
+            ],
+            "technique": [
+              "Resource Hijacking"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": true,
+          "groups": [
+            "sysmon",
+            "sysmon_event3",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1707596045.000002",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "3",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "3",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-10 20:14:05.000",
+              "processGuid": "{A1B2C3D4-3001-65c9-0008-000000030008}",
+              "processId": "5800",
+              "image": "C:\\Users\\Public\\xmrig.exe",
+              "user": "CORP\\admin2",
+              "protocol": "tcp",
+              "initiated": "true",
+              "sourceIsIpv6": "false",
+              "sourceIp": "198.51.100.20",
+              "sourceHostname": "WS01.corp.local",
+              "sourcePort": "49872",
+              "destinationIsIpv6": "false",
+              "destinationIp": "198.51.100.50",
+              "destinationHostname": "pool.supportxmr.com",
+              "destinationPort": "443"
+            }
+          }
+        },
+        "_fomorian_test": true,
+        "fomorian_batch": 11,
+        "fomorian_campaign": 30,
+        "fomorian_technique": "T1496",
+        "fomorian_technique_name": "Resource Hijacking"
+      }
+    }
+  ]
+}

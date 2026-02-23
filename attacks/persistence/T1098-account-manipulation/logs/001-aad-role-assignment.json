@@ -5,9 +5,7 @@
     "name": "Azure AD Global Admin Assignment",
     "description": "Attacker assigns Global Administrator role to compromised account",
     "expected_detection": "CRITICAL",
-    "expected_soar": "privilege-escalation-response",
     "kill_chain_phase": "persistence",
-    "notes": "Privilege escalation in Azure AD",
     "format": "wazuh-native",
     "format_version": "1.0"
   },

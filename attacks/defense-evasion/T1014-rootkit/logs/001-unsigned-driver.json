@@ -1,0 +1,76 @@
+{
+  "_metadata": {
+    "attack_id": "T1014",
+    "variation": "001",
+    "name": "Unsigned Rootkit Driver",
+    "description": "Loading unsigned driver from suspicious location",
+    "expected_detection": "Sigma: Unsigned Driver Load Attempt (T1014)",
+    "kill_chain_phase": "defense-evasion",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Sysmon Event 7 - Image Loaded (unsigned driver)",
+      "sequence": 1,
+      "timestamp": "2026-01-31T15:00:00.000Z",
+      "log": {
+        "timestamp": "2026-01-31T15:00:00.000Z",
+        "rule": {
+          "level": 14,
+          "description": "Sysmon - Event 7: Unsigned Driver Load",
+          "id": "100001",
+          "mitre": {
+            "id": [
+              "T1014"
+            ],
+            "tactic": [
+              "Defense Evasion"
+            ],
+            "technique": [
+              "Rootkit"
+            ]
+          },
+          "groups": [
+            "sysmon",
+            "sysmon_event7",
+            "driver"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000005.000001",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "7",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local"
+            },
+            "eventdata": {
+              "utcTime": "2026-01-31 15:00:00.000",
+              "processGuid": "{12345678-1234-1234-1234-123456789015}",
+              "processId": "4",
+              "image": "System",
+              "imageLoaded": "C:\\Users\\attacker\\AppData\\Local\\Temp\\rootkit.sys",
+              "hashes": "SHA256=DEADBEEF01234567890ABCDEF01234567890ABCDEF01234567890ABCDEF0123",
+              "signed": "false",
+              "signatureStatus": "Unsigned"
+            }
+          }
+        }
+      }
+    }
+  ]
+}

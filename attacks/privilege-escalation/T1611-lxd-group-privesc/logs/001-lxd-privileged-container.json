@@ -1,0 +1,136 @@
+{
+  "_metadata": {
+    "attack_id": "T1611",
+    "variation": "001",
+    "name": "LXD Privileged Container Escape",
+    "description": "Creating a privileged LXD container with host filesystem mounted for root access",
+    "expected_detection": "HIGH",
+    "kill_chain_phase": "privilege-escalation",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Sysmon Event 1 - LXC init with security.privileged=true",
+      "sequence": 1,
+      "timestamp": "2026-02-22T03:01:00.000Z",
+      "log": {
+        "timestamp": "2026-02-22T03:01:00.000+0000",
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 1: LXD Privileged Container Initialization",
+          "id": "100101",
+          "mitre": {
+            "id": [
+              "T1611"
+            ],
+            "tactic": [
+              "Privilege Escalation"
+            ],
+            "technique": [
+              "Escape to Host"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "linux"
+          ]
+        },
+        "agent": {
+          "id": "030",
+          "name": "VULN01",
+          "ip": "198.51.100.30"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1708567260.000007",
+        "decoder": {
+          "name": "sysmon-linux"
+        },
+        "location": "/var/log/syslog",
+        "data": {
+          "eventdata": {
+            "utcTime": "2026-02-22 03:01:00.000",
+            "processGuid": "{a1b2c3d4-0004-0001-0001-000000000001}",
+            "processId": "21501",
+            "image": "/snap/bin/lxc",
+            "commandLine": "lxc init myimage mycontainer -c security.privileged=true",
+            "currentDirectory": "/home/admin2",
+            "user": "admin2",
+            "integrityLevel": "no_level",
+            "hashes": "SHA256=b9d3e48a6f0c5b2d7e9f1a3b5c7d9e1f3a5b7c9d1e3f5a7b9c1d3e5f7a9b1c3",
+            "parentProcessGuid": "{a1b2c3d4-0004-0001-0001-000000000000}",
+            "parentProcessId": "21400",
+            "parentImage": "/usr/bin/bash",
+            "parentCommandLine": "bash"
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Sysmon Event 1 - LXC device add to mount host root filesystem",
+      "sequence": 2,
+      "timestamp": "2026-02-22T03:01:00.100Z",
+      "log": {
+        "timestamp": "2026-02-22T03:01:00.100+0000",
+        "rule": {
+          "level": 14,
+          "description": "Sysmon - Event 1: LXD Container Host Filesystem Mount",
+          "id": "100101",
+          "mitre": {
+            "id": [
+              "T1611"
+            ],
+            "tactic": [
+              "Privilege Escalation"
+            ],
+            "technique": [
+              "Escape to Host"
+            ]
+          },
+          "firedtimes": 2,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "linux"
+          ]
+        },
+        "agent": {
+          "id": "030",
+          "name": "VULN01",
+          "ip": "198.51.100.30"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1708567260.000008",
+        "decoder": {
+          "name": "sysmon-linux"
+        },
+        "location": "/var/log/syslog",
+        "data": {
+          "eventdata": {
+            "utcTime": "2026-02-22 03:01:00.100",
+            "processGuid": "{a1b2c3d4-0004-0001-0001-000000000002}",
+            "processId": "21520",
+            "image": "/snap/bin/lxc",
+            "commandLine": "lxc config device add mycontainer mydevice disk source=/ path=/mnt/root recursive=true",
+            "currentDirectory": "/home/admin2",
+            "user": "admin2",
+            "integrityLevel": "no_level",
+            "hashes": "SHA256=b9d3e48a6f0c5b2d7e9f1a3b5c7d9e1f3a5b7c9d1e3f5a7b9c1d3e5f7a9b1c3",
+            "parentProcessGuid": "{a1b2c3d4-0004-0001-0001-000000000000}",
+            "parentProcessId": "21400",
+            "parentImage": "/usr/bin/bash",
+            "parentCommandLine": "bash"
+          }
+        }
+      }
+    }
+  ]
+}

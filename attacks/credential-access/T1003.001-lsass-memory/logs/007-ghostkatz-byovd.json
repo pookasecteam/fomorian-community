@@ -9,7 +9,9 @@
     "format": "wazuh-native",
     "format_version": "2.0",
     "tool": "GhostKatz",
-    "references": ["https://github.com/RainbowDynamix/GhostKatz"]
+    "references": [
+      "https://github.com/RainbowDynamix/GhostKatz"
+    ]
   },
   "attacker_profile": {
     "c2_framework": "Cobalt Strike",
@@ -28,20 +30,38 @@
         "rule": {
           "level": 5,
           "description": "Sysmon - Event 11: File created",
-          "id": "92011",
+          "id": "100901",
           "mitre": {
-            "id": ["T1068"],
-            "tactic": ["Privilege Escalation"],
-            "technique": ["Exploitation for Privilege Escalation"]
+            "id": [
+              "T1068"
+            ],
+            "tactic": [
+              "Privilege Escalation"
+            ],
+            "technique": [
+              "Exploitation for Privilege Escalation"
+            ]
           },
           "firedtimes": 1,
           "mail": false,
-          "groups": ["sysmon", "sysmon_event11", "windows"]
+          "groups": [
+            "sysmon",
+            "sysmon_event11",
+            "windows"
+          ]
         },
-        "agent": {"id": "007", "name": "WS01", "ip": "10.1.0.20"},
-        "manager": {"name": "wazuh.manager"},
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
         "id": "1707100000.500001",
-        "decoder": {"name": "windows_eventchannel"},
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
         "location": "EventChannel",
         "_fomorian_test": true,
         "_fomorian_batch": "ghostkatz-byovd",
@@ -78,20 +98,41 @@
         "rule": {
           "level": 10,
           "description": "Sysmon - Event 6: Driver loaded",
-          "id": "92006",
+          "id": "100001",
           "mitre": {
-            "id": ["T1068", "T1014"],
-            "tactic": ["Privilege Escalation", "Defense Evasion"],
-            "technique": ["Exploitation for Privilege Escalation", "Rootkit"]
+            "id": [
+              "T1068",
+              "T1014"
+            ],
+            "tactic": [
+              "Privilege Escalation",
+              "Defense Evasion"
+            ],
+            "technique": [
+              "Exploitation for Privilege Escalation",
+              "Rootkit"
+            ]
           },
           "firedtimes": 1,
           "mail": false,
-          "groups": ["sysmon", "sysmon_event6", "windows"]
+          "groups": [
+            "sysmon",
+            "sysmon_event6",
+            "windows"
+          ]
         },
-        "agent": {"id": "007", "name": "WS01", "ip": "10.1.0.20"},
-        "manager": {"name": "wazuh.manager"},
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
         "id": "1707100002.500002",
-        "decoder": {"name": "windows_eventchannel"},
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
         "location": "EventChannel",
         "_fomorian_test": true,
         "_fomorian_batch": "ghostkatz-byovd",
@@ -127,20 +168,38 @@
         "rule": {
           "level": 5,
           "description": "Sysmon - Event 11: File created",
-          "id": "92011",
+          "id": "100901",
           "mitre": {
-            "id": ["T1068"],
-            "tactic": ["Privilege Escalation"],
-            "technique": ["Exploitation for Privilege Escalation"]
+            "id": [
+              "T1068"
+            ],
+            "tactic": [
+              "Privilege Escalation"
+            ],
+            "technique": [
+              "Exploitation for Privilege Escalation"
+            ]
           },
           "firedtimes": 2,
           "mail": false,
-          "groups": ["sysmon", "sysmon_event11", "windows"]
+          "groups": [
+            "sysmon",
+            "sysmon_event11",
+            "windows"
+          ]
         },
-        "agent": {"id": "007", "name": "WS01", "ip": "10.1.0.20"},
-        "manager": {"name": "wazuh.manager"},
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
         "id": "1707100005.500003",
-        "decoder": {"name": "windows_eventchannel"},
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
         "location": "EventChannel",
         "_fomorian_test": true,
         "_fomorian_batch": "ghostkatz-byovd",
@@ -177,20 +236,41 @@
         "rule": {
           "level": 10,
           "description": "Sysmon - Event 6: Driver loaded",
-          "id": "92006",
+          "id": "100001",
           "mitre": {
-            "id": ["T1068", "T1014"],
-            "tactic": ["Privilege Escalation", "Defense Evasion"],
-            "technique": ["Exploitation for Privilege Escalation", "Rootkit"]
+            "id": [
+              "T1068",
+              "T1014"
+            ],
+            "tactic": [
+              "Privilege Escalation",
+              "Defense Evasion"
+            ],
+            "technique": [
+              "Exploitation for Privilege Escalation",
+              "Rootkit"
+            ]
           },
           "firedtimes": 2,
           "mail": false,
-          "groups": ["sysmon", "sysmon_event6", "windows"]
+          "groups": [
+            "sysmon",
+            "sysmon_event6",
+            "windows"
+          ]
         },
-        "agent": {"id": "007", "name": "WS01", "ip": "10.1.0.20"},
-        "manager": {"name": "wazuh.manager"},
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
         "id": "1707100007.500004",
-        "decoder": {"name": "windows_eventchannel"},
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
         "location": "EventChannel",
         "_fomorian_test": true,
         "_fomorian_batch": "ghostkatz-byovd",
@@ -226,20 +306,38 @@
         "rule": {
           "level": 6,
           "description": "Sysmon - Event 7: Image loaded",
-          "id": "92007",
+          "id": "100001",
           "mitre": {
-            "id": ["T1068"],
-            "tactic": ["Privilege Escalation"],
-            "technique": ["Exploitation for Privilege Escalation"]
+            "id": [
+              "T1068"
+            ],
+            "tactic": [
+              "Privilege Escalation"
+            ],
+            "technique": [
+              "Exploitation for Privilege Escalation"
+            ]
           },
           "firedtimes": 1,
           "mail": false,
-          "groups": ["sysmon", "sysmon_event7", "windows"]
+          "groups": [
+            "sysmon",
+            "sysmon_event7",
+            "windows"
+          ]
         },
-        "agent": {"id": "007", "name": "WS01", "ip": "10.1.0.20"},
-        "manager": {"name": "wazuh.manager"},
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
         "id": "1707100010.500005",
-        "decoder": {"name": "windows_eventchannel"},
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
         "location": "EventChannel",
         "_fomorian_test": true,
         "_fomorian_batch": "ghostkatz-byovd",
@@ -284,20 +382,38 @@
         "rule": {
           "level": 12,
           "description": "Sysmon - Event 10: Process accessed",
-          "id": "92010",
+          "id": "100001",
           "mitre": {
-            "id": ["T1003.001"],
-            "tactic": ["Credential Access"],
-            "technique": ["LSASS Memory"]
+            "id": [
+              "T1003.001"
+            ],
+            "tactic": [
+              "Credential Access"
+            ],
+            "technique": [
+              "LSASS Memory"
+            ]
           },
           "firedtimes": 1,
           "mail": false,
-          "groups": ["sysmon", "sysmon_event10", "windows"]
+          "groups": [
+            "sysmon",
+            "sysmon_event10",
+            "windows"
+          ]
         },
-        "agent": {"id": "007", "name": "WS01", "ip": "10.1.0.20"},
-        "manager": {"name": "wazuh.manager"},
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
         "id": "1707100015.500006",
-        "decoder": {"name": "windows_eventchannel"},
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
         "location": "EventChannel",
         "_fomorian_test": true,
         "_fomorian_batch": "ghostkatz-byovd",
@@ -339,20 +455,38 @@
         "rule": {
           "level": 5,
           "description": "Sysmon - Event 11: File created",
-          "id": "92011",
+          "id": "100901",
           "mitre": {
-            "id": ["T1068"],
-            "tactic": ["Privilege Escalation"],
-            "technique": ["Exploitation for Privilege Escalation"]
+            "id": [
+              "T1068"
+            ],
+            "tactic": [
+              "Privilege Escalation"
+            ],
+            "technique": [
+              "Exploitation for Privilege Escalation"
+            ]
           },
           "firedtimes": 3,
           "mail": false,
-          "groups": ["sysmon", "sysmon_event11", "windows"]
+          "groups": [
+            "sysmon",
+            "sysmon_event11",
+            "windows"
+          ]
         },
-        "agent": {"id": "007", "name": "WS01", "ip": "10.1.0.20"},
-        "manager": {"name": "wazuh.manager"},
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
         "id": "1707100020.500007",
-        "decoder": {"name": "windows_eventchannel"},
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
         "location": "EventChannel",
         "_fomorian_test": true,
         "_fomorian_batch": "ghostkatz-byovd",

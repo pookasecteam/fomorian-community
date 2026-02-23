@@ -1,0 +1,144 @@
+{
+  "metadata": {
+    "technique_id": "T1052.003",
+    "technique_name": "Exfiltration Over Physical Medium: Network Printer",
+    "tactic": "exfiltration",
+    "description": "Exfiltrate data by printing to network-connected printer with remote storage",
+    "campaign": "34",
+    "batch": "15",
+    "expected_detection": "LOW",
+    "attack_time": "2026-02-10T15:30:00.000Z",
+    "target_host": "WS01",
+    "simulated_destination": "198.51.100.200"
+  },
+  "logs": [
+    {
+      "timestamp": "2026-02-10T15:30:00.000Z",
+      "rule": {
+        "level": 3,
+        "description": "Sysmon - Event 3: Network Connection",
+        "id": "100103",
+        "mitre": {
+          "id": [
+            "T1052.003"
+          ],
+          "tactic": [
+            "Exfiltration"
+          ],
+          "technique": [
+            "Exfiltration Over Physical Medium"
+          ]
+        },
+        "groups": [
+          "sysmon",
+          "sysmon_event3"
+        ]
+      },
+      "agent": {
+        "id": "020",
+        "name": "WS01",
+        "ip": "198.51.100.20"
+      },
+      "manager": {
+        "name": "wazuh.manager"
+      },
+      "id": "1707576600.000001",
+      "decoder": {
+        "name": "windows_eventchannel"
+      },
+      "location": "EventChannel",
+      "data": {
+        "win": {
+          "system": {
+            "eventID": "3",
+            "channel": "Microsoft-Windows-Sysmon/Operational",
+            "computer": "WS01.corp.local",
+            "systemTime": "2026-02-10T15:30:00.000Z"
+          },
+          "eventdata": {
+            "utcTime": "2026-02-10 15:30:00.000",
+            "processGuid": "{a23d360c-1234-65c8-0000-0010e3ab4000}",
+            "processId": "8222",
+            "image": "C:\\Windows\\System32\\spoolsv.exe",
+            "user": "NT AUTHORITY\\SYSTEM",
+            "protocol": "tcp",
+            "initiated": "true",
+            "sourceIsIpv6": "false",
+            "sourceIp": "198.51.100.20",
+            "sourceHostname": "WS01.corp.local",
+            "sourcePort": "50165",
+            "sourcePortName": "-",
+            "destinationIsIpv6": "false",
+            "destinationIp": "198.51.100.200",
+            "destinationHostname": "hp-laserjet-4350.local",
+            "destinationPort": "9100",
+            "destinationPortName": "jetdirect"
+          }
+        }
+      },
+      "fomorian_test": true,
+      "fomorian_batch": "15",
+      "fomorian_campaign": "34"
+    },
+    {
+      "timestamp": "2026-02-10T15:30:05.000Z",
+      "rule": {
+        "level": 5,
+        "description": "Zeek - Large print job to network printer",
+        "id": "100001",
+        "mitre": {
+          "id": [
+            "T1052.003"
+          ],
+          "tactic": [
+            "Exfiltration"
+          ],
+          "technique": [
+            "Exfiltration Over Physical Medium"
+          ]
+        },
+        "groups": [
+          "zeek",
+          "zeek_http"
+        ]
+      },
+      "agent": {
+        "id": "001",
+        "name": "GW01",
+        "ip": "198.51.100.1"
+      },
+      "manager": {
+        "name": "wazuh.manager"
+      },
+      "id": "1707576605.000002",
+      "decoder": {
+        "name": "zeek"
+      },
+      "location": "/var/log/zeek/http.log",
+      "data": {
+        "zeek": {
+          "http": {
+            "ts": "1707576605.000000",
+            "uid": "PMnFyz6CdEeIgHij0h",
+            "id.orig_h": "198.51.100.20",
+            "id.orig_p": "50166",
+            "id.resp_h": "198.51.100.200",
+            "id.resp_p": "631",
+            "trans_depth": "1",
+            "method": "POST",
+            "host": "198.51.100.200",
+            "uri": "/printers/HP_LaserJet_4350",
+            "user_agent": "CUPS/2.3.3 IPP/2.1",
+            "request_body_len": "52428800",
+            "response_body_len": "256",
+            "status_code": "200",
+            "status_msg": "OK"
+          }
+        }
+      },
+      "fomorian_test": true,
+      "fomorian_batch": "15",
+      "fomorian_campaign": "34"
+    }
+  ]
+}

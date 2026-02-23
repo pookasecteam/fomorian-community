@@ -1,0 +1,83 @@
+{
+  "_metadata": {
+    "attack_id": "T1087.004",
+    "variation": "001",
+    "name": "Cloud Account Discovery",
+    "description": "Enumerating Azure AD users via Graph API",
+    "expected_detection": "MEDIUM",
+    "kill_chain_phase": "discovery",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Azure AD - User enumeration",
+      "sequence": 1,
+      "timestamp": "2026-02-04T11:04:00.000Z",
+      "log": {
+        "timestamp": "2026-02-04T11:04:00.000+0000",
+        "rule": {
+          "level": 8,
+          "description": "Azure AD: Cloud Account Enumeration",
+          "id": "100001",
+          "mitre": {
+            "id": [
+              "T1087.004"
+            ],
+            "tactic": [
+              "Discovery"
+            ],
+            "technique": [
+              "Cloud Account"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "azure",
+            "azuread",
+            "discovery"
+          ]
+        },
+        "agent": {
+          "id": "000",
+          "name": "wazuh.manager",
+          "ip": "127.0.0.1"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000002.100005",
+        "decoder": {
+          "name": "json"
+        },
+        "location": "azure",
+        "data": {
+          "azure": {
+            "operationName": "List users",
+            "resultType": "Success",
+            "callerIpAddress": "185.220.101.42",
+            "identity": {
+              "claims": {
+                "name": "attacker@contoso.com"
+              }
+            },
+            "properties": {
+              "targetResources": [
+                {
+                  "displayName": "All Users"
+                }
+              ],
+              "additionalDetails": [
+                {
+                  "key": "Count",
+                  "value": "1500"
+                }
+              ]
+            }
+          }
+        }
+      }
+    }
+  ]
+}

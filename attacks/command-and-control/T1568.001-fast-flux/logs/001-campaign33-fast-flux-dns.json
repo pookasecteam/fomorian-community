@@ -1,0 +1,156 @@
+{
+  "metadata": {
+    "technique_id": "T1568.001",
+    "technique_name": "Dynamic Resolution: Fast Flux DNS",
+    "tactic": "command-and-control",
+    "description": "C2 domain with rapidly changing IP addresses and low TTL values",
+    "campaign": "33",
+    "batch": "14",
+    "expected_detection": "LOW",
+    "attack_time": "2026-02-10T14:04:00.000Z",
+    "target_host": "WS01",
+    "simulated_c2": "fastflux.evil.com"
+  },
+  "logs": [
+    {
+      "timestamp": "2026-02-10T14:04:00.000Z",
+      "rule": {
+        "level": 3,
+        "description": "Zeek - DNS query with low TTL",
+        "id": "100001",
+        "mitre": {
+          "id": [
+            "T1568.001"
+          ],
+          "tactic": [
+            "Command and Control"
+          ],
+          "technique": [
+            "Fast Flux DNS"
+          ]
+        },
+        "groups": [
+          "zeek",
+          "zeek_dns"
+        ]
+      },
+      "agent": {
+        "id": "001",
+        "name": "GW01",
+        "ip": "198.51.100.1"
+      },
+      "manager": {
+        "name": "wazuh.manager"
+      },
+      "id": "1707577440.000001",
+      "decoder": {
+        "name": "zeek"
+      },
+      "location": "zeek_dns",
+      "data": {
+        "zeek": {
+          "ts": "1707577440.000000",
+          "uid": "F1a2b3c4d5e6f7g8h9",
+          "id.orig_h": "198.51.100.20",
+          "id.orig_p": "55123",
+          "id.resp_h": "8.8.8.8",
+          "id.resp_p": "53",
+          "proto": "udp",
+          "trans_id": "12350",
+          "rtt": "0.015",
+          "query": "fastflux.evil.com",
+          "qclass": "1",
+          "qclass_name": "C_INTERNET",
+          "qtype": "1",
+          "qtype_name": "A",
+          "rcode": "0",
+          "rcode_name": "NOERROR",
+          "AA": "false",
+          "TC": "false",
+          "RD": "true",
+          "RA": "true",
+          "Z": "0",
+          "answers": [
+            "100.100.100.100"
+          ],
+          "TTLs": [
+            "30"
+          ]
+        }
+      },
+      "fomorian_test": true,
+      "fomorian_batch": "14",
+      "fomorian_campaign": "33"
+    },
+    {
+      "timestamp": "2026-02-10T14:04:35.000Z",
+      "rule": {
+        "level": 3,
+        "description": "Zeek - DNS query with low TTL and IP rotation",
+        "id": "100001",
+        "mitre": {
+          "id": [
+            "T1568.001"
+          ],
+          "tactic": [
+            "Command and Control"
+          ],
+          "technique": [
+            "Fast Flux DNS"
+          ]
+        },
+        "groups": [
+          "zeek",
+          "zeek_dns"
+        ]
+      },
+      "agent": {
+        "id": "001",
+        "name": "GW01",
+        "ip": "198.51.100.1"
+      },
+      "manager": {
+        "name": "wazuh.manager"
+      },
+      "id": "1707577475.000001",
+      "decoder": {
+        "name": "zeek"
+      },
+      "location": "zeek_dns",
+      "data": {
+        "zeek": {
+          "ts": "1707577475.000000",
+          "uid": "F2a2b3c4d5e6f7g8h9",
+          "id.orig_h": "198.51.100.20",
+          "id.orig_p": "55124",
+          "id.resp_h": "8.8.8.8",
+          "id.resp_p": "53",
+          "proto": "udp",
+          "trans_id": "12351",
+          "rtt": "0.017",
+          "query": "fastflux.evil.com",
+          "qclass": "1",
+          "qclass_name": "C_INTERNET",
+          "qtype": "1",
+          "qtype_name": "A",
+          "rcode": "0",
+          "rcode_name": "NOERROR",
+          "AA": "false",
+          "TC": "false",
+          "RD": "true",
+          "RA": "true",
+          "Z": "0",
+          "answers": [
+            "100.100.100.101"
+          ],
+          "TTLs": [
+            "30"
+          ]
+        }
+      },
+      "fomorian_test": true,
+      "fomorian_batch": "14",
+      "fomorian_campaign": "33"
+    }
+  ]
+}

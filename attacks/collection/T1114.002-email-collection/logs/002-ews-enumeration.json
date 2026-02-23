@@ -1,0 +1,71 @@
+{
+  "_metadata": {
+    "attack_id": "T1114.002",
+    "variation": "002",
+    "name": "Exchange Web Services Email Harvesting",
+    "description": "Attacker uses EWS to enumerate and download emails",
+    "expected_detection": "HIGH",
+    "kill_chain_phase": "collection",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "EWS FindItem operation - email enumeration",
+      "sequence": 1,
+      "timestamp": "2026-01-29T16:20:00.000Z",
+      "log": {
+        "o365": {
+          "audit": {
+            "CreationTime": "2026-01-29T16:20:00.000Z",
+            "RecordType": 2,
+            "Operation": "MailItemsAccessed",
+            "OrganizationId": "corp-tenant-guid",
+            "Workload": "Exchange",
+            "ClientIP": "185.220.101.45",
+            "UserId": "john.doe@corp.local",
+            "MailboxOwnerUPN": "cfo@corp.local",
+            "ClientInfoString": "Client=REST;Client=RESTSystem;",
+            "OperationCount": 500,
+            "Folders": [
+              {
+                "Path": "\\Inbox",
+                "ItemCount": 500
+              }
+            ],
+            "ResultStatus": "Succeeded"
+          }
+        },
+        "agent": {
+          "name": "O365-Audit",
+          "id": "o365"
+        }
+      }
+    },
+    {
+      "_comment": "Mass email export",
+      "sequence": 2,
+      "timestamp": "2026-01-29T16:25:00.000Z",
+      "log": {
+        "o365": {
+          "audit": {
+            "CreationTime": "2026-01-29T16:25:00.000Z",
+            "RecordType": 2,
+            "Operation": "MailItemsAccessed",
+            "Workload": "Exchange",
+            "ClientIP": "185.220.101.45",
+            "UserId": "john.doe@corp.local",
+            "MailboxOwnerUPN": "cfo@corp.local",
+            "OperationCount": 1500,
+            "Throttled": "True",
+            "ResultStatus": "Succeeded"
+          }
+        },
+        "agent": {
+          "name": "O365-Audit",
+          "id": "o365"
+        }
+      }
+    }
+  ]
+}

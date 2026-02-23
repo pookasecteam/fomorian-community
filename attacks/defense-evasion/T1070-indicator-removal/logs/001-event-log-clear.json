@@ -1,0 +1,73 @@
+{
+  "_metadata": {
+    "attack_id": "T1070",
+    "variation": "001",
+    "name": "Windows Event Log Cleared",
+    "description": "Attacker clears Windows Security event log",
+    "expected_detection": "CRITICAL",
+    "kill_chain_phase": "defense-evasion",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Windows Security Event 1102 - Log Cleared",
+      "sequence": 1,
+      "timestamp": "2026-02-04T10:04:00.000Z",
+      "log": {
+        "timestamp": "2026-02-04T10:04:00.000+0000",
+        "rule": {
+          "level": 15,
+          "description": "Windows Security Event Log Cleared",
+          "id": "100920",
+          "mitre": {
+            "id": [
+              "T1070.001"
+            ],
+            "tactic": [
+              "Defense Evasion"
+            ],
+            "technique": [
+              "Indicator Removal on Host: Clear Windows Event Logs"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": true,
+          "groups": [
+            "windows",
+            "security"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000001.100005",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1102",
+              "channel": "Security",
+              "providerName": "Microsoft-Windows-Eventlog",
+              "computer": "WS01.corp.local"
+            },
+            "eventdata": {
+              "subjectUserSid": "S-1-5-21-1234567890-1234567890-1234567890-1001",
+              "subjectUserName": "attacker",
+              "subjectDomainName": "CORP",
+              "subjectLogonId": "0x12345"
+            }
+          }
+        }
+      }
+    }
+  ]
+}

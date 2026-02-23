@@ -1,0 +1,92 @@
+{
+  "_metadata": {
+    "attack_id": "T1499.002",
+    "variation": "001",
+    "name": "Endpoint DoS - Service Exhaustion Flood",
+    "description": "PowerShell script creating thousands of connections to exhaust service resources",
+    "expected_detection": "MEDIUM",
+    "kill_chain_phase": "impact",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Sysmon Event 1 - PowerShell connection flood script",
+      "sequence": 1,
+      "timestamp": "2026-02-10T20:18:00.000Z",
+      "log": {
+        "timestamp": "2026-02-10T20:18:00.000+0000",
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 1: Process Create - DoS Script",
+          "id": "100101",
+          "mitre": {
+            "id": [
+              "T1499",
+              "T1499.002"
+            ],
+            "tactic": [
+              "Impact"
+            ],
+            "technique": [
+              "Endpoint DoS - Service Exhaustion Flood"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": true,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1707596280.000001",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-10 20:18:00.000",
+              "processGuid": "{A1B2C3D4-3001-65c9-0009-000000030009}",
+              "processId": "5900",
+              "image": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+              "commandLine": "powershell.exe -Command \"1..10000 | ForEach-Object { Test-NetConnection -ComputerName 198.51.100.11 -Port 445 }\"",
+              "currentDirectory": "C:\\Users\\admin2\\",
+              "user": "CORP\\admin2",
+              "integrityLevel": "Medium",
+              "hashes": "SHA256=DE96A6E69944335375DC1AC238336066889D9FFC7D73628EF4FE1B1B160AB32C",
+              "parentProcessGuid": "{A1B2C3D4-3001-65c9-0000-000000030000}",
+              "parentProcessId": "4800",
+              "parentImage": "C:\\Windows\\System32\\cmd.exe",
+              "parentCommandLine": "cmd.exe"
+            }
+          }
+        },
+        "_fomorian_test": true,
+        "fomorian_batch": 11,
+        "fomorian_campaign": 30,
+        "fomorian_technique": "T1499.002",
+        "fomorian_technique_name": "Endpoint DoS - Service Exhaustion Flood"
+      }
+    }
+  ]
+}

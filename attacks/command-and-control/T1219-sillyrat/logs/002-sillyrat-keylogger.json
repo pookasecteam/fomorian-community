@@ -1,0 +1,215 @@
+{
+  "_metadata": {
+    "attack_id": "T1056.001",
+    "variation": "002",
+    "name": "SillyRAT Keylogger Activity",
+    "description": "SillyRAT keylogger activation and credential capture",
+    "expected_detection": "HIGH",
+    "kill_chain_phase": "collection",
+    "format": "wazuh-native",
+    "format_version": "1.0",
+    "tool": "SillyRAT",
+    "tool_url": "https://github.com/hash3liZer/SillyRAT",
+    "mitre_techniques": [
+      "T1056.001",
+      "T1219"
+    ]
+  },
+  "logs": [
+    {
+      "_comment": "Sysmon Event 1 - Python accessing keyboard hook APIs",
+      "sequence": 1,
+      "timestamp": "2026-01-31T14:10:00.000Z",
+      "log": {
+        "rule": {
+          "level": 14,
+          "description": "Sysmon - Event 1: Potential Keylogger - Python process with keyboard monitoring",
+          "id": "100210",
+          "mitre": {
+            "id": [
+              "T1056.001"
+            ],
+            "tactic": [
+              "Collection",
+              "Credential Access"
+            ],
+            "technique": [
+              "Keylogging"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows",
+            "keylogger"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000002.000001",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local"
+            },
+            "eventdata": {
+              "utcTime": "2026-01-31 14:10:00.000",
+              "processGuid": "{A1B2C3D4-1234-5678-9ABC-DEF012345678}",
+              "processId": "4532",
+              "image": "C:\\Users\\victim\\AppData\\Local\\Programs\\Python\\Python311\\python.exe",
+              "commandLine": "python.exe client.py",
+              "currentDirectory": "C:\\Users\\victim\\Downloads\\",
+              "user": "CORP\\victim",
+              "integrityLevel": "Medium",
+              "parentProcessGuid": "{A1B2C3D4-1111-2222-3333-444455556666}",
+              "parentProcessId": "1234",
+              "parentImage": "C:\\Windows\\explorer.exe"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Sysmon Event 7 - Python loading keyboard hook DLL",
+      "sequence": 2,
+      "timestamp": "2026-01-31T14:10:01.000Z",
+      "log": {
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 7: Python loaded user32.dll (keyboard hook capability)",
+          "id": "100211",
+          "mitre": {
+            "id": [
+              "T1056.001"
+            ],
+            "tactic": [
+              "Collection"
+            ],
+            "technique": [
+              "Keylogging"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event7",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000002.000002",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "7",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local"
+            },
+            "eventdata": {
+              "utcTime": "2026-01-31 14:10:01.000",
+              "processGuid": "{A1B2C3D4-1234-5678-9ABC-DEF012345678}",
+              "processId": "4532",
+              "image": "C:\\Users\\victim\\AppData\\Local\\Programs\\Python\\Python311\\python.exe",
+              "imageLoaded": "C:\\Windows\\System32\\user32.dll",
+              "signed": "true",
+              "signature": "Microsoft Windows",
+              "signatureStatus": "Valid"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Sysmon Event 11 - Keylogger dump file created",
+      "sequence": 3,
+      "timestamp": "2026-01-31T14:30:00.000Z",
+      "log": {
+        "rule": {
+          "level": 14,
+          "description": "Sysmon - Event 11: Suspicious keylog dump file created",
+          "id": "100212",
+          "mitre": {
+            "id": [
+              "T1056.001",
+              "T1074.001"
+            ],
+            "tactic": [
+              "Collection"
+            ],
+            "technique": [
+              "Keylogging",
+              "Local Data Staging"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event11",
+            "windows",
+            "keylogger"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000002.000003",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "11",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local"
+            },
+            "eventdata": {
+              "utcTime": "2026-01-31 14:30:00.000",
+              "processGuid": "{A1B2C3D4-1234-5678-9ABC-DEF012345678}",
+              "processId": "4532",
+              "image": "C:\\Users\\victim\\AppData\\Local\\Programs\\Python\\Python311\\python.exe",
+              "targetFilename": "C:\\Users\\victim\\AppData\\Local\\Temp\\keylog.txt",
+              "creationUtcTime": "2026-01-31 14:30:00.000"
+            }
+          }
+        }
+      }
+    }
+  ]
+}

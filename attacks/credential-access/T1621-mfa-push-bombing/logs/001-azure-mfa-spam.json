@@ -1,0 +1,298 @@
+{
+  "_metadata": {
+    "attack_id": "T1621",
+    "variation": "001",
+    "name": "MFA Push Bombing via Azure AD",
+    "description": "Repeated MFA push notifications to fatigue user into approving",
+    "expected_detection": "HIGH",
+    "kill_chain_phase": "credential-access",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Azure AD - Multiple MFA requests in short timeframe",
+      "sequence": 1,
+      "timestamp": "2026-01-29T18:00:00.000Z",
+      "log": {
+        "rule": {
+          "level": 12,
+          "description": "Azure AD: MFA Push Request 1",
+          "id": "100100",
+          "mitre": {
+            "id": [
+              "T1621"
+            ],
+            "tactic": [
+              "Credential Access"
+            ],
+            "technique": [
+              "MFA Request Generation"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "azure",
+            "authentication",
+            "o365"
+          ]
+        },
+        "agent": {
+          "id": "040",
+          "name": "azure-sentinel",
+          "ip": "0.0.0.0"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000000.600001",
+        "decoder": {
+          "name": "azure-signin"
+        },
+        "location": "azure-activity-logs",
+        "data": {
+          "azure": {
+            "activityDisplayName": "Sign-in activity",
+            "category": "SignInLogs",
+            "correlationId": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+            "result": "failure",
+            "resultDescription": "MFA denied; user did not respond to MFA challenge",
+            "loggedByService": "Core Directory",
+            "initiatedBy": {
+              "user": {
+                "userPrincipalName": "john.doe@corp.onmicrosoft.com",
+                "displayName": "John Doe",
+                "id": "12345678-1234-1234-1234-123456789012"
+              }
+            },
+            "targetResources": [
+              {
+                "displayName": "Microsoft Office 365",
+                "type": "Application"
+              }
+            ],
+            "additionalDetails": [
+              {
+                "key": "MFA authentication method",
+                "value": "Phone App Notification"
+              }
+            ],
+            "location": {
+              "city": "Unknown",
+              "state": "Unknown",
+              "countryOrRegion": "RU"
+            },
+            "ipAddress": "185.220.101.45",
+            "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Azure AD - MFA request 2",
+      "sequence": 2,
+      "timestamp": "2026-01-29T18:00:30.000Z",
+      "log": {
+        "rule": {
+          "level": 12,
+          "description": "Azure AD: MFA Push Request 2",
+          "id": "100100",
+          "mitre": {
+            "id": [
+              "T1621"
+            ],
+            "tactic": [
+              "Credential Access"
+            ],
+            "technique": [
+              "MFA Request Generation"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "azure",
+            "authentication",
+            "o365"
+          ]
+        },
+        "agent": {
+          "id": "040",
+          "name": "azure-sentinel",
+          "ip": "0.0.0.0"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000000.600002",
+        "decoder": {
+          "name": "azure-signin"
+        },
+        "location": "azure-activity-logs",
+        "data": {
+          "azure": {
+            "activityDisplayName": "Sign-in activity",
+            "category": "SignInLogs",
+            "correlationId": "b2c3d4e5-f6a7-8901-bcde-f12345678901",
+            "result": "failure",
+            "resultDescription": "MFA denied; user did not respond to MFA challenge",
+            "loggedByService": "Core Directory",
+            "initiatedBy": {
+              "user": {
+                "userPrincipalName": "john.doe@corp.onmicrosoft.com",
+                "displayName": "John Doe",
+                "id": "12345678-1234-1234-1234-123456789012"
+              }
+            },
+            "additionalDetails": [
+              {
+                "key": "MFA authentication method",
+                "value": "Phone App Notification"
+              }
+            ],
+            "location": {
+              "city": "Unknown",
+              "countryOrRegion": "RU"
+            },
+            "ipAddress": "185.220.101.45"
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Azure AD - MFA request 3",
+      "sequence": 3,
+      "timestamp": "2026-01-29T18:01:00.000Z",
+      "log": {
+        "rule": {
+          "level": 12,
+          "description": "Azure AD: MFA Push Request 3",
+          "id": "100100",
+          "mitre": {
+            "id": [
+              "T1621"
+            ],
+            "tactic": [
+              "Credential Access"
+            ],
+            "technique": [
+              "MFA Request Generation"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "azure",
+            "authentication",
+            "o365"
+          ]
+        },
+        "agent": {
+          "id": "040",
+          "name": "azure-sentinel",
+          "ip": "0.0.0.0"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000000.600003",
+        "decoder": {
+          "name": "azure-signin"
+        },
+        "location": "azure-activity-logs",
+        "data": {
+          "azure": {
+            "activityDisplayName": "Sign-in activity",
+            "category": "SignInLogs",
+            "correlationId": "c3d4e5f6-a7b8-9012-cdef-123456789012",
+            "result": "failure",
+            "resultDescription": "MFA denied; user did not respond to MFA challenge",
+            "ipAddress": "185.220.101.45",
+            "location": {
+              "countryOrRegion": "RU"
+            },
+            "initiatedBy": {
+              "user": {
+                "userPrincipalName": "john.doe@corp.onmicrosoft.com"
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Azure AD - User accepts MFA (fatigue)",
+      "sequence": 4,
+      "timestamp": "2026-01-29T18:01:30.000Z",
+      "log": {
+        "rule": {
+          "level": 14,
+          "description": "Azure AD: MFA Approved After Multiple Denials",
+          "id": "100100",
+          "mitre": {
+            "id": [
+              "T1621"
+            ],
+            "tactic": [
+              "Credential Access"
+            ],
+            "technique": [
+              "MFA Request Generation"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "azure",
+            "authentication",
+            "o365"
+          ]
+        },
+        "agent": {
+          "id": "040",
+          "name": "azure-sentinel",
+          "ip": "0.0.0.0"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000000.600004",
+        "decoder": {
+          "name": "azure-signin"
+        },
+        "location": "azure-activity-logs",
+        "data": {
+          "azure": {
+            "activityDisplayName": "Sign-in activity",
+            "category": "SignInLogs",
+            "correlationId": "d4e5f6a7-b8c9-0123-def0-123456789013",
+            "result": "success",
+            "resultDescription": "MFA completed successfully",
+            "loggedByService": "Core Directory",
+            "initiatedBy": {
+              "user": {
+                "userPrincipalName": "john.doe@corp.onmicrosoft.com",
+                "displayName": "John Doe"
+              }
+            },
+            "additionalDetails": [
+              {
+                "key": "MFA authentication method",
+                "value": "Phone App Notification"
+              }
+            ],
+            "location": {
+              "city": "Unknown",
+              "countryOrRegion": "RU"
+            },
+            "ipAddress": "185.220.101.45",
+            "riskDetail": "none",
+            "riskLevelAggregated": "high",
+            "riskLevelDuringSignIn": "high"
+          }
+        }
+      }
+    }
+  ]
+}

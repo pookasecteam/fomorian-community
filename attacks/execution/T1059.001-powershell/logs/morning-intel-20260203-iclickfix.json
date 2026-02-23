@@ -20,18 +20,39 @@
         "rule": {
           "level": 14,
           "description": "Sysmon - Event 1: ClickFix PowerShell execution from Explorer",
-          "id": "92151",
+          "id": "100916",
           "mitre": {
-            "id": ["T1059.001", "T1566.002"],
-            "tactic": ["Execution", "Initial Access"],
-            "technique": ["Command and Scripting Interpreter: PowerShell", "Phishing: Spearphishing Link"]
+            "id": [
+              "T1059.001",
+              "T1566.002"
+            ],
+            "tactic": [
+              "Execution",
+              "Initial Access"
+            ],
+            "technique": [
+              "Command and Scripting Interpreter: PowerShell",
+              "Phishing: Spearphishing Link"
+            ]
           },
-          "groups": ["sysmon", "sysmon_event1", "windows"]
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
         },
-        "agent": {"id": "007", "name": "WS01", "ip": "10.1.0.20"},
-        "manager": {"name": "wazuh.manager"},
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
         "id": "1706951200.000012",
-        "decoder": {"name": "windows_eventchannel"},
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
         "location": "EventChannel",
         "data": {
           "win": {
@@ -71,18 +92,36 @@
         "rule": {
           "level": 14,
           "description": "Sysmon - Event 1: NetSupport RAT execution",
-          "id": "92151",
+          "id": "100916",
           "mitre": {
-            "id": ["T1219"],
-            "tactic": ["Command and Control"],
-            "technique": ["Remote Access Software"]
+            "id": [
+              "T1219"
+            ],
+            "tactic": [
+              "Command and Control"
+            ],
+            "technique": [
+              "Remote Access Software"
+            ]
           },
-          "groups": ["sysmon", "sysmon_event1", "windows"]
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
         },
-        "agent": {"id": "007", "name": "WS01", "ip": "10.1.0.20"},
-        "manager": {"name": "wazuh.manager"},
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
         "id": "1706951215.000013",
-        "decoder": {"name": "windows_eventchannel"},
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
         "location": "EventChannel",
         "data": {
           "win": {

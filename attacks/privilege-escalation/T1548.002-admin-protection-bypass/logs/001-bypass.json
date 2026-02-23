@@ -1,0 +1,62 @@
+{
+  "timestamp": "2026-01-31T22:07:00.000Z",
+  "rule": {
+    "level": 14,
+    "description": "Sysmon - Event 1: Administrator Protection Bypass",
+    "id": "92151",
+    "mitre": {
+      "id": [
+        "T1548.002"
+      ],
+      "tactic": [
+        "Privilege Escalation"
+      ],
+      "technique": [
+        "Abuse Elevation Control Mechanism: Bypass User Account Control"
+      ]
+    },
+    "groups": [
+      "sysmon",
+      "sysmon_event1",
+      "windows"
+    ]
+  },
+  "agent": {
+    "id": "007",
+    "name": "WS01",
+    "ip": "198.51.100.20"
+  },
+  "manager": {
+    "name": "wazuh.manager"
+  },
+  "id": "1700000027.000001",
+  "decoder": {
+    "name": "windows_eventchannel"
+  },
+  "location": "EventChannel",
+  "data": {
+    "win": {
+      "system": {
+        "eventID": "1",
+        "channel": "Microsoft-Windows-Sysmon/Operational",
+        "providerName": "Microsoft-Windows-Sysmon",
+        "computer": "WS01.corp.local"
+      },
+      "eventdata": {
+        "utcTime": "2026-01-31 22:07:00.000",
+        "processGuid": "{12345678-1234-1234-1234-123456789027}",
+        "processId": "1234",
+        "image": "C:\\Users\\attacker\\tools\\adminbypass.exe",
+        "commandLine": "adminbypass.exe --exploit RAiProcessRunOnce --target cmd.exe",
+        "currentDirectory": "C:\\Users\\attacker\\tools\\",
+        "user": "CORP\\attacker",
+        "parentImage": "C:\\Windows\\System32\\cmd.exe",
+        "parentCommandLine": "cmd.exe"
+      }
+    }
+  },
+  "_fomorian_batch": "threat-intel-batch2-2026-01-31",
+  "_fomorian_test": true,
+  "_fomorian_attack_id": "T1548.002",
+  "_fomorian_expected_detection": "Sigma: Windows Administrator Protection Bypass Attempt (T1548.002)"
+}

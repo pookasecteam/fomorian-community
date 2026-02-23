@@ -1,0 +1,222 @@
+{
+  "_metadata": {
+    "attack_id": "T1036.008",
+    "variation": "001",
+    "name": "Masquerade File Type - Double Extension",
+    "description": "Executable masquerading as PDF using double extension (.pdf.exe) to deceive users",
+    "expected_detection": "HIGH",
+    "kill_chain_phase": "defense-evasion",
+    "tactic": "Defense Evasion",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Sysmon Event 11 - File creation with double extension",
+      "sequence": 1,
+      "timestamp": "2026-02-10T20:04:00.000Z",
+      "log": {
+        "timestamp": "2026-02-10T20:04:00.000Z",
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 11: File created with double extension (.pdf.exe)",
+          "id": "100001",
+          "mitre": {
+            "id": [
+              "T1036.008"
+            ],
+            "tactic": [
+              "Defense Evasion"
+            ],
+            "technique": [
+              "Masquerading: Masquerade File Type"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event11",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1707599040.000001",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "11",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "11",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-10 20:04:00.000",
+              "processGuid": "{B5A2D3E4-1234-5678-9ABC-DEF012345684}",
+              "processId": "4124",
+              "image": "C:\\Windows\\System32\\cmd.exe",
+              "targetFilename": "C:\\Users\\Public\\Downloads\\Invoice_Q4_2025.pdf.exe",
+              "creationUtcTime": "2026-02-10 20:04:00.000",
+              "user": "CORP\\attacker"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Sysmon Event 1 - Execution of masqueraded file",
+      "sequence": 2,
+      "timestamp": "2026-02-10T20:04:15.000Z",
+      "log": {
+        "timestamp": "2026-02-10T20:04:15.000Z",
+        "rule": {
+          "level": 15,
+          "description": "Sysmon - Event 1: Execution of file with double extension",
+          "id": "100001",
+          "mitre": {
+            "id": [
+              "T1036.008",
+              "T1204.002"
+            ],
+            "tactic": [
+              "Defense Evasion",
+              "Execution"
+            ],
+            "technique": [
+              "Masquerading: Masquerade File Type",
+              "User Execution: Malicious File"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1707599055.000001",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-10 20:04:15.000",
+              "processGuid": "{B5A2D3E4-1234-5678-9ABC-DEF012345685}",
+              "processId": "5648",
+              "image": "C:\\Users\\Public\\Downloads\\Invoice_Q4_2025.pdf.exe",
+              "commandLine": "\"C:\\Users\\Public\\Downloads\\Invoice_Q4_2025.pdf.exe\"",
+              "currentDirectory": "C:\\Users\\Public\\Downloads\\",
+              "user": "CORP\\victim",
+              "integrityLevel": "Medium",
+              "hashes": "SHA256=1A2B3C4D5E6F7890ABCDEF1234567890ABCDEF1234567890ABCDEF1234567890",
+              "parentProcessGuid": "{B5A2D3E4-1234-5678-9ABC-DEF012345670}",
+              "parentProcessId": "3812",
+              "parentImage": "C:\\Windows\\explorer.exe",
+              "parentCommandLine": "C:\\Windows\\explorer.exe"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Sysmon Event 11 - Rename to hide true extension",
+      "sequence": 3,
+      "timestamp": "2026-02-10T20:04:30.000Z",
+      "log": {
+        "timestamp": "2026-02-10T20:04:30.000Z",
+        "rule": {
+          "level": 10,
+          "description": "Sysmon - Event 11: File rename to further masquerade extension",
+          "id": "100001",
+          "mitre": {
+            "id": [
+              "T1036.008"
+            ],
+            "tactic": [
+              "Defense Evasion"
+            ],
+            "technique": [
+              "Masquerading: Masquerade File Type"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event11",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1707599070.000001",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "11",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "11",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-10 20:04:30.000",
+              "processGuid": "{B5A2D3E4-1234-5678-9ABC-DEF012345685}",
+              "processId": "5648",
+              "image": "C:\\Users\\Public\\Downloads\\Invoice_Q4_2025.pdf.exe",
+              "targetFilename": "C:\\Users\\Public\\Downloads\\Report.docx.exe",
+              "creationUtcTime": "2026-02-10 20:04:30.000",
+              "user": "CORP\\attacker"
+            }
+          }
+        }
+      }
+    }
+  ]
+}

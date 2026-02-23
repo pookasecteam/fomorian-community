@@ -1,0 +1,83 @@
+{
+  "_metadata": {
+    "attack_id": "T1037",
+    "variation": "001",
+    "name": "Boot or Logon Initialization Scripts - UserInitMprLogonScript",
+    "description": "Setting the UserInitMprLogonScript registry value to execute a payload at user logon for persistence",
+    "expected_detection": "HIGH",
+    "kill_chain_phase": "persistence",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Sysmon Event 13 - Registry SetValue for UserInitMprLogonScript persistence key",
+      "sequence": 1,
+      "timestamp": "2026-02-22T15:35:00.000Z",
+      "log": {
+        "timestamp": "2026-02-22T15:35:00.000+0000",
+        "rule": {
+          "level": 14,
+          "description": "Sysmon - Event 13: UserInitMprLogonScript Registry Persistence",
+          "id": "100100",
+          "mitre": {
+            "id": [
+              "T1037"
+            ],
+            "tactic": [
+              "Persistence"
+            ],
+            "technique": [
+              "Boot or Logon Initialization Scripts"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event13",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000028.100009",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "13",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "13",
+              "opcode": "0",
+              "keywords": "0x8000000000000000",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-22 15:35:00.000",
+              "eventType": "SetValue",
+              "processGuid": "{C28A0F3E-0008-6E1A-2800-000000000100}",
+              "processId": "15644",
+              "image": "C:\\Windows\\System32\\reg.exe",
+              "targetObject": "HKU\\S-1-5-21-3412845201-3854213789-2107890127-1103\\Environment\\UserInitMprLogonScript",
+              "details": "C:\\Users\\attacker\\AppData\\Local\\Temp\\updater.bat",
+              "user": "CORP\\attacker"
+            }
+          }
+        }
+      }
+    }
+  ]
+}

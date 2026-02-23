@@ -1,0 +1,105 @@
+{
+  "_metadata": {
+    "attack_id": "T1098.001",
+    "variation": "005",
+    "name": "AWS Console Login Profile Creation",
+    "description": "Attacker creates console login profile for an IAM user that previously had only programmatic access. Enables interactive console access for deeper reconnaissance and manual exploitation.",
+    "expected_detection": "HIGH",
+    "kill_chain_phase": "persistence",
+    "format": "wazuh-native",
+    "format_version": "1.0",
+    "cloud_provider": "aws",
+    "data_source": "cloudtrail"
+  },
+  "logs": [
+    {
+      "_comment": "CloudTrail: CreateLoginProfile - Attacker creates console password for programmatic-only IAM user",
+      "sequence": 1,
+      "timestamp": "2026-02-23T10:18:00.000Z",
+      "log": {
+        "rule": {
+          "level": 3,
+          "description": "Amazon AWS Cloudtrail - CreateLoginProfile",
+          "id": "100802",
+          "mitre": {
+            "id": [
+              "T1098.001"
+            ],
+            "tactic": [
+              "Persistence"
+            ],
+            "technique": [
+              "Account Manipulation: Additional Cloud Credentials"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "amazon",
+            "aws",
+            "aws-cloudtrail"
+          ],
+          "pci_dss": [
+            "10.6.1"
+          ],
+          "hipaa": [
+            "164.312.b"
+          ],
+          "nist_800_53": [
+            "AU.6"
+          ],
+          "tsc": [
+            "CC7.2",
+            "CC7.3"
+          ],
+          "gdpr": [
+            "IV_35.7.d"
+          ]
+        },
+        "agent": {
+          "id": "040",
+          "name": "wazuh.manager",
+          "ip": "any"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1708700100.280002",
+        "decoder": {
+          "name": "json"
+        },
+        "location": "wodles_aws",
+        "data": {
+          "aws": {
+            "source": "cloudtrail",
+            "eventVersion": "1.09",
+            "eventTime": "2026-02-23T10:18:00Z",
+            "eventSource": "iam.amazonaws.com",
+            "eventName": "CreateLoginProfile",
+            "awsRegion": "us-east-1",
+            "sourceIPAddress": "203.0.113.42",
+            "userAgent": "Boto3/1.26.165 Python/3.13.9 Linux/6.16.8+kali-amd64 Botocore/1.29.165",
+            "requestParameters": "{\"userName\":\"target-user\",\"passwordResetRequired\":false}",
+            "responseElements": "{\"loginProfile\":{\"userName\":\"target-user\",\"createDate\":\"2026-02-23T10:18:00Z\",\"passwordResetRequired\":false}}",
+            "userIdentity": {
+              "type": "IAMUser",
+              "arn": "arn:aws:iam::123456789012:user/compromised-user",
+              "accountId": "123456789012",
+              "userName": "compromised-user",
+              "principalId": "AIDACKCEVSQ6C2EXAMPLE",
+              "accessKeyId": "AKIAIOSFODNN7EXAMPLE"
+            },
+            "eventID": "c28f9a01-b002-4e28-a002-000000280002",
+            "requestID": "req-28002-a002-4e28-b002-000000280002",
+            "readOnly": "false",
+            "eventType": "AwsApiCall",
+            "managementEvent": "true",
+            "recipientAccountId": "123456789012",
+            "eventCategory": "Management",
+            "aws_account_id": "123456789012"
+          }
+        }
+      }
+    }
+  ]
+}

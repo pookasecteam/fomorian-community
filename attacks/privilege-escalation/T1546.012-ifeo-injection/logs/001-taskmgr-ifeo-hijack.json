@@ -1,0 +1,165 @@
+{
+  "_metadata": {
+    "attack_id": "T1546.012",
+    "variation": "001",
+    "name": "IFEO Injection - Task Manager Hijack",
+    "description": "Hijack taskmgr.exe via IFEO Debugger to execute malicious payload",
+    "expected_detection": "HIGH",
+    "kill_chain_phase": "privilege-escalation",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Sysmon Event 1 - reg.exe adding IFEO debugger for taskmgr.exe",
+      "sequence": 1,
+      "timestamp": "2026-02-10T19:18:00.000Z",
+      "log": {
+        "timestamp": "2026-02-10T19:18:00.000+0000",
+        "rule": {
+          "level": 14,
+          "description": "Sysmon - Event 1: Process creation",
+          "id": "100101",
+          "mitre": {
+            "id": [
+              "T1546.012"
+            ],
+            "tactic": [
+              "Privilege Escalation",
+              "Persistence"
+            ],
+            "technique": [
+              "Event Triggered Execution: Image File Execution Options Injection"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": true,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1707589080.000001",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-10 19:18:00.000",
+              "processGuid": "{8df8f34e-2910-65c9-0018-000000029018}",
+              "processId": "20100",
+              "image": "C:\\Windows\\System32\\reg.exe",
+              "commandLine": "reg.exe add \"HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Image File Execution Options\\taskmgr.exe\" /v Debugger /t REG_SZ /d \"C:\\malicious.exe\" /f",
+              "currentDirectory": "C:\\Windows\\System32\\",
+              "user": "CORP\\Administrator",
+              "integrityLevel": "High",
+              "hashes": "SHA256=D1E2F3A4B5C697807190283746501928374650192837465019283746501928374",
+              "parentProcessGuid": "{8df8f34e-2910-65c9-0000-000000029000}",
+              "parentProcessId": "8456",
+              "parentImage": "C:\\Windows\\System32\\cmd.exe",
+              "parentCommandLine": "cmd.exe"
+            }
+          }
+        },
+        "_fomorian_test": true,
+        "fomorian_batch": 10,
+        "fomorian_campaign": 29,
+        "fomorian_technique": "T1546.012",
+        "fomorian_technique_name": "IFEO Injection - Task Manager Hijack"
+      }
+    },
+    {
+      "_comment": "Sysmon Event 13 - Registry IFEO Debugger key modification",
+      "sequence": 2,
+      "timestamp": "2026-02-10T19:18:01.000Z",
+      "log": {
+        "timestamp": "2026-02-10T19:18:01.000+0000",
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 13: Registry value set",
+          "id": "100107",
+          "mitre": {
+            "id": [
+              "T1546.012"
+            ],
+            "tactic": [
+              "Privilege Escalation",
+              "Persistence"
+            ],
+            "technique": [
+              "Event Triggered Execution: Image File Execution Options Injection"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": true,
+          "groups": [
+            "sysmon",
+            "sysmon_event13",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1707589081.000002",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "13",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "13",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-10 19:18:01.000",
+              "processGuid": "{8df8f34e-2910-65c9-0018-000000029018}",
+              "processId": "20100",
+              "image": "C:\\Windows\\System32\\reg.exe",
+              "eventType": "SetValue",
+              "targetObject": "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Image File Execution Options\\taskmgr.exe\\Debugger",
+              "details": "C:\\malicious.exe",
+              "user": "CORP\\Administrator"
+            }
+          }
+        },
+        "_fomorian_test": true,
+        "fomorian_batch": 10,
+        "fomorian_campaign": 29,
+        "fomorian_technique": "T1546.012",
+        "fomorian_technique_name": "IFEO Injection - Task Manager Hijack"
+      }
+    }
+  ]
+}

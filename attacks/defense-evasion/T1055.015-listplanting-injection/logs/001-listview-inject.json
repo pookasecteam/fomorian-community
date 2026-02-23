@@ -1,0 +1,155 @@
+{
+  "_metadata": {
+    "attack_id": "T1055.015",
+    "variation": "001",
+    "name": "ListPlanting Process Injection via ListView Control",
+    "description": "Inject shellcode into remote process by abusing ListView control message handling",
+    "expected_detection": "MEDIUM",
+    "kill_chain_phase": "defense-evasion",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Sysmon Event 1 - Process Creation: Custom injector tool targets explorer",
+      "sequence": 1,
+      "timestamp": "2026-02-22T10:06:00.000Z",
+      "log": {
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 1: Process creation",
+          "id": "100101",
+          "mitre": {
+            "id": [
+              "T1055.015"
+            ],
+            "tactic": [
+              "Defense Evasion",
+              "Privilege Escalation"
+            ],
+            "technique": [
+              "Process Injection: ListPlanting"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": true,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1709002400.000016",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-22 10:06:00.000",
+              "processGuid": "{12345678-2400-2400-2400-000000000016}",
+              "processId": "11200",
+              "image": "C:\\Users\\Public\\ListPlant.exe",
+              "commandLine": "ListPlant.exe --pid 4820 --shellcode beacon.bin",
+              "currentDirectory": "C:\\Users\\Public\\",
+              "user": "CORP\\Administrator",
+              "integrityLevel": "High",
+              "hashes": "SHA256=F6A1B2C3D4E5F6A1B2C3D4E5F6A1B2C3D4E5F6A1B2C3D4E5F6A1B2C3D4E5F6A1",
+              "parentProcessGuid": "{12345678-2400-2400-2400-000000000000}",
+              "parentProcessId": "1234",
+              "parentImage": "C:\\Windows\\System32\\cmd.exe",
+              "parentCommandLine": "cmd.exe"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Sysmon Event 10 - Process Access: Injector opens explorer.exe for write",
+      "sequence": 2,
+      "timestamp": "2026-02-22T10:06:01.000Z",
+      "log": {
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 10: Process access",
+          "id": "100001",
+          "mitre": {
+            "id": [
+              "T1055.015"
+            ],
+            "tactic": [
+              "Defense Evasion"
+            ],
+            "technique": [
+              "Process Injection: ListPlanting"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": true,
+          "groups": [
+            "sysmon",
+            "sysmon_event10",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1709002400.000017",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "10",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "10",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-22 10:06:01.000",
+              "sourceProcessGuid": "{12345678-2400-2400-2400-000000000016}",
+              "sourceProcessId": "11200",
+              "sourceImage": "C:\\Users\\Public\\ListPlant.exe",
+              "targetProcessGuid": "{12345678-2400-2400-2400-000000000200}",
+              "targetProcessId": "4820",
+              "targetImage": "C:\\Windows\\explorer.exe",
+              "grantedAccess": "0x1F0FFF",
+              "callTrace": "C:\\Windows\\SYSTEM32\\ntdll.dll+A0344",
+              "sourceUser": "CORP\\Administrator",
+              "targetUser": "CORP\\Administrator"
+            }
+          }
+        }
+      }
+    }
+  ]
+}

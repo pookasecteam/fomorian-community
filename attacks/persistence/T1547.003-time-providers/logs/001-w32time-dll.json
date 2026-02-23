@@ -1,0 +1,79 @@
+{
+  "_metadata": {
+    "attack_id": "T1547.003",
+    "variation": "001",
+    "name": "Time Providers DLL",
+    "description": "Registering malicious DLL as W32Time time provider",
+    "expected_detection": "HIGH",
+    "kill_chain_phase": "persistence",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Sysmon Event 13 - Time provider registry modification",
+      "sequence": 1,
+      "timestamp": "2026-02-04T10:06:00.000Z",
+      "log": {
+        "timestamp": "2026-02-04T10:06:00.000+0000",
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 13: Time Provider Registry Modification",
+          "id": "100922",
+          "mitre": {
+            "id": [
+              "T1547.003"
+            ],
+            "tactic": [
+              "Persistence",
+              "Privilege Escalation"
+            ],
+            "technique": [
+              "Time Providers"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event13",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000001.100007",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "13",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-04 10:06:00.000",
+              "eventType": "SetValue",
+              "processGuid": "{A1B2C3D4-1547-0003-0001-000000000001}",
+              "processId": "5678",
+              "image": "C:\\Windows\\System32\\reg.exe",
+              "targetObject": "HKLM\\SYSTEM\\CurrentControlSet\\Services\\W32Time\\TimeProviders\\MalProvider\\DllName",
+              "details": "C:\\Windows\\Temp\\evil.dll",
+              "user": "CORP\\attacker"
+            }
+          }
+        }
+      }
+    }
+  ]
+}

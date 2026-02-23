@@ -1,0 +1,400 @@
+{
+  "_metadata": {
+    "attack_id": "T1518.001",
+    "variation": "001",
+    "name": "AWS Security Tools Enumeration",
+    "description": "Attacker enumerates active security services including Security Hub, IAM Access Analyzer, and GuardDuty to understand defensive posture and plan evasion",
+    "expected_detection": "MEDIUM",
+    "kill_chain_phase": "discovery",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "CloudTrail: DescribeHub - Check if Security Hub is enabled and configured",
+      "sequence": 1,
+      "timestamp": "2026-02-23T14:08:00.000Z",
+      "log": {
+        "timestamp": "2026-02-23T14:08:01.000+0000",
+        "rule": {
+          "level": 3,
+          "description": "AWS Cloudtrail: securityhub.amazonaws.com - DescribeHub.",
+          "id": "100802",
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "amazon",
+            "aws",
+            "aws_cloudtrail"
+          ],
+          "pci_dss": [
+            "10.6.1"
+          ],
+          "hipaa": [
+            "164.312.b"
+          ],
+          "nist_800_53": [
+            "AU.6"
+          ],
+          "tsc": [
+            "CC7.2",
+            "CC7.3"
+          ],
+          "mitre": {
+            "id": [
+              "T1518.001"
+            ],
+            "tactic": [
+              "Discovery"
+            ],
+            "technique": [
+              "Security Software Discovery"
+            ]
+          },
+          "gdpr": [
+            "IV_35.7.d"
+          ]
+        },
+        "agent": {
+          "id": "000",
+          "name": "wazuh.manager"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000029.290013",
+        "decoder": {
+          "name": "json"
+        },
+        "location": "Wazuh-AWS",
+        "data": {
+          "integration": "aws",
+          "aws": {
+            "eventVersion": "1.11",
+            "eventTime": "2026-02-23T14:08:00Z",
+            "eventSource": "securityhub.amazonaws.com",
+            "eventName": "DescribeHub",
+            "awsRegion": "us-east-2",
+            "sourceIPAddress": "198.51.100.77",
+            "userAgent": "aws-cli/2.15.0 Python/3.11.6 Linux/6.1.0-kali amd64",
+            "userIdentity": {
+              "type": "IAMUser",
+              "arn": "arn:aws:iam::575084400239:user/compromised-dev",
+              "accountId": "575084400239",
+              "userName": "compromised-dev",
+              "principalId": "AIDACKCEVSQ6C2EXAMPLE",
+              "accessKeyId": "AKIAIOSFODNN7EXAMPLE"
+            },
+            "requestParameters": null,
+            "responseElements": null,
+            "eventID": "a5c9d3e4-f6b8-4d0e-a3c5-9r8q4p2f6b03",
+            "requestID": "d6e7f8a9-b0c1-4d2e-a3f4-c5d6e7f8a9b0",
+            "readOnly": "true",
+            "eventType": "AwsApiCall",
+            "managementEvent": "true",
+            "recipientAccountId": "575084400239",
+            "eventCategory": "Management",
+            "source": "cloudtrail",
+            "aws_account_id": "575084400239"
+          }
+        }
+      }
+    },
+    {
+      "_comment": "CloudTrail: GetFindings - Retrieve Security Hub findings to see what has been detected",
+      "sequence": 2,
+      "timestamp": "2026-02-23T14:08:12.000Z",
+      "log": {
+        "timestamp": "2026-02-23T14:08:13.000+0000",
+        "rule": {
+          "level": 5,
+          "description": "AWS Cloudtrail: securityhub.amazonaws.com - GetFindings.",
+          "id": "100802",
+          "firedtimes": 2,
+          "mail": false,
+          "groups": [
+            "amazon",
+            "aws",
+            "aws_cloudtrail"
+          ],
+          "pci_dss": [
+            "10.6.1"
+          ],
+          "hipaa": [
+            "164.312.b"
+          ],
+          "nist_800_53": [
+            "AU.6"
+          ],
+          "tsc": [
+            "CC7.2",
+            "CC7.3"
+          ],
+          "mitre": {
+            "id": [
+              "T1518.001"
+            ],
+            "tactic": [
+              "Discovery"
+            ],
+            "technique": [
+              "Security Software Discovery"
+            ]
+          },
+          "gdpr": [
+            "IV_35.7.d"
+          ]
+        },
+        "agent": {
+          "id": "000",
+          "name": "wazuh.manager"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000029.290014",
+        "decoder": {
+          "name": "json"
+        },
+        "location": "Wazuh-AWS",
+        "data": {
+          "integration": "aws",
+          "aws": {
+            "eventVersion": "1.11",
+            "eventTime": "2026-02-23T14:08:12Z",
+            "eventSource": "securityhub.amazonaws.com",
+            "eventName": "GetFindings",
+            "awsRegion": "us-east-2",
+            "sourceIPAddress": "198.51.100.77",
+            "userAgent": "aws-cli/2.15.0 Python/3.11.6 Linux/6.1.0-kali amd64",
+            "userIdentity": {
+              "type": "IAMUser",
+              "arn": "arn:aws:iam::575084400239:user/compromised-dev",
+              "accountId": "575084400239",
+              "userName": "compromised-dev",
+              "principalId": "AIDACKCEVSQ6C2EXAMPLE",
+              "accessKeyId": "AKIAIOSFODNN7EXAMPLE"
+            },
+            "requestParameters": {
+              "filters": {
+                "severityLabel": [
+                  {
+                    "value": "CRITICAL",
+                    "comparison": "EQUALS"
+                  }
+                ],
+                "workflowStatus": [
+                  {
+                    "value": "NEW",
+                    "comparison": "EQUALS"
+                  }
+                ]
+              },
+              "maxResults": 100
+            },
+            "responseElements": null,
+            "eventID": "b6d0e4f5-a7c9-4e1f-b4d6-0s9r5q3a7c14",
+            "requestID": "e7f8a9b0-c1d2-4e3f-b4a5-d6e7f8a9b0c1",
+            "readOnly": "true",
+            "eventType": "AwsApiCall",
+            "managementEvent": "true",
+            "recipientAccountId": "575084400239",
+            "eventCategory": "Management",
+            "source": "cloudtrail",
+            "aws_account_id": "575084400239"
+          }
+        }
+      }
+    },
+    {
+      "_comment": "CloudTrail: ListAnalyzers - Check for IAM Access Analyzer instances",
+      "sequence": 3,
+      "timestamp": "2026-02-23T14:08:24.000Z",
+      "log": {
+        "timestamp": "2026-02-23T14:08:25.000+0000",
+        "rule": {
+          "level": 3,
+          "description": "AWS Cloudtrail: access-analyzer.amazonaws.com - ListAnalyzers.",
+          "id": "100802",
+          "firedtimes": 3,
+          "mail": false,
+          "groups": [
+            "amazon",
+            "aws",
+            "aws_cloudtrail"
+          ],
+          "pci_dss": [
+            "10.6.1"
+          ],
+          "hipaa": [
+            "164.312.b"
+          ],
+          "nist_800_53": [
+            "AU.6"
+          ],
+          "tsc": [
+            "CC7.2",
+            "CC7.3"
+          ],
+          "mitre": {
+            "id": [
+              "T1518.001"
+            ],
+            "tactic": [
+              "Discovery"
+            ],
+            "technique": [
+              "Security Software Discovery"
+            ]
+          },
+          "gdpr": [
+            "IV_35.7.d"
+          ]
+        },
+        "agent": {
+          "id": "000",
+          "name": "wazuh.manager"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000029.290015",
+        "decoder": {
+          "name": "json"
+        },
+        "location": "Wazuh-AWS",
+        "data": {
+          "integration": "aws",
+          "aws": {
+            "eventVersion": "1.11",
+            "eventTime": "2026-02-23T14:08:24Z",
+            "eventSource": "access-analyzer.amazonaws.com",
+            "eventName": "ListAnalyzers",
+            "awsRegion": "us-east-2",
+            "sourceIPAddress": "198.51.100.77",
+            "userAgent": "aws-cli/2.15.0 Python/3.11.6 Linux/6.1.0-kali amd64",
+            "userIdentity": {
+              "type": "IAMUser",
+              "arn": "arn:aws:iam::575084400239:user/compromised-dev",
+              "accountId": "575084400239",
+              "userName": "compromised-dev",
+              "principalId": "AIDACKCEVSQ6C2EXAMPLE",
+              "accessKeyId": "AKIAIOSFODNN7EXAMPLE"
+            },
+            "requestParameters": null,
+            "responseElements": null,
+            "eventID": "c7e1f5a6-b8d0-4f2a-c5e7-1t0s6r4b8d25",
+            "requestID": "f8a9b0c1-d2e3-4f4a-c5b6-e7f8a9b0c1d2",
+            "readOnly": "true",
+            "eventType": "AwsApiCall",
+            "managementEvent": "true",
+            "recipientAccountId": "575084400239",
+            "eventCategory": "Management",
+            "source": "cloudtrail",
+            "aws_account_id": "575084400239"
+          }
+        }
+      }
+    },
+    {
+      "_comment": "CloudTrail: ListFindings - Enumerate GuardDuty findings to see what was detected",
+      "sequence": 4,
+      "timestamp": "2026-02-23T14:08:37.000Z",
+      "log": {
+        "timestamp": "2026-02-23T14:08:38.000+0000",
+        "rule": {
+          "level": 5,
+          "description": "AWS Cloudtrail: guardduty.amazonaws.com - ListFindings.",
+          "id": "100802",
+          "firedtimes": 4,
+          "mail": false,
+          "groups": [
+            "amazon",
+            "aws",
+            "aws_cloudtrail"
+          ],
+          "pci_dss": [
+            "10.6.1"
+          ],
+          "hipaa": [
+            "164.312.b"
+          ],
+          "nist_800_53": [
+            "AU.6"
+          ],
+          "tsc": [
+            "CC7.2",
+            "CC7.3"
+          ],
+          "mitre": {
+            "id": [
+              "T1518.001"
+            ],
+            "tactic": [
+              "Discovery"
+            ],
+            "technique": [
+              "Security Software Discovery"
+            ]
+          },
+          "gdpr": [
+            "IV_35.7.d"
+          ]
+        },
+        "agent": {
+          "id": "000",
+          "name": "wazuh.manager"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000029.290016",
+        "decoder": {
+          "name": "json"
+        },
+        "location": "Wazuh-AWS",
+        "data": {
+          "integration": "aws",
+          "aws": {
+            "eventVersion": "1.11",
+            "eventTime": "2026-02-23T14:08:37Z",
+            "eventSource": "guardduty.amazonaws.com",
+            "eventName": "ListFindings",
+            "awsRegion": "us-east-2",
+            "sourceIPAddress": "198.51.100.77",
+            "userAgent": "aws-cli/2.15.0 Python/3.11.6 Linux/6.1.0-kali amd64",
+            "userIdentity": {
+              "type": "IAMUser",
+              "arn": "arn:aws:iam::575084400239:user/compromised-dev",
+              "accountId": "575084400239",
+              "userName": "compromised-dev",
+              "principalId": "AIDACKCEVSQ6C2EXAMPLE",
+              "accessKeyId": "AKIAIOSFODNN7EXAMPLE"
+            },
+            "requestParameters": {
+              "detectorId": "d4b5c6e7f8a9b0c1d2e3",
+              "findingCriteria": {
+                "criterion": {
+                  "severity": {
+                    "gte": 7
+                  }
+                }
+              },
+              "maxResults": 50
+            },
+            "responseElements": null,
+            "eventID": "d8f2a6b7-c9e1-4a3b-d6f8-2u1t7s5c9e36",
+            "requestID": "a9b0c1d2-e3f4-4a5b-d6c7-f8a9b0c1d2e3",
+            "readOnly": "true",
+            "eventType": "AwsApiCall",
+            "managementEvent": "true",
+            "recipientAccountId": "575084400239",
+            "eventCategory": "Management",
+            "source": "cloudtrail",
+            "aws_account_id": "575084400239"
+          }
+        }
+      }
+    }
+  ]
+}

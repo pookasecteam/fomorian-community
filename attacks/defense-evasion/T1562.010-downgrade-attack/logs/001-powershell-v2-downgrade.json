@@ -1,0 +1,56 @@
+{
+  "_metadata": {
+    "attack_id": "T1562.010",
+    "variation": "001",
+    "name": "Downgrade Attack",
+    "description": "Launch PowerShell v2 to evade logging",
+    "expected_detection": "HIGH",
+    "kill_chain_phase": "defense-evasion",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Sysmon Event 1 - PowerShell -Version 2",
+      "sequence": 1,
+      "log": {
+        "rule": {
+          "level": 8,
+          "description": "Sysmon - Event 1: PowerShell v2 Downgrade",
+          "id": "100001",
+          "mitre": {
+            "id": [
+              "T1562.010"
+            ],
+            "tactic": [
+              "Defense Evasion"
+            ],
+            "technique": [
+              "Impair Defenses: Downgrade Attack"
+            ]
+          },
+          "groups": [
+            "sysmon",
+            "sysmon_event1"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01"
+        },
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1"
+            },
+            "eventdata": {
+              "commandLine": "powershell.exe -Version 2 -c whoami",
+              "image": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+              "user": "CORP\\admin2"
+            }
+          }
+        }
+      }
+    }
+  ]
+}

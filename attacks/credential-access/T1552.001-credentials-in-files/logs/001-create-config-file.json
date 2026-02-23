@@ -1,0 +1,149 @@
+{
+  "_metadata": {
+    "attack_id": "T1552.001",
+    "variation": "001",
+    "name": "Credentials in Files - Config File Creation",
+    "description": "Store plaintext credentials in configuration file",
+    "expected_detection": "LOW",
+    "kill_chain_phase": "credential-access",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Sysmon Event 1 - Process Creation: echo password to file",
+      "sequence": 1,
+      "timestamp": "2026-02-09T10:37:00.000Z",
+      "log": {
+        "rule": {
+          "level": 3,
+          "description": "Sysmon - Event 1: Process creation",
+          "id": "100101",
+          "mitre": {
+            "id": [
+              "T1552.001"
+            ],
+            "tactic": [
+              "Credential Access"
+            ],
+            "technique": [
+              "Unsecured Credentials: Credentials In Files"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1709000103.000001",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-09 10:37:00.000",
+              "processGuid": "{12345678-1234-1234-1234-000000103001}",
+              "processId": "6128",
+              "image": "C:\\Windows\\System32\\cmd.exe",
+              "commandLine": "cmd.exe /c echo password=Admin123 > C:\\Users\\Public\\test.config",
+              "currentDirectory": "C:\\Users\\Public\\",
+              "user": "CORP\\Administrator",
+              "integrityLevel": "High",
+              "hashes": "SHA256=E5F6A7B8C9D0E1F2A3B4C5D6E7F8A9B0C1D2E3F4A5B6C7D8E9F0A1B2C3D4E5F6",
+              "parentProcessGuid": "{12345678-1234-1234-1234-000000103000}",
+              "parentProcessId": "1234",
+              "parentImage": "C:\\Windows\\System32\\cmd.exe",
+              "parentCommandLine": "C:\\Windows\\System32\\cmd.exe"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Sysmon Event 11 - File Create: test.config",
+      "sequence": 2,
+      "timestamp": "2026-02-09T10:37:01.000Z",
+      "log": {
+        "rule": {
+          "level": 3,
+          "description": "Sysmon - Event 11: File created",
+          "id": "100111",
+          "mitre": {
+            "id": [
+              "T1552.001"
+            ],
+            "tactic": [
+              "Credential Access"
+            ],
+            "technique": [
+              "Unsecured Credentials: Credentials In Files"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event11",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1709000103.000002",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "11",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "11",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-09 10:37:01.000",
+              "processGuid": "{12345678-1234-1234-1234-000000103001}",
+              "processId": "6128",
+              "image": "C:\\Windows\\System32\\cmd.exe",
+              "targetFilename": "C:\\Users\\Public\\test.config",
+              "creationUtcTime": "2026-02-09 10:37:01.000"
+            }
+          }
+        }
+      }
+    }
+  ]
+}

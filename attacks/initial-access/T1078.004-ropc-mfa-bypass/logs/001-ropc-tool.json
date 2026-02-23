@@ -1,0 +1,64 @@
+{
+  "timestamp": "2026-01-31T23:07:00.000Z",
+  "rule": {
+    "level": 12,
+    "description": "Sysmon - Event 1: ROPC MFA Bypass Tool",
+    "id": "92151",
+    "mitre": {
+      "id": [
+        "T1078.004"
+      ],
+      "tactic": [
+        "Initial Access",
+        "Defense Evasion",
+        "Persistence"
+      ],
+      "technique": [
+        "Valid Accounts: Cloud Accounts"
+      ]
+    },
+    "groups": [
+      "sysmon",
+      "sysmon_event1",
+      "windows"
+    ]
+  },
+  "agent": {
+    "id": "007",
+    "name": "WS01",
+    "ip": "198.51.100.20"
+  },
+  "manager": {
+    "name": "wazuh.manager"
+  },
+  "id": "1700000037.000001",
+  "decoder": {
+    "name": "windows_eventchannel"
+  },
+  "location": "EventChannel",
+  "data": {
+    "win": {
+      "system": {
+        "eventID": "1",
+        "channel": "Microsoft-Windows-Sysmon/Operational",
+        "providerName": "Microsoft-Windows-Sysmon",
+        "computer": "WS01.corp.local"
+      },
+      "eventdata": {
+        "utcTime": "2026-01-31 23:07:00.000",
+        "processGuid": "{12345678-1234-1234-1234-123456789037}",
+        "processId": "6789",
+        "image": "C:\\Users\\attacker\\tools\\python.exe",
+        "commandLine": "python.exe ropci.py --tenant contoso.onmicrosoft.com --username admin@contoso.com --password P@ssw0rd",
+        "currentDirectory": "C:\\Users\\attacker\\tools\\",
+        "user": "CORP\\attacker",
+        "parentImage": "C:\\Windows\\System32\\cmd.exe",
+        "parentCommandLine": "cmd.exe"
+      }
+    }
+  },
+  "_fomorian_batch": "threat-intel-batch3-2026-01-31",
+  "_fomorian_test": true,
+  "_fomorian_attack_id": "T1078.004",
+  "_fomorian_expected_detection": "Sigma: ROPC Legacy Authentication Tool (T1078.004)"
+}

@@ -1,0 +1,233 @@
+{
+  "_metadata": {
+    "attack_id": "T1559.001",
+    "variation": "001",
+    "name": "Office COM Object Abuse",
+    "description": "Malicious use of Office COM objects (Outlook, Excel) from non-Office processes",
+    "expected_detection": "HIGH",
+    "kill_chain_phase": "execution",
+    "references": [
+      "https://github.com/TheMagicClaw/LOLAPI"
+    ],
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Sysmon Event 1 - PowerShell instantiating Outlook COM object",
+      "sequence": 1,
+      "timestamp": "2026-02-03T14:00:00.000Z",
+      "log": {
+        "timestamp": "2026-02-03T14:00:00.000+0000",
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 1: PowerShell with Outlook COM object",
+          "id": "100916",
+          "mitre": {
+            "id": [
+              "T1559.001",
+              "T1059.001"
+            ],
+            "tactic": [
+              "Execution"
+            ],
+            "technique": [
+              "Component Object Model",
+              "PowerShell"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows",
+            "powershell",
+            "com"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1706965200.100001",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-03 14:00:00.000",
+              "processGuid": "{12345678-1234-1234-1234-123456789230}",
+              "processId": "12788",
+              "image": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+              "commandLine": "powershell.exe -c \"$outlook = New-Object -ComObject Outlook.Application; $mapi = $outlook.GetNamespace('MAPI'); $inbox = $mapi.GetDefaultFolder(6); $inbox.Items | Select-Object Subject, SenderEmailAddress\"",
+              "currentDirectory": "C:\\Users\\attacker\\",
+              "user": "CORP\\attacker",
+              "integrityLevel": "Medium",
+              "parentImage": "C:\\Windows\\System32\\cmd.exe"
+            }
+          }
+        },
+        "_fomorian_batch": "lolapi-com",
+        "_fomorian_test": true,
+        "_fomorian_attack_id": "T1559.001",
+        "_fomorian_technique": "outlook-com-abuse"
+      }
+    },
+    {
+      "_comment": "Sysmon Event 1 - PowerShell with Excel COM for data exfil",
+      "sequence": 2,
+      "timestamp": "2026-02-03T14:00:10.000Z",
+      "log": {
+        "timestamp": "2026-02-03T14:00:10.000+0000",
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 1: PowerShell with Excel COM object",
+          "id": "100916",
+          "mitre": {
+            "id": [
+              "T1559.001",
+              "T1059.001"
+            ],
+            "tactic": [
+              "Execution"
+            ],
+            "technique": [
+              "Component Object Model",
+              "PowerShell"
+            ]
+          },
+          "firedtimes": 2,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows",
+            "powershell",
+            "com"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1706965210.100002",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-03 14:00:10.000",
+              "processGuid": "{12345678-1234-1234-1234-123456789231}",
+              "processId": "12900",
+              "image": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+              "commandLine": "powershell.exe -c \"$excel = New-Object -ComObject Excel.Application; $wb = $excel.Workbooks.Open('C:\\Sensitive\\data.xlsx'); $ws = $wb.Sheets[1]; $ws.Range('A1:Z100').Value2 | Out-File C:\\Temp\\exfil.txt\"",
+              "currentDirectory": "C:\\Users\\attacker\\",
+              "user": "CORP\\attacker",
+              "integrityLevel": "Medium",
+              "parentImage": "C:\\Windows\\System32\\cmd.exe"
+            }
+          }
+        },
+        "_fomorian_batch": "lolapi-com",
+        "_fomorian_test": true,
+        "_fomorian_attack_id": "T1559.001",
+        "_fomorian_technique": "excel-com-abuse"
+      }
+    },
+    {
+      "_comment": "Sysmon Event 1 - WScript Shell.Application abuse",
+      "sequence": 3,
+      "timestamp": "2026-02-03T14:00:20.000Z",
+      "log": {
+        "timestamp": "2026-02-03T14:00:20.000+0000",
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 1: Shell.Application COM object abuse",
+          "id": "100916",
+          "mitre": {
+            "id": [
+              "T1559.001"
+            ],
+            "tactic": [
+              "Execution"
+            ],
+            "technique": [
+              "Component Object Model"
+            ]
+          },
+          "firedtimes": 3,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows",
+            "com"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1706965220.100003",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-03 14:00:20.000",
+              "processGuid": "{12345678-1234-1234-1234-123456789232}",
+              "processId": "13012",
+              "image": "C:\\Windows\\System32\\wscript.exe",
+              "commandLine": "wscript.exe C:\\Users\\attacker\\script.vbs",
+              "currentDirectory": "C:\\Users\\attacker\\",
+              "user": "CORP\\attacker",
+              "integrityLevel": "Medium",
+              "parentImage": "C:\\Windows\\System32\\cmd.exe"
+            }
+          }
+        },
+        "_fomorian_batch": "lolapi-com",
+        "_fomorian_test": true,
+        "_fomorian_attack_id": "T1559.001",
+        "_fomorian_technique": "shell-application-abuse"
+      }
+    }
+  ]
+}

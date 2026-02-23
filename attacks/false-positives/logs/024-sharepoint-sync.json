@@ -1,0 +1,152 @@
+{
+  "_metadata": {
+    "attack_id": "NONE",
+    "variation": "FP-024",
+    "name": "SharePoint OneDrive for Business File Sync",
+    "description": "OneDrive for Business client (GROOVE.EXE) performing routine file synchronization with SharePoint Online",
+    "expected_detection": "NONE",
+    "kill_chain_phase": "none",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "OneDrive sync client creating local file from SharePoint - LEGITIMATE",
+      "sequence": 1,
+      "timestamp": "2026-01-29T11:45:00.000Z",
+      "log": {
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 11: OneDrive File Sync Write",
+          "id": "100100",
+          "mitre": {
+            "id": [
+              "NONE"
+            ],
+            "tactic": [
+              "None"
+            ],
+            "technique": [
+              "OneDrive File Sync Write"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event11",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.50"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000000.122024001",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "11",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "11",
+              "opcode": "0",
+              "keywords": "0x8000000000000000",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-01-29 11:45:00.000",
+              "processGuid": "{FP-024-C3D4-E5F6-000000000001}",
+              "processId": "7340",
+              "image": "C:\\Program Files\\Microsoft Office\\root\\Office16\\GROOVE.EXE",
+              "targetFilename": "C:\\Users\\j.murphy\\OneDrive - Corp\\Documents\\Q4-Budget-Report.xlsx",
+              "creationUtcTime": "2026-01-29 11:45:00.000"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "OneDrive HTTPS connection to SharePoint Online - LEGITIMATE",
+      "sequence": 2,
+      "timestamp": "2026-01-29T11:45:03.000Z",
+      "log": {
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 3: OneDrive SharePoint Sync Connection",
+          "id": "100100",
+          "mitre": {
+            "id": [
+              "NONE"
+            ],
+            "tactic": [
+              "None"
+            ],
+            "technique": [
+              "OneDrive SharePoint Sync Connection"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event3",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.50"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000000.122024002",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "3",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "3",
+              "opcode": "0",
+              "keywords": "0x8000000000000000",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-01-29 11:45:03.000",
+              "processGuid": "{FP-024-C3D4-E5F6-000000000002}",
+              "processId": "7340",
+              "image": "C:\\Program Files\\Microsoft Office\\root\\Office16\\GROOVE.EXE",
+              "user": "CORP\\j.murphy",
+              "protocol": "tcp",
+              "initiated": "true",
+              "sourceIp": "198.51.100.50",
+              "sourcePort": "51423",
+              "destinationIp": "13.107.136.10",
+              "destinationHostname": "corp-my.sharepoint.com",
+              "destinationPort": "443"
+            }
+          }
+        }
+      }
+    }
+  ]
+}

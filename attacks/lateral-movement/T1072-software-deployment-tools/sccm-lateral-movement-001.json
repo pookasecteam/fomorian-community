@@ -1,0 +1,251 @@
+{
+  "_metadata": {
+    "attack_id": "T1072",
+    "variation": "001",
+    "name": "SCCM Application Deployment Abuse",
+    "description": "Lateral movement via SCCM/ConfigMgr to deploy malicious application or script to target systems",
+    "expected_detection": "HIGH",
+    "kill_chain_phase": "lateral-movement",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Sysmon Event 1 - SCCMAdmin console creating deployment",
+      "sequence": 1,
+      "timestamp": "2026-02-08T11:30:00.000Z",
+      "log": {
+        "timestamp": "2026-02-08T11:30:00.000+0000",
+        "rule": {
+          "level": 6,
+          "description": "Sysmon - Event 1: SCCM Admin Console execution",
+          "id": "100915",
+          "mitre": {
+            "id": [
+              "T1072"
+            ],
+            "tactic": [
+              "Lateral Movement"
+            ],
+            "technique": [
+              "Software Deployment Tools"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1707400000.300012",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-08 11:30:00.000",
+              "processGuid": "{A1B2C3D4-LAT-1072-0001-000000000001}",
+              "processId": "7234",
+              "image": "C:\\Program Files (x86)\\Microsoft Endpoint Manager\\AdminConsole\\bin\\Microsoft.ConfigurationManagement.exe",
+              "fileVersion": "5.2309.1000.0",
+              "description": "Configuration Manager Console",
+              "product": "Microsoft Endpoint Configuration Manager",
+              "company": "Microsoft Corporation",
+              "originalFileName": "Microsoft.ConfigurationManagement.exe",
+              "commandLine": "\"C:\\Program Files (x86)\\Microsoft Endpoint Manager\\AdminConsole\\bin\\Microsoft.ConfigurationManagement.exe\"",
+              "currentDirectory": "C:\\Program Files (x86)\\Microsoft Endpoint Manager\\AdminConsole\\bin\\",
+              "user": "CORP\\sccm.admin",
+              "logonGuid": "{A1B2C3D4-0001-0001-0003-000000000001}",
+              "logonId": "0x5e7",
+              "terminalSessionId": "1",
+              "integrityLevel": "High",
+              "hashes": "SHA256=2B3C4D5E6F7A8B9C0D1E2F3A4B5C6D7E8F9A0B1C2D3E4F5A6B7C8D9E0F1A2B3C",
+              "parentProcessGuid": "{A1B2C3D4-0001-0001-0002-000000000001}",
+              "parentProcessId": "4512",
+              "parentImage": "C:\\Windows\\explorer.exe",
+              "parentCommandLine": "C:\\Windows\\explorer.exe"
+            }
+          }
+        },
+        "_fomorian_batch": "PT-2026-003-batch1-lateral",
+        "_fomorian_test": true,
+        "_fomorian_attack_id": "T1072",
+        "_fomorian_expected_detection": "Sigma: SCCM Admin Console Activity (T1072)"
+      }
+    },
+    {
+      "_comment": "Windows Event - SCCM client receiving application deployment",
+      "sequence": 2,
+      "timestamp": "2026-02-08T11:30:30.000Z",
+      "log": {
+        "timestamp": "2026-02-08T11:30:30.000+0000",
+        "rule": {
+          "level": 10,
+          "description": "SCCM: Application deployment received on client",
+          "id": "100001",
+          "mitre": {
+            "id": [
+              "T1072"
+            ],
+            "tactic": [
+              "Lateral Movement",
+              "Execution"
+            ],
+            "technique": [
+              "Software Deployment Tools"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "windows",
+            "sccm",
+            "application_deployment"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1707400000.300013",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "11707",
+              "channel": "Application",
+              "providerName": "MsiInstaller",
+              "computer": "FS01.corp.local",
+              "level": "4",
+              "task": "0",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "ProductName": "Maintenance Tool",
+              "ProductVersion": "1.0.0",
+              "Manufacturer": "Internal IT",
+              "ProductLanguage": "1033",
+              "InstallSource": "\\\\SCCM01\\SMS_ATL\\Client\\i386\\",
+              "PackageCode": "{D7E8F9A0-B1C2-3456-7890-ABCDEF012345}",
+              "UserSID": "S-1-5-18"
+            }
+          }
+        },
+        "_fomorian_batch": "PT-2026-003-batch1-lateral",
+        "_fomorian_test": true,
+        "_fomorian_attack_id": "T1072",
+        "_fomorian_expected_detection": "Sigma: SCCM Application Deployment (T1072)"
+      }
+    },
+    {
+      "_comment": "Sysmon Event 1 - SCCM deployed script execution on target",
+      "sequence": 3,
+      "timestamp": "2026-02-08T11:31:00.000Z",
+      "log": {
+        "timestamp": "2026-02-08T11:31:00.000+0000",
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 1: SCCM script execution via ccmexec",
+          "id": "100915",
+          "mitre": {
+            "id": [
+              "T1072",
+              "T1059.001"
+            ],
+            "tactic": [
+              "Lateral Movement",
+              "Execution"
+            ],
+            "technique": [
+              "Software Deployment Tools",
+              "PowerShell"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": true,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1707400000.300014",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "FS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-08 11:31:00.000",
+              "processGuid": "{A1B2C3D4-LAT-1072-0002-000000000001}",
+              "processId": "8456",
+              "image": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+              "commandLine": "powershell.exe -ExecutionPolicy Bypass -File \"C:\\Windows\\ccmcache\\1a\\deploy.ps1\"",
+              "currentDirectory": "C:\\Windows\\ccmcache\\1a\\",
+              "user": "NT AUTHORITY\\SYSTEM",
+              "logonGuid": "{A1B2C3D4-0001-0001-0001-000000000001}",
+              "logonId": "0x3e7",
+              "terminalSessionId": "0",
+              "integrityLevel": "System",
+              "hashes": "SHA256=9A8B7C6D5E4F3A2B1C0D9E8F7A6B5C4D3E2F1A0B9C8D7E6F5A4B3C2D1E0F9A8B",
+              "parentProcessGuid": "{A1B2C3D4-1072-0001-0003-000000000001}",
+              "parentProcessId": "2156",
+              "parentImage": "C:\\Windows\\CCM\\CcmExec.exe",
+              "parentCommandLine": "C:\\Windows\\CCM\\CcmExec.exe"
+            }
+          }
+        },
+        "_fomorian_batch": "PT-2026-003-batch1-lateral",
+        "_fomorian_test": true,
+        "_fomorian_attack_id": "T1072",
+        "_fomorian_expected_detection": "Sigma: SCCM Script Deployment Execution (T1072)"
+      }
+    }
+  ]
+}

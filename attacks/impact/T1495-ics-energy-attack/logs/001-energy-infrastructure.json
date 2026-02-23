@@ -1,0 +1,328 @@
+{
+  "_metadata": {
+    "attack_id": "T1495",
+    "variation": "001",
+    "name": "Energy Infrastructure Attack (Poland-Style)",
+    "description": "Coordinated attack on energy infrastructure targeting wind farms, solar farms, and power plants",
+    "expected_detection": "HIGH",
+    "kill_chain_phase": "impact",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Firewall - Outbound connection to ICS protocol (Modbus)",
+      "sequence": 1,
+      "timestamp": "2026-01-31T13:00:00.000Z",
+      "log": {
+        "rule": {
+          "level": 12,
+          "description": "Firewall - Outbound ICS Protocol Connection (Modbus)",
+          "id": "100400",
+          "mitre": {
+            "id": [
+              "T1495",
+              "T1489"
+            ],
+            "tactic": [
+              "Impact"
+            ],
+            "technique": [
+              "Firmware Corruption",
+              "Service Stop"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "firewall",
+            "ics",
+            "modbus",
+            "energy"
+          ]
+        },
+        "agent": {
+          "id": "040",
+          "name": "wazuh.manager",
+          "ip": "198.51.100.100"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000131.600001",
+        "decoder": {
+          "name": "firewall"
+        },
+        "location": "/var/log/firewall.log",
+        "data": {
+          "srcip": "198.51.100.50",
+          "dstip": "203.0.113.50",
+          "srcport": "49152",
+          "dstport": "502",
+          "protocol": "TCP",
+          "action": "ALLOW",
+          "direction": "outbound",
+          "interface": "eth0"
+        }
+      }
+    },
+    {
+      "_comment": "Firewall - Outbound connection to ICS protocol (S7comm)",
+      "sequence": 2,
+      "timestamp": "2026-01-31T13:00:15.000Z",
+      "log": {
+        "rule": {
+          "level": 12,
+          "description": "Firewall - Outbound ICS Protocol Connection (S7comm)",
+          "id": "100401",
+          "mitre": {
+            "id": [
+              "T1495",
+              "T1565"
+            ],
+            "tactic": [
+              "Impact"
+            ],
+            "technique": [
+              "Firmware Corruption",
+              "Data Manipulation"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "firewall",
+            "ics",
+            "s7comm",
+            "energy"
+          ]
+        },
+        "agent": {
+          "id": "040",
+          "name": "wazuh.manager",
+          "ip": "198.51.100.100"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000131.600002",
+        "decoder": {
+          "name": "firewall"
+        },
+        "location": "/var/log/firewall.log",
+        "data": {
+          "srcip": "198.51.100.50",
+          "dstip": "198.51.100.25",
+          "srcport": "49153",
+          "dstport": "102",
+          "protocol": "TCP",
+          "action": "ALLOW",
+          "direction": "outbound",
+          "interface": "eth0"
+        }
+      }
+    },
+    {
+      "_comment": "Firewall - Outbound connection to ICS protocol (DNP3)",
+      "sequence": 3,
+      "timestamp": "2026-01-31T13:00:30.000Z",
+      "log": {
+        "rule": {
+          "level": 14,
+          "description": "Firewall - Outbound ICS Protocol Connection (DNP3)",
+          "id": "100402",
+          "mitre": {
+            "id": [
+              "T1495",
+              "T1489"
+            ],
+            "tactic": [
+              "Impact"
+            ],
+            "technique": [
+              "Firmware Corruption",
+              "Service Stop"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "firewall",
+            "ics",
+            "dnp3",
+            "energy",
+            "critical"
+          ]
+        },
+        "agent": {
+          "id": "040",
+          "name": "wazuh.manager",
+          "ip": "198.51.100.100"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000131.600003",
+        "decoder": {
+          "name": "firewall"
+        },
+        "location": "/var/log/firewall.log",
+        "data": {
+          "srcip": "198.51.100.50",
+          "dstip": "185.192.69.100",
+          "srcport": "49154",
+          "dstport": "20000",
+          "protocol": "TCP",
+          "action": "ALLOW",
+          "direction": "outbound",
+          "interface": "eth0"
+        }
+      }
+    },
+    {
+      "_comment": "Process creation - ICS toolkit execution",
+      "sequence": 4,
+      "timestamp": "2026-01-31T13:01:00.000Z",
+      "log": {
+        "rule": {
+          "level": 14,
+          "description": "Sysmon - Event 1: ICS Attack Tool Execution",
+          "id": "100403",
+          "mitre": {
+            "id": [
+              "T1495",
+              "T1059.001"
+            ],
+            "tactic": [
+              "Impact",
+              "Execution"
+            ],
+            "technique": [
+              "Firmware Corruption",
+              "PowerShell"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows",
+            "ics",
+            "attack"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000131.600004",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local"
+            },
+            "eventdata": {
+              "utcTime": "2026-01-31 13:01:00.000",
+              "processGuid": "{WS01-ICS-ATTACK}",
+              "processId": "8765",
+              "image": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+              "commandLine": "powershell.exe -ep bypass -file C:\\Users\\operator\\ics_control.ps1 -target 203.0.113.50 -port 502 -command STOP",
+              "currentDirectory": "C:\\Users\\operator\\",
+              "user": "CORP\\operator",
+              "integrityLevel": "High",
+              "hashes": "SHA256=DE96A6E69944335375DC1AC238336066889D9FFC7D73628EF4FE1B1B160AB32C",
+              "parentProcessGuid": "{WS01-PARENT}",
+              "parentProcessId": "4567",
+              "parentImage": "C:\\Windows\\System32\\cmd.exe",
+              "parentCommandLine": "cmd.exe"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Network connection - OPC UA to external",
+      "sequence": 5,
+      "timestamp": "2026-01-31T13:01:30.000Z",
+      "log": {
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 3: OPC UA Connection to External Host",
+          "id": "100404",
+          "mitre": {
+            "id": [
+              "T1495"
+            ],
+            "tactic": [
+              "Impact"
+            ],
+            "technique": [
+              "Firmware Corruption"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event3",
+            "windows",
+            "ics",
+            "opcua"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000131.600005",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "3",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local"
+            },
+            "eventdata": {
+              "utcTime": "2026-01-31 13:01:30.000",
+              "processGuid": "{WS01-OPC-CLIENT}",
+              "processId": "9012",
+              "image": "C:\\Program Files\\OPC\\Client\\opcua-client.exe",
+              "user": "CORP\\operator",
+              "protocol": "tcp",
+              "initiated": "true",
+              "sourceIsIpv6": "false",
+              "sourceIp": "198.51.100.20",
+              "sourceHostname": "WS01.corp.local",
+              "sourcePort": "51000",
+              "destinationIsIpv6": "false",
+              "destinationIp": "192.0.2.100",
+              "destinationHostname": "",
+              "destinationPort": "4840"
+            }
+          }
+        }
+      }
+    }
+  ]
+}

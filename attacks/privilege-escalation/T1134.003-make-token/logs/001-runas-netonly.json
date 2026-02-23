@@ -1,0 +1,79 @@
+{
+  "_metadata": {
+    "attack_id": "T1134.003",
+    "variation": "001",
+    "name": "Make and Impersonate Token",
+    "description": "Creating token with runas /netonly for impersonation",
+    "expected_detection": "MEDIUM",
+    "kill_chain_phase": "privilege-escalation",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Sysmon Event 1 - Runas netonly",
+      "sequence": 1,
+      "timestamp": "2026-02-04T11:11:00.000Z",
+      "log": {
+        "timestamp": "2026-02-04T11:11:00.000+0000",
+        "rule": {
+          "level": 10,
+          "description": "Sysmon - Event 1: Token Impersonation via Runas",
+          "id": "100001",
+          "mitre": {
+            "id": [
+              "T1134.003"
+            ],
+            "tactic": [
+              "Defense Evasion",
+              "Privilege Escalation"
+            ],
+            "technique": [
+              "Make and Impersonate Token"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000002.100012",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-04 11:11:00.000",
+              "processGuid": "{A1B2C3D4-1134-0003-0001-000000000001}",
+              "processId": "1234",
+              "image": "C:\\Windows\\System32\\runas.exe",
+              "commandLine": "runas /netonly /user:CORP\\admin cmd.exe",
+              "currentDirectory": "C:\\Users\\attacker\\",
+              "user": "CORP\\attacker",
+              "parentImage": "C:\\Windows\\System32\\cmd.exe"
+            }
+          }
+        }
+      }
+    }
+  ]
+}

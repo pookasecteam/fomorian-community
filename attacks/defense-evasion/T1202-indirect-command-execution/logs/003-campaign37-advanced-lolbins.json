@@ -1,0 +1,231 @@
+{
+  "_metadata": {
+    "attack_id": "T1202",
+    "variation": "003",
+    "name": "Indirect Command Execution - Advanced LOLBins",
+    "description": "Using pcalua.exe, forfiles.exe, and manage-bde.wsf for indirect command execution",
+    "expected_detection": "HIGH",
+    "kill_chain_phase": "defense-evasion",
+    "tactic": "Defense Evasion",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Sysmon Event 1 - pcalua.exe execution",
+      "sequence": 1,
+      "timestamp": "2026-02-10T20:18:00.000Z",
+      "log": {
+        "timestamp": "2026-02-10T20:18:00.000Z",
+        "rule": {
+          "level": 13,
+          "description": "Sysmon - Event 1: pcalua.exe used for indirect command execution",
+          "id": "100001",
+          "mitre": {
+            "id": [
+              "T1202"
+            ],
+            "tactic": [
+              "Defense Evasion"
+            ],
+            "technique": [
+              "Indirect Command Execution"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1707599880.000001",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-10 20:18:00.000",
+              "processGuid": "{B5A2D3E4-1234-5678-9ABC-DEF012345698}",
+              "processId": "6248",
+              "image": "C:\\Windows\\System32\\pcalua.exe",
+              "commandLine": "pcalua.exe -a C:\\Users\\Public\\malware.exe",
+              "currentDirectory": "C:\\Users\\attacker\\",
+              "user": "CORP\\attacker",
+              "integrityLevel": "Medium",
+              "hashes": "SHA256=LEGIT_PCALUA_HASH",
+              "parentProcessGuid": "{B5A2D3E4-1234-5678-9ABC-DEF012345670}",
+              "parentProcessId": "3248",
+              "parentImage": "C:\\Windows\\System32\\cmd.exe",
+              "parentCommandLine": "cmd.exe"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Sysmon Event 1 - forfiles.exe with /c cmd execution",
+      "sequence": 2,
+      "timestamp": "2026-02-10T20:18:15.000Z",
+      "log": {
+        "timestamp": "2026-02-10T20:18:15.000Z",
+        "rule": {
+          "level": 13,
+          "description": "Sysmon - Event 1: forfiles.exe used for indirect command execution",
+          "id": "100001",
+          "mitre": {
+            "id": [
+              "T1202"
+            ],
+            "tactic": [
+              "Defense Evasion"
+            ],
+            "technique": [
+              "Indirect Command Execution"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1707599895.000001",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-10 20:18:15.000",
+              "processGuid": "{B5A2D3E4-1234-5678-9ABC-DEF012345699}",
+              "processId": "6452",
+              "image": "C:\\Windows\\System32\\forfiles.exe",
+              "commandLine": "forfiles.exe /p C:\\Windows\\System32 /m cmd.exe /c \"cmd.exe /c powershell.exe -enc JABhAD0AJwBtAGEAbAB3AGEAcgBlACcA\"",
+              "currentDirectory": "C:\\Users\\attacker\\",
+              "user": "CORP\\attacker",
+              "integrityLevel": "Medium",
+              "hashes": "SHA256=LEGIT_FORFILES_HASH",
+              "parentProcessGuid": "{B5A2D3E4-1234-5678-9ABC-DEF012345670}",
+              "parentProcessId": "3248",
+              "parentImage": "C:\\Windows\\System32\\cmd.exe",
+              "parentCommandLine": "cmd.exe"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Sysmon Event 1 - manage-bde.wsf execution",
+      "sequence": 3,
+      "timestamp": "2026-02-10T20:18:30.000Z",
+      "log": {
+        "timestamp": "2026-02-10T20:18:30.000Z",
+        "rule": {
+          "level": 13,
+          "description": "Sysmon - Event 1: manage-bde.wsf used for indirect script execution",
+          "id": "100001",
+          "mitre": {
+            "id": [
+              "T1202"
+            ],
+            "tactic": [
+              "Defense Evasion"
+            ],
+            "technique": [
+              "Indirect Command Execution"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1707599910.000001",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-10 20:18:30.000",
+              "processGuid": "{B5A2D3E4-1234-5678-9ABC-DEF012345700}",
+              "processId": "6624",
+              "image": "C:\\Windows\\System32\\wscript.exe",
+              "commandLine": "wscript.exe C:\\Windows\\System32\\manage-bde.wsf",
+              "currentDirectory": "C:\\Windows\\System32\\",
+              "user": "CORP\\attacker",
+              "integrityLevel": "High",
+              "hashes": "SHA256=LEGIT_WSCRIPT_HASH",
+              "parentProcessGuid": "{B5A2D3E4-1234-5678-9ABC-DEF012345670}",
+              "parentProcessId": "3248",
+              "parentImage": "C:\\Windows\\System32\\cmd.exe",
+              "parentCommandLine": "cmd.exe"
+            }
+          }
+        }
+      }
+    }
+  ]
+}

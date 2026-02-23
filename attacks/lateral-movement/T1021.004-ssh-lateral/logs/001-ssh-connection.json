@@ -1,0 +1,51 @@
+{
+  "_metadata": {
+    "attack_id": "T1021.004",
+    "variation": "001",
+    "name": "Remote Services - SSH",
+    "description": "Lateral movement using SSH protocol",
+    "expected_detection": "LOW",
+    "kill_chain_phase": "lateral-movement",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Linux auth.log - SSH successful authentication",
+      "sequence": 1,
+      "log": {
+        "rule": {
+          "level": 5,
+          "description": "SSH Successful Authentication",
+          "id": "100001",
+          "mitre": {
+            "id": [
+              "T1021.004"
+            ],
+            "tactic": [
+              "Lateral Movement"
+            ],
+            "technique": [
+              "Remote Services: SSH"
+            ]
+          },
+          "groups": [
+            "syslog",
+            "sshd",
+            "authentication_success"
+          ]
+        },
+        "agent": {
+          "id": "030",
+          "name": "VULN01"
+        },
+        "data": {
+          "srcip": "198.51.100.1",
+          "srcuser": "admin2",
+          "dstuser": "admin2"
+        },
+        "full_log": "Feb  8 12:30:15 VULN01 sshd[12345]: Accepted password for admin2 from 198.51.100.1 port 52341 ssh2"
+      }
+    }
+  ]
+}

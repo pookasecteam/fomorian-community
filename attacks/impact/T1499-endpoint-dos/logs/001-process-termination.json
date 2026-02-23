@@ -1,0 +1,171 @@
+{
+  "_metadata": {
+    "attack_id": "T1499",
+    "variation": "001",
+    "name": "Endpoint Denial of Service - Critical Process Termination",
+    "description": "Attacker terminates critical security and system processes to cause service disruption",
+    "expected_detection": "HIGH",
+    "kill_chain_phase": "impact",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Sysmon Event 1 - taskkill targeting security processes",
+      "sequence": 1,
+      "timestamp": "2026-02-08T21:00:00.000Z",
+      "log": {
+        "timestamp": "2026-02-08T21:00:00.000+0000",
+        "rule": {
+          "level": 14,
+          "description": "Sysmon - Event 1: Security Process Termination Attempt",
+          "id": "100916",
+          "mitre": {
+            "id": [
+              "T1499",
+              "T1562.001"
+            ],
+            "tactic": [
+              "Impact",
+              "Defense Evasion"
+            ],
+            "technique": [
+              "Endpoint Denial of Service",
+              "Disable or Modify Tools"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": true,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "010",
+          "name": "DC01",
+          "ip": "198.51.100.10"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1707400000.300070",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "DC01.corp.local",
+              "level": "4",
+              "task": "1",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-08 21:00:00.000",
+              "processGuid": "{A1B2C3D4-IMPC-1499-0001-000000000001}",
+              "processId": "1200",
+              "image": "C:\\Windows\\System32\\taskkill.exe",
+              "commandLine": "taskkill /F /IM MsMpEng.exe /IM WinDefend.exe /IM wazuh-agent.exe /IM ossec-agent.exe",
+              "currentDirectory": "C:\\Windows\\System32\\",
+              "user": "CORP\\admin.compromised",
+              "integrityLevel": "High",
+              "hashes": "SHA256=A1B2C3D4E5F6A7B8C9D0E1F2A3B4C5D6E7F8A9B0C1D2E3F4A5B6C7D8E9F0A1B2",
+              "parentProcessGuid": "{A1B2C3D4-IMPC-1499-0001-PARENT000001}",
+              "parentProcessId": "1100",
+              "parentImage": "C:\\Windows\\System32\\cmd.exe",
+              "parentCommandLine": "cmd.exe /c impact.bat"
+            }
+          }
+        },
+        "_fomorian_batch": "PT-2026-003-batch2-impact",
+        "_fomorian_test": true,
+        "_fomorian_attack_id": "T1499",
+        "_fomorian_expected_detection": "Sigma: Security Process Termination Attempt (T1499)"
+      }
+    },
+    {
+      "_comment": "Sysmon Event 1 - Stopping critical Windows services",
+      "sequence": 2,
+      "timestamp": "2026-02-08T21:00:05.000Z",
+      "log": {
+        "timestamp": "2026-02-08T21:00:05.000+0000",
+        "rule": {
+          "level": 14,
+          "description": "Sysmon - Event 1: Critical Service Stopped",
+          "id": "100916",
+          "mitre": {
+            "id": [
+              "T1499",
+              "T1489"
+            ],
+            "tactic": [
+              "Impact"
+            ],
+            "technique": [
+              "Endpoint Denial of Service",
+              "Service Stop"
+            ]
+          },
+          "firedtimes": 2,
+          "mail": true,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "010",
+          "name": "DC01",
+          "ip": "198.51.100.10"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1707400000.300071",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "DC01.corp.local",
+              "level": "4",
+              "task": "1",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-08 21:00:05.000",
+              "processGuid": "{A1B2C3D4-IMPC-1499-0001-000000000002}",
+              "processId": "1250",
+              "image": "C:\\Windows\\System32\\net.exe",
+              "commandLine": "net stop \"Windows Defender\" /y",
+              "currentDirectory": "C:\\Windows\\System32\\",
+              "user": "CORP\\admin.compromised",
+              "integrityLevel": "High",
+              "hashes": "SHA256=B2C3D4E5F6A7B8C9D0E1F2A3B4C5D6E7F8A9B0C1D2E3F4A5B6C7D8E9F0A1B2C3",
+              "parentProcessGuid": "{A1B2C3D4-IMPC-1499-0001-PARENT000001}",
+              "parentProcessId": "1100",
+              "parentImage": "C:\\Windows\\System32\\cmd.exe",
+              "parentCommandLine": "cmd.exe /c impact.bat"
+            }
+          }
+        },
+        "_fomorian_batch": "PT-2026-003-batch2-impact",
+        "_fomorian_test": true,
+        "_fomorian_attack_id": "T1499",
+        "_fomorian_expected_detection": "Sigma: Critical Service Stopped (T1499)"
+      }
+    }
+  ]
+}

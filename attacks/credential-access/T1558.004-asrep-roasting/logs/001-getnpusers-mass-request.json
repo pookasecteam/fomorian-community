@@ -1,0 +1,201 @@
+{
+  "_metadata": {
+    "attack_id": "T1558.004",
+    "variation": "001",
+    "name": "AS-REP Roasting - Mass TGT Requests",
+    "description": "Attacker requests TGTs for multiple accounts with Kerberos pre-authentication disabled using impacket-GetNPUsers",
+    "expected_detection": "CRITICAL",
+    "kill_chain_phase": "credential-access",
+    "format": "wazuh-native",
+    "format_version": "1.0",
+    "tool": "impacket-GetNPUsers"
+  },
+  "logs": [
+    {
+      "_comment": "Event 4768 - Kerberos TGT Request with preAuthType=0 (AS-REP Roasting indicator)",
+      "sequence": 1,
+      "timestamp": "2026-02-10T22:57:00.000Z",
+      "log": {
+        "timestamp": "2026-02-10T22:57:00.000Z",
+        "rule": {
+          "level": 3,
+          "description": "Windows Eventchannel event",
+          "id": "100600",
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "windows",
+            "eventchannel"
+          ]
+        },
+        "agent": {
+          "id": "010",
+          "name": "DC01",
+          "ip": "198.51.100.12"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1707600000.100001",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "4768",
+              "channel": "Security",
+              "providerName": "Microsoft-Windows-Security-Auditing",
+              "computer": "DC01.corp.local",
+              "level": "0",
+              "task": "14339",
+              "keywords": "0x8020000000000000",
+              "severityValue": "AUDIT_SUCCESS"
+            },
+            "eventdata": {
+              "targetUserName": "svc_sql",
+              "targetDomainName": "CORP.LOCAL",
+              "targetSid": "S-1-5-21-3298120035-3471069779-879265153-1104",
+              "serviceName": "krbtgt/CORP.LOCAL",
+              "serviceId": "S-1-5-21-3298120035-3471069779-879265153-502",
+              "ticketOptions": "0x40810010",
+              "status": "0x0",
+              "ticketEncryptionType": "0x17",
+              "preAuthType": "0",
+              "ipAddress": "::ffff:198.51.100.110",
+              "ipPort": "56234",
+              "certificateIssuerName": "",
+              "certificateSerialNumber": "",
+              "certificateThumbprint": ""
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Second AS-REP request - svc_backup",
+      "sequence": 2,
+      "timestamp": "2026-02-10T22:57:01.000Z",
+      "log": {
+        "timestamp": "2026-02-10T22:57:01.000Z",
+        "rule": {
+          "level": 3,
+          "description": "Windows Eventchannel event",
+          "id": "100600",
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "windows",
+            "eventchannel"
+          ]
+        },
+        "agent": {
+          "id": "010",
+          "name": "DC01",
+          "ip": "198.51.100.12"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1707600000.100002",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "4768",
+              "channel": "Security",
+              "providerName": "Microsoft-Windows-Security-Auditing",
+              "computer": "DC01.corp.local",
+              "level": "0",
+              "task": "14339",
+              "keywords": "0x8020000000000000",
+              "severityValue": "AUDIT_SUCCESS"
+            },
+            "eventdata": {
+              "targetUserName": "svc_backup",
+              "targetDomainName": "CORP.LOCAL",
+              "targetSid": "S-1-5-21-3298120035-3471069779-879265153-1105",
+              "serviceName": "krbtgt/CORP.LOCAL",
+              "serviceId": "S-1-5-21-3298120035-3471069779-879265153-502",
+              "ticketOptions": "0x40810010",
+              "status": "0x0",
+              "ticketEncryptionType": "0x17",
+              "preAuthType": "0",
+              "ipAddress": "::ffff:198.51.100.110",
+              "ipPort": "56234",
+              "certificateIssuerName": "",
+              "certificateSerialNumber": "",
+              "certificateThumbprint": ""
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Third AS-REP request - svc_web",
+      "sequence": 3,
+      "timestamp": "2026-02-10T22:57:02.000Z",
+      "log": {
+        "timestamp": "2026-02-10T22:57:02.000Z",
+        "rule": {
+          "level": 3,
+          "description": "Windows Eventchannel event",
+          "id": "100600",
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "windows",
+            "eventchannel"
+          ]
+        },
+        "agent": {
+          "id": "010",
+          "name": "DC01",
+          "ip": "198.51.100.12"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1707600000.100003",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "4768",
+              "channel": "Security",
+              "providerName": "Microsoft-Windows-Security-Auditing",
+              "computer": "DC01.corp.local",
+              "level": "0",
+              "task": "14339",
+              "keywords": "0x8020000000000000",
+              "severityValue": "AUDIT_SUCCESS"
+            },
+            "eventdata": {
+              "targetUserName": "svc_web",
+              "targetDomainName": "CORP.LOCAL",
+              "targetSid": "S-1-5-21-3298120035-3471069779-879265153-1106",
+              "serviceName": "krbtgt/CORP.LOCAL",
+              "serviceId": "S-1-5-21-3298120035-3471069779-879265153-502",
+              "ticketOptions": "0x40810010",
+              "status": "0x0",
+              "ticketEncryptionType": "0x17",
+              "preAuthType": "0",
+              "ipAddress": "::ffff:198.51.100.110",
+              "ipPort": "56234",
+              "certificateIssuerName": "",
+              "certificateSerialNumber": "",
+              "certificateThumbprint": ""
+            }
+          }
+        }
+      }
+    }
+  ]
+}

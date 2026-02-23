@@ -1,0 +1,90 @@
+{
+  "_metadata": {
+    "attack_id": "T1673",
+    "variation": "001",
+    "name": "Virtual Machine Discovery - Systeminfo VM Detection",
+    "description": "Using systeminfo to detect virtual machine artifacts and hypervisor presence",
+    "expected_detection": "MEDIUM",
+    "kill_chain_phase": "discovery",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Sysmon Event 1 - Systeminfo VM detection",
+      "sequence": 1,
+      "timestamp": "2026-02-08T10:30:00.000Z",
+      "log": {
+        "timestamp": "2026-02-08T10:30:00.000+0000",
+        "rule": {
+          "level": 6,
+          "description": "Sysmon - Event 1: Process Create",
+          "id": "100916",
+          "mitre": {
+            "id": [
+              "T1673"
+            ],
+            "tactic": [
+              "Discovery"
+            ],
+            "technique": [
+              "Virtual Machine Discovery"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1707400000.200033",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-08 10:30:00.000",
+              "processGuid": "{A1B2C3D4-DISC-1673-0001-000000000001}",
+              "processId": "8912",
+              "image": "C:\\Windows\\System32\\systeminfo.exe",
+              "commandLine": "systeminfo",
+              "currentDirectory": "C:\\Users\\attacker\\",
+              "user": "CORP\\admin.user",
+              "integrityLevel": "Medium",
+              "hashes": "SHA256=C6D7E8F9A0B1C2D3E4F5A6B7C8D9E0F1A2B3C4D5E6F7A8B9C0D1E2F3A4B5C6D7",
+              "parentProcessGuid": "{A1B2C3D4-DISC-1673-0001-PARENT000001}",
+              "parentProcessId": "3200",
+              "parentImage": "C:\\Windows\\System32\\cmd.exe",
+              "parentCommandLine": "cmd.exe"
+            }
+          }
+        },
+        "_fomorian_batch": "PT-2026-003-batch1-discovery",
+        "_fomorian_test": true,
+        "_fomorian_attack_id": "T1673",
+        "_fomorian_expected_detection": "Sigma: Virtual Machine Discovery (T1673)"
+      }
+    }
+  ]
+}

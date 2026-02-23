@@ -1,0 +1,80 @@
+{
+  "_metadata": {
+    "attack_id": "T1036",
+    "variation": "001",
+    "name": "Renamed System Binary",
+    "description": "Executing a renamed copy of cmd.exe as svchost.exe",
+    "expected_detection": "HIGH",
+    "kill_chain_phase": "defense-evasion",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Sysmon Event 1 - Renamed cmd.exe as svchost.exe",
+      "sequence": 1,
+      "timestamp": "2026-02-04T10:01:00.000Z",
+      "log": {
+        "timestamp": "2026-02-04T10:01:00.000+0000",
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 1: Masquerading - Renamed System Binary",
+          "id": "100917",
+          "mitre": {
+            "id": [
+              "T1036"
+            ],
+            "tactic": [
+              "Defense Evasion"
+            ],
+            "technique": [
+              "Masquerading"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000001.100002",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-04 10:01:00.000",
+              "processGuid": "{A1B2C3D4-1036-0001-0001-000000000001}",
+              "processId": "5632",
+              "image": "C:\\Users\\attacker\\svchost.exe",
+              "originalFileName": "cmd.exe",
+              "commandLine": "C:\\Users\\attacker\\svchost.exe /c whoami",
+              "currentDirectory": "C:\\Users\\attacker\\",
+              "user": "CORP\\attacker",
+              "parentImage": "C:\\Windows\\explorer.exe",
+              "parentCommandLine": "explorer.exe"
+            }
+          }
+        }
+      }
+    }
+  ]
+}

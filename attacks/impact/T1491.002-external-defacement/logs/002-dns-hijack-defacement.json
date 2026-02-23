@@ -1,0 +1,165 @@
+{
+  "_metadata": {
+    "attack_id": "T1491.002",
+    "variation": "002",
+    "name": "External Defacement - DNS Hijack to Attacker Server",
+    "description": "Attacker modifies DNS records to point website to attacker-controlled defacement server",
+    "expected_detection": "HIGH",
+    "kill_chain_phase": "impact",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "CloudTrail - Route53 record change to attacker IP",
+      "sequence": 1,
+      "timestamp": "2026-02-08T15:10:00.000Z",
+      "log": {
+        "timestamp": "2026-02-08T15:10:00.000+0000",
+        "rule": {
+          "level": 12,
+          "description": "AWS CloudTrail - Route53 DNS Record Modified",
+          "id": "100001",
+          "mitre": {
+            "id": [
+              "T1491.002"
+            ],
+            "tactic": [
+              "Impact"
+            ],
+            "technique": [
+              "External Defacement"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "aws",
+            "cloudtrail",
+            "route53"
+          ]
+        },
+        "agent": {
+          "id": "000",
+          "name": "wazuh.manager"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1707400000.300008",
+        "decoder": {
+          "name": "aws-cloudtrail"
+        },
+        "location": "CloudTrail",
+        "data": {
+          "aws": {
+            "eventSource": "route53.amazonaws.com",
+            "eventName": "ChangeResourceRecordSets",
+            "eventTime": "2026-02-08T15:10:00Z",
+            "awsRegion": "us-east-1",
+            "sourceIPAddress": "198.51.100.110",
+            "userIdentity": {
+              "type": "IAMUser",
+              "userName": "compromised-dns-admin",
+              "arn": "arn:aws:iam::123456789012:user/compromised-dns-admin"
+            },
+            "requestParameters": {
+              "hostedZoneId": "Z1234567890ABC",
+              "changeBatch": {
+                "changes": [
+                  {
+                    "action": "UPSERT",
+                    "resourceRecordSet": {
+                      "name": "www.company.com",
+                      "type": "A",
+                      "ttl": 60,
+                      "resourceRecords": [
+                        {
+                          "value": "185.220.101.42"
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            },
+            "responseElements": null,
+            "requestID": "C9D8E7F6A5B4C3D2"
+          }
+        },
+        "_fomorian_batch": "PT-2026-003-batch2-impact",
+        "_fomorian_test": true,
+        "_fomorian_attack_id": "T1491.002",
+        "_fomorian_expected_detection": "Sigma: DNS Record Changed to Suspicious IP (T1491.002)"
+      }
+    },
+    {
+      "_comment": "Zeek DNS log - Resolution to attacker IP after hijack",
+      "sequence": 2,
+      "timestamp": "2026-02-08T15:11:00.000Z",
+      "log": {
+        "timestamp": "2026-02-08T15:11:00.000+0000",
+        "rule": {
+          "level": 10,
+          "description": "Zeek - DNS Query Resolving to Known Bad IP",
+          "id": "100001",
+          "mitre": {
+            "id": [
+              "T1491.002"
+            ],
+            "tactic": [
+              "Impact"
+            ],
+            "technique": [
+              "External Defacement"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "zeek",
+            "dns"
+          ]
+        },
+        "agent": {
+          "id": "001",
+          "name": "GW01",
+          "ip": "198.51.100.1"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1707400000.300009",
+        "decoder": {
+          "name": "zeek-dns"
+        },
+        "location": "/opt/zeek/logs/current/dns.log",
+        "data": {
+          "zeek": {
+            "ts": "1707400260.000000",
+            "uid": "CYuNkW2VLj7xn6GVGd",
+            "id_orig_h": "198.51.100.20",
+            "id_orig_p": "54321",
+            "id_resp_h": "8.8.8.8",
+            "id_resp_p": "53",
+            "proto": "udp",
+            "query": "www.company.com",
+            "qclass": 1,
+            "qtype": 1,
+            "rcode": 0,
+            "answers": [
+              "185.220.101.42"
+            ],
+            "TTLs": [
+              60.0
+            ]
+          }
+        },
+        "_fomorian_batch": "PT-2026-003-batch2-impact",
+        "_fomorian_test": true,
+        "_fomorian_attack_id": "T1491.002",
+        "_fomorian_expected_detection": "Sigma: DNS Resolution to Threat Intel IP (T1491.002)"
+      }
+    }
+  ]
+}

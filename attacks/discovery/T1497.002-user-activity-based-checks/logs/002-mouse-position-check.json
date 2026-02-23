@@ -1,0 +1,91 @@
+{
+  "_metadata": {
+    "attack_id": "T1497.002",
+    "variation": "002",
+    "name": "User Activity Based Checks - Mouse Position Check",
+    "description": "Checking mouse cursor position changes to detect sandbox/automated analysis environment",
+    "expected_detection": "LOW",
+    "kill_chain_phase": "discovery",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Sysmon Event 1 - PowerShell script checking mouse position",
+      "sequence": 1,
+      "timestamp": "2026-02-08T10:09:00.000Z",
+      "log": {
+        "timestamp": "2026-02-08T10:09:00.000+0000",
+        "rule": {
+          "level": 10,
+          "description": "Sysmon - Event 1: Process Create",
+          "id": "100916",
+          "mitre": {
+            "id": [
+              "T1497.002"
+            ],
+            "tactic": [
+              "Discovery",
+              "Defense Evasion"
+            ],
+            "technique": [
+              "User Activity Based Checks"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1707400000.200011",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-08 10:09:00.000",
+              "processGuid": "{A1B2C3D4-DISC-1497-0002-000000000001}",
+              "processId": "8156",
+              "image": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+              "commandLine": "powershell.exe -c \"Add-Type -AssemblyName System.Windows.Forms; $pos1=[System.Windows.Forms.Cursor]::Position; Start-Sleep -Seconds 5; $pos2=[System.Windows.Forms.Cursor]::Position; if($pos1 -eq $pos2){exit 1}\"",
+              "currentDirectory": "C:\\Users\\attacker\\",
+              "user": "CORP\\admin.user",
+              "integrityLevel": "Medium",
+              "hashes": "SHA256=DE96A6E69944335375DC1AC238336066889D9FFC7D73628EF4FE1B1B160AB32C",
+              "parentProcessGuid": "{A1B2C3D4-DISC-1497-0002-PARENT000001}",
+              "parentProcessId": "7244",
+              "parentImage": "C:\\Users\\attacker\\payload.exe",
+              "parentCommandLine": "payload.exe"
+            }
+          }
+        },
+        "_fomorian_batch": "PT-2026-003-batch1-discovery",
+        "_fomorian_test": true,
+        "_fomorian_attack_id": "T1497.002",
+        "_fomorian_expected_detection": "Sigma: Mouse Position Sandbox Evasion Check (T1497.002)"
+      }
+    }
+  ]
+}

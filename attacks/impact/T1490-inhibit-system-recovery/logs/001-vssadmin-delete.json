@@ -5,9 +5,7 @@
     "name": "Shadow Copy Deletion",
     "description": "Attacker deleting Volume Shadow Copies to prevent recovery",
     "expected_detection": "CRITICAL",
-    "expected_soar": "ransomware-response",
     "kill_chain_phase": "impact",
-    "notes": "Shadow copy deletion is a strong ransomware indicator. Generates both Sysmon and Windows Security logs.",
     "format": "wazuh-native",
     "format_version": "1.0"
   },
@@ -17,7 +15,6 @@
       "sequence": 1,
       "timestamp": "",
       "log": {
-        "timestamp": "",
         "rule": {
           "level": 12,
           "description": "Sysmon - Event 1: Shadow Copy Deletion",
@@ -44,7 +41,7 @@
         "agent": {
           "id": "{{agent_id}}",
           "name": "{{agent_name}}",
-          "ip": "10.1.0.20"
+          "ip": "198.51.100.20"
         },
         "manager": {
           "name": "wazuh.manager"
@@ -91,7 +88,6 @@
       "sequence": 2,
       "timestamp": "",
       "log": {
-        "timestamp": "",
         "rule": {
           "level": 12,
           "description": "Sysmon - Event 4688: Shadow Copy Deletion",
@@ -118,7 +114,7 @@
         "agent": {
           "id": "{{agent_id}}",
           "name": "{{agent_name}}",
-          "ip": "10.1.0.20"
+          "ip": "198.51.100.20"
         },
         "manager": {
           "name": "wazuh.manager"
@@ -167,7 +163,6 @@
       "sequence": 3,
       "timestamp": "",
       "log": {
-        "timestamp": "",
         "rule": {
           "level": 12,
           "description": "Sysmon - Event 1: Shadow Copy Deletion",
@@ -194,7 +189,7 @@
         "agent": {
           "id": "{{agent_id}}",
           "name": "{{agent_name}}",
-          "ip": "10.1.0.20"
+          "ip": "198.51.100.20"
         },
         "manager": {
           "name": "wazuh.manager"
@@ -241,7 +236,6 @@
       "sequence": 4,
       "timestamp": "",
       "log": {
-        "timestamp": "",
         "rule": {
           "level": 12,
           "description": "Sysmon - Event 4688: Shadow Copy Deletion",
@@ -268,7 +262,7 @@
         "agent": {
           "id": "{{agent_id}}",
           "name": "{{agent_name}}",
-          "ip": "10.1.0.20"
+          "ip": "198.51.100.20"
         },
         "manager": {
           "name": "wazuh.manager"
@@ -317,7 +311,6 @@
       "sequence": 5,
       "timestamp": "",
       "log": {
-        "timestamp": "",
         "rule": {
           "level": 12,
           "description": "Sysmon - Event 1: Shadow Copy Deletion",
@@ -344,7 +337,7 @@
         "agent": {
           "id": "{{agent_id}}",
           "name": "{{agent_name}}",
-          "ip": "10.1.0.20"
+          "ip": "198.51.100.20"
         },
         "manager": {
           "name": "wazuh.manager"
@@ -391,7 +384,6 @@
       "sequence": 6,
       "timestamp": "",
       "log": {
-        "timestamp": "",
         "rule": {
           "level": 12,
           "description": "Sysmon - Event 4688: Shadow Copy Deletion",
@@ -418,7 +410,7 @@
         "agent": {
           "id": "{{agent_id}}",
           "name": "{{agent_name}}",
-          "ip": "10.1.0.20"
+          "ip": "198.51.100.20"
         },
         "manager": {
           "name": "wazuh.manager"
@@ -467,7 +459,6 @@
       "sequence": 7,
       "timestamp": "",
       "log": {
-        "timestamp": "",
         "rule": {
           "level": 12,
           "description": "Sysmon - Event 1: Shadow Copy Deletion",
@@ -494,7 +485,7 @@
         "agent": {
           "id": "{{agent_id}}",
           "name": "{{agent_name}}",
-          "ip": "10.1.0.20"
+          "ip": "198.51.100.20"
         },
         "manager": {
           "name": "wazuh.manager"
@@ -541,7 +532,6 @@
       "sequence": 8,
       "timestamp": "",
       "log": {
-        "timestamp": "",
         "rule": {
           "level": 12,
           "description": "Sysmon - Event 4688: Shadow Copy Deletion",
@@ -568,7 +558,7 @@
         "agent": {
           "id": "{{agent_id}}",
           "name": "{{agent_name}}",
-          "ip": "10.1.0.20"
+          "ip": "198.51.100.20"
         },
         "manager": {
           "name": "wazuh.manager"

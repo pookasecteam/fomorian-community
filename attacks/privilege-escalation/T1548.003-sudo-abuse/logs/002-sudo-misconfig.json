@@ -1,0 +1,152 @@
+{
+  "_metadata": {
+    "attack_id": "T1548.003",
+    "variation": "002",
+    "name": "Sudo Misconfiguration Abuse",
+    "description": "Attacker abuses NOPASSWD sudo entry to escalate privileges",
+    "expected_detection": "HIGH",
+    "kill_chain_phase": "privilege-escalation",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "User checking sudo privileges",
+      "sequence": 1,
+      "timestamp": "2026-01-29T14:30:00.000Z",
+      "log": {
+        "rule": {
+          "level": 10,
+          "description": "Sudo Misconfiguration Abuse",
+          "id": "100200",
+          "mitre": {
+            "id": [
+              "T1548.003"
+            ],
+            "tactic": [
+              "Privilege Escalation"
+            ]
+          },
+          "firedtimes": 1,
+          "groups": [
+            "syslog",
+            "linux"
+          ]
+        },
+        "agent": {
+          "id": "030",
+          "name": "DVLNX01",
+          "ip": "198.51.100.30"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000000.332254253",
+        "decoder": {
+          "name": "syslog"
+        },
+        "location": "/var/log/syslog",
+        "data": {
+          "facility": "authpriv",
+          "severity": "info",
+          "hostname": "DVLNX01",
+          "program": "auditd",
+          "message": "type=EXECVE msg=audit(1706538600.000:1060): argc=2 a0=\"sudo\" a1=\"-l\""
+        },
+        "full_log": "type=EXECVE msg=audit(1706538600.000:1060): argc=2 a0=\"sudo\" a1=\"-l\""
+      }
+    },
+    {
+      "_comment": "Abusing vim sudo to spawn root shell",
+      "sequence": 2,
+      "timestamp": "2026-01-29T14:30:05.000Z",
+      "log": {
+        "rule": {
+          "level": 10,
+          "description": "Sudo Misconfiguration Abuse",
+          "id": "100200",
+          "mitre": {
+            "id": [
+              "T1548.003"
+            ],
+            "tactic": [
+              "Privilege Escalation"
+            ]
+          },
+          "firedtimes": 1,
+          "groups": [
+            "syslog",
+            "linux"
+          ]
+        },
+        "agent": {
+          "id": "030",
+          "name": "DVLNX01",
+          "ip": "198.51.100.30"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000000.297775517",
+        "decoder": {
+          "name": "syslog"
+        },
+        "location": "/var/log/syslog",
+        "data": {
+          "facility": "authpriv",
+          "severity": "info",
+          "hostname": "DVLNX01",
+          "program": "sudo",
+          "message": "www-data : TTY=pts/0 ; PWD=/var/www/html ; USER=root ; COMMAND=/usr/bin/vim /var/log/apache2/error.log"
+        },
+        "full_log": "www-data : TTY=pts/0 ; PWD=/var/www/html ; USER=root ; COMMAND=/usr/bin/vim /var/log/apache2/error.log"
+      }
+    },
+    {
+      "_comment": "Shell escape from vim",
+      "sequence": 3,
+      "timestamp": "2026-01-29T14:30:10.000Z",
+      "log": {
+        "rule": {
+          "level": 10,
+          "description": "Sudo Misconfiguration Abuse",
+          "id": "100200",
+          "mitre": {
+            "id": [
+              "T1548.003"
+            ],
+            "tactic": [
+              "Privilege Escalation"
+            ]
+          },
+          "firedtimes": 1,
+          "groups": [
+            "syslog",
+            "linux"
+          ]
+        },
+        "agent": {
+          "id": "030",
+          "name": "DVLNX01",
+          "ip": "198.51.100.30"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000000.160063328",
+        "decoder": {
+          "name": "syslog"
+        },
+        "location": "/var/log/syslog",
+        "data": {
+          "facility": "authpriv",
+          "severity": "info",
+          "hostname": "DVLNX01",
+          "program": "auditd",
+          "message": "type=EXECVE msg=audit(1706538610.000:1061): argc=2 a0=\"/bin/bash\" a1=\"-p\" uid=0 euid=0 auid=33"
+        },
+        "full_log": "type=EXECVE msg=audit(1706538610.000:1061): argc=2 a0=\"/bin/bash\" a1=\"-p\" uid=0 euid=0 auid=33"
+      }
+    }
+  ]
+}

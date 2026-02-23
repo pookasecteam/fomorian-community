@@ -1,0 +1,139 @@
+{
+  "_metadata": {
+    "attack_id": "T1565.002",
+    "variation": "002",
+    "name": "Transmitted Data Manipulation - mitmproxy HTTP Interception",
+    "description": "Attacker uses mitmproxy to intercept and modify HTTP traffic in transit",
+    "expected_detection": "HIGH",
+    "kill_chain_phase": "impact",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Sysmon Linux Event 1 - mitmproxy execution",
+      "sequence": 1,
+      "timestamp": "2026-02-08T23:10:00.000Z",
+      "log": {
+        "timestamp": "2026-02-08T23:10:00.000+0000",
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 1: HTTP Proxy Interception Tool",
+          "id": "100101",
+          "mitre": {
+            "id": [
+              "T1565.002"
+            ],
+            "tactic": [
+              "Impact"
+            ],
+            "technique": [
+              "Transmitted Data Manipulation"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "linux"
+          ]
+        },
+        "agent": {
+          "id": "001",
+          "name": "GW01",
+          "ip": "198.51.100.1"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1707400000.300112",
+        "decoder": {
+          "name": "sysmon-linux"
+        },
+        "location": "/var/log/sysmon/sysmon.log",
+        "data": {
+          "eventdata": {
+            "utcTime": "2026-02-08 23:10:00.000",
+            "processGuid": "{A1B2C3D4-IMPC-1565-0002-000000000001}",
+            "processId": "30200",
+            "image": "/usr/bin/mitmproxy",
+            "commandLine": "mitmproxy --mode transparent --showhost -s /tmp/inject.py",
+            "currentDirectory": "/tmp",
+            "user": "root",
+            "parentProcessGuid": "{A1B2C3D4-IMPC-1565-0002-PARENT000001}",
+            "parentProcessId": "30100",
+            "parentImage": "/bin/bash",
+            "parentCommandLine": "/bin/bash -i"
+          }
+        },
+        "_fomorian_batch": "PT-2026-003-batch2-impact",
+        "_fomorian_test": true,
+        "_fomorian_attack_id": "T1565.002",
+        "_fomorian_expected_detection": "Sigma: mitmproxy HTTP Interception (T1565.002)"
+      }
+    },
+    {
+      "_comment": "Sysmon Linux Event 3 - mitmproxy listening on interceptor port",
+      "sequence": 2,
+      "timestamp": "2026-02-08T23:10:05.000Z",
+      "log": {
+        "timestamp": "2026-02-08T23:10:05.000+0000",
+        "rule": {
+          "level": 10,
+          "description": "Sysmon - Event 3: Proxy Listening Port",
+          "id": "100103",
+          "mitre": {
+            "id": [
+              "T1565.002"
+            ],
+            "tactic": [
+              "Impact"
+            ],
+            "technique": [
+              "Transmitted Data Manipulation"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event3",
+            "linux"
+          ]
+        },
+        "agent": {
+          "id": "001",
+          "name": "GW01",
+          "ip": "198.51.100.1"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1707400000.300113",
+        "decoder": {
+          "name": "sysmon-linux"
+        },
+        "location": "/var/log/sysmon/sysmon.log",
+        "data": {
+          "eventdata": {
+            "utcTime": "2026-02-08 23:10:05.000",
+            "processGuid": "{A1B2C3D4-IMPC-1565-0002-000000000001}",
+            "processId": "30200",
+            "image": "/usr/bin/mitmproxy",
+            "user": "root",
+            "protocol": "tcp",
+            "sourceIp": "0.0.0.0",
+            "sourcePort": "8080",
+            "destinationIp": "0.0.0.0",
+            "destinationPort": "0"
+          }
+        },
+        "_fomorian_batch": "PT-2026-003-batch2-impact",
+        "_fomorian_test": true,
+        "_fomorian_attack_id": "T1565.002",
+        "_fomorian_expected_detection": "Sigma: HTTP Proxy Interception Active (T1565.002)"
+      }
+    }
+  ]
+}

@@ -15,24 +15,43 @@
       "sequence": 1,
       "timestamp": "2026-01-29T13:00:00.000Z",
       "log": {
-        "timestamp": "",
         "rule": {
           "level": 14,
           "description": "Sysmon - Event 1: Shadow Copy Deletion",
           "id": "100100",
           "mitre": {
-            "id": ["T1485", "T1490"],
-            "tactic": ["Impact"],
-            "technique": ["Data Destruction", "Inhibit System Recovery"]
+            "id": [
+              "T1485",
+              "T1490"
+            ],
+            "tactic": [
+              "Impact"
+            ],
+            "technique": [
+              "Data Destruction",
+              "Inhibit System Recovery"
+            ]
           },
           "firedtimes": 1,
           "mail": false,
-          "groups": ["sysmon", "sysmon_event1", "windows"]
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
         },
-        "agent": {"id": "007", "name": "WS01", "ip": "10.1.0.20"},
-        "manager": {"name": "wazuh.manager"},
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
         "id": "1700000000.100001",
-        "decoder": {"name": "windows_eventchannel"},
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
         "location": "EventChannel",
         "data": {
           "win": {
@@ -71,24 +90,41 @@
       "sequence": 2,
       "timestamp": "2026-01-29T13:00:30.000Z",
       "log": {
-        "timestamp": "",
         "rule": {
           "level": 14,
           "description": "Sysmon - Event 1: Secure File Deletion Tool",
           "id": "100100",
           "mitre": {
-            "id": ["T1485"],
-            "tactic": ["Impact"],
-            "technique": ["Data Destruction"]
+            "id": [
+              "T1485"
+            ],
+            "tactic": [
+              "Impact"
+            ],
+            "technique": [
+              "Data Destruction"
+            ]
           },
           "firedtimes": 1,
           "mail": false,
-          "groups": ["sysmon", "sysmon_event1", "windows"]
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
         },
-        "agent": {"id": "007", "name": "WS01", "ip": "10.1.0.20"},
-        "manager": {"name": "wazuh.manager"},
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
         "id": "1700000000.100002",
-        "decoder": {"name": "windows_eventchannel"},
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
         "location": "EventChannel",
         "data": {
           "win": {
@@ -127,24 +163,43 @@
       "sequence": 3,
       "timestamp": "2026-01-29T13:01:00.000Z",
       "log": {
-        "timestamp": "",
         "rule": {
           "level": 14,
           "description": "Sysmon - Event 1: Backup Catalog Deletion",
           "id": "100100",
           "mitre": {
-            "id": ["T1485", "T1490"],
-            "tactic": ["Impact"],
-            "technique": ["Data Destruction", "Inhibit System Recovery"]
+            "id": [
+              "T1485",
+              "T1490"
+            ],
+            "tactic": [
+              "Impact"
+            ],
+            "technique": [
+              "Data Destruction",
+              "Inhibit System Recovery"
+            ]
           },
           "firedtimes": 1,
           "mail": false,
-          "groups": ["sysmon", "sysmon_event1", "windows"]
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
         },
-        "agent": {"id": "007", "name": "WS01", "ip": "10.1.0.20"},
-        "manager": {"name": "wazuh.manager"},
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
         "id": "1700000000.100003",
-        "decoder": {"name": "windows_eventchannel"},
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
         "location": "EventChannel",
         "data": {
           "win": {

@@ -1,0 +1,275 @@
+{
+  "_metadata": {
+    "attack_id": "T1021.002",
+    "variation": "001",
+    "name": "PsExec Lateral Movement - Remote Service Installation",
+    "description": "Attacker uses impacket-psexec to install a service on remote system (WS01) and execute commands remotely, enabling lateral movement across the network",
+    "expected_detection": "HIGH",
+    "kill_chain_phase": "lateral-movement",
+    "format": "wazuh-native",
+    "format_version": "1.0",
+    "tool": "impacket-psexec"
+  },
+  "logs": [
+    {
+      "_comment": "Event 5145 - Network Share Object Accessed (ADMIN$ share for service upload)",
+      "sequence": 1,
+      "timestamp": "2026-02-10T23:25:00.000Z",
+      "log": {
+        "timestamp": "2026-02-10T23:25:00.000Z",
+        "rule": {
+          "level": 3,
+          "description": "Windows Eventchannel event",
+          "id": "100600",
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "windows",
+            "eventchannel"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1707600000.700001",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "5145",
+              "channel": "Security",
+              "providerName": "Microsoft-Windows-Security-Auditing",
+              "computer": "WS01.corp.local",
+              "level": "0",
+              "task": "12811",
+              "keywords": "0x8020000000000000",
+              "severityValue": "AUDIT_SUCCESS"
+            },
+            "eventdata": {
+              "subjectUserSid": "S-1-5-21-3298120035-3471069779-879265153-500",
+              "subjectUserName": "Administrator",
+              "subjectDomainName": "CORP",
+              "subjectLogonId": "0x3e7",
+              "objectType": "File",
+              "ipAddress": "198.51.100.110",
+              "ipPort": "49152",
+              "shareName": "\\\\*\\ADMIN$",
+              "shareLocalPath": "\\??\\C:\\Windows",
+              "relativePath": "\\PSEXESVC.exe",
+              "accessMask": "0x2",
+              "accessList": "%%4417"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Event 7045 - New Service Installed (PSEXESVC)",
+      "sequence": 2,
+      "timestamp": "2026-02-10T23:25:01.000Z",
+      "log": {
+        "timestamp": "2026-02-10T23:25:01.000Z",
+        "rule": {
+          "level": 12,
+          "description": "New Windows Service Created - Suspicious",
+          "id": "100700",
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "windows",
+            "system"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1707600000.700002",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "System",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "7045",
+              "channel": "System",
+              "providerName": "Service Control Manager",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "0",
+              "keywords": "0x8080000000000000",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "serviceName": "PSEXESVC",
+              "imageFileName": "%SystemRoot%\\PSEXESVC.exe",
+              "serviceType": "user mode service",
+              "startType": "demand start",
+              "accountName": "LocalSystem"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Sysmon Event 1 - PSEXESVC.exe process creation (service starts)",
+      "sequence": 3,
+      "timestamp": "2026-02-10T23:25:02.000Z",
+      "log": {
+        "timestamp": "2026-02-10T23:25:02.000Z",
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 1: PsExec Service Execution",
+          "id": "100150",
+          "mitre": {
+            "id": [
+              "T1021.002"
+            ],
+            "tactic": [
+              "Lateral Movement"
+            ],
+            "technique": [
+              "Remote Services: SMB/Windows Admin Shares"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1707600000.700003",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-10 23:25:02.000",
+              "processGuid": "{GUID-PSEXESVC}",
+              "processId": "2468",
+              "image": "C:\\Windows\\PSEXESVC.exe",
+              "commandLine": "C:\\Windows\\PSEXESVC.exe",
+              "currentDirectory": "C:\\Windows\\system32\\",
+              "user": "NT AUTHORITY\\SYSTEM",
+              "integrityLevel": "System",
+              "hashes": "SHA256=3A68E87929F5A1D46D7A3B8A1F5C8E7A8D9C1B3E4F5A6D7C8E9F0A1B2C3D4E5F6",
+              "parentProcessGuid": "{GUID-SERVICES}",
+              "parentProcessId": "668",
+              "parentImage": "C:\\Windows\\System32\\services.exe",
+              "parentCommandLine": "C:\\Windows\\system32\\services.exe"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Sysmon Event 1 - Remote command execution (cmd.exe spawned by PSEXESVC)",
+      "sequence": 4,
+      "timestamp": "2026-02-10T23:25:03.000Z",
+      "log": {
+        "timestamp": "2026-02-10T23:25:03.000Z",
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 1: Command Execution via PsExec",
+          "id": "100151",
+          "mitre": {
+            "id": [
+              "T1021.002",
+              "T1059.003"
+            ],
+            "tactic": [
+              "Lateral Movement",
+              "Execution"
+            ],
+            "technique": [
+              "Remote Services: SMB",
+              "Command and Scripting Interpreter: cmd"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1707600000.700004",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-10 23:25:03.000",
+              "processGuid": "{GUID-CMD}",
+              "processId": "3456",
+              "image": "C:\\Windows\\System32\\cmd.exe",
+              "commandLine": "cmd.exe /c whoami",
+              "currentDirectory": "C:\\Windows\\system32\\",
+              "user": "NT AUTHORITY\\SYSTEM",
+              "integrityLevel": "System",
+              "hashes": "SHA256=D1C7B5E6F7C8D9E0F1A2B3C4D5E6F7A8B9C0D1E2F3A4B5C6D7E8F9A0B1C2D3E4",
+              "parentProcessGuid": "{GUID-PSEXESVC}",
+              "parentProcessId": "2468",
+              "parentImage": "C:\\Windows\\PSEXESVC.exe",
+              "parentCommandLine": "C:\\Windows\\PSEXESVC.exe"
+            }
+          }
+        }
+      }
+    }
+  ]
+}

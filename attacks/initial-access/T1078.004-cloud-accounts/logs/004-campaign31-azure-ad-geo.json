@@ -7,9 +7,7 @@
     "expected_detection": "LOW",
     "kill_chain_phase": "initial-access",
     "format": "wazuh-native",
-    "format_version": "1.0",
-    "campaign": "31",
-    "batch": "12"
+    "format_version": "1.0"
   },
   "logs": [
     {
@@ -23,21 +21,40 @@
           "description": "Azure AD - Impossible Travel Detected",
           "id": "100405",
           "mitre": {
-            "id": ["T1078.004"],
-            "tactic": ["Initial Access"],
-            "technique": ["Valid Accounts: Cloud Accounts"]
+            "id": [
+              "T1078.004"
+            ],
+            "tactic": [
+              "Initial Access"
+            ],
+            "technique": [
+              "Valid Accounts: Cloud Accounts"
+            ]
           },
           "firedtimes": 1,
           "mail": false,
-          "groups": ["cloud", "azure_ad", "authentication", "impossible_travel"]
+          "groups": [
+            "cloud",
+            "azure_ad",
+            "authentication",
+            "impossible_travel"
+          ]
         },
-        "agent": {"id": "002", "name": "analyst-workstation", "ip": "10.0.10.5"},
-        "manager": {"name": "wazuh.manager"},
+        "agent": {
+          "id": "002",
+          "name": "ANALYST01",
+          "ip": "198.51.100.5"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
         "id": "1710000007.000001",
-        "decoder": {"name": "json"},
+        "decoder": {
+          "name": "json"
+        },
         "location": "/var/log/azure_ad_signin.log",
         "data": {
-          "userPrincipalName": "analyst@yourcompany.onmicrosoft.com",
+          "userPrincipalName": "analyst@contoso.onmicrosoft.com",
           "appDisplayName": "Office 365 Exchange Online",
           "ipAddress": "185.220.101.50",
           "location": {
@@ -71,7 +88,10 @@
             "isCompliant": false
           },
           "riskLevel": "high",
-          "riskEventTypes": ["impossibleTravel", "anonymizedIPAddress"]
+          "riskEventTypes": [
+            "impossibleTravel",
+            "anonymizedIPAddress"
+          ]
         },
         "_fomorian_test": true,
         "fomorian_campaign": 31,

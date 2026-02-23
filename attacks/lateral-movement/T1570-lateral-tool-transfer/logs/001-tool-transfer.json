@@ -1,0 +1,232 @@
+{
+  "_metadata": {
+    "attack_id": "T1570",
+    "variation": "001",
+    "name": "Lateral Tool Transfer",
+    "description": "Transferring attack tools between systems during lateral movement",
+    "expected_detection": "MEDIUM",
+    "kill_chain_phase": "lateral-movement",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Sysmon Event 1 - Copy tool via SMB",
+      "sequence": 1,
+      "timestamp": "2026-01-30T05:10:00.000Z",
+      "log": {
+        "rule": {
+          "level": 10,
+          "description": "Sysmon - Event 1: Lateral Tool Transfer via SMB Copy",
+          "id": "100100",
+          "mitre": {
+            "id": [
+              "T1570"
+            ],
+            "tactic": [
+              "Lateral Movement"
+            ],
+            "technique": [
+              "Lateral Tool Transfer"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000031.500001",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-01-30 05:10:00.000",
+              "processGuid": "{TRANSFER-001-0001-000000000001}",
+              "processId": "63000",
+              "image": "C:\\Windows\\System32\\cmd.exe",
+              "commandLine": "cmd.exe /c copy C:\\Tools\\beacon.exe \\\\WS02\\C$\\Windows\\Temp\\svchost.exe",
+              "currentDirectory": "C:\\Users\\attacker\\",
+              "user": "CORP\\attacker",
+              "integrityLevel": "High",
+              "hashes": "SHA256=CMD_EXE_HASH_1234567890ABCDEF1234567890ABCDEF1234",
+              "parentProcessGuid": "{TRANSFER-001-0001-000000000000}",
+              "parentProcessId": "63000",
+              "parentImage": "C:\\Windows\\explorer.exe",
+              "parentCommandLine": "C:\\Windows\\explorer.exe"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Sysmon Event 3 - SMB connection for tool transfer",
+      "sequence": 2,
+      "timestamp": "2026-01-30T05:10:01.000Z",
+      "log": {
+        "rule": {
+          "level": 8,
+          "description": "Sysmon - Event 3: SMB Connection for File Transfer",
+          "id": "100100",
+          "mitre": {
+            "id": [
+              "T1570",
+              "T1021.002"
+            ],
+            "tactic": [
+              "Lateral Movement"
+            ],
+            "technique": [
+              "Lateral Tool Transfer",
+              "SMB/Windows Admin Shares"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event3",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000031.500002",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "3",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "3",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-01-30 05:10:01.000",
+              "processGuid": "{TRANSFER-001-0001-000000000001}",
+              "processId": "63000",
+              "image": "C:\\Windows\\System32\\cmd.exe",
+              "user": "CORP\\attacker",
+              "protocol": "tcp",
+              "initiated": "true",
+              "sourceIsIpv6": "false",
+              "sourceIp": "198.51.100.20",
+              "sourceHostname": "WS01.corp.local",
+              "sourcePort": "63100",
+              "destinationIsIpv6": "false",
+              "destinationIp": "198.51.100.21",
+              "destinationHostname": "WS02.corp.local",
+              "destinationPort": "445",
+              "destinationPortName": "microsoft-ds"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Sysmon Event 1 - PowerShell file transfer",
+      "sequence": 3,
+      "timestamp": "2026-01-30T05:10:10.000Z",
+      "log": {
+        "rule": {
+          "level": 10,
+          "description": "Sysmon - Event 1: Lateral Tool Transfer via PowerShell",
+          "id": "100100",
+          "mitre": {
+            "id": [
+              "T1570"
+            ],
+            "tactic": [
+              "Lateral Movement"
+            ],
+            "technique": [
+              "Lateral Tool Transfer"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000031.500003",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-01-30 05:10:10.000",
+              "processGuid": "{TRANSFER-001-0001-000000000002}",
+              "processId": "63200",
+              "image": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+              "commandLine": "powershell.exe -c \"Copy-Item -Path 'C:\\Tools\\*' -Destination '\\\\WS02\\C$\\Temp\\' -Recurse\"",
+              "currentDirectory": "C:\\Users\\attacker\\",
+              "user": "CORP\\attacker",
+              "integrityLevel": "High",
+              "hashes": "SHA256=PS_EXE_HASH_1234567890ABCDEF1234567890ABCDEF1234567",
+              "parentProcessGuid": "{TRANSFER-001-0001-000000000000}",
+              "parentProcessId": "63000",
+              "parentImage": "C:\\Windows\\System32\\cmd.exe",
+              "parentCommandLine": "cmd.exe"
+            }
+          }
+        }
+      }
+    }
+  ]
+}

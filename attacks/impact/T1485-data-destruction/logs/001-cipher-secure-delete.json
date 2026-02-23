@@ -7,9 +7,7 @@
     "expected_detection": "MEDIUM",
     "kill_chain_phase": "impact",
     "format": "wazuh-native",
-    "format_version": "1.0",
-    "campaign": "Campaign 26",
-    "date_executed": "2026-02-09"
+    "format_version": "1.0"
   },
   "logs": [
     {
@@ -17,24 +15,41 @@
       "sequence": 1,
       "timestamp": "2026-02-09T15:18:00.000Z",
       "log": {
-        "timestamp": "",
         "rule": {
           "level": 10,
           "description": "Sysmon - Event 1: Process creation",
           "id": "100101",
           "mitre": {
-            "id": ["T1485"],
-            "tactic": ["Impact"],
-            "technique": ["Data Destruction"]
+            "id": [
+              "T1485"
+            ],
+            "tactic": [
+              "Impact"
+            ],
+            "technique": [
+              "Data Destruction"
+            ]
           },
           "firedtimes": 1,
           "mail": true,
-          "groups": ["sysmon", "sysmon_event1", "windows"]
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
         },
-        "agent": {"id": "013", "name": "FS01", "ip": "10.1.0.11"},
-        "manager": {"name": "wazuh.manager"},
+        "agent": {
+          "id": "011",
+          "name": "FS01",
+          "ip": "198.51.100.11"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
         "id": "1709000309.000001",
-        "decoder": {"name": "windows_eventchannel"},
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
         "location": "EventChannel",
         "data": {
           "win": {
@@ -42,7 +57,7 @@
               "eventID": "1",
               "channel": "Microsoft-Windows-Sysmon/Operational",
               "providerName": "Microsoft-Windows-Sysmon",
-              "computer": "FS01.yourcompany.local",
+              "computer": "FS01.corp.local",
               "level": "4",
               "task": "1",
               "severityValue": "INFORMATION"
@@ -54,7 +69,7 @@
               "image": "C:\\Windows\\System32\\cipher.exe",
               "commandLine": "cipher  /w:C:\\Users\\Public\\destruction_test.txt",
               "currentDirectory": "C:\\Windows\\System32\\",
-              "user": "YOURCOMPANY\\Administrator",
+              "user": "CORP\\Administrator",
               "integrityLevel": "High",
               "hashes": "SHA256=1E2F3A4B5C6D7E8F9A0B1C2D3E4F5A6B7C8D9E0F1A2B3C4D5E6F7A8B9C0D1E2F",
               "parentProcessGuid": "{12345678-1234-1234-1234-000000309000}",

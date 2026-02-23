@@ -1,0 +1,62 @@
+{
+  "timestamp": "2026-01-31T23:01:00.000Z",
+  "rule": {
+    "level": 14,
+    "description": "Sysmon - Event 1: Shai-Hulud Supply Chain Attack",
+    "id": "92151",
+    "mitre": {
+      "id": [
+        "T1195.002"
+      ],
+      "tactic": [
+        "Initial Access"
+      ],
+      "technique": [
+        "Supply Chain Compromise: Compromise Software Supply Chain"
+      ]
+    },
+    "groups": [
+      "sysmon",
+      "sysmon_event1",
+      "windows"
+    ]
+  },
+  "agent": {
+    "id": "007",
+    "name": "WS01",
+    "ip": "198.51.100.20"
+  },
+  "manager": {
+    "name": "wazuh.manager"
+  },
+  "id": "1700000031.000001",
+  "decoder": {
+    "name": "windows_eventchannel"
+  },
+  "location": "EventChannel",
+  "data": {
+    "win": {
+      "system": {
+        "eventID": "1",
+        "channel": "Microsoft-Windows-Sysmon/Operational",
+        "providerName": "Microsoft-Windows-Sysmon",
+        "computer": "WS01.corp.local"
+      },
+      "eventdata": {
+        "utcTime": "2026-01-31 23:01:00.000",
+        "processGuid": "{12345678-1234-1234-1234-123456789031}",
+        "processId": "5632",
+        "image": "C:\\Users\\developer\\AppData\\Roaming\\npm\\node_modules\\.bin\\bun.exe",
+        "commandLine": "bun.exe run setup_bun.js",
+        "currentDirectory": "C:\\Users\\developer\\projects\\app\\",
+        "user": "CORP\\developer",
+        "parentImage": "C:\\Program Files\\nodejs\\node.exe",
+        "parentCommandLine": "node.exe npm install malicious-package"
+      }
+    }
+  },
+  "_fomorian_batch": "threat-intel-batch3-2026-01-31",
+  "_fomorian_test": true,
+  "_fomorian_attack_id": "T1195.002",
+  "_fomorian_expected_detection": "Sigma: Shai-Hulud 2.0 Supply Chain Attack (T1195.002)"
+}

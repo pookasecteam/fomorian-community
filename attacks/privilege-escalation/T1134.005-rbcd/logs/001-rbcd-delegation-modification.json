@@ -1,0 +1,78 @@
+{
+  "_metadata": {
+    "attack_id": "T1134.005",
+    "variation": "001",
+    "name": "Resource-Based Constrained Delegation Attack",
+    "description": "Attacker modifies msDS-AllowedToActOnBehalfOfOtherIdentity attribute to enable RBCD privilege escalation from ROGUE01$ to DC01$",
+    "expected_detection": "CRITICAL",
+    "kill_chain_phase": "privilege-escalation",
+    "format": "wazuh-native",
+    "format_version": "1.0",
+    "tool": "impacket-rbcd"
+  },
+  "logs": [
+    {
+      "_comment": "Event 5136 - Directory Service Object Modified (msDS-AllowedToActOnBehalfOfOtherIdentity attribute)",
+      "sequence": 1,
+      "timestamp": "2026-02-10T23:10:15.000Z",
+      "log": {
+        "timestamp": "2026-02-10T23:10:15.000Z",
+        "rule": {
+          "level": 3,
+          "description": "Windows Eventchannel event",
+          "id": "100600",
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "windows",
+            "eventchannel"
+          ]
+        },
+        "agent": {
+          "id": "010",
+          "name": "DC01",
+          "ip": "198.51.100.12"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1707600000.300001",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "5136",
+              "channel": "Security",
+              "providerName": "Microsoft-Windows-Security-Auditing",
+              "computer": "DC01.corp.local",
+              "level": "0",
+              "task": "14081",
+              "keywords": "0x8020000000000000",
+              "severityValue": "AUDIT_SUCCESS"
+            },
+            "eventdata": {
+              "opCorrelationID": "{d1234567-89ab-cdef-0123-456789abcdef}",
+              "appCorrelationID": "-",
+              "subjectUserSid": "S-1-5-21-3298120035-3471069779-879265153-500",
+              "subjectUserName": "Administrator",
+              "subjectDomainName": "CORP",
+              "subjectLogonId": "0x3e7",
+              "dSName": "DC=corp,DC=local",
+              "dSType": "%%14676",
+              "objectDN": "CN=DC01,OU=Domain Controllers,DC=corp,DC=local",
+              "objectGUID": "{12345678-90ab-cdef-1234-567890abcdef}",
+              "objectClass": "computer",
+              "attributeLDAPDisplayName": "msDS-AllowedToActOnBehalfOfOtherIdentity",
+              "attributeSyntaxOID": "2.5.5.15",
+              "attributeValue": "O:BAD:(A;;CCDCLCSWRPWPDTLOCRSDRCWDWO;;;S-1-5-21-3298120035-3471069779-879265153-1201)",
+              "operationType": "%%14674"
+            }
+          }
+        }
+      }
+    }
+  ]
+}

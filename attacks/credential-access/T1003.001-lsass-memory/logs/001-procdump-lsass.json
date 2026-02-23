@@ -5,9 +5,7 @@
     "name": "ProcDump LSASS Dump",
     "description": "Sysinternals ProcDump used to create memory dump of LSASS",
     "expected_detection": "HIGH",
-    "expected_soar": "credential-dumping-response",
     "kill_chain_phase": "credential-access",
-    "notes": "Common pentester/red team technique. ProcDump is signed Microsoft binary. Generates both Sysmon and Windows Security logs.",
     "format": "wazuh-native",
     "format_version": "1.0"
   },
@@ -17,7 +15,6 @@
       "sequence": 1,
       "timestamp": "",
       "log": {
-        "timestamp": "",
         "rule": {
           "level": 12,
           "description": "Sysmon - Event 1: ProcDump LSASS Dump",
@@ -44,7 +41,7 @@
         "agent": {
           "id": "{{agent_id}}",
           "name": "{{agent_name}}",
-          "ip": "10.1.0.20"
+          "ip": "198.51.100.20"
         },
         "manager": {
           "name": "wazuh.manager"
@@ -72,7 +69,7 @@
               "processGuid": "{{guid}}",
               "processId": "{{pid}}",
               "image": "C:\\Tools\\procdump64.exe",
-              "fileVersion": "10.11.0.0",
+              "fileVersion": "198.51.100.0",
               "description": "Sysinternals process dump utility",
               "product": "ProcDump",
               "company": "Sysinternals - www.sysinternals.com",
@@ -96,7 +93,6 @@
       "sequence": 2,
       "timestamp": "",
       "log": {
-        "timestamp": "",
         "rule": {
           "level": 12,
           "description": "Sysmon - Event 4688: ProcDump LSASS Dump",
@@ -123,7 +119,7 @@
         "agent": {
           "id": "{{agent_id}}",
           "name": "{{agent_name}}",
-          "ip": "10.1.0.20"
+          "ip": "198.51.100.20"
         },
         "manager": {
           "name": "wazuh.manager"
@@ -172,7 +168,6 @@
       "sequence": 3,
       "timestamp": "",
       "log": {
-        "timestamp": "",
         "rule": {
           "level": 12,
           "description": "Sysmon - Event 10: ProcDump LSASS Dump",
@@ -199,7 +194,7 @@
         "agent": {
           "id": "{{agent_id}}",
           "name": "{{agent_name}}",
-          "ip": "10.1.0.20"
+          "ip": "198.51.100.20"
         },
         "manager": {
           "name": "wazuh.manager"
@@ -246,7 +241,6 @@
       "sequence": 4,
       "timestamp": "",
       "log": {
-        "timestamp": "",
         "rule": {
           "level": 12,
           "description": "Sysmon - Event 4663: ProcDump LSASS Dump",
@@ -273,7 +267,7 @@
         "agent": {
           "id": "{{agent_id}}",
           "name": "{{agent_name}}",
-          "ip": "10.1.0.20"
+          "ip": "198.51.100.20"
         },
         "manager": {
           "name": "wazuh.manager"
@@ -319,7 +313,6 @@
       "sequence": 5,
       "timestamp": "",
       "log": {
-        "timestamp": "",
         "rule": {
           "level": 12,
           "description": "Sysmon - Event 11: ProcDump LSASS Dump",
@@ -346,7 +339,7 @@
         "agent": {
           "id": "{{agent_id}}",
           "name": "{{agent_name}}",
-          "ip": "10.1.0.20"
+          "ip": "198.51.100.20"
         },
         "manager": {
           "name": "wazuh.manager"

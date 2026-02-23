@@ -1,10 +1,8 @@
 {
   "_metadata": {
     "attack_id": "T1047",
-    "batch": "threat-intel-2026-01-31",
     "name": "WMI Process Execution",
     "description": "WMI-based process execution via wmiprvse.exe spawning child processes",
-    "source": "https://github.com/MHaggis/NEBULA",
     "expected_detection": "HIGH",
     "kill_chain_phase": "execution",
     "format": "wazuh-native",
@@ -20,20 +18,30 @@
         "rule": {
           "level": 12,
           "description": "Sysmon - Event 1: WmiPrvSE Spawning PowerShell",
-          "id": "92151",
+          "id": "100916",
           "mitre": {
-            "id": ["T1047"],
-            "tactic": ["Execution"],
-            "technique": ["Windows Management Instrumentation"]
+            "id": [
+              "T1047"
+            ],
+            "tactic": [
+              "Execution"
+            ],
+            "technique": [
+              "Windows Management Instrumentation"
+            ]
           },
           "firedtimes": 1,
           "mail": false,
-          "groups": ["sysmon", "sysmon_event1", "windows"]
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
         },
         "agent": {
-          "id": "007",
+          "id": "020",
           "name": "WS01",
-          "ip": "10.1.0.20"
+          "ip": "198.51.100.20"
         },
         "manager": {
           "name": "wazuh.manager"
@@ -83,20 +91,30 @@
         "rule": {
           "level": 12,
           "description": "Sysmon - Event 1: WmiPrvSE Spawning CMD",
-          "id": "92151",
+          "id": "100916",
           "mitre": {
-            "id": ["T1047"],
-            "tactic": ["Execution"],
-            "technique": ["Windows Management Instrumentation"]
+            "id": [
+              "T1047"
+            ],
+            "tactic": [
+              "Execution"
+            ],
+            "technique": [
+              "Windows Management Instrumentation"
+            ]
           },
           "firedtimes": 1,
           "mail": false,
-          "groups": ["sysmon", "sysmon_event1", "windows"]
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
         },
         "agent": {
-          "id": "007",
+          "id": "020",
           "name": "WS01",
-          "ip": "10.1.0.20"
+          "ip": "198.51.100.20"
         },
         "manager": {
           "name": "wazuh.manager"
@@ -146,20 +164,33 @@
         "rule": {
           "level": 14,
           "description": "Sysmon - Event 19: WMI Event Filter Created",
-          "id": "92169",
+          "id": "100001",
           "mitre": {
-            "id": ["T1047", "T1546.003"],
-            "tactic": ["Execution", "Persistence"],
-            "technique": ["Windows Management Instrumentation", "WMI Event Subscription"]
+            "id": [
+              "T1047",
+              "T1546.003"
+            ],
+            "tactic": [
+              "Execution",
+              "Persistence"
+            ],
+            "technique": [
+              "Windows Management Instrumentation",
+              "WMI Event Subscription"
+            ]
           },
           "firedtimes": 1,
           "mail": false,
-          "groups": ["sysmon", "sysmon_event19", "windows"]
+          "groups": [
+            "sysmon",
+            "sysmon_event19",
+            "windows"
+          ]
         },
         "agent": {
-          "id": "007",
+          "id": "020",
           "name": "WS01",
-          "ip": "10.1.0.20"
+          "ip": "198.51.100.20"
         },
         "manager": {
           "name": "wazuh.manager"

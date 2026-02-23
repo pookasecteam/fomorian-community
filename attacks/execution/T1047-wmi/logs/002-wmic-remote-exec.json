@@ -5,9 +5,7 @@
     "name": "WMI Remote Process Execution",
     "description": "wmic.exe used to execute process on remote system - lateral movement indicator",
     "expected_detection": "CRITICAL",
-    "expected_soar": "lateral-movement-detection",
     "kill_chain_phase": "execution",
-    "notes": "Remote WMI execution is a common lateral movement technique",
     "format": "wazuh-native",
     "format_version": "1.0"
   },
@@ -17,7 +15,6 @@
       "sequence": 1,
       "timestamp": "2026-01-29T11:15:00.000Z",
       "log": {
-        "timestamp": "",
         "rule": {
           "level": 12,
           "description": "Sysmon - Event 1: WMI Remote Process Execution",
@@ -42,9 +39,9 @@
           ]
         },
         "agent": {
-          "id": "007",
+          "id": "020",
           "name": "WS01",
-          "ip": "10.1.0.20"
+          "ip": "198.51.100.20"
         },
         "manager": {
           "name": "wazuh.manager"
@@ -90,7 +87,6 @@
       "sequence": 2,
       "timestamp": "2026-01-29T11:15:01.000Z",
       "log": {
-        "timestamp": "",
         "rule": {
           "level": 12,
           "description": "Sysmon - Event 3: WMI Remote Process Execution",
@@ -115,9 +111,9 @@
           ]
         },
         "agent": {
-          "id": "007",
+          "id": "020",
           "name": "WS01",
-          "ip": "10.1.0.20"
+          "ip": "198.51.100.20"
         },
         "manager": {
           "name": "wazuh.manager"
@@ -148,9 +144,9 @@
               "user": "CORP\\admin.user",
               "protocol": "tcp",
               "initiated": "true",
-              "sourceIp": "10.1.1.50",
+              "sourceIp": "198.51.100.50",
               "sourcePort": "50100",
-              "destinationIp": "10.1.1.10",
+              "destinationIp": "198.51.100.10",
               "destinationHostname": "DC01.corp.local",
               "destinationPort": "135"
             }

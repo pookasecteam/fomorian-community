@@ -1,0 +1,131 @@
+{
+  "_metadata": {
+    "attack_id": "T1562.001",
+    "variation": "001",
+    "name": "Metro4Shell CVE-2025-11953 Defender Exclusion",
+    "description": "Metro4Shell exploitation chain adds Defender exclusions before deploying Rust malware",
+    "expected_detection": "HIGH",
+    "kill_chain_phase": "defense-evasion",
+    "source_url": "https://thehackernews.com/2026/02/hackers-exploit-metro4shell-rce-flaw-in.html",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Sysmon Event 1 - PowerShell adding Defender exclusion",
+      "sequence": 1,
+      "log": {
+        "timestamp": "2026-02-03T11:00:00.000Z",
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 1: Defender exclusion via PowerShell",
+          "id": "100916",
+          "mitre": {
+            "id": [
+              "T1562.001"
+            ],
+            "tactic": [
+              "Defense Evasion"
+            ],
+            "technique": [
+              "Disable or Modify Tools"
+            ]
+          },
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational"
+            },
+            "eventdata": {
+              "image": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+              "commandLine": "powershell.exe -enc UwBlAHQALQBNAHAAUAByAGUAZgBlAHIAZQBuAGMAZQAgAC0ARQB4AGMAbAB1AHMAaQBvAG4AUABhAHQAaAAgACIAQwA6AFwAVQBzAGUAcgBzAFwAdgBpAGMAdABpAG0AXABBAHAAcABEAGEAdABhAFwATABvAGMAYQBsAFwAVABlAG0AcAAi",
+              "user": "CORP\\developer",
+              "parentImage": "C:\\Program Files\\nodejs\\node.exe",
+              "parentCommandLine": "node.exe metro-server.js"
+            }
+          }
+        },
+        "_fomorian_test": true,
+        "_fomorian_attack_id": "T1562.001",
+        "_fomorian_batch": "morning-intel-20260203"
+      }
+    },
+    {
+      "_comment": "Sysmon Event 3 - Network connection to Metro4Shell C2",
+      "sequence": 2,
+      "log": {
+        "timestamp": "2026-02-03T11:00:10.000Z",
+        "rule": {
+          "level": 14,
+          "description": "Sysmon - Event 3: Connection to Metro4Shell C2",
+          "id": "100918",
+          "mitre": {
+            "id": [
+              "T1071.001"
+            ],
+            "tactic": [
+              "Command and Control"
+            ],
+            "technique": [
+              "Web Protocols"
+            ]
+          },
+          "groups": [
+            "sysmon",
+            "sysmon_event3",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "3",
+              "channel": "Microsoft-Windows-Sysmon/Operational"
+            },
+            "eventdata": {
+              "image": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+              "user": "CORP\\developer",
+              "protocol": "tcp",
+              "sourceIp": "198.51.100.20",
+              "sourcePort": "50123",
+              "destinationIp": "8.218.43.248",
+              "destinationPort": "60124"
+            }
+          }
+        },
+        "_fomorian_test": true,
+        "_fomorian_attack_id": "T1071.001",
+        "_fomorian_batch": "morning-intel-20260203"
+      }
+    }
+  ]
+}

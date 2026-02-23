@@ -1,0 +1,170 @@
+{
+  "_metadata": {
+    "attack_id": "T1570",
+    "variation": "001",
+    "name": "Lateral Tool Transfer - Admin Share Copy",
+    "description": "Copy tool to remote host using administrative share (C$)",
+    "expected_detection": "HIGH",
+    "kill_chain_phase": "lateral-movement",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Sysmon Event 1 - PowerShell Copy-Item to admin share",
+      "sequence": 1,
+      "timestamp": "2026-02-10T16:28:00.000Z",
+      "log": {
+        "timestamp": "2026-02-10T16:28:00.000+0000",
+        "rule": {
+          "level": 10,
+          "description": "Sysmon - Event 1: Process Creation",
+          "id": "100603",
+          "mitre": {
+            "id": [
+              "T1570"
+            ],
+            "tactic": [
+              "Lateral Movement"
+            ],
+            "technique": [
+              "Lateral Tool Transfer"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1707583680.000001",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-10 16:28:00.000",
+              "processGuid": "{8df8f34e-2710-65c7-0028-000000000400}",
+              "processId": "10512",
+              "image": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+              "commandLine": "powershell.exe -Command \"Copy-Item C:\\Users\\Public\\tool.exe -Destination '\\\\FS01\\C$\\Users\\Public\\tool.exe'\"",
+              "currentDirectory": "C:\\Users\\admin2\\",
+              "user": "CORP\\admin2",
+              "integrityLevel": "Medium",
+              "hashes": "SHA256=A8FDBA9DF15E41B6F5C69C79F66A26A9D48E174F9F1D8F7E6A5B4C3D2E1F0A9B",
+              "parentProcessGuid": "{8df8f34e-2710-65c7-0000-000000000400}",
+              "parentProcessId": "3344",
+              "parentImage": "C:\\Windows\\System32\\cmd.exe",
+              "parentCommandLine": "cmd.exe"
+            }
+          }
+        },
+        "_fomorian_test": true,
+        "fomorian_batch": 8,
+        "fomorian_campaign": 27,
+        "fomorian_technique": "T1570",
+        "fomorian_technique_name": "Lateral Tool Transfer - Admin Share Copy"
+      }
+    },
+    {
+      "_comment": "Sysmon Event 3 - SMB connection to FS01",
+      "sequence": 2,
+      "timestamp": "2026-02-10T16:28:01.000Z",
+      "log": {
+        "timestamp": "2026-02-10T16:28:01.000+0000",
+        "rule": {
+          "level": 7,
+          "description": "Sysmon - Event 3: Network Connection",
+          "id": "100604",
+          "mitre": {
+            "id": [
+              "T1570"
+            ],
+            "tactic": [
+              "Lateral Movement"
+            ],
+            "technique": [
+              "Lateral Tool Transfer"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event3",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1707583681.000001",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "3",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "3",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-10 16:28:01.000",
+              "processGuid": "{8df8f34e-2710-65c7-0028-000000000400}",
+              "processId": "10512",
+              "image": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+              "user": "CORP\\admin2",
+              "protocol": "tcp",
+              "initiated": "true",
+              "sourceIsIpv6": "false",
+              "sourceIp": "198.51.100.20",
+              "sourceHostname": "WS01.corp.local",
+              "sourcePort": "54323",
+              "destinationIsIpv6": "false",
+              "destinationIp": "198.51.100.11",
+              "destinationHostname": "FS01.corp.local",
+              "destinationPort": "445"
+            }
+          }
+        },
+        "_fomorian_test": true,
+        "fomorian_batch": 8,
+        "fomorian_campaign": 27,
+        "fomorian_technique": "T1570",
+        "fomorian_technique_name": "Lateral Tool Transfer - Admin Share Copy"
+      }
+    }
+  ]
+}

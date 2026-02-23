@@ -1,0 +1,84 @@
+{
+  "_metadata": {
+    "attack_id": "NONE",
+    "variation": "FP-003",
+    "name": "Windows Defender LSASS Scan",
+    "description": "Defender legitimately scanning LSASS during scheduled scan",
+    "expected_detection": "NONE",
+    "kill_chain_phase": "none",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "MsMpEng accessing LSASS - LEGITIMATE (Defender scan)",
+      "sequence": 1,
+      "timestamp": "2026-01-29T02:00:00.000Z",
+      "log": {
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 10: Windows Defender LSASS Scan",
+          "id": "100100",
+          "mitre": {
+            "id": [
+              "NONE"
+            ],
+            "tactic": [
+              "None"
+            ],
+            "technique": [
+              "Windows Defender LSASS Scan"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event10",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000000.359626899",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "10",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "opcode": "0",
+              "keywords": "0x8000000000000000",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-01-29 02:00:00.000",
+              "sourceProcessGuid": "{FP-003-0001-0001-000000000001}",
+              "sourceProcessId": "4500",
+              "sourceThreadId": "4504",
+              "sourceImage": "C:\\ProgramData\\Microsoft\\Windows Defender\\Platform\\4.18.2301.6-0\\MsMpEng.exe",
+              "targetProcessGuid": "{FP-003-0001-0001-LSASS0000001}",
+              "targetProcessId": "728",
+              "targetImage": "C:\\Windows\\System32\\lsass.exe",
+              "grantedAccess": "0x1000",
+              "callTrace": "C:\\Windows\\SYSTEM32\\ntdll.dll+9c4c4|C:\\ProgramData\\Microsoft\\Windows Defender\\Platform\\4.18.2301.6-0\\MsMpEng.exe+12345"
+            }
+          }
+        }
+      }
+    }
+  ]
+}

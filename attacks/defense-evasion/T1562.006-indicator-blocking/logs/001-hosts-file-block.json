@@ -1,0 +1,98 @@
+{
+  "_metadata": {
+    "attack_id": "T1562.006",
+    "variation": "001",
+    "name": "Indicator Blocking",
+    "description": "Block security tool telemetry via hosts file",
+    "expected_detection": "MEDIUM",
+    "kill_chain_phase": "defense-evasion",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Sysmon Event 1 - echo redirect to hosts file",
+      "sequence": 1,
+      "log": {
+        "rule": {
+          "level": 6,
+          "description": "Sysmon - Event 1: Hosts File Modification",
+          "id": "100001",
+          "mitre": {
+            "id": [
+              "T1562.006"
+            ],
+            "tactic": [
+              "Defense Evasion"
+            ],
+            "technique": [
+              "Impair Defenses: Indicator Blocking"
+            ]
+          },
+          "groups": [
+            "sysmon",
+            "sysmon_event1"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01"
+        },
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1"
+            },
+            "eventdata": {
+              "commandLine": "cmd.exe /c echo 127.0.0.1 telemetry.microsoft.com >> C:\\Windows\\System32\\drivers\\etc\\hosts",
+              "image": "C:\\Windows\\System32\\cmd.exe",
+              "user": "CORP\\admin2"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Sysmon Event 11 - hosts file modification",
+      "sequence": 2,
+      "log": {
+        "rule": {
+          "level": 6,
+          "description": "Sysmon - Event 11: Hosts File Changed",
+          "id": "100001",
+          "mitre": {
+            "id": [
+              "T1562.006"
+            ],
+            "tactic": [
+              "Defense Evasion"
+            ],
+            "technique": [
+              "Impair Defenses: Indicator Blocking"
+            ]
+          },
+          "groups": [
+            "sysmon",
+            "sysmon_event11"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01"
+        },
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "11"
+            },
+            "eventdata": {
+              "targetFilename": "C:\\Windows\\System32\\drivers\\etc\\hosts",
+              "image": "C:\\Windows\\System32\\cmd.exe",
+              "user": "CORP\\admin2"
+            }
+          }
+        }
+      }
+    }
+  ]
+}

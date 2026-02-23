@@ -1,0 +1,236 @@
+{
+  "_metadata": {
+    "attack_id": "T1090.003",
+    "name": "Cloudflare Tunnel C2 (ZeroPulse)",
+    "description": "C2 communications via Cloudflare Tunnel infrastructure using ZeroPulse framework",
+    "expected_detection": "HIGH",
+    "kill_chain_phase": "command-and-control",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Sysmon Event 1 - cloudflared tunnel creation",
+      "sequence": 1,
+      "timestamp": "2026-01-31T16:10:15.123Z",
+      "log": {
+        "timestamp": "2026-01-31T16:10:15.123+0000",
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 1: Cloudflare Tunnel Creation",
+          "id": "100916",
+          "mitre": {
+            "id": [
+              "T1090.003",
+              "T1572"
+            ],
+            "tactic": [
+              "Command and Control"
+            ],
+            "technique": [
+              "Proxy: Multi-hop Proxy",
+              "Protocol Tunneling"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000012.400001",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local"
+            },
+            "eventdata": {
+              "utcTime": "2026-01-31 16:10:15.123",
+              "processGuid": "{12345678-cfd-1234-cfd-123456789abc}",
+              "processId": "5432",
+              "image": "C:\\Users\\jsmith\\AppData\\Local\\Temp\\cloudflared.exe",
+              "commandLine": "cloudflared.exe tunnel --no-autoupdate run --token eyJhIjoiMTIzNDU2Nzg5MGFiY2RlZiJ9",
+              "currentDirectory": "C:\\Users\\jsmith\\",
+              "user": "CORP\\jsmith",
+              "integrityLevel": "Medium",
+              "hashes": "SHA256=cloudflaredhash123",
+              "parentProcessGuid": "{12345678-cfd-1234-cfd-123456789000}",
+              "parentProcessId": "4321",
+              "parentImage": "C:\\Windows\\System32\\cmd.exe",
+              "parentCommandLine": "cmd.exe"
+            }
+          }
+        },
+        "_fomorian_batch": "threat-intel-2026-01-31",
+        "_fomorian_test": true,
+        "_fomorian_attack_id": "T1090.003",
+        "_fomorian_expected_detection": "Cloudflare Tunnel C2"
+      }
+    },
+    {
+      "_comment": "Sysmon Event 3 - Cloudflare tunnel network connection",
+      "sequence": 2,
+      "timestamp": "2026-01-31T16:10:20.456Z",
+      "log": {
+        "timestamp": "2026-01-31T16:10:20.456+0000",
+        "rule": {
+          "level": 10,
+          "description": "Sysmon - Event 3: Cloudflare Tunnel Connection",
+          "id": "100917",
+          "mitre": {
+            "id": [
+              "T1090.003"
+            ],
+            "tactic": [
+              "Command and Control"
+            ],
+            "technique": [
+              "Proxy: Multi-hop Proxy"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event3",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000012.400002",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "3",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local"
+            },
+            "eventdata": {
+              "utcTime": "2026-01-31 16:10:20.456",
+              "processGuid": "{12345678-cfd-1234-cfd-123456789abc}",
+              "processId": "5432",
+              "image": "C:\\Users\\jsmith\\AppData\\Local\\Temp\\cloudflared.exe",
+              "user": "CORP\\jsmith",
+              "protocol": "tcp",
+              "initiated": "true",
+              "sourceIp": "198.51.100.20",
+              "sourcePort": "52345",
+              "destinationIp": "104.16.124.96",
+              "destinationPort": "443",
+              "destinationHostname": "region1.argotunnel.com"
+            }
+          }
+        },
+        "_fomorian_batch": "threat-intel-2026-01-31",
+        "_fomorian_test": true,
+        "_fomorian_attack_id": "T1090.003",
+        "_fomorian_expected_detection": "Cloudflare Tunnel C2"
+      }
+    },
+    {
+      "_comment": "Sysmon Event 1 - evil-winrm execution via ZeroPulse",
+      "sequence": 3,
+      "timestamp": "2026-01-31T16:15:30.789Z",
+      "log": {
+        "timestamp": "2026-01-31T16:15:30.789+0000",
+        "rule": {
+          "level": 14,
+          "description": "Sysmon - Event 1: Evil-WinRM Remote Execution",
+          "id": "100916",
+          "mitre": {
+            "id": [
+              "T1021.006",
+              "T1059.001"
+            ],
+            "tactic": [
+              "Lateral Movement",
+              "Execution"
+            ],
+            "technique": [
+              "Remote Services: Windows Remote Management",
+              "Command and Scripting Interpreter: PowerShell"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "DC01",
+          "ip": "198.51.100.10"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000012.400003",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "DC01.corp.local"
+            },
+            "eventdata": {
+              "utcTime": "2026-01-31 16:15:30.789",
+              "processGuid": "{12345678-winrm-1234-winrm-123456789abc}",
+              "processId": "6543",
+              "image": "C:\\Windows\\System32\\wsmprovhost.exe",
+              "commandLine": "C:\\Windows\\system32\\wsmprovhost.exe -Embedding",
+              "currentDirectory": "C:\\Windows\\system32\\",
+              "user": "CORP\\admin",
+              "integrityLevel": "High",
+              "hashes": "SHA256=wsmprovhosthash",
+              "parentProcessGuid": "{12345678-winrm-1234-winrm-123456789000}",
+              "parentProcessId": "876",
+              "parentImage": "C:\\Windows\\System32\\svchost.exe",
+              "parentCommandLine": "C:\\Windows\\system32\\svchost.exe -k DcomLaunch -p"
+            }
+          }
+        },
+        "_fomorian_batch": "threat-intel-2026-01-31",
+        "_fomorian_test": true,
+        "_fomorian_attack_id": "T1021.006",
+        "_fomorian_expected_detection": "WinRM Remote Execution"
+      }
+    }
+  ]
+}

@@ -1,0 +1,177 @@
+{
+  "_metadata": {
+    "attack_id": "T1021.005",
+    "variation": "001",
+    "name": "VNC Remote Access - TightVNC Viewer",
+    "description": "Lateral movement via VNC remote desktop connection using TightVNC viewer to connect to target host on port 5900",
+    "expected_detection": "HIGH",
+    "kill_chain_phase": "lateral-movement",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Sysmon Event 1 - VNC viewer process creation",
+      "sequence": 1,
+      "timestamp": "2026-02-08T11:00:00.000Z",
+      "log": {
+        "timestamp": "2026-02-08T11:00:00.000+0000",
+        "rule": {
+          "level": 6,
+          "description": "Sysmon - Event 1: Process Creation",
+          "id": "100915",
+          "mitre": {
+            "id": [
+              "T1021.005"
+            ],
+            "tactic": [
+              "Lateral Movement"
+            ],
+            "technique": [
+              "Remote Services: VNC"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1707400000.300001",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-08 11:00:00.000",
+              "processGuid": "{A1B2C3D4-LAT-0005-0001-000000000001}",
+              "processId": "5890",
+              "image": "C:\\Program Files\\TightVNC\\tvnviewer.exe",
+              "fileVersion": "2.8.81.0",
+              "description": "TightVNC Viewer",
+              "product": "TightVNC",
+              "company": "GlavSoft LLC.",
+              "originalFileName": "tvnviewer.exe",
+              "commandLine": "\"C:\\Program Files\\TightVNC\\tvnviewer.exe\" 198.51.100.11::5900",
+              "currentDirectory": "C:\\Users\\admin.user\\Desktop\\",
+              "user": "CORP\\admin.user",
+              "logonGuid": "{A1B2C3D4-0001-0001-0001-000000000001}",
+              "logonId": "0x3e7",
+              "terminalSessionId": "1",
+              "integrityLevel": "High",
+              "hashes": "SHA256=8A3F2B1C4D5E6F7A8B9C0D1E2F3A4B5C6D7E8F9A0B1C2D3E4F5A6B7C8D9E0F1A",
+              "parentProcessGuid": "{A1B2C3D4-0001-0001-0002-000000000001}",
+              "parentProcessId": "4512",
+              "parentImage": "C:\\Windows\\explorer.exe",
+              "parentCommandLine": "C:\\Windows\\explorer.exe"
+            }
+          }
+        },
+        "_fomorian_batch": "PT-2026-003-batch1-lateral",
+        "_fomorian_test": true,
+        "_fomorian_attack_id": "T1021.005",
+        "_fomorian_expected_detection": "Sigma: VNC Remote Service Connection (T1021.005)"
+      }
+    },
+    {
+      "_comment": "Sysmon Event 3 - VNC network connection to port 5900",
+      "sequence": 2,
+      "timestamp": "2026-02-08T11:00:01.000Z",
+      "log": {
+        "timestamp": "2026-02-08T11:00:01.000+0000",
+        "rule": {
+          "level": 8,
+          "description": "Sysmon - Event 3: Network Connection",
+          "id": "100917",
+          "mitre": {
+            "id": [
+              "T1021.005"
+            ],
+            "tactic": [
+              "Lateral Movement"
+            ],
+            "technique": [
+              "Remote Services: VNC"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event3",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1707400000.300002",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "3",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "3",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-08 11:00:01.000",
+              "processGuid": "{A1B2C3D4-LAT-0005-0001-000000000001}",
+              "processId": "5890",
+              "image": "C:\\Program Files\\TightVNC\\tvnviewer.exe",
+              "user": "CORP\\admin.user",
+              "protocol": "tcp",
+              "initiated": "true",
+              "sourceIsIpv6": "false",
+              "sourceIp": "198.51.100.20",
+              "sourceHostname": "WS01.corp.local",
+              "sourcePort": "49789",
+              "destinationIsIpv6": "false",
+              "destinationIp": "198.51.100.11",
+              "destinationHostname": "FS01.corp.local",
+              "destinationPort": "5900",
+              "destinationPortName": "vnc"
+            }
+          }
+        },
+        "_fomorian_batch": "PT-2026-003-batch1-lateral",
+        "_fomorian_test": true,
+        "_fomorian_attack_id": "T1021.005",
+        "_fomorian_expected_detection": "Sigma: VNC Remote Service Connection (T1021.005)"
+      }
+    }
+  ]
+}

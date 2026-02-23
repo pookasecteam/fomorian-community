@@ -1,0 +1,148 @@
+{
+  "_metadata": {
+    "attack_id": "T1547.008",
+    "variation": "001",
+    "name": "Winlogon Helper DLL Shell Hijack",
+    "description": "Modify Winlogon Shell or Userinit registry values to execute payload during logon",
+    "expected_detection": "HIGH",
+    "kill_chain_phase": "persistence",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Sysmon Event 13 - Registry: Winlogon Shell value modified",
+      "sequence": 1,
+      "timestamp": "2026-02-22T10:01:00.000Z",
+      "log": {
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 13: Registry value set",
+          "id": "100001",
+          "mitre": {
+            "id": [
+              "T1547.008"
+            ],
+            "tactic": [
+              "Persistence",
+              "Privilege Escalation"
+            ],
+            "technique": [
+              "Boot or Logon Autostart Execution: Winlogon Helper DLL"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": true,
+          "groups": [
+            "sysmon",
+            "sysmon_event13",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1709002400.000004",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "13",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "13",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-22 10:01:00.000",
+              "eventType": "SetValue",
+              "processGuid": "{12345678-2400-2400-2400-000000000004}",
+              "processId": "6672",
+              "image": "C:\\Windows\\System32\\reg.exe",
+              "targetObject": "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Winlogon\\Shell",
+              "details": "explorer.exe, C:\\Users\\Public\\beacon.exe",
+              "user": "CORP\\Administrator"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Sysmon Event 13 - Registry: Winlogon Userinit value modified",
+      "sequence": 2,
+      "timestamp": "2026-02-22T10:01:05.000Z",
+      "log": {
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 13: Registry value set",
+          "id": "100001",
+          "mitre": {
+            "id": [
+              "T1547.008"
+            ],
+            "tactic": [
+              "Persistence",
+              "Privilege Escalation"
+            ],
+            "technique": [
+              "Boot or Logon Autostart Execution: Winlogon Helper DLL"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": true,
+          "groups": [
+            "sysmon",
+            "sysmon_event13",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1709002400.000005",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "13",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "13",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-22 10:01:05.000",
+              "eventType": "SetValue",
+              "processGuid": "{12345678-2400-2400-2400-000000000005}",
+              "processId": "6672",
+              "image": "C:\\Windows\\System32\\reg.exe",
+              "targetObject": "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Winlogon\\Userinit",
+              "details": "C:\\Windows\\System32\\userinit.exe, C:\\Users\\Public\\beacon.exe",
+              "user": "CORP\\Administrator"
+            }
+          }
+        }
+      }
+    }
+  ]
+}

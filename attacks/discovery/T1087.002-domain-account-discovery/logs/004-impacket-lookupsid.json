@@ -7,8 +7,6 @@
     "expected_detection": "MEDIUM",
     "kill_chain_phase": "discovery",
     "tool": "impacket-lookupsid",
-    "command": "impacket-lookupsid yourcompany.local/Administrator:\"\"@10.1.0.10",
-    "impact": "Complete user and group enumeration via RID cycling",
     "format": "wazuh-native",
     "format_version": "1.0"
   },
@@ -22,7 +20,7 @@
         "rule": {
           "level": 3,
           "description": "Windows Eventchannel event",
-          "id": "60009",
+          "id": "100600",
           "firedtimes": 1,
           "mail": false,
           "groups": [
@@ -31,9 +29,9 @@
           ]
         },
         "agent": {
-          "id": "012",
+          "id": "010",
           "name": "DC01",
-          "ip": "10.1.0.99"
+          "ip": "198.51.100.12"
         },
         "manager": {
           "name": "wazuh.manager"
@@ -49,17 +47,17 @@
               "eventID": "4662",
               "channel": "Security",
               "providerName": "Microsoft-Windows-Security-Auditing",
-              "computer": "DC01.yourcompany.local",
+              "computer": "DC01.corp.local",
               "level": "0",
               "keywords": "0x8020000000000000",
               "severityValue": "AUDIT_SUCCESS"
             },
             "eventdata": {
               "subjectUserName": "Administrator",
-              "subjectDomainName": "YOURCOMPANY",
+              "subjectDomainName": "CORP",
               "objectServer": "Security Account Manager",
               "objectType": "%%14676",
-              "objectName": "DC=yourcompany,DC=local",
+              "objectName": "DC=corp,DC=local",
               "accessList": "%%1538",
               "properties": ""
             }

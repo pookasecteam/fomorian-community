@@ -1,0 +1,78 @@
+{
+  "_metadata": {
+    "attack_id": "T1027.002",
+    "variation": "001",
+    "name": "Crypter Payload Execution",
+    "description": "Execution of crypter-obfuscated payload from temp with random name",
+    "expected_detection": "Sigma: Suspicious Packed/Crypted Executable (T1027.002)",
+    "kill_chain_phase": "defense-evasion",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Sysmon Event 1 - Crypted executable from Temp",
+      "sequence": 1,
+      "timestamp": "2026-01-31T15:00:00.000Z",
+      "log": {
+        "timestamp": "2026-01-31T15:00:00.000Z",
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 1: Suspicious Packed Executable",
+          "id": "100916",
+          "mitre": {
+            "id": [
+              "T1027.002"
+            ],
+            "tactic": [
+              "Defense Evasion"
+            ],
+            "technique": [
+              "Software Packing"
+            ]
+          },
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "obfuscation"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000009.000001",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local"
+            },
+            "eventdata": {
+              "utcTime": "2026-01-31 15:00:00.000",
+              "processGuid": "{12345678-1234-1234-1234-123456789019}",
+              "processId": "1234",
+              "image": "C:\\Users\\attacker\\AppData\\Local\\Temp\\X7K9M2PQ4R.exe",
+              "commandLine": "C:\\Users\\attacker\\AppData\\Local\\Temp\\X7K9M2PQ4R.exe",
+              "currentDirectory": "C:\\Users\\attacker\\AppData\\Local\\Temp\\",
+              "user": "CORP\\attacker",
+              "hashes": "SHA256=CRYPTED123456789012345678901234567890123456789012345678901234ABCD",
+              "parentImage": "C:\\Windows\\explorer.exe",
+              "parentCommandLine": "explorer.exe"
+            }
+          }
+        }
+      }
+    }
+  ]
+}

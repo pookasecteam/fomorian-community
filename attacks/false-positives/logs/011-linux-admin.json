@@ -1,0 +1,152 @@
+{
+  "_metadata": {
+    "attack_id": "NONE",
+    "variation": "FP-011",
+    "name": "Linux Server Administration",
+    "description": "Legitimate Linux system administration activity",
+    "expected_detection": "NONE",
+    "kill_chain_phase": "none",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Admin SSH login - LEGITIMATE",
+      "sequence": 1,
+      "timestamp": "2026-01-29T09:00:00.000Z",
+      "log": {
+        "rule": {
+          "level": 10,
+          "description": "Linux Server Administration",
+          "id": "100200",
+          "mitre": {
+            "id": [
+              "NONE"
+            ],
+            "tactic": [
+              "None"
+            ]
+          },
+          "firedtimes": 1,
+          "groups": [
+            "syslog",
+            "linux"
+          ]
+        },
+        "agent": {
+          "id": "030",
+          "name": "DVLNX01",
+          "ip": "198.51.100.30"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000000.708036068",
+        "decoder": {
+          "name": "syslog"
+        },
+        "location": "/var/log/syslog",
+        "data": {
+          "facility": "authpriv",
+          "severity": "info",
+          "hostname": "DVLNX01",
+          "program": "sshd",
+          "message": "Accepted publickey for admin from 198.51.100.100 port 52000 ssh2: RSA SHA256:knownAdminKeyFingerprint"
+        },
+        "full_log": "Accepted publickey for admin from 198.51.100.100 port 52000 ssh2: RSA SHA256:knownAdminKeyFingerprint"
+      }
+    },
+    {
+      "_comment": "Package updates - LEGITIMATE",
+      "sequence": 2,
+      "timestamp": "2026-01-29T09:05:00.000Z",
+      "log": {
+        "rule": {
+          "level": 10,
+          "description": "Linux Server Administration",
+          "id": "100200",
+          "mitre": {
+            "id": [
+              "NONE"
+            ],
+            "tactic": [
+              "None"
+            ]
+          },
+          "firedtimes": 1,
+          "groups": [
+            "syslog",
+            "linux"
+          ]
+        },
+        "agent": {
+          "id": "030",
+          "name": "DVLNX01",
+          "ip": "198.51.100.30"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000000.561523928",
+        "decoder": {
+          "name": "syslog"
+        },
+        "location": "/var/log/syslog",
+        "data": {
+          "facility": "authpriv",
+          "severity": "info",
+          "hostname": "DVLNX01",
+          "program": "sudo",
+          "message": "admin : TTY=pts/0 ; PWD=/home/admin ; USER=root ; COMMAND=/usr/bin/apt update && /usr/bin/apt upgrade -y"
+        },
+        "full_log": "admin : TTY=pts/0 ; PWD=/home/admin ; USER=root ; COMMAND=/usr/bin/apt update && /usr/bin/apt upgrade -y"
+      }
+    },
+    {
+      "_comment": "Log review - LEGITIMATE",
+      "sequence": 3,
+      "timestamp": "2026-01-29T09:10:00.000Z",
+      "log": {
+        "rule": {
+          "level": 10,
+          "description": "Linux Server Administration",
+          "id": "100200",
+          "mitre": {
+            "id": [
+              "NONE"
+            ],
+            "tactic": [
+              "None"
+            ]
+          },
+          "firedtimes": 1,
+          "groups": [
+            "syslog",
+            "linux"
+          ]
+        },
+        "agent": {
+          "id": "030",
+          "name": "DVLNX01",
+          "ip": "198.51.100.30"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000000.291300909",
+        "decoder": {
+          "name": "syslog"
+        },
+        "location": "/var/log/syslog",
+        "data": {
+          "facility": "authpriv",
+          "severity": "info",
+          "hostname": "DVLNX01",
+          "program": "auditd",
+          "message": "type=EXECVE msg=audit(1706518200.000:5000): argc=3 a0=\"tail\" a1=\"-f\" a2=\"/var/log/auth.log\""
+        },
+        "full_log": "type=EXECVE msg=audit(1706518200.000:5000): argc=3 a0=\"tail\" a1=\"-f\" a2=\"/var/log/auth.log\""
+      }
+    }
+  ]
+}

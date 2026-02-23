@@ -1,0 +1,161 @@
+{
+  "metadata": {
+    "technique_id": "T1048.012",
+    "technique_name": "Exfiltration Over Alternative Protocol: Email",
+    "tactic": "exfiltration",
+    "description": "Exfiltrate data via email attachment to external address",
+    "campaign": "34",
+    "batch": "15",
+    "expected_detection": "MEDIUM",
+    "attack_time": "2026-02-10T15:28:00.000Z",
+    "target_host": "WS01",
+    "simulated_destination": "smtp.gmail.com"
+  },
+  "logs": [
+    {
+      "timestamp": "2026-02-10T15:28:00.000Z",
+      "rule": {
+        "level": 3,
+        "description": "Sysmon - Event 3: Network Connection",
+        "id": "100103",
+        "mitre": {
+          "id": [
+            "T1048.012"
+          ],
+          "tactic": [
+            "Exfiltration"
+          ],
+          "technique": [
+            "Exfiltration Over Alternative Protocol"
+          ]
+        },
+        "groups": [
+          "sysmon",
+          "sysmon_event3"
+        ]
+      },
+      "agent": {
+        "id": "020",
+        "name": "WS01",
+        "ip": "198.51.100.20"
+      },
+      "manager": {
+        "name": "wazuh.manager"
+      },
+      "id": "1707576480.000001",
+      "decoder": {
+        "name": "windows_eventchannel"
+      },
+      "location": "EventChannel",
+      "data": {
+        "win": {
+          "system": {
+            "eventID": "3",
+            "channel": "Microsoft-Windows-Sysmon/Operational",
+            "computer": "WS01.corp.local",
+            "systemTime": "2026-02-10T15:28:00.000Z"
+          },
+          "eventdata": {
+            "utcTime": "2026-02-10 15:28:00.000",
+            "processGuid": "{a23d360c-0123-65c8-0000-0010e3ab3900}",
+            "processId": "8000",
+            "image": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+            "user": "CORP\\admin2",
+            "protocol": "tcp",
+            "initiated": "true",
+            "sourceIsIpv6": "false",
+            "sourceIp": "198.51.100.20",
+            "sourceHostname": "WS01.corp.local",
+            "sourcePort": "50143",
+            "sourcePortName": "-",
+            "destinationIsIpv6": "false",
+            "destinationIp": "142.250.185.109",
+            "destinationHostname": "smtp.gmail.com",
+            "destinationPort": "587",
+            "destinationPortName": "submission"
+          }
+        }
+      },
+      "fomorian_test": true,
+      "fomorian_batch": "15",
+      "fomorian_campaign": "34"
+    },
+    {
+      "timestamp": "2026-02-10T15:28:05.000Z",
+      "rule": {
+        "level": 5,
+        "description": "Zeek - SMTP email with large attachment",
+        "id": "100001",
+        "mitre": {
+          "id": [
+            "T1048.012"
+          ],
+          "tactic": [
+            "Exfiltration"
+          ],
+          "technique": [
+            "Exfiltration Over Alternative Protocol"
+          ]
+        },
+        "groups": [
+          "zeek",
+          "zeek_smtp"
+        ]
+      },
+      "agent": {
+        "id": "001",
+        "name": "GW01",
+        "ip": "198.51.100.1"
+      },
+      "manager": {
+        "name": "wazuh.manager"
+      },
+      "id": "1707576485.000002",
+      "decoder": {
+        "name": "zeek"
+      },
+      "location": "/var/log/zeek/smtp.log",
+      "data": {
+        "zeek": {
+          "smtp": {
+            "ts": "1707576485.000000",
+            "uid": "OLmExy5BcDdHfGhi9g",
+            "id.orig_h": "198.51.100.20",
+            "id.orig_p": "50143",
+            "id.resp_h": "142.250.185.109",
+            "id.resp_p": "587",
+            "trans_depth": "1",
+            "helo": "WS01.corp.local",
+            "mailfrom": "admin2@corp.local",
+            "rcptto": [
+              "attacker@protonmail.com"
+            ],
+            "date": "Mon, 10 Feb 2026 15:28:05 +0000",
+            "from": "admin2@corp.local",
+            "to": [
+              "attacker@protonmail.com"
+            ],
+            "subject": "Financial Report Q4 2025",
+            "x_originating_ip": "198.51.100.20",
+            "first_received": "from WS01.corp.local",
+            "second_received": "from smtp.gmail.com",
+            "last_reply": "250 2.0.0 OK",
+            "path": [
+              "198.51.100.20",
+              "142.250.185.109"
+            ],
+            "user_agent": "Microsoft.PowerShell.Commands.SendMailMessage",
+            "tls": "true",
+            "fuids": [
+              "FZa1bc2CD34EF5GH6i"
+            ],
+            "is_webmail": "false"
+          }
+        }
+      },
+      "fomorian_test": true,
+      "fomorian_batch": "15",
+      "fomorian_campaign": "34"
+    }
+  ]
+}

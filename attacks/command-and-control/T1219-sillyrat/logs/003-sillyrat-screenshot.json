@@ -1,0 +1,215 @@
+{
+  "_metadata": {
+    "attack_id": "T1113",
+    "variation": "003",
+    "name": "SillyRAT Screenshot Capture",
+    "description": "SillyRAT screen capture and exfiltration",
+    "expected_detection": "MEDIUM",
+    "kill_chain_phase": "collection",
+    "format": "wazuh-native",
+    "format_version": "1.0",
+    "tool": "SillyRAT",
+    "tool_url": "https://github.com/hash3liZer/SillyRAT",
+    "mitre_techniques": [
+      "T1113",
+      "T1219"
+    ]
+  },
+  "logs": [
+    {
+      "_comment": "Sysmon Event 7 - Python loading screen capture DLLs",
+      "sequence": 1,
+      "timestamp": "2026-01-31T14:15:00.000Z",
+      "log": {
+        "rule": {
+          "level": 10,
+          "description": "Sysmon - Event 7: Python loaded GDI32.dll (screen capture capability)",
+          "id": "100220",
+          "mitre": {
+            "id": [
+              "T1113"
+            ],
+            "tactic": [
+              "Collection"
+            ],
+            "technique": [
+              "Screen Capture"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event7",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000003.000001",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "7",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local"
+            },
+            "eventdata": {
+              "utcTime": "2026-01-31 14:15:00.000",
+              "processGuid": "{A1B2C3D4-1234-5678-9ABC-DEF012345678}",
+              "processId": "4532",
+              "image": "C:\\Users\\victim\\AppData\\Local\\Programs\\Python\\Python311\\python.exe",
+              "imageLoaded": "C:\\Windows\\System32\\gdi32.dll",
+              "signed": "true",
+              "signature": "Microsoft Windows",
+              "signatureStatus": "Valid"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Sysmon Event 11 - Screenshot file created",
+      "sequence": 2,
+      "timestamp": "2026-01-31T14:15:05.000Z",
+      "log": {
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 11: Screenshot file created by Python process",
+          "id": "100221",
+          "mitre": {
+            "id": [
+              "T1113"
+            ],
+            "tactic": [
+              "Collection"
+            ],
+            "technique": [
+              "Screen Capture"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event11",
+            "windows",
+            "screenshot"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000003.000002",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "11",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local"
+            },
+            "eventdata": {
+              "utcTime": "2026-01-31 14:15:05.000",
+              "processGuid": "{A1B2C3D4-1234-5678-9ABC-DEF012345678}",
+              "processId": "4532",
+              "image": "C:\\Users\\victim\\AppData\\Local\\Programs\\Python\\Python311\\python.exe",
+              "targetFilename": "C:\\Users\\victim\\AppData\\Local\\Temp\\screenshot_20260131_141505.png",
+              "creationUtcTime": "2026-01-31 14:15:05.000"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Sysmon Event 3 - Screenshot data exfiltrated over C2",
+      "sequence": 3,
+      "timestamp": "2026-01-31T14:15:10.000Z",
+      "log": {
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 3: Data exfiltration over C2 channel",
+          "id": "100222",
+          "mitre": {
+            "id": [
+              "T1041",
+              "T1219"
+            ],
+            "tactic": [
+              "Exfiltration",
+              "Command and Control"
+            ],
+            "technique": [
+              "Exfiltration Over C2 Channel",
+              "Remote Access Software"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event3",
+            "windows",
+            "exfiltration"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000003.000003",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "3",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local"
+            },
+            "eventdata": {
+              "utcTime": "2026-01-31 14:15:10.000",
+              "processGuid": "{A1B2C3D4-1234-5678-9ABC-DEF012345678}",
+              "processId": "4532",
+              "image": "C:\\Users\\victim\\AppData\\Local\\Programs\\Python\\Python311\\python.exe",
+              "user": "CORP\\victim",
+              "protocol": "tcp",
+              "initiated": "true",
+              "sourceIp": "198.51.100.20",
+              "sourcePort": "49153",
+              "destinationIp": "45.33.32.156",
+              "destinationPort": "2999"
+            }
+          }
+        }
+      }
+    }
+  ]
+}

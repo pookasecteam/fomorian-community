@@ -1,0 +1,262 @@
+{
+  "_metadata": {
+    "attack_id": "T1611",
+    "variation": "002",
+    "name": "Kubernetes hostPID Namespace Escape",
+    "description": "Adversary escapes container using hostPID namespace to access host processes",
+    "expected_detection": "CRITICAL",
+    "kill_chain_phase": "privilege-escalation",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Sysmon Linux - Pod created with hostPID",
+      "sequence": 1,
+      "timestamp": "2026-01-30T11:10:00.000Z",
+      "log": {
+        "rule": {
+          "level": 15,
+          "description": "Kubernetes - Pod Created with hostPID Namespace",
+          "id": "100001",
+          "mitre": {
+            "id": [
+              "T1611"
+            ],
+            "tactic": [
+              "Privilege Escalation"
+            ],
+            "technique": [
+              "Escape to Host"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "kubernetes",
+            "linux",
+            "container"
+          ]
+        },
+        "agent": {
+          "id": "030",
+          "name": "DVLNX01",
+          "ip": "198.51.100.30"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700001110.000001",
+        "decoder": {
+          "name": "kubernetes"
+        },
+        "location": "kubernetes",
+        "data": {
+          "kubernetes": {
+            "kind": "Pod",
+            "apiVersion": "v1",
+            "metadata": {
+              "name": "escape-pod",
+              "namespace": "default"
+            },
+            "spec": {
+              "hostPID": true,
+              "hostNetwork": true,
+              "containers": [
+                {
+                  "name": "attacker",
+                  "image": "alpine:latest",
+                  "securityContext": {
+                    "privileged": true
+                  }
+                }
+              ]
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Auditd - Process listing host PIDs from container",
+      "sequence": 2,
+      "timestamp": "2026-01-30T11:10:05.000Z",
+      "log": {
+        "rule": {
+          "level": 12,
+          "description": "Auditd - Container Accessing Host Process List",
+          "id": "100001",
+          "mitre": {
+            "id": [
+              "T1611",
+              "T1057"
+            ],
+            "tactic": [
+              "Privilege Escalation",
+              "Discovery"
+            ],
+            "technique": [
+              "Escape to Host",
+              "Process Discovery"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "audit",
+            "linux",
+            "container"
+          ]
+        },
+        "agent": {
+          "id": "030",
+          "name": "DVLNX01",
+          "ip": "198.51.100.30"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700001110.000002",
+        "decoder": {
+          "name": "auditd"
+        },
+        "location": "audit",
+        "data": {
+          "audit": {
+            "type": "EXECVE",
+            "argc": "2",
+            "a0": "ps",
+            "a1": "auxww",
+            "pid": "13450",
+            "ppid": "13400",
+            "uid": "0",
+            "comm": "ps",
+            "exe": "/bin/ps"
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Auditd - Injecting into host process via /proc",
+      "sequence": 3,
+      "timestamp": "2026-01-30T11:10:10.000Z",
+      "log": {
+        "rule": {
+          "level": 15,
+          "description": "Auditd - Container Injecting into Host Process",
+          "id": "100001",
+          "mitre": {
+            "id": [
+              "T1611",
+              "T1055"
+            ],
+            "tactic": [
+              "Privilege Escalation",
+              "Defense Evasion"
+            ],
+            "technique": [
+              "Escape to Host",
+              "Process Injection"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "audit",
+            "linux",
+            "container"
+          ]
+        },
+        "agent": {
+          "id": "030",
+          "name": "DVLNX01",
+          "ip": "198.51.100.30"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700001110.000003",
+        "decoder": {
+          "name": "auditd"
+        },
+        "location": "audit",
+        "data": {
+          "audit": {
+            "type": "OPENAT",
+            "syscall": "openat",
+            "success": "yes",
+            "pid": "13460",
+            "ppid": "13450",
+            "uid": "0",
+            "comm": "cat",
+            "exe": "/bin/cat",
+            "key": "proc_access"
+          },
+          "file": {
+            "path": "/proc/1/root/etc/shadow"
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Auditd - Executing command in host namespace",
+      "sequence": 4,
+      "timestamp": "2026-01-30T11:10:15.000Z",
+      "log": {
+        "rule": {
+          "level": 15,
+          "description": "Auditd - Container Executing in Host Namespace",
+          "id": "100001",
+          "mitre": {
+            "id": [
+              "T1611"
+            ],
+            "tactic": [
+              "Privilege Escalation"
+            ],
+            "technique": [
+              "Escape to Host"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "audit",
+            "linux",
+            "container"
+          ]
+        },
+        "agent": {
+          "id": "030",
+          "name": "DVLNX01",
+          "ip": "198.51.100.30"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700001110.000004",
+        "decoder": {
+          "name": "auditd"
+        },
+        "location": "audit",
+        "data": {
+          "audit": {
+            "type": "EXECVE",
+            "argc": "7",
+            "a0": "nsenter",
+            "a1": "-t",
+            "a2": "1",
+            "a3": "-m",
+            "a4": "-u",
+            "a5": "-n",
+            "a6": "-p",
+            "pid": "13470",
+            "ppid": "13460",
+            "uid": "0",
+            "comm": "nsenter",
+            "exe": "/usr/bin/nsenter"
+          }
+        }
+      }
+    }
+  ]
+}

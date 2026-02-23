@@ -1,0 +1,101 @@
+{
+  "_metadata": {
+    "attack_id": "T1072",
+    "variation": "001",
+    "name": "Software Deployment Tools - PDQ Deploy Lateral Movement",
+    "description": "Adversary abuses PDQ Deploy (legitimate software deployment tool) for lateral movement by pushing malicious payloads to managed endpoints. Atomic Red Team test: PDQDeployConsole.exe execution. Also covers SCCM abuse via SharpSCCM, Radmin, and similar RMM/deployment tools.",
+    "expected_detection": "HIGH",
+    "kill_chain_phase": "lateral-movement",
+    "references": [
+      "https://attack.mitre.org/techniques/T1072/",
+      "https://github.com/redcanaryco/atomic-red-team/blob/master/atomics/T1072/T1072.md"
+    ],
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Sysmon Event 1 - PDQ Deploy runner executing on target - real-world lateral movement via deployment tool",
+      "sequence": 1,
+      "timestamp": "2026-02-08T11:15:00.000Z",
+      "log": {
+        "timestamp": "2026-02-08T11:15:00.000+0000",
+        "rule": {
+          "level": 10,
+          "description": "Sysmon - Event 1: Process Create",
+          "id": "100916",
+          "mitre": {
+            "id": [
+              "T1072"
+            ],
+            "tactic": [
+              "Lateral Movement",
+              "Execution"
+            ],
+            "technique": [
+              "Software Deployment Tools"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "011",
+          "name": "FS01",
+          "ip": "198.51.100.11"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1707400000.300020",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "FS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-08 11:15:00.000",
+              "processGuid": "{A1B2C3D4-LAT1-1072-0001-000000000001}",
+              "processId": "3480",
+              "image": "C:\\Windows\\AdminArsenal\\PDQDeployRunner\\service-1\\exec\\PDQDeployRunner.exe",
+              "fileVersion": "19.3.350.0",
+              "description": "PDQ Deploy Runner",
+              "product": "PDQ Deploy",
+              "company": "PDQ.com",
+              "originalFileName": "PDQDeployRunner.exe",
+              "commandLine": "\"C:\\Windows\\AdminArsenal\\PDQDeployRunner\\service-1\\exec\\PDQDeployRunner.exe\" -logPath \"C:\\Windows\\AdminArsenal\\PDQDeployRunner\\service-1\\log\"",
+              "currentDirectory": "C:\\Windows\\AdminArsenal\\PDQDeployRunner\\service-1\\exec\\",
+              "user": "NT AUTHORITY\\SYSTEM",
+              "integrityLevel": "System",
+              "hashes": "SHA256=0D1E2F3A4B5C6D7E8F9A0B1C2D3E4F5A6B7C8D9E0F1A2B3C4D5E6F7A8B9C0D1",
+              "parentProcessGuid": "{A1B2C3D4-LAT1-1072-0001-PARENT000001}",
+              "parentProcessId": "724",
+              "parentImage": "C:\\Windows\\System32\\services.exe",
+              "parentCommandLine": "C:\\Windows\\system32\\services.exe",
+              "parentUser": "NT AUTHORITY\\SYSTEM"
+            }
+          }
+        },
+        "_fomorian_batch": "PT-2026-003-batch1-lateral",
+        "_fomorian_test": true,
+        "_fomorian_attack_id": "T1072",
+        "_fomorian_expected_detection": "Sigma: Software Deployment Tool Execution (T1072)"
+      }
+    }
+  ]
+}

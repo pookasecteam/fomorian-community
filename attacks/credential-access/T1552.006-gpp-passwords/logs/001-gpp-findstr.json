@@ -1,0 +1,210 @@
+{
+  "_metadata": {
+    "attack_id": "T1552.006",
+    "variation": "001",
+    "name": "Group Policy Preferences Password Discovery",
+    "description": "Adversary searches SYSVOL for Group Policy Preferences containing credentials",
+    "expected_detection": "HIGH",
+    "kill_chain_phase": "credential-access",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Sysmon Event 1 - findstr searching for cpassword in SYSVOL",
+      "sequence": 1,
+      "timestamp": "2026-01-30T10:00:00.000Z",
+      "log": {
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 1: GPP Password Discovery via Findstr",
+          "id": "100601",
+          "mitre": {
+            "id": [
+              "T1552.006"
+            ],
+            "tactic": [
+              "Credential Access"
+            ],
+            "technique": [
+              "Group Policy Preferences"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000600.000001",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local"
+            },
+            "eventdata": {
+              "utcTime": "2026-01-30 10:00:00.000",
+              "processGuid": "{A1B2C3D4-1552-0006-0001-000000000001}",
+              "processId": "8234",
+              "image": "C:\\Windows\\System32\\findstr.exe",
+              "commandLine": "findstr /S /I cpassword \\\\DC01.corp.local\\SYSVOL\\corp.local\\Policies\\*.xml",
+              "currentDirectory": "C:\\Users\\attacker\\",
+              "user": "CORP\\attacker",
+              "integrityLevel": "Medium",
+              "hashes": "SHA256=7A8B9C0D1E2F3A4B5C6D7E8F9A0B1C2D3E4F5A6B7C8D9E0F1A2B3C4D5E6F7A8B",
+              "parentProcessGuid": "{A1B2C3D4-1552-0006-0000-000000000001}",
+              "parentProcessId": "7100",
+              "parentImage": "C:\\Windows\\System32\\cmd.exe",
+              "parentCommandLine": "cmd.exe"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Sysmon Event 1 - PowerShell Get-GPPPassword script",
+      "sequence": 2,
+      "timestamp": "2026-01-30T10:00:10.000Z",
+      "log": {
+        "rule": {
+          "level": 14,
+          "description": "Sysmon - Event 1: Get-GPPPassword Execution",
+          "id": "100602",
+          "mitre": {
+            "id": [
+              "T1552.006"
+            ],
+            "tactic": [
+              "Credential Access"
+            ],
+            "technique": [
+              "Group Policy Preferences"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000600.000002",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local"
+            },
+            "eventdata": {
+              "utcTime": "2026-01-30 10:00:10.000",
+              "processGuid": "{A1B2C3D4-1552-0006-0002-000000000001}",
+              "processId": "8250",
+              "image": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+              "commandLine": "powershell.exe -ExecutionPolicy Bypass -Command \"Get-GPPPassword\"",
+              "currentDirectory": "C:\\Users\\attacker\\",
+              "user": "CORP\\attacker",
+              "integrityLevel": "Medium",
+              "parentProcessGuid": "{A1B2C3D4-1552-0006-0000-000000000001}",
+              "parentProcessId": "7100",
+              "parentImage": "C:\\Windows\\System32\\cmd.exe",
+              "parentCommandLine": "cmd.exe"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Sysmon Event 11 - Groups.xml accessed from SYSVOL",
+      "sequence": 3,
+      "timestamp": "2026-01-30T10:00:15.000Z",
+      "log": {
+        "rule": {
+          "level": 10,
+          "description": "Sysmon - Event 11: GPP XML File Access",
+          "id": "100603",
+          "mitre": {
+            "id": [
+              "T1552.006"
+            ],
+            "tactic": [
+              "Credential Access"
+            ],
+            "technique": [
+              "Group Policy Preferences"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event11",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000600.000003",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "11",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local"
+            },
+            "eventdata": {
+              "utcTime": "2026-01-30 10:00:15.000",
+              "processGuid": "{A1B2C3D4-1552-0006-0002-000000000001}",
+              "processId": "8250",
+              "image": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+              "targetFilename": "C:\\Users\\attacker\\AppData\\Local\\Temp\\Groups.xml",
+              "creationUtcTime": "2026-01-30 10:00:15.000"
+            }
+          }
+        }
+      }
+    }
+  ]
+}

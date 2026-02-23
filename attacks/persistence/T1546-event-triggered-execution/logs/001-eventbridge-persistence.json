@@ -1,0 +1,308 @@
+{
+  "_metadata": {
+    "attack_id": "T1546",
+    "variation": "001",
+    "name": "EventBridge Rule Persistence",
+    "description": "Attacker creates an EventBridge rule that triggers a Lambda function on a schedule or in response to specific API events, establishing persistent code execution in the cloud environment",
+    "expected_detection": "HIGH",
+    "kill_chain_phase": "persistence",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "CloudTrail: PutRule - Create an EventBridge rule for scheduled or event-driven execution",
+      "sequence": 1,
+      "timestamp": "2026-02-23T14:14:00.000Z",
+      "log": {
+        "timestamp": "2026-02-23T14:14:01.000+0000",
+        "rule": {
+          "level": 5,
+          "description": "AWS Cloudtrail: events.amazonaws.com - PutRule.",
+          "id": "100802",
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "amazon",
+            "aws",
+            "aws_cloudtrail"
+          ],
+          "pci_dss": [
+            "10.6.1"
+          ],
+          "hipaa": [
+            "164.312.b"
+          ],
+          "nist_800_53": [
+            "AU.6"
+          ],
+          "tsc": [
+            "CC7.2",
+            "CC7.3"
+          ],
+          "mitre": {
+            "id": [
+              "T1546"
+            ],
+            "tactic": [
+              "Persistence"
+            ],
+            "technique": [
+              "Event Triggered Execution"
+            ]
+          },
+          "gdpr": [
+            "IV_35.7.d"
+          ]
+        },
+        "agent": {
+          "id": "000",
+          "name": "wazuh.manager"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000029.800001",
+        "decoder": {
+          "name": "json"
+        },
+        "location": "Wazuh-AWS",
+        "data": {
+          "integration": "aws",
+          "aws": {
+            "eventVersion": "1.11",
+            "eventTime": "2026-02-23T14:14:00Z",
+            "eventSource": "events.amazonaws.com",
+            "eventName": "PutRule",
+            "awsRegion": "us-east-2",
+            "sourceIPAddress": "198.51.100.77",
+            "userAgent": "aws-cli/2.15.0 Python/3.11.6 Linux/6.1.0-kali amd64",
+            "userIdentity": {
+              "type": "IAMUser",
+              "arn": "arn:aws:iam::575084400239:user/compromised-dev",
+              "accountId": "575084400239",
+              "userName": "compromised-dev",
+              "principalId": "AIDACKCEVSQ6C2EXAMPLE",
+              "accessKeyId": "AKIAIOSFODNN7EXAMPLE"
+            },
+            "requestParameters": {
+              "name": "cloudwatch-health-monitor",
+              "scheduleExpression": "rate(5 minutes)",
+              "state": "ENABLED",
+              "description": "CloudWatch health monitoring rule",
+              "eventBusName": "default"
+            },
+            "responseElements": {
+              "ruleArn": "arn:aws:events:us-east-2:575084400239:rule/cloudwatch-health-monitor"
+            },
+            "eventID": "f0d5e1a9-48bc-8c35-a2f0-5w9b8c4d3f76",
+            "requestID": "b4c9d5e8-0a1b-2c3d-6e7f-8a9b0c1d2e36",
+            "readOnly": "false",
+            "eventType": "AwsApiCall",
+            "managementEvent": "true",
+            "recipientAccountId": "575084400239",
+            "eventCategory": "Management",
+            "source": "cloudtrail",
+            "aws_account_id": "575084400239"
+          }
+        }
+      }
+    },
+    {
+      "_comment": "CloudTrail: PutTargets - Attach a Lambda function as the target for the malicious rule",
+      "sequence": 2,
+      "timestamp": "2026-02-23T14:14:10.000Z",
+      "log": {
+        "timestamp": "2026-02-23T14:14:11.000+0000",
+        "rule": {
+          "level": 5,
+          "description": "AWS Cloudtrail: events.amazonaws.com - PutTargets.",
+          "id": "100802",
+          "firedtimes": 2,
+          "mail": false,
+          "groups": [
+            "amazon",
+            "aws",
+            "aws_cloudtrail"
+          ],
+          "pci_dss": [
+            "10.6.1"
+          ],
+          "hipaa": [
+            "164.312.b"
+          ],
+          "nist_800_53": [
+            "AU.6"
+          ],
+          "tsc": [
+            "CC7.2",
+            "CC7.3"
+          ],
+          "mitre": {
+            "id": [
+              "T1546"
+            ],
+            "tactic": [
+              "Persistence"
+            ],
+            "technique": [
+              "Event Triggered Execution"
+            ]
+          },
+          "gdpr": [
+            "IV_35.7.d"
+          ]
+        },
+        "agent": {
+          "id": "000",
+          "name": "wazuh.manager"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000029.800002",
+        "decoder": {
+          "name": "json"
+        },
+        "location": "Wazuh-AWS",
+        "data": {
+          "integration": "aws",
+          "aws": {
+            "eventVersion": "1.11",
+            "eventTime": "2026-02-23T14:14:10Z",
+            "eventSource": "events.amazonaws.com",
+            "eventName": "PutTargets",
+            "awsRegion": "us-east-2",
+            "sourceIPAddress": "198.51.100.77",
+            "userAgent": "aws-cli/2.15.0 Python/3.11.6 Linux/6.1.0-kali amd64",
+            "userIdentity": {
+              "type": "IAMUser",
+              "arn": "arn:aws:iam::575084400239:user/compromised-dev",
+              "accountId": "575084400239",
+              "userName": "compromised-dev",
+              "principalId": "AIDACKCEVSQ6C2EXAMPLE",
+              "accessKeyId": "AKIAIOSFODNN7EXAMPLE"
+            },
+            "requestParameters": {
+              "rule": "cloudwatch-health-monitor",
+              "targets": [
+                {
+                  "id": "health-check-target-1",
+                  "arn": "arn:aws:lambda:us-east-2:575084400239:function:cw-health-monitor",
+                  "input": "{\"action\":\"exfil\",\"bucket\":\"prod-data-lake\",\"dest\":\"198.51.100.77\"}"
+                }
+              ],
+              "eventBusName": "default"
+            },
+            "responseElements": {
+              "failedEntryCount": 0,
+              "failedEntries": []
+            },
+            "eventID": "a1e6f2b0-59cd-9d46-b3a1-6x0c9d5e4a87",
+            "requestID": "c5d0e6f9-1b2c-3d4e-7f8a-9b0c1d2e3f47",
+            "readOnly": "false",
+            "eventType": "AwsApiCall",
+            "managementEvent": "true",
+            "recipientAccountId": "575084400239",
+            "eventCategory": "Management",
+            "source": "cloudtrail",
+            "aws_account_id": "575084400239"
+          }
+        }
+      }
+    },
+    {
+      "_comment": "CloudTrail: DescribeRule - Verify the persistence mechanism is active",
+      "sequence": 3,
+      "timestamp": "2026-02-23T14:14:22.000Z",
+      "log": {
+        "timestamp": "2026-02-23T14:14:23.000+0000",
+        "rule": {
+          "level": 3,
+          "description": "AWS Cloudtrail: events.amazonaws.com - DescribeRule.",
+          "id": "100802",
+          "firedtimes": 3,
+          "mail": false,
+          "groups": [
+            "amazon",
+            "aws",
+            "aws_cloudtrail"
+          ],
+          "pci_dss": [
+            "10.6.1"
+          ],
+          "hipaa": [
+            "164.312.b"
+          ],
+          "nist_800_53": [
+            "AU.6"
+          ],
+          "tsc": [
+            "CC7.2",
+            "CC7.3"
+          ],
+          "mitre": {
+            "id": [
+              "T1546"
+            ],
+            "tactic": [
+              "Persistence"
+            ],
+            "technique": [
+              "Event Triggered Execution"
+            ]
+          },
+          "gdpr": [
+            "IV_35.7.d"
+          ]
+        },
+        "agent": {
+          "id": "000",
+          "name": "wazuh.manager"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000029.800003",
+        "decoder": {
+          "name": "json"
+        },
+        "location": "Wazuh-AWS",
+        "data": {
+          "integration": "aws",
+          "aws": {
+            "eventVersion": "1.11",
+            "eventTime": "2026-02-23T14:14:22Z",
+            "eventSource": "events.amazonaws.com",
+            "eventName": "DescribeRule",
+            "awsRegion": "us-east-2",
+            "sourceIPAddress": "198.51.100.77",
+            "userAgent": "aws-cli/2.15.0 Python/3.11.6 Linux/6.1.0-kali amd64",
+            "userIdentity": {
+              "type": "IAMUser",
+              "arn": "arn:aws:iam::575084400239:user/compromised-dev",
+              "accountId": "575084400239",
+              "userName": "compromised-dev",
+              "principalId": "AIDACKCEVSQ6C2EXAMPLE",
+              "accessKeyId": "AKIAIOSFODNN7EXAMPLE"
+            },
+            "requestParameters": {
+              "name": "cloudwatch-health-monitor",
+              "eventBusName": "default"
+            },
+            "responseElements": null,
+            "eventID": "b2f7a3c1-60de-0e57-c4b2-7y1d0e6f5b98",
+            "requestID": "d6e1f7a0-2c3d-4e5f-8a9b-0c1d2e3f4a58",
+            "readOnly": "true",
+            "eventType": "AwsApiCall",
+            "managementEvent": "true",
+            "recipientAccountId": "575084400239",
+            "eventCategory": "Management",
+            "source": "cloudtrail",
+            "aws_account_id": "575084400239"
+          }
+        }
+      }
+    }
+  ]
+}

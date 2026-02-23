@@ -1,0 +1,144 @@
+{
+  "metadata": {
+    "technique_id": "T1567.010",
+    "technique_name": "Exfiltration Over Web Service: WhatsApp",
+    "tactic": "exfiltration",
+    "description": "Exfiltrate data via WhatsApp Business API",
+    "campaign": "34",
+    "batch": "15",
+    "expected_detection": "HIGH",
+    "attack_time": "2026-02-10T15:20:00.000Z",
+    "target_host": "WS01",
+    "simulated_destination": "graph.facebook.com"
+  },
+  "logs": [
+    {
+      "timestamp": "2026-02-10T15:20:00.000Z",
+      "rule": {
+        "level": 3,
+        "description": "Sysmon - Event 3: Network Connection",
+        "id": "100103",
+        "mitre": {
+          "id": [
+            "T1567.010"
+          ],
+          "tactic": [
+            "Exfiltration"
+          ],
+          "technique": [
+            "Exfiltration Over Web Service: WhatsApp"
+          ]
+        },
+        "groups": [
+          "sysmon",
+          "sysmon_event3"
+        ]
+      },
+      "agent": {
+        "id": "020",
+        "name": "WS01",
+        "ip": "198.51.100.20"
+      },
+      "manager": {
+        "name": "wazuh.manager"
+      },
+      "id": "1707576000.000001",
+      "decoder": {
+        "name": "windows_eventchannel"
+      },
+      "location": "EventChannel",
+      "data": {
+        "win": {
+          "system": {
+            "eventID": "3",
+            "channel": "Microsoft-Windows-Sysmon/Operational",
+            "computer": "WS01.corp.local",
+            "systemTime": "2026-02-10T15:20:00.000Z"
+          },
+          "eventdata": {
+            "utcTime": "2026-02-10 15:20:00.000",
+            "processGuid": "{a23d360c-6789-65c8-0000-0010e3ab3600}",
+            "processId": "7334",
+            "image": "C:\\Windows\\System32\\curl.exe",
+            "user": "CORP\\admin2",
+            "protocol": "tcp",
+            "initiated": "true",
+            "sourceIsIpv6": "false",
+            "sourceIp": "198.51.100.20",
+            "sourceHostname": "WS01.corp.local",
+            "sourcePort": "50077",
+            "sourcePortName": "-",
+            "destinationIsIpv6": "false",
+            "destinationIp": "157.240.12.35",
+            "destinationHostname": "graph.facebook.com",
+            "destinationPort": "443",
+            "destinationPortName": "https"
+          }
+        }
+      },
+      "fomorian_test": true,
+      "fomorian_batch": "15",
+      "fomorian_campaign": "34"
+    },
+    {
+      "timestamp": "2026-02-10T15:20:05.000Z",
+      "rule": {
+        "level": 5,
+        "description": "Zeek - HTTP POST to Meta/Facebook API",
+        "id": "100001",
+        "mitre": {
+          "id": [
+            "T1567.010"
+          ],
+          "tactic": [
+            "Exfiltration"
+          ],
+          "technique": [
+            "Exfiltration Over Web Service: WhatsApp"
+          ]
+        },
+        "groups": [
+          "zeek",
+          "zeek_http"
+        ]
+      },
+      "agent": {
+        "id": "001",
+        "name": "GW01",
+        "ip": "198.51.100.1"
+      },
+      "manager": {
+        "name": "wazuh.manager"
+      },
+      "id": "1707576005.000002",
+      "decoder": {
+        "name": "zeek"
+      },
+      "location": "/var/log/zeek/http.log",
+      "data": {
+        "zeek": {
+          "http": {
+            "ts": "1707576005.000000",
+            "uid": "KHiAtu1XyZzDbCde5c",
+            "id.orig_h": "198.51.100.20",
+            "id.orig_p": "50077",
+            "id.resp_h": "157.240.12.35",
+            "id.resp_p": "443",
+            "trans_depth": "1",
+            "method": "POST",
+            "host": "graph.facebook.com",
+            "uri": "/v18.0/1234567890/media",
+            "user_agent": "curl/7.83.1",
+            "request_body_len": "8388608",
+            "response_body_len": "192",
+            "status_code": "200",
+            "status_msg": "OK"
+          }
+        }
+      },
+      "fomorian_test": true,
+      "fomorian_batch": "15",
+      "fomorian_campaign": "34"
+    }
+  ]
+}

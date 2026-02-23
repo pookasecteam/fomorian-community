@@ -1,0 +1,159 @@
+{
+  "_metadata": {
+    "attack_id": "T1615",
+    "variation": "001",
+    "name": "Group Policy Discovery",
+    "description": "Enumeration of group policies using gpresult and PowerShell",
+    "expected_detection": "MEDIUM",
+    "kill_chain_phase": "discovery",
+    "references": [
+      "https://github.com/a2awais/Threat-Hunting/tree/main/CrowdStrike"
+    ],
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Sysmon Event 1 - gpresult enumeration",
+      "sequence": 1,
+      "timestamp": "2026-02-03T15:20:00.000Z",
+      "log": {
+        "timestamp": "2026-02-03T15:20:00.000+0000",
+        "rule": {
+          "level": 10,
+          "description": "Sysmon - Event 1: Group Policy discovery",
+          "id": "100916",
+          "mitre": {
+            "id": [
+              "T1615"
+            ],
+            "tactic": [
+              "Discovery"
+            ],
+            "technique": [
+              "Group Policy Discovery"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1706973600.100001",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-03 15:20:00.000",
+              "processGuid": "{12345678-1234-1234-1234-123456789320}",
+              "processId": "16100",
+              "image": "C:\\Windows\\System32\\gpresult.exe",
+              "commandLine": "gpresult /r",
+              "currentDirectory": "C:\\Users\\attacker\\",
+              "user": "CORP\\attacker",
+              "integrityLevel": "Medium",
+              "parentImage": "C:\\Windows\\System32\\cmd.exe"
+            }
+          }
+        },
+        "_fomorian_batch": "crowdstrike-th",
+        "_fomorian_test": true,
+        "_fomorian_attack_id": "T1615",
+        "_fomorian_technique": "gpresult-enum"
+      }
+    },
+    {
+      "_comment": "Sysmon Event 1 - PowerShell Get-GPO enumeration",
+      "sequence": 2,
+      "timestamp": "2026-02-03T15:20:10.000Z",
+      "log": {
+        "timestamp": "2026-02-03T15:20:10.000+0000",
+        "rule": {
+          "level": 10,
+          "description": "Sysmon - Event 1: Group Policy discovery via PowerShell",
+          "id": "100916",
+          "mitre": {
+            "id": [
+              "T1615",
+              "T1059.001"
+            ],
+            "tactic": [
+              "Discovery",
+              "Execution"
+            ],
+            "technique": [
+              "Group Policy Discovery",
+              "PowerShell"
+            ]
+          },
+          "firedtimes": 2,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows",
+            "powershell"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1706973610.100002",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-03 15:20:10.000",
+              "processGuid": "{12345678-1234-1234-1234-123456789321}",
+              "processId": "16200",
+              "image": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+              "commandLine": "powershell.exe -c \"Get-GPO -All | Select-Object DisplayName, GpoStatus\"",
+              "currentDirectory": "C:\\Users\\attacker\\",
+              "user": "CORP\\attacker",
+              "integrityLevel": "Medium",
+              "parentImage": "C:\\Windows\\System32\\cmd.exe"
+            }
+          }
+        },
+        "_fomorian_batch": "crowdstrike-th",
+        "_fomorian_test": true,
+        "_fomorian_attack_id": "T1615",
+        "_fomorian_technique": "get-gpo-enum"
+      }
+    }
+  ]
+}

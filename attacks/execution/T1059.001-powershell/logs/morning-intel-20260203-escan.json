@@ -20,18 +20,39 @@
         "rule": {
           "level": 15,
           "description": "Sysmon - Event 1: eScan reload.exe spawning PowerShell",
-          "id": "92151",
+          "id": "100916",
           "mitre": {
-            "id": ["T1059.001", "T1562.001"],
-            "tactic": ["Execution", "Defense Evasion"],
-            "technique": ["Command and Scripting Interpreter: PowerShell", "Impair Defenses: Disable or Modify Tools"]
+            "id": [
+              "T1059.001",
+              "T1562.001"
+            ],
+            "tactic": [
+              "Execution",
+              "Defense Evasion"
+            ],
+            "technique": [
+              "Command and Scripting Interpreter: PowerShell",
+              "Impair Defenses: Disable or Modify Tools"
+            ]
           },
-          "groups": ["sysmon", "sysmon_event1", "windows"]
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
         },
-        "agent": {"id": "007", "name": "WS01", "ip": "10.1.0.20"},
-        "manager": {"name": "wazuh.manager"},
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
         "id": "1706950900.000010",
-        "decoder": {"name": "windows_eventchannel"},
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
         "location": "EventChannel",
         "data": {
           "win": {
@@ -72,18 +93,36 @@
         "rule": {
           "level": 14,
           "description": "Sysmon - Event 11: HOSTS file modified to block updates",
-          "id": "92157",
+          "id": "100922",
           "mitre": {
-            "id": ["T1562.001"],
-            "tactic": ["Defense Evasion"],
-            "technique": ["Impair Defenses: Disable or Modify Tools"]
+            "id": [
+              "T1562.001"
+            ],
+            "tactic": [
+              "Defense Evasion"
+            ],
+            "technique": [
+              "Impair Defenses: Disable or Modify Tools"
+            ]
           },
-          "groups": ["sysmon", "sysmon_event11", "windows"]
+          "groups": [
+            "sysmon",
+            "sysmon_event11",
+            "windows"
+          ]
         },
-        "agent": {"id": "007", "name": "WS01", "ip": "10.1.0.20"},
-        "manager": {"name": "wazuh.manager"},
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
         "id": "1706950910.000011",
-        "decoder": {"name": "windows_eventchannel"},
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
         "location": "EventChannel",
         "data": {
           "win": {

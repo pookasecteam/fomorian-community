@@ -1,0 +1,136 @@
+{
+  "_metadata": {
+    "attack_id": "T1552.004",
+    "variation": "001",
+    "name": "SSH Private Key Discovery",
+    "description": "Searching for SSH private keys and authorized_keys files across the filesystem",
+    "expected_detection": "HIGH",
+    "kill_chain_phase": "credential-access",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Sysmon Event 1 - Find all id_rsa files on disk",
+      "sequence": 1,
+      "timestamp": "2026-02-22T03:00:00.200Z",
+      "log": {
+        "timestamp": "2026-02-22T03:00:00.200+0000",
+        "rule": {
+          "level": 10,
+          "description": "Sysmon - Event 1: Searching for SSH private keys on filesystem",
+          "id": "100101",
+          "mitre": {
+            "id": [
+              "T1552.004"
+            ],
+            "tactic": [
+              "Credential Access"
+            ],
+            "technique": [
+              "Private Keys"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "linux"
+          ]
+        },
+        "agent": {
+          "id": "030",
+          "name": "VULN01",
+          "ip": "198.51.100.30"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1708567200.000003",
+        "decoder": {
+          "name": "sysmon-linux"
+        },
+        "location": "/var/log/syslog",
+        "data": {
+          "eventdata": {
+            "utcTime": "2026-02-22 03:00:00.200",
+            "processGuid": "{a1b2c3d4-0002-0001-0001-000000000001}",
+            "processId": "31010",
+            "image": "/usr/bin/find",
+            "commandLine": "find / -name id_rsa 2>/dev/null",
+            "currentDirectory": "/home/admin2",
+            "user": "admin2",
+            "integrityLevel": "no_level",
+            "hashes": "SHA256=d4735e3a265e16eee03f59718b9b5d03019c07d8b6c51f90da3a666eec13ab35",
+            "parentProcessGuid": "{a1b2c3d4-0002-0001-0001-000000000000}",
+            "parentProcessId": "31009",
+            "parentImage": "/usr/bin/bash",
+            "parentCommandLine": "bash"
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Sysmon Event 1 - Reading discovered SSH private key",
+      "sequence": 2,
+      "timestamp": "2026-02-22T03:00:00.300Z",
+      "log": {
+        "timestamp": "2026-02-22T03:00:00.300+0000",
+        "rule": {
+          "level": 10,
+          "description": "Sysmon - Event 1: Reading SSH private key file",
+          "id": "100101",
+          "mitre": {
+            "id": [
+              "T1552.004"
+            ],
+            "tactic": [
+              "Credential Access"
+            ],
+            "technique": [
+              "Private Keys"
+            ]
+          },
+          "firedtimes": 2,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "linux"
+          ]
+        },
+        "agent": {
+          "id": "030",
+          "name": "VULN01",
+          "ip": "198.51.100.30"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1708567200.000004",
+        "decoder": {
+          "name": "sysmon-linux"
+        },
+        "location": "/var/log/syslog",
+        "data": {
+          "eventdata": {
+            "utcTime": "2026-02-22 03:00:00.300",
+            "processGuid": "{a1b2c3d4-0002-0001-0001-000000000002}",
+            "processId": "31011",
+            "image": "/usr/bin/cat",
+            "commandLine": "cat /home/admin2/.ssh/id_rsa",
+            "currentDirectory": "/home/admin2",
+            "user": "admin2",
+            "integrityLevel": "no_level",
+            "hashes": "SHA256=4e07408562bedb8b60ce05c1decfe3ad16b72230967de01f640b7e4729b49fce",
+            "parentProcessGuid": "{a1b2c3d4-0002-0001-0001-000000000000}",
+            "parentProcessId": "31009",
+            "parentImage": "/usr/bin/bash",
+            "parentCommandLine": "bash"
+          }
+        }
+      }
+    }
+  ]
+}

@@ -8,9 +8,7 @@
     "kill_chain_phase": "execution",
     "format": "wazuh-native",
     "format_version": "1.0",
-    "tool": "impacket-wmiexec",
-    "command": "impacket-wmiexec yourcompany.local/Administrator:\"\"@10.1.0.99 \"whoami\"",
-    "impact": "Remote code execution with SYSTEM privileges via WMI, enables lateral movement and persistence"
+    "tool": "impacket-wmiexec"
   },
   "logs": [
     {
@@ -24,18 +22,28 @@
           "description": "Sysmon - Event 1: WMI Remote Command Execution",
           "id": "100100",
           "mitre": {
-            "id": ["T1047"],
-            "tactic": ["Execution"],
-            "technique": ["Windows Management Instrumentation"]
+            "id": [
+              "T1047"
+            ],
+            "tactic": [
+              "Execution"
+            ],
+            "technique": [
+              "Windows Management Instrumentation"
+            ]
           },
           "firedtimes": 1,
           "mail": false,
-          "groups": ["sysmon", "sysmon_event1", "windows"]
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
         },
         "agent": {
-          "id": "012",
+          "id": "010",
           "name": "DC01",
-          "ip": "10.1.0.99"
+          "ip": "198.51.100.12"
         },
         "manager": {
           "name": "wazuh.manager"
@@ -51,7 +59,7 @@
               "eventID": "1",
               "channel": "Microsoft-Windows-Sysmon/Operational",
               "providerName": "Microsoft-Windows-Sysmon",
-              "computer": "DC01.yourcompany.local",
+              "computer": "DC01.corp.local",
               "level": "4",
               "task": "1",
               "severityValue": "INFORMATION"
@@ -84,15 +92,18 @@
         "rule": {
           "level": 3,
           "description": "Windows Eventchannel event",
-          "id": "60009",
+          "id": "100600",
           "firedtimes": 1,
           "mail": false,
-          "groups": ["windows", "eventchannel"]
+          "groups": [
+            "windows",
+            "eventchannel"
+          ]
         },
         "agent": {
-          "id": "012",
+          "id": "010",
           "name": "DC01",
-          "ip": "10.1.0.99"
+          "ip": "198.51.100.12"
         },
         "manager": {
           "name": "wazuh.manager"
@@ -108,7 +119,7 @@
               "eventID": "4688",
               "channel": "Security",
               "providerName": "Microsoft-Windows-Security-Auditing",
-              "computer": "DC01.yourcompany.local",
+              "computer": "DC01.corp.local",
               "level": "0",
               "task": "13312",
               "keywords": "0x8020000000000000",
@@ -117,7 +128,7 @@
             "eventdata": {
               "subjectUserSid": "S-1-5-18",
               "subjectUserName": "DC01$",
-              "subjectDomainName": "YOURCOMPANY",
+              "subjectDomainName": "CORP",
               "subjectLogonId": "0x3e7",
               "newProcessId": "0x998",
               "newProcessName": "C:\\Windows\\System32\\cmd.exe",
@@ -139,15 +150,18 @@
         "rule": {
           "level": 3,
           "description": "Windows Eventchannel event",
-          "id": "60009",
+          "id": "100600",
           "firedtimes": 1,
           "mail": false,
-          "groups": ["windows", "eventchannel"]
+          "groups": [
+            "windows",
+            "eventchannel"
+          ]
         },
         "agent": {
-          "id": "012",
+          "id": "010",
           "name": "DC01",
-          "ip": "10.1.0.99"
+          "ip": "198.51.100.12"
         },
         "manager": {
           "name": "wazuh.manager"
@@ -163,7 +177,7 @@
               "eventID": "5145",
               "channel": "Security",
               "providerName": "Microsoft-Windows-Security-Auditing",
-              "computer": "DC01.yourcompany.local",
+              "computer": "DC01.corp.local",
               "level": "0",
               "task": "12811",
               "keywords": "0x8020000000000000",
@@ -172,10 +186,10 @@
             "eventdata": {
               "subjectUserSid": "S-1-5-21-3298120035-3471069779-879265153-500",
               "subjectUserName": "Administrator",
-              "subjectDomainName": "YOURCOMPANY",
+              "subjectDomainName": "CORP",
               "subjectLogonId": "0x12345",
               "objectType": "File",
-              "ipAddress": "10.1.0.50",
+              "ipAddress": "198.51.100.110",
               "ipPort": "49152",
               "shareName": "\\\\*\\ADMIN$",
               "shareLocalPath": "\\??\\C:\\Windows",

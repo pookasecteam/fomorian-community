@@ -1,0 +1,139 @@
+{
+  "_metadata": {
+    "attack_id": "T1565.003",
+    "variation": "001",
+    "name": "Runtime Data Manipulation - SQL Database Record Modification",
+    "description": "Attacker directly modifies database records via SQL UPDATE to alter business data",
+    "expected_detection": "HIGH",
+    "kill_chain_phase": "impact",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Sysmon Linux Event 1 - mysql CLI with UPDATE statement",
+      "sequence": 1,
+      "timestamp": "2026-02-08T23:20:00.000Z",
+      "log": {
+        "timestamp": "2026-02-08T23:20:00.000+0000",
+        "rule": {
+          "level": 14,
+          "description": "Sysmon - Event 1: Database Record Manipulation",
+          "id": "100101",
+          "mitre": {
+            "id": [
+              "T1565.003"
+            ],
+            "tactic": [
+              "Impact"
+            ],
+            "technique": [
+              "Runtime Data Manipulation"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": true,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "linux"
+          ]
+        },
+        "agent": {
+          "id": "030",
+          "name": "VULN01",
+          "ip": "198.51.100.30"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1707400000.300120",
+        "decoder": {
+          "name": "sysmon-linux"
+        },
+        "location": "/var/log/sysmon/sysmon.log",
+        "data": {
+          "eventdata": {
+            "utcTime": "2026-02-08 23:20:00.000",
+            "processGuid": "{A1B2C3D4-IMPC-1565-0003-000000000001}",
+            "processId": "35100",
+            "image": "/usr/bin/mysql",
+            "commandLine": "mysql -u root -p'compromised_pass' -e \"UPDATE accounts SET balance=1000000 WHERE account_id='attacker123'\" banking_db",
+            "currentDirectory": "/tmp",
+            "user": "www-data",
+            "parentProcessGuid": "{A1B2C3D4-IMPC-1565-0003-PARENT000001}",
+            "parentProcessId": "35000",
+            "parentImage": "/bin/bash",
+            "parentCommandLine": "/bin/bash -c './manipulate.sh'"
+          }
+        },
+        "_fomorian_batch": "PT-2026-003-batch2-impact",
+        "_fomorian_test": true,
+        "_fomorian_attack_id": "T1565.003",
+        "_fomorian_expected_detection": "Sigma: Suspicious SQL UPDATE Command (T1565.003)"
+      }
+    },
+    {
+      "_comment": "Database audit log - Unauthorized record modification",
+      "sequence": 2,
+      "timestamp": "2026-02-08T23:20:01.000Z",
+      "log": {
+        "timestamp": "2026-02-08T23:20:01.000+0000",
+        "rule": {
+          "level": 14,
+          "description": "MySQL Audit - Unauthorized Data Modification",
+          "id": "100860",
+          "mitre": {
+            "id": [
+              "T1565.003"
+            ],
+            "tactic": [
+              "Impact"
+            ],
+            "technique": [
+              "Runtime Data Manipulation"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": true,
+          "groups": [
+            "mysql",
+            "database",
+            "audit"
+          ]
+        },
+        "agent": {
+          "id": "030",
+          "name": "VULN01",
+          "ip": "198.51.100.30"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1707400000.300121",
+        "decoder": {
+          "name": "mysql-audit"
+        },
+        "location": "/var/log/mysql/audit.log",
+        "data": {
+          "mysql": {
+            "timestamp": "2026-02-08T23:20:01.000Z",
+            "event_class": "table_access",
+            "event_type": "update",
+            "connection_id": "12345",
+            "user": "root",
+            "host": "localhost",
+            "database": "banking_db",
+            "table": "accounts",
+            "query": "UPDATE accounts SET balance=1000000 WHERE account_id='attacker123'",
+            "rows_affected": 1
+          }
+        },
+        "_fomorian_batch": "PT-2026-003-batch2-impact",
+        "_fomorian_test": true,
+        "_fomorian_attack_id": "T1565.003",
+        "_fomorian_expected_detection": "Wazuh: Database Record Manipulation (T1565.003)"
+      }
+    }
+  ]
+}

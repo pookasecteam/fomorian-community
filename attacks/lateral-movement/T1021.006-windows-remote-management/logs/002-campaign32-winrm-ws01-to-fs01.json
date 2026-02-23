@@ -1,0 +1,163 @@
+{
+  "_metadata": {
+    "attack_id": "T1021.006",
+    "variation": "002",
+    "name": "WinRM Lateral Movement WS01 to FS01",
+    "description": "PowerShell remoting via WinRM from WS01 to FS01",
+    "expected_detection": "MEDIUM",
+    "kill_chain_phase": "lateral-movement",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Sysmon Event 3 - Network connection to WinRM port 5985",
+      "sequence": 1,
+      "timestamp": "2026-02-10T14:02:00.000Z",
+      "log": {
+        "rule": {
+          "level": 10,
+          "description": "Sysmon - Event 3: WinRM Network Connection",
+          "id": "100100",
+          "mitre": {
+            "id": [
+              "T1021.006"
+            ],
+            "tactic": [
+              "Lateral Movement"
+            ],
+            "technique": [
+              "Remote Services: Windows Remote Management"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event3",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1707574920.100003",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "3",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "opcode": "0",
+              "keywords": "0x8000000000000000",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-10 14:02:00.000",
+              "processGuid": "{A1B2C3D4-0003-0003-0003-000000030001}",
+              "processId": "9123",
+              "image": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+              "user": "CORP\\Administrator",
+              "protocol": "tcp",
+              "initiated": "true",
+              "sourceIp": "198.51.100.20",
+              "sourcePort": "51345",
+              "destinationIp": "198.51.100.11",
+              "destinationPort": "5985"
+            }
+          }
+        },
+        "_fomorian_test": true,
+        "fomorian_campaign": 32,
+        "fomorian_batch": 13
+      }
+    },
+    {
+      "_comment": "Sysmon Event 1 - wsmprovhost.exe spawning PowerShell on target FS01",
+      "sequence": 2,
+      "timestamp": "2026-02-10T14:02:01.000Z",
+      "log": {
+        "rule": {
+          "level": 10,
+          "description": "Sysmon - Event 1: WinRM Remote Command Execution",
+          "id": "100100",
+          "mitre": {
+            "id": [
+              "T1021.006"
+            ],
+            "tactic": [
+              "Lateral Movement"
+            ],
+            "technique": [
+              "Remote Services: Windows Remote Management"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "011",
+          "name": "FS01",
+          "ip": "198.51.100.11"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1707574921.100004",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "FS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "opcode": "0",
+              "keywords": "0x8000000000000000",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-10 14:02:01.000",
+              "processGuid": "{A1B2C3D4-0002-0002-0002-000000030001}",
+              "processId": "7890",
+              "image": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+              "commandLine": "powershell.exe -NoProfile -NonInteractive -Command \"Get-ChildItem C:\\Shares; net view; net use\"",
+              "currentDirectory": "C:\\Windows\\System32\\",
+              "user": "CORP\\Administrator",
+              "integrityLevel": "High",
+              "parentProcessGuid": "{A1B2C3D4-0002-0002-0002-000000030000}",
+              "parentProcessId": "7889",
+              "parentImage": "C:\\Windows\\System32\\wsmprovhost.exe",
+              "parentCommandLine": "C:\\Windows\\System32\\wsmprovhost.exe -Embedding"
+            }
+          }
+        },
+        "_fomorian_test": true,
+        "fomorian_campaign": 32,
+        "fomorian_batch": 13
+      }
+    }
+  ]
+}

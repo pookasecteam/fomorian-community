@@ -1,0 +1,59 @@
+{
+  "_metadata": {
+    "attack_id": "T1567.002",
+    "variation": "001",
+    "name": "Exfiltration to Cloud Storage",
+    "description": "Data exfiltration to Dropbox cloud storage",
+    "expected_detection": "MEDIUM",
+    "kill_chain_phase": "exfiltration",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Sysmon Event 3 - HTTPS connection to Dropbox",
+      "sequence": 1,
+      "log": {
+        "rule": {
+          "level": 10,
+          "description": "Sysmon - Event 3: Cloud Storage Exfiltration",
+          "id": "100001",
+          "mitre": {
+            "id": [
+              "T1567.002"
+            ],
+            "tactic": [
+              "Exfiltration"
+            ],
+            "technique": [
+              "Exfiltration Over Web Service"
+            ]
+          },
+          "groups": [
+            "sysmon",
+            "sysmon_event3"
+          ]
+        },
+        "agent": {
+          "id": "010",
+          "name": "DC01"
+        },
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "3"
+            },
+            "eventdata": {
+              "image": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+              "destinationIp": "162.125.19.131",
+              "destinationHostname": "dl.dropboxusercontent.com",
+              "destinationPort": "443",
+              "protocol": "tcp",
+              "user": "CORP\\Administrator"
+            }
+          }
+        }
+      }
+    }
+  ]
+}

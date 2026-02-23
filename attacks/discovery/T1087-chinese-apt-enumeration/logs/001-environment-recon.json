@@ -1,0 +1,392 @@
+{
+  "_metadata": {
+    "attack_id": "T1087",
+    "variation": "001",
+    "name": "Chinese APT Environment Enumeration",
+    "description": "Rapid reconnaissance commands used by Chinese APT groups for environment mapping",
+    "expected_detection": "HIGH",
+    "kill_chain_phase": "discovery",
+    "references": [
+      "https://detect.fyi/playbook-hunting-chinese-apt-379a6b950492",
+      "https://socprime.com/blog/chinese-apt-cyberespionage-southeast-asia-detection/"
+    ],
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Sysmon Event 1 - whoami enumeration",
+      "sequence": 1,
+      "relative_time": "T+0:00:00",
+      "timestamp": "",
+      "log": {
+        "rule": {
+          "level": 6,
+          "description": "Sysmon - Event 1: User Enumeration via whoami",
+          "id": "100916",
+          "mitre": {
+            "id": [
+              "T1033"
+            ],
+            "tactic": [
+              "Discovery"
+            ],
+            "technique": [
+              "System Owner/User Discovery"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows",
+            "apt"
+          ]
+        },
+        "agent": {
+          "id": "{{agent_id}}",
+          "name": "{{agent_name}}",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000005.000001",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "{{computer_name}}.corp.local"
+            },
+            "eventdata": {
+              "processId": "4532",
+              "image": "C:\\Windows\\System32\\whoami.exe",
+              "commandLine": "whoami /all",
+              "user": "{{domain}}\\{{username}}",
+              "parentImage": "C:\\Windows\\System32\\cmd.exe"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Sysmon Event 1 - Domain user enumeration",
+      "sequence": 2,
+      "relative_time": "T+0:00:02",
+      "timestamp": "",
+      "log": {
+        "rule": {
+          "level": 10,
+          "description": "Sysmon - Event 1: Domain User Enumeration",
+          "id": "100916",
+          "mitre": {
+            "id": [
+              "T1087.002"
+            ],
+            "tactic": [
+              "Discovery"
+            ],
+            "technique": [
+              "Account Discovery: Domain Account"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows",
+            "apt"
+          ]
+        },
+        "agent": {
+          "id": "{{agent_id}}",
+          "name": "{{agent_name}}",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000005.000002",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "{{computer_name}}.corp.local"
+            },
+            "eventdata": {
+              "processId": "4536",
+              "image": "C:\\Windows\\System32\\net.exe",
+              "commandLine": "net user /domain",
+              "user": "{{domain}}\\{{username}}",
+              "parentImage": "C:\\Windows\\System32\\cmd.exe"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Sysmon Event 1 - Domain Admins enumeration",
+      "sequence": 3,
+      "relative_time": "T+0:00:07",
+      "timestamp": "",
+      "log": {
+        "rule": {
+          "level": 10,
+          "description": "Sysmon - Event 1: Domain Admins Group Enumeration",
+          "id": "100916",
+          "mitre": {
+            "id": [
+              "T1069.002"
+            ],
+            "tactic": [
+              "Discovery"
+            ],
+            "technique": [
+              "Permission Groups Discovery: Domain Groups"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows",
+            "apt"
+          ]
+        },
+        "agent": {
+          "id": "{{agent_id}}",
+          "name": "{{agent_name}}",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000005.000003",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "{{computer_name}}.corp.local"
+            },
+            "eventdata": {
+              "processId": "4540",
+              "image": "C:\\Windows\\System32\\net.exe",
+              "commandLine": "net group \"Domain Admins\" /domain",
+              "user": "{{domain}}\\{{username}}",
+              "parentImage": "C:\\Windows\\System32\\cmd.exe"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Sysmon Event 1 - Domain trust enumeration via nltest",
+      "sequence": 4,
+      "relative_time": "T+0:00:15",
+      "timestamp": "",
+      "log": {
+        "rule": {
+          "level": 10,
+          "description": "Sysmon - Event 1: Domain Trust Enumeration",
+          "id": "100916",
+          "mitre": {
+            "id": [
+              "T1482"
+            ],
+            "tactic": [
+              "Discovery"
+            ],
+            "technique": [
+              "Domain Trust Discovery"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows",
+            "apt"
+          ]
+        },
+        "agent": {
+          "id": "{{agent_id}}",
+          "name": "{{agent_name}}",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000005.000004",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "{{computer_name}}.corp.local"
+            },
+            "eventdata": {
+              "processId": "4560",
+              "image": "C:\\Windows\\System32\\nltest.exe",
+              "commandLine": "nltest /domain_trusts",
+              "user": "{{domain}}\\{{username}}",
+              "parentImage": "C:\\Windows\\System32\\cmd.exe"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Sysmon Event 1 - Registry credential theft (SAM)",
+      "sequence": 5,
+      "relative_time": "T+0:01:00",
+      "timestamp": "",
+      "log": {
+        "rule": {
+          "level": 14,
+          "description": "Sysmon - Event 1: SAM Registry Hive Export",
+          "id": "100916",
+          "mitre": {
+            "id": [
+              "T1003.002"
+            ],
+            "tactic": [
+              "Credential Access"
+            ],
+            "technique": [
+              "OS Credential Dumping: Security Account Manager"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows",
+            "apt",
+            "credential_theft"
+          ]
+        },
+        "agent": {
+          "id": "{{agent_id}}",
+          "name": "{{agent_name}}",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000005.000005",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "{{computer_name}}.corp.local"
+            },
+            "eventdata": {
+              "processId": "4572",
+              "image": "C:\\Windows\\System32\\reg.exe",
+              "commandLine": "reg save HKLM\\SAM C:\\Windows\\Temp\\sam.save",
+              "user": "{{domain}}\\{{username}}",
+              "parentImage": "C:\\Windows\\System32\\cmd.exe"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Sysmon Event 1 - Registry credential theft (SYSTEM)",
+      "sequence": 6,
+      "relative_time": "T+0:01:05",
+      "timestamp": "",
+      "log": {
+        "rule": {
+          "level": 14,
+          "description": "Sysmon - Event 1: SYSTEM Registry Hive Export",
+          "id": "100916",
+          "mitre": {
+            "id": [
+              "T1003.002"
+            ],
+            "tactic": [
+              "Credential Access"
+            ],
+            "technique": [
+              "OS Credential Dumping: Security Account Manager"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows",
+            "apt",
+            "credential_theft"
+          ]
+        },
+        "agent": {
+          "id": "{{agent_id}}",
+          "name": "{{agent_name}}",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000005.000006",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "{{computer_name}}.corp.local"
+            },
+            "eventdata": {
+              "processId": "4576",
+              "image": "C:\\Windows\\System32\\reg.exe",
+              "commandLine": "reg save HKLM\\SYSTEM C:\\Windows\\Temp\\system.save",
+              "user": "{{domain}}\\{{username}}",
+              "parentImage": "C:\\Windows\\System32\\cmd.exe"
+            }
+          }
+        }
+      }
+    }
+  ]
+}

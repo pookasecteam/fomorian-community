@@ -1,0 +1,108 @@
+{
+  "_metadata": {
+    "attack_id": "T1538",
+    "variation": "001",
+    "name": "Cloud Service Dashboard - Azure Portal Sign-in",
+    "description": "Suspicious sign-in to Azure Portal from untrusted location for cloud reconnaissance",
+    "expected_detection": "MEDIUM",
+    "kill_chain_phase": "discovery",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Azure AD Sign-in Log - Portal access from suspicious IP",
+      "sequence": 1,
+      "timestamp": "2026-02-08T10:14:00.000Z",
+      "log": {
+        "timestamp": "2026-02-08T10:14:00.000+0000",
+        "rule": {
+          "level": 8,
+          "description": "Office 365 - Azure Portal Sign-in from Untrusted Location",
+          "id": "100001",
+          "mitre": {
+            "id": [
+              "T1538"
+            ],
+            "tactic": [
+              "Discovery"
+            ],
+            "technique": [
+              "Cloud Service Dashboard"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "office365",
+            "azure"
+          ]
+        },
+        "agent": {
+          "id": "000",
+          "name": "wazuh.manager",
+          "ip": "127.0.0.1"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1707400000.200016",
+        "decoder": {
+          "name": "json"
+        },
+        "location": "office365",
+        "data": {
+          "office365": {
+            "Workload": "AzureActiveDirectory",
+            "Operation": "UserLoggedIn",
+            "ResultStatus": "Success",
+            "UserId": "attacker@contoso.com",
+            "ClientIP": "185.220.101.42",
+            "UserAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36",
+            "ObjectId": "00000003-0000-0000-c000-000000000000",
+            "Target": [
+              {
+                "ID": "Azure Portal",
+                "Type": 0
+              }
+            ],
+            "ExtendedProperties": [
+              {
+                "Name": "ResultStatusDetail",
+                "Value": "Success"
+              },
+              {
+                "Name": "UserType",
+                "Value": "Member"
+              },
+              {
+                "Name": "RequestType",
+                "Value": "Login:login"
+              }
+            ],
+            "DeviceProperties": [
+              {
+                "Name": "BrowserType",
+                "Value": "Chrome"
+              },
+              {
+                "Name": "OS",
+                "Value": "Windows 10"
+              }
+            ],
+            "Actor": [
+              {
+                "ID": "attacker@contoso.com",
+                "Type": 0
+              }
+            ]
+          }
+        },
+        "_fomorian_batch": "PT-2026-003-batch1-discovery",
+        "_fomorian_test": true,
+        "_fomorian_attack_id": "T1538",
+        "_fomorian_expected_detection": "Sigma: Azure Portal Access from Suspicious Location (T1538)"
+      }
+    }
+  ]
+}

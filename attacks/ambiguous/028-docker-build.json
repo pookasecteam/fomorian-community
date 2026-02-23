@@ -1,0 +1,158 @@
+{
+  "_metadata": {
+    "attack_id": "NONE",
+    "variation": "FP-028",
+    "name": "Docker Build on Developer Machine",
+    "description": "Developer building container images and pulling from Docker Hub registry",
+    "expected_detection": "NONE",
+    "kill_chain_phase": "none",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "docker.exe build command - LEGITIMATE",
+      "sequence": 1,
+      "timestamp": "2026-01-29T14:00:00.000Z",
+      "log": {
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 1: Docker Build on Developer Machine",
+          "id": "100100",
+          "mitre": {
+            "id": [
+              "NONE"
+            ],
+            "tactic": [
+              "None"
+            ],
+            "technique": [
+              "Docker Build on Developer Machine"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "DEVBOX01",
+          "ip": "198.51.100.45"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000000.280000001",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "DEVBOX01.corp.local",
+              "level": "4",
+              "task": "1",
+              "opcode": "0",
+              "keywords": "0x8000000000000000",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-01-29 14:00:00.000",
+              "processGuid": "{FP-028-0001-0001-000000000001}",
+              "processId": "10200",
+              "image": "C:\\Program Files\\Docker\\Docker\\resources\\bin\\docker.exe",
+              "commandLine": "\"C:\\Program Files\\Docker\\Docker\\resources\\bin\\docker.exe\" build -t app:latest .",
+              "currentDirectory": "C:\\Projects\\webapp\\",
+              "user": "CORP\\dev.user",
+              "integrityLevel": "Medium",
+              "parentProcessGuid": "{FP-028-0001-0001-000000000000}",
+              "parentProcessId": "8800",
+              "parentImage": "C:\\Windows\\System32\\cmd.exe",
+              "parentCommandLine": "\"C:\\Windows\\System32\\cmd.exe\""
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "docker.exe connecting to Docker Hub registry on 443 - LEGITIMATE",
+      "sequence": 2,
+      "timestamp": "2026-01-29T14:00:15.000Z",
+      "log": {
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 3: Docker Build on Developer Machine",
+          "id": "100100",
+          "mitre": {
+            "id": [
+              "NONE"
+            ],
+            "tactic": [
+              "None"
+            ],
+            "technique": [
+              "Docker Build on Developer Machine"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event3",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "DEVBOX01",
+          "ip": "198.51.100.45"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000000.280000002",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "3",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "DEVBOX01.corp.local",
+              "level": "4",
+              "task": "1",
+              "opcode": "0",
+              "keywords": "0x8000000000000000",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-01-29 14:00:15.000",
+              "processGuid": "{FP-028-0001-0001-000000000001}",
+              "processId": "10200",
+              "image": "C:\\Program Files\\Docker\\Docker\\resources\\bin\\docker.exe",
+              "user": "CORP\\dev.user",
+              "protocol": "tcp",
+              "initiated": "true",
+              "sourceIp": "198.51.100.45",
+              "sourcePort": "56200",
+              "destinationIp": "44.205.64.79",
+              "destinationHostname": "registry.hub.docker.com",
+              "destinationPort": "443"
+            }
+          }
+        }
+      }
+    }
+  ]
+}

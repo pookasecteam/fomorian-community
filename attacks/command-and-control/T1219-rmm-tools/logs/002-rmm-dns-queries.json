@@ -1,0 +1,283 @@
+{
+  "_metadata": {
+    "attack_id": "T1219",
+    "name": "DNS Queries to Known RMM Domains",
+    "description": "Detects DNS queries to Remote Monitoring and Management tool domains",
+    "expected_detection": "MEDIUM",
+    "kill_chain_phase": "command-and-control",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Sysmon Event 22 - DNS Query to AnyDesk",
+      "sequence": 1,
+      "timestamp": "2026-01-31T21:00:15.123Z",
+      "log": {
+        "timestamp": "2026-01-31T21:00:15.123+0000",
+        "rule": {
+          "level": 6,
+          "description": "Sysmon - Event 22: DNS Query to RMM Domain",
+          "id": "100927",
+          "mitre": {
+            "id": [
+              "T1219"
+            ],
+            "tactic": [
+              "Command and Control"
+            ],
+            "technique": [
+              "Remote Access Software"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event22",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000007.900001",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "22",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local"
+            },
+            "eventdata": {
+              "utcTime": "2026-01-31 21:00:15.123",
+              "processGuid": "{12345678-dns1-1234-dns1-123456789abc}",
+              "processId": "1234",
+              "queryName": "boot.net.anydesk.com",
+              "queryStatus": "0",
+              "queryResults": "185.84.241.22",
+              "image": "C:\\Users\\attacker\\Downloads\\AnyDesk.exe"
+            }
+          }
+        },
+        "_fomorian_batch": "threat-intel-2026-01-31",
+        "_fomorian_test": true,
+        "_fomorian_attack_id": "T1219",
+        "_fomorian_expected_detection": "Sigma: DNS Queries to RMM Domains (T1219)"
+      }
+    },
+    {
+      "_comment": "Sysmon Event 22 - DNS Query to ngrok",
+      "sequence": 2,
+      "timestamp": "2026-01-31T21:01:30.456Z",
+      "log": {
+        "timestamp": "2026-01-31T21:01:30.456+0000",
+        "rule": {
+          "level": 8,
+          "description": "Sysmon - Event 22: DNS Query to Tunneling Service",
+          "id": "100927",
+          "mitre": {
+            "id": [
+              "T1219",
+              "T1572"
+            ],
+            "tactic": [
+              "Command and Control"
+            ],
+            "technique": [
+              "Remote Access Software",
+              "Protocol Tunneling"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event22",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000007.900002",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "22",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local"
+            },
+            "eventdata": {
+              "utcTime": "2026-01-31 21:01:30.456",
+              "processGuid": "{12345678-dns2-1234-dns2-123456789abc}",
+              "processId": "2345",
+              "queryName": "connect.us.ngrok-agent.com",
+              "queryStatus": "0",
+              "queryResults": "3.22.30.42",
+              "image": "C:\\Users\\attacker\\Downloads\\ngrok.exe"
+            }
+          }
+        },
+        "_fomorian_batch": "threat-intel-2026-01-31",
+        "_fomorian_test": true,
+        "_fomorian_attack_id": "T1219",
+        "_fomorian_expected_detection": "Sigma: DNS Queries to RMM Domains (T1219)"
+      }
+    },
+    {
+      "_comment": "Sysmon Event 22 - DNS Query to RustDesk",
+      "sequence": 3,
+      "timestamp": "2026-01-31T21:02:45.789Z",
+      "log": {
+        "timestamp": "2026-01-31T21:02:45.789+0000",
+        "rule": {
+          "level": 6,
+          "description": "Sysmon - Event 22: DNS Query to RMM Domain",
+          "id": "100927",
+          "mitre": {
+            "id": [
+              "T1219"
+            ],
+            "tactic": [
+              "Command and Control"
+            ],
+            "technique": [
+              "Remote Access Software"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event22",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000007.900003",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "22",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local"
+            },
+            "eventdata": {
+              "utcTime": "2026-01-31 21:02:45.789",
+              "processGuid": "{12345678-dns3-1234-dns3-123456789abc}",
+              "processId": "3456",
+              "queryName": "rs-ny.rustdesk.com",
+              "queryStatus": "0",
+              "queryResults": "159.223.106.102",
+              "image": "C:\\Users\\attacker\\AppData\\Local\\rustdesk\\rustdesk.exe"
+            }
+          }
+        },
+        "_fomorian_batch": "threat-intel-2026-01-31",
+        "_fomorian_test": true,
+        "_fomorian_attack_id": "T1219",
+        "_fomorian_expected_detection": "Sigma: DNS Queries to RMM Domains (T1219)"
+      }
+    },
+    {
+      "_comment": "Sysmon Event 22 - DNS Query to ScreenConnect",
+      "sequence": 4,
+      "timestamp": "2026-01-31T21:04:00.012Z",
+      "log": {
+        "timestamp": "2026-01-31T21:04:00.012+0000",
+        "rule": {
+          "level": 8,
+          "description": "Sysmon - Event 22: DNS Query to RMM Domain",
+          "id": "100927",
+          "mitre": {
+            "id": [
+              "T1219"
+            ],
+            "tactic": [
+              "Command and Control"
+            ],
+            "technique": [
+              "Remote Access Software"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event22",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000007.900004",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "22",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local"
+            },
+            "eventdata": {
+              "utcTime": "2026-01-31 21:04:00.012",
+              "processGuid": "{12345678-dns4-1234-dns4-123456789abc}",
+              "processId": "4567",
+              "queryName": "live.screenconnect.com",
+              "queryStatus": "0",
+              "queryResults": "34.192.50.42",
+              "image": "C:\\Program Files (x86)\\ScreenConnect Client (abc123)\\ScreenConnect.ClientService.exe"
+            }
+          }
+        },
+        "_fomorian_batch": "threat-intel-2026-01-31",
+        "_fomorian_test": true,
+        "_fomorian_attack_id": "T1219",
+        "_fomorian_expected_detection": "Sigma: DNS Queries to RMM Domains (T1219)"
+      }
+    }
+  ]
+}

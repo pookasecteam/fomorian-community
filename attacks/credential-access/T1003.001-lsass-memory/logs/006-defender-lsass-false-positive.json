@@ -5,8 +5,6 @@
     "name": "Windows Defender LSASS Access (False Positive)",
     "description": "Legitimate Windows Defender scanning LSASS. Should NOT trigger credential dumping alerts.",
     "expected_detection": "NONE",
-    "expected_soar": "none - should be filtered",
-    "notes": "Tests false positive filtering. Our SOAR workflow should subtract score for legitimate security tools.",
     "format": "wazuh-native",
     "format_version": "1.0"
   },
@@ -16,7 +14,6 @@
       "sequence": 1,
       "timestamp": "2026-01-29T16:30:00.123Z",
       "log": {
-        "timestamp": "",
         "rule": {
           "level": 12,
           "description": "Sysmon - Event 10: Windows Defender LSASS Access (False Positive)",
@@ -41,9 +38,9 @@
           ]
         },
         "agent": {
-          "id": "007",
+          "id": "020",
           "name": "WS01",
-          "ip": "10.1.0.20"
+          "ip": "198.51.100.20"
         },
         "manager": {
           "name": "wazuh.manager"

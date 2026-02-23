@@ -1,0 +1,62 @@
+{
+  "timestamp": "2026-01-31T23:06:00.000Z",
+  "rule": {
+    "level": 14,
+    "description": "Sysmon - Event 1: Mimikatz Golden Ticket",
+    "id": "92151",
+    "mitre": {
+      "id": [
+        "T1558.001"
+      ],
+      "tactic": [
+        "Credential Access"
+      ],
+      "technique": [
+        "Steal or Forge Kerberos Tickets: Golden Ticket"
+      ]
+    },
+    "groups": [
+      "sysmon",
+      "sysmon_event1",
+      "windows"
+    ]
+  },
+  "agent": {
+    "id": "007",
+    "name": "WS01",
+    "ip": "198.51.100.20"
+  },
+  "manager": {
+    "name": "wazuh.manager"
+  },
+  "id": "1700000036.000001",
+  "decoder": {
+    "name": "windows_eventchannel"
+  },
+  "location": "EventChannel",
+  "data": {
+    "win": {
+      "system": {
+        "eventID": "1",
+        "channel": "Microsoft-Windows-Sysmon/Operational",
+        "providerName": "Microsoft-Windows-Sysmon",
+        "computer": "WS01.corp.local"
+      },
+      "eventdata": {
+        "utcTime": "2026-01-31 23:06:00.000",
+        "processGuid": "{12345678-1234-1234-1234-123456789036}",
+        "processId": "5678",
+        "image": "C:\\Users\\attacker\\tools\\mimikatz.exe",
+        "commandLine": "mimikatz.exe \"kerberos::golden /user:Administrator /domain:corp.local /sid:S-1-5-21-123456789-123456789-123456789 /krbtgt:aabbccdd11223344aabbccdd11223344 /ptt\"",
+        "currentDirectory": "C:\\Users\\attacker\\tools\\",
+        "user": "CORP\\attacker",
+        "parentImage": "C:\\Windows\\System32\\cmd.exe",
+        "parentCommandLine": "cmd.exe"
+      }
+    }
+  },
+  "_fomorian_batch": "threat-intel-batch3-2026-01-31",
+  "_fomorian_test": true,
+  "_fomorian_attack_id": "T1558.001",
+  "_fomorian_expected_detection": "Sigma: Kerberos Golden Ticket Tools (T1558.001)"
+}

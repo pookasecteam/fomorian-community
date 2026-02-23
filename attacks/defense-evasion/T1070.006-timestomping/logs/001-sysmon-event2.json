@@ -1,0 +1,60 @@
+{
+  "timestamp": "2026-01-31T23:05:00.000Z",
+  "rule": {
+    "level": 10,
+    "description": "Sysmon - Event 2: File Creation Time Changed",
+    "id": "92152",
+    "mitre": {
+      "id": [
+        "T1070.006"
+      ],
+      "tactic": [
+        "Defense Evasion"
+      ],
+      "technique": [
+        "Indicator Removal: Timestomp"
+      ]
+    },
+    "groups": [
+      "sysmon",
+      "sysmon_event2",
+      "windows"
+    ]
+  },
+  "agent": {
+    "id": "007",
+    "name": "WS01",
+    "ip": "198.51.100.20"
+  },
+  "manager": {
+    "name": "wazuh.manager"
+  },
+  "id": "1700000035.000001",
+  "decoder": {
+    "name": "windows_eventchannel"
+  },
+  "location": "EventChannel",
+  "data": {
+    "win": {
+      "system": {
+        "eventID": "2",
+        "channel": "Microsoft-Windows-Sysmon/Operational",
+        "providerName": "Microsoft-Windows-Sysmon",
+        "computer": "WS01.corp.local"
+      },
+      "eventdata": {
+        "utcTime": "2026-01-31 23:05:00.000",
+        "processGuid": "{12345678-1234-1234-1234-123456789035}",
+        "processId": "4567",
+        "image": "C:\\Users\\attacker\\tools\\timestomp.exe",
+        "targetFilename": "C:\\Windows\\Temp\\malware.exe",
+        "creationUtcTime": "2023-01-15 08:30:00.000",
+        "previousCreationUtcTime": "2026-01-31 23:04:30.000"
+      }
+    }
+  },
+  "_fomorian_batch": "threat-intel-batch3-2026-01-31",
+  "_fomorian_test": true,
+  "_fomorian_attack_id": "T1070.006",
+  "_fomorian_expected_detection": "Sigma: File Timestomping Detected (T1070.006)"
+}

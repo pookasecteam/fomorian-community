@@ -1,0 +1,165 @@
+{
+  "_metadata": {
+    "attack_id": "T1553",
+    "variation": "001",
+    "name": "Unsigned DLL Loaded in Trusted Directory (Parent Technique)",
+    "description": "Loading an unsigned DLL into a trusted application via DLL search order exploitation. Parent technique catch-all for subverting trust controls.",
+    "expected_detection": "HIGH",
+    "kill_chain_phase": "defense-evasion",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Sysmon Event 7 - Unsigned DLL loaded by a legitimate signed application in Program Files",
+      "sequence": 1,
+      "timestamp": "2026-02-22T14:20:00.000Z",
+      "log": {
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 7: Unsigned DLL Loaded in Trusted Application Directory",
+          "id": "100100",
+          "mitre": {
+            "id": [
+              "T1553"
+            ],
+            "tactic": [
+              "Defense Evasion"
+            ],
+            "technique": [
+              "Subvert Trust Controls"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event7",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1708611600.100280011",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "7",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "7",
+              "opcode": "0",
+              "keywords": "0x8000000000000000",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-22 14:20:00.000",
+              "processGuid": "{C28-T1553-0001-0001-000000000001}",
+              "processId": "5748",
+              "image": "C:\\Program Files\\Common Files\\Microsoft Shared\\ClickToRun\\OfficeClickToRun.exe",
+              "imageLoaded": "C:\\Program Files\\Common Files\\Microsoft Shared\\ClickToRun\\vcruntime140.dll",
+              "fileVersion": "-",
+              "description": "-",
+              "product": "-",
+              "company": "-",
+              "originalFileName": "-",
+              "hashes": "SHA256=DEADBEEF1234567890ABCDEF1234567890ABCDEF1234567890ABCDEF12345678",
+              "signed": "false",
+              "signature": "-",
+              "signatureStatus": "Unavailable",
+              "user": "CORP\\jsmith"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Sysmon Event 3 - Outbound C2 connection from the hijacked process after loading the unsigned DLL",
+      "sequence": 2,
+      "timestamp": "2026-02-22T14:20:05.000Z",
+      "log": {
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 3: Suspicious Outbound Connection from Trusted Process",
+          "id": "100100",
+          "mitre": {
+            "id": [
+              "T1553"
+            ],
+            "tactic": [
+              "Defense Evasion"
+            ],
+            "technique": [
+              "Subvert Trust Controls"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event3",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1708611605.100280012",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "3",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "3",
+              "opcode": "0",
+              "keywords": "0x8000000000000000",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-22 14:20:05.000",
+              "processGuid": "{C28-T1553-0001-0001-000000000001}",
+              "processId": "5748",
+              "image": "C:\\Program Files\\Common Files\\Microsoft Shared\\ClickToRun\\OfficeClickToRun.exe",
+              "user": "CORP\\jsmith",
+              "protocol": "tcp",
+              "initiated": "true",
+              "sourceIsIpv6": "false",
+              "sourceIp": "198.51.100.20",
+              "sourceHostname": "WS01.corp.local",
+              "sourcePort": "49832",
+              "destinationIsIpv6": "false",
+              "destinationIp": "91.215.85.142",
+              "destinationHostname": "",
+              "destinationPort": "443",
+              "destinationPortName": "https"
+            }
+          }
+        }
+      }
+    }
+  ]
+}

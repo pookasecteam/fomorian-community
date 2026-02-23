@@ -1,0 +1,82 @@
+{
+  "_metadata": {
+    "attack_id": "T1557",
+    "variation": "001",
+    "name": "Adversary-in-the-Middle",
+    "description": "LLMNR/NBT-NS poisoning with Responder",
+    "expected_detection": "CRITICAL",
+    "kill_chain_phase": "credential-access",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Sysmon Event 3 - Responder listening",
+      "sequence": 1,
+      "timestamp": "2026-02-04T11:18:00.000Z",
+      "log": {
+        "timestamp": "2026-02-04T11:18:00.000+0000",
+        "rule": {
+          "level": 14,
+          "description": "Sysmon - Event 3: MITM Tool Detected",
+          "id": "100001",
+          "mitre": {
+            "id": [
+              "T1557"
+            ],
+            "tactic": [
+              "Credential Access",
+              "Collection"
+            ],
+            "technique": [
+              "Adversary-in-the-Middle"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": true,
+          "groups": [
+            "sysmon",
+            "sysmon_event3",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000002.100019",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "3",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-04 11:18:00.000",
+              "processGuid": "{A1B2C3D4-1557-0001-0001-000000000001}",
+              "processId": "6789",
+              "image": "C:\\Tools\\Responder\\Responder.exe",
+              "user": "CORP\\attacker",
+              "protocol": "udp",
+              "initiated": "false",
+              "sourceIp": "0.0.0.0",
+              "sourcePort": "5355",
+              "destinationIp": "0.0.0.0",
+              "destinationPort": "0"
+            }
+          }
+        }
+      }
+    }
+  ]
+}

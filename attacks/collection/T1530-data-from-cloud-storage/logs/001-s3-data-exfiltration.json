@@ -1,0 +1,140 @@
+{
+  "_metadata": {
+    "attack_id": "T1530",
+    "variation": "001",
+    "name": "AWS S3 Data Exfiltration",
+    "description": "Downloading objects and enumerating object versions from S3 buckets to exfiltrate sensitive data including previously deleted credentials",
+    "expected_detection": "MEDIUM",
+    "kill_chain_phase": "collection",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "CloudTrail - GetObject to download sensitive file from S3",
+      "sequence": 1,
+      "timestamp": "2026-02-22T00:30:00.000Z",
+      "log": {
+        "rule": {
+          "level": 6,
+          "description": "Amazon AWS Cloudtrail - GetObject",
+          "id": "100803",
+          "mitre": {
+            "id": [
+              "T1530"
+            ],
+            "tactic": [
+              "Collection"
+            ],
+            "technique": [
+              "Data from Cloud Storage Object"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "amazon",
+            "aws",
+            "aws-cloudtrail"
+          ]
+        },
+        "agent": {
+          "id": "040",
+          "name": "wazuh.manager",
+          "ip": "any"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000011.C21016",
+        "decoder": {
+          "name": "json"
+        },
+        "location": "wodles_aws",
+        "data": {
+          "aws": {
+            "source": "cloudtrail",
+            "eventVersion": "1.09",
+            "eventTime": "2026-02-22T00:30:00Z",
+            "eventSource": "s3.amazonaws.com",
+            "eventName": "GetObject",
+            "awsRegion": "us-east-2",
+            "sourceIPAddress": "198.51.100.40",
+            "userAgent": "aws-cli/2.33.23 md/Botocore#1.42.54 ua/2.0 os/linux#6.11.2-amd64 md/arch#x86_64 lang/python#3.12.8",
+            "requestParameters": "{\"bucketName\":\"campaign21-sensitive-data-575084\",\"key\":\"credentials.txt\"}",
+            "responseElements": "null",
+            "userIdentity": {
+              "type": "Root",
+              "arn": "arn:aws:iam::575084400239:root",
+              "accountId": "575084400239",
+              "principalId": "575084400239"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "CloudTrail - ListObjectVersions to find deleted versions of sensitive files",
+      "sequence": 2,
+      "timestamp": "2026-02-22T00:30:01.000Z",
+      "log": {
+        "rule": {
+          "level": 8,
+          "description": "Amazon AWS Cloudtrail - ListObjectVersions",
+          "id": "100803",
+          "mitre": {
+            "id": [
+              "T1530"
+            ],
+            "tactic": [
+              "Collection"
+            ],
+            "technique": [
+              "Data from Cloud Storage Object"
+            ]
+          },
+          "firedtimes": 2,
+          "mail": false,
+          "groups": [
+            "amazon",
+            "aws",
+            "aws-cloudtrail"
+          ]
+        },
+        "agent": {
+          "id": "040",
+          "name": "wazuh.manager",
+          "ip": "any"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000011.C21017",
+        "decoder": {
+          "name": "json"
+        },
+        "location": "wodles_aws",
+        "data": {
+          "aws": {
+            "source": "cloudtrail",
+            "eventVersion": "1.09",
+            "eventTime": "2026-02-22T00:30:01Z",
+            "eventSource": "s3.amazonaws.com",
+            "eventName": "ListObjectVersions",
+            "awsRegion": "us-east-2",
+            "sourceIPAddress": "198.51.100.40",
+            "userAgent": "aws-cli/2.33.23 md/Botocore#1.42.54 ua/2.0 os/linux#6.11.2-amd64 md/arch#x86_64 lang/python#3.12.8",
+            "requestParameters": "{\"bucketName\":\"campaign21-sensitive-data-575084\"}",
+            "responseElements": "null",
+            "userIdentity": {
+              "type": "Root",
+              "arn": "arn:aws:iam::575084400239:root",
+              "accountId": "575084400239",
+              "principalId": "575084400239"
+            }
+          }
+        }
+      }
+    }
+  ]
+}

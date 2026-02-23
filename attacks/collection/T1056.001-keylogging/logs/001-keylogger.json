@@ -1,0 +1,226 @@
+{
+  "_metadata": {
+    "attack_id": "T1056.001",
+    "variation": "001",
+    "name": "Keylogging via GetAsyncKeyState",
+    "description": "Keylogger capturing user input including passwords",
+    "expected_detection": "HIGH",
+    "kill_chain_phase": "collection",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Sysmon Event 1 - Keylogger process start",
+      "sequence": 1,
+      "timestamp": "2026-01-29T19:00:00.000Z",
+      "log": {
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 1: Keylogger Execution",
+          "id": "100100",
+          "mitre": {
+            "id": [
+              "T1056.001"
+            ],
+            "tactic": [
+              "Collection",
+              "Credential Access"
+            ],
+            "technique": [
+              "Keylogging"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000000.700001",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "opcode": "0",
+              "keywords": "0x8000000000000000",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-01-29 19:00:00.000",
+              "processGuid": "{KEYLOG-001-0001-0001-000000000001}",
+              "processId": "9100",
+              "image": "C:\\Users\\Public\\svchost.exe",
+              "commandLine": "C:\\Users\\Public\\svchost.exe -hidden",
+              "currentDirectory": "C:\\Users\\Public\\",
+              "user": "CORP\\john.doe",
+              "integrityLevel": "Medium",
+              "hashes": "SHA256=KEYLOGGERHASH1234567890ABCDEF1234567890ABCDEF12345678",
+              "parentProcessGuid": "{KEYLOG-001-0001-0001-000000000000}",
+              "parentProcessId": "9000",
+              "parentImage": "C:\\Windows\\explorer.exe",
+              "parentCommandLine": "C:\\Windows\\explorer.exe"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Sysmon Event 10 - Process access to read keyboard input",
+      "sequence": 2,
+      "timestamp": "2026-01-29T19:00:01.000Z",
+      "log": {
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 10: Keyboard Hook Access",
+          "id": "100100",
+          "mitre": {
+            "id": [
+              "T1056.001"
+            ],
+            "tactic": [
+              "Collection"
+            ],
+            "technique": [
+              "Keylogging"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event10",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000000.700002",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "10",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "10",
+              "opcode": "0",
+              "keywords": "0x8000000000000000",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-01-29 19:00:01.000",
+              "sourceProcessGuid": "{KEYLOG-001-0001-0001-000000000001}",
+              "sourceProcessId": "9100",
+              "sourceImage": "C:\\Users\\Public\\svchost.exe",
+              "sourceUser": "CORP\\john.doe",
+              "targetProcessGuid": "{KEYLOG-001-0001-0001-000000000002}",
+              "targetProcessId": "824",
+              "targetImage": "C:\\Windows\\System32\\csrss.exe",
+              "targetUser": "NT AUTHORITY\\SYSTEM",
+              "grantedAccess": "0x1410",
+              "callTrace": "C:\\Windows\\SYSTEM32\\ntdll.dll+9d4c4|C:\\Windows\\System32\\KERNELBASE.dll+2c13e|C:\\Users\\Public\\svchost.exe+1234"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Sysmon Event 11 - Keylog file created",
+      "sequence": 3,
+      "timestamp": "2026-01-29T19:05:00.000Z",
+      "log": {
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 11: Keylog File Created",
+          "id": "100100",
+          "mitre": {
+            "id": [
+              "T1056.001"
+            ],
+            "tactic": [
+              "Collection"
+            ],
+            "technique": [
+              "Keylogging"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event11",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000000.700003",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "11",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "11",
+              "opcode": "0",
+              "keywords": "0x8000000000000000",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-01-29 19:05:00.000",
+              "processGuid": "{KEYLOG-001-0001-0001-000000000001}",
+              "processId": "9100",
+              "image": "C:\\Users\\Public\\svchost.exe",
+              "targetFilename": "C:\\Users\\Public\\AppData\\Local\\Temp\\~sys32.log",
+              "creationUtcTime": "2026-01-29 19:05:00.000",
+              "user": "CORP\\john.doe"
+            }
+          }
+        }
+      }
+    }
+  ]
+}

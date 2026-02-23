@@ -19,16 +19,43 @@
         "rule": {
           "level": 14,
           "description": "Sysmon - Event 1: Hidden user account creation",
-          "id": "92151",
-          "mitre": {"id": ["T1098", "T1136.001"], "tactic": ["Persistence"], "technique": ["Account Manipulation", "Local Account"]},
-          "groups": ["sysmon", "sysmon_event1", "windows"]
+          "id": "100916",
+          "mitre": {
+            "id": [
+              "T1098",
+              "T1136.001"
+            ],
+            "tactic": [
+              "Persistence"
+            ],
+            "technique": [
+              "Account Manipulation",
+              "Local Account"
+            ]
+          },
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
         },
-        "agent": {"id": "007", "name": "WS01", "ip": "10.1.0.20"},
-        "manager": {"name": "wazuh.manager"},
-        "decoder": {"name": "windows_eventchannel"},
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
         "data": {
           "win": {
-            "system": {"eventID": "1", "channel": "Microsoft-Windows-Sysmon/Operational"},
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational"
+            },
             "eventdata": {
               "image": "C:\\Windows\\System32\\net.exe",
               "commandLine": "net user admin$ P@ssw0rd123 /add",
@@ -51,16 +78,41 @@
         "rule": {
           "level": 14,
           "description": "Sysmon - Event 1: Adding user to Administrators group",
-          "id": "92151",
-          "mitre": {"id": ["T1098"], "tactic": ["Persistence"], "technique": ["Account Manipulation"]},
-          "groups": ["sysmon", "sysmon_event1", "windows"]
+          "id": "100916",
+          "mitre": {
+            "id": [
+              "T1098"
+            ],
+            "tactic": [
+              "Persistence"
+            ],
+            "technique": [
+              "Account Manipulation"
+            ]
+          },
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
         },
-        "agent": {"id": "007", "name": "WS01", "ip": "10.1.0.20"},
-        "manager": {"name": "wazuh.manager"},
-        "decoder": {"name": "windows_eventchannel"},
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
         "data": {
           "win": {
-            "system": {"eventID": "1", "channel": "Microsoft-Windows-Sysmon/Operational"},
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational"
+            },
             "eventdata": {
               "image": "C:\\Windows\\System32\\net.exe",
               "commandLine": "net localgroup Administrators admin$ /add",

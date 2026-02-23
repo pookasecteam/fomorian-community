@@ -1,0 +1,139 @@
+{
+  "_metadata": {
+    "attack_id": "T1565.003",
+    "variation": "002",
+    "name": "Runtime Data Manipulation - Redis In-Memory Data Modification",
+    "description": "Attacker modifies in-memory Redis data to alter session/cache information",
+    "expected_detection": "MEDIUM",
+    "kill_chain_phase": "impact",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Sysmon Linux Event 1 - redis-cli modifying session data",
+      "sequence": 1,
+      "timestamp": "2026-02-08T23:30:00.000Z",
+      "log": {
+        "timestamp": "2026-02-08T23:30:00.000+0000",
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 1: Redis Data Manipulation",
+          "id": "100101",
+          "mitre": {
+            "id": [
+              "T1565.003"
+            ],
+            "tactic": [
+              "Impact"
+            ],
+            "technique": [
+              "Runtime Data Manipulation"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "linux"
+          ]
+        },
+        "agent": {
+          "id": "030",
+          "name": "VULN01",
+          "ip": "198.51.100.30"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1707400000.300122",
+        "decoder": {
+          "name": "sysmon-linux"
+        },
+        "location": "/var/log/sysmon/sysmon.log",
+        "data": {
+          "eventdata": {
+            "utcTime": "2026-02-08 23:30:00.000",
+            "processGuid": "{A1B2C3D4-IMPC-1565-0004-000000000001}",
+            "processId": "35200",
+            "image": "/usr/bin/redis-cli",
+            "commandLine": "redis-cli SET session:admin:12345 '{\"user\":\"admin\",\"role\":\"superuser\",\"privileges\":[\"all\"]}'",
+            "currentDirectory": "/tmp",
+            "user": "www-data",
+            "parentProcessGuid": "{A1B2C3D4-IMPC-1565-0004-PARENT000001}",
+            "parentProcessId": "35100",
+            "parentImage": "/bin/bash",
+            "parentCommandLine": "/bin/bash -c './session_hijack.sh'"
+          }
+        },
+        "_fomorian_batch": "PT-2026-003-batch2-impact",
+        "_fomorian_test": true,
+        "_fomorian_attack_id": "T1565.003",
+        "_fomorian_expected_detection": "Sigma: Redis Session Data Manipulation (T1565.003)"
+      }
+    },
+    {
+      "_comment": "Sysmon Linux Event 3 - Redis connection from web shell",
+      "sequence": 2,
+      "timestamp": "2026-02-08T23:30:01.000Z",
+      "log": {
+        "timestamp": "2026-02-08T23:30:01.000+0000",
+        "rule": {
+          "level": 10,
+          "description": "Sysmon - Event 3: Redis Connection from Unusual Source",
+          "id": "100103",
+          "mitre": {
+            "id": [
+              "T1565.003"
+            ],
+            "tactic": [
+              "Impact"
+            ],
+            "technique": [
+              "Runtime Data Manipulation"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event3",
+            "linux"
+          ]
+        },
+        "agent": {
+          "id": "030",
+          "name": "VULN01",
+          "ip": "198.51.100.30"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1707400000.300123",
+        "decoder": {
+          "name": "sysmon-linux"
+        },
+        "location": "/var/log/sysmon/sysmon.log",
+        "data": {
+          "eventdata": {
+            "utcTime": "2026-02-08 23:30:01.000",
+            "processGuid": "{A1B2C3D4-IMPC-1565-0004-000000000001}",
+            "processId": "35200",
+            "image": "/usr/bin/redis-cli",
+            "user": "www-data",
+            "protocol": "tcp",
+            "sourceIp": "198.51.100.30",
+            "sourcePort": "45678",
+            "destinationIp": "127.0.0.1",
+            "destinationPort": "6379"
+          }
+        },
+        "_fomorian_batch": "PT-2026-003-batch2-impact",
+        "_fomorian_test": true,
+        "_fomorian_attack_id": "T1565.003",
+        "_fomorian_expected_detection": "Sigma: Suspicious Redis Access (T1565.003)"
+      }
+    }
+  ]
+}

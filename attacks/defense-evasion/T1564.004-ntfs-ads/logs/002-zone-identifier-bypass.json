@@ -1,0 +1,215 @@
+{
+  "_metadata": {
+    "attack_id": "T1564.004",
+    "variation": "002",
+    "name": "Zone.Identifier ADS Removal (MotW Bypass)",
+    "description": "Adversary removes Zone.Identifier ADS to bypass Mark of the Web security warnings",
+    "expected_detection": "HIGH",
+    "kill_chain_phase": "defense-evasion",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Sysmon Event 1 - PowerShell Unblock-File to remove MotW",
+      "sequence": 1,
+      "timestamp": "2026-01-30T11:00:00.000Z",
+      "log": {
+        "rule": {
+          "level": 10,
+          "description": "Sysmon - Event 1: PowerShell Unblock-File (MotW Bypass)",
+          "id": "100001",
+          "mitre": {
+            "id": [
+              "T1564.004",
+              "T1553.005"
+            ],
+            "tactic": [
+              "Defense Evasion"
+            ],
+            "technique": [
+              "NTFS File Attributes",
+              "Mark-of-the-Web Bypass"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700001010.000001",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local"
+            },
+            "eventdata": {
+              "utcTime": "2026-01-30 11:00:00.000",
+              "processGuid": "{A1B2C3D4-1564-0004-0010-000000000002}",
+              "processId": "6120",
+              "image": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+              "commandLine": "powershell.exe -Command \"Unblock-File -Path C:\\Users\\victim\\Downloads\\malware.exe\"",
+              "currentDirectory": "C:\\Users\\attacker\\",
+              "user": "CORP\\attacker",
+              "integrityLevel": "Medium",
+              "parentProcessGuid": "{A1B2C3D4-1564-0004-0009-000000000002}",
+              "parentProcessId": "5900",
+              "parentImage": "C:\\Windows\\System32\\cmd.exe",
+              "parentCommandLine": "cmd.exe"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Sysmon Event 1 - cmd.exe deleting Zone.Identifier stream",
+      "sequence": 2,
+      "timestamp": "2026-01-30T11:00:05.000Z",
+      "log": {
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 1: Zone.Identifier ADS Deletion",
+          "id": "100001",
+          "mitre": {
+            "id": [
+              "T1564.004",
+              "T1553.005"
+            ],
+            "tactic": [
+              "Defense Evasion"
+            ],
+            "technique": [
+              "NTFS File Attributes",
+              "Mark-of-the-Web Bypass"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700001010.000002",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local"
+            },
+            "eventdata": {
+              "utcTime": "2026-01-30 11:00:05.000",
+              "processGuid": "{A1B2C3D4-1564-0004-0011-000000000002}",
+              "processId": "6130",
+              "image": "C:\\Windows\\System32\\cmd.exe",
+              "commandLine": "cmd.exe /c del C:\\Users\\victim\\Downloads\\malware.exe:Zone.Identifier",
+              "currentDirectory": "C:\\Users\\attacker\\",
+              "user": "CORP\\attacker",
+              "integrityLevel": "Medium",
+              "parentProcessGuid": "{A1B2C3D4-1564-0004-0009-000000000002}",
+              "parentProcessId": "5900",
+              "parentImage": "C:\\Windows\\explorer.exe",
+              "parentCommandLine": "explorer.exe"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Sysmon Event 23 - Zone.Identifier stream deleted",
+      "sequence": 3,
+      "timestamp": "2026-01-30T11:00:06.000Z",
+      "log": {
+        "rule": {
+          "level": 10,
+          "description": "Sysmon - Event 23: Zone.Identifier ADS Removed",
+          "id": "100001",
+          "mitre": {
+            "id": [
+              "T1564.004",
+              "T1553.005"
+            ],
+            "tactic": [
+              "Defense Evasion"
+            ],
+            "technique": [
+              "NTFS File Attributes",
+              "Mark-of-the-Web Bypass"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event23",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700001010.000003",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "23",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local"
+            },
+            "eventdata": {
+              "utcTime": "2026-01-30 11:00:06.000",
+              "processGuid": "{A1B2C3D4-1564-0004-0011-000000000002}",
+              "processId": "6130",
+              "image": "C:\\Windows\\System32\\cmd.exe",
+              "targetFilename": "C:\\Users\\victim\\Downloads\\malware.exe:Zone.Identifier",
+              "hashes": "SHA256=DELETED"
+            }
+          }
+        }
+      }
+    }
+  ]
+}

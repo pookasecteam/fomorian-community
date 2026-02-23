@@ -7,8 +7,7 @@
     "expected_detection": "HIGH",
     "kill_chain_phase": "persistence",
     "format": "wazuh-native",
-    "format_version": "1.0",
-    "campaign": "operation-shadow-domain"
+    "format_version": "1.0"
   },
   "logs": [
     {
@@ -20,15 +19,26 @@
         "rule": {
           "level": 3,
           "description": "Sysmon - Event 1: Process Create",
-          "id": "92000",
+          "id": "100900",
           "firedtimes": 1,
           "mail": false,
-          "groups": ["sysmon", "sysmon_event1"]
+          "groups": [
+            "sysmon",
+            "sysmon_event1"
+          ]
         },
-        "agent": {"id": "003", "name": "DC01", "ip": "10.0.10.10"},
-        "manager": {"name": "wazuh.manager"},
+        "agent": {
+          "id": "010",
+          "name": "DC01",
+          "ip": "198.51.100.10"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
         "id": "1706900002.000001",
-        "decoder": {"name": "windows_eventchannel"},
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
         "location": "EventChannel",
         "data": {
           "win": {
@@ -67,18 +77,36 @@
           "description": "Scheduled Task Created",
           "id": "100648",
           "mitre": {
-            "id": ["T1053.005"],
-            "tactic": ["Persistence", "Privilege Escalation"],
-            "technique": ["Scheduled Task/Job: Scheduled Task"]
+            "id": [
+              "T1053.005"
+            ],
+            "tactic": [
+              "Persistence",
+              "Privilege Escalation"
+            ],
+            "technique": [
+              "Scheduled Task/Job: Scheduled Task"
+            ]
           },
           "firedtimes": 1,
           "mail": false,
-          "groups": ["windows", "scheduled_task"]
+          "groups": [
+            "windows",
+            "scheduled_task"
+          ]
         },
-        "agent": {"id": "003", "name": "DC01", "ip": "10.0.10.10"},
-        "manager": {"name": "wazuh.manager"},
+        "agent": {
+          "id": "010",
+          "name": "DC01",
+          "ip": "198.51.100.10"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
         "id": "1706900002.000002",
-        "decoder": {"name": "windows_eventchannel"},
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
         "location": "EventChannel",
         "data": {
           "win": {

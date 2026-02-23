@@ -1,0 +1,227 @@
+{
+  "_metadata": {
+    "attack_id": "T1482",
+    "variation": "001",
+    "name": "Domain Trust Discovery",
+    "description": "Enumerating domain trusts to identify paths for lateral movement",
+    "expected_detection": "MEDIUM",
+    "kill_chain_phase": "discovery",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Sysmon Event 1 - nltest /domain_trusts",
+      "sequence": 1,
+      "timestamp": "2026-01-30T04:25:00.000Z",
+      "log": {
+        "rule": {
+          "level": 10,
+          "description": "Sysmon - Event 1: Domain Trust Discovery via nltest",
+          "id": "100100",
+          "mitre": {
+            "id": [
+              "T1482"
+            ],
+            "tactic": [
+              "Discovery"
+            ],
+            "technique": [
+              "Domain Trust Discovery"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000030.600001",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-01-30 04:25:00.000",
+              "processGuid": "{TRUST-001-0001-000000000001}",
+              "processId": "54000",
+              "image": "C:\\Windows\\System32\\nltest.exe",
+              "commandLine": "nltest /domain_trusts /all_trusts",
+              "currentDirectory": "C:\\Users\\attacker\\",
+              "user": "CORP\\attacker",
+              "integrityLevel": "Medium",
+              "hashes": "SHA256=NLTEST_HASH_1234567890ABCDEF1234567890ABCDEF12345",
+              "parentProcessGuid": "{TRUST-001-0001-000000000000}",
+              "parentProcessId": "54000",
+              "parentImage": "C:\\Windows\\System32\\cmd.exe",
+              "parentCommandLine": "cmd.exe"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Sysmon Event 1 - dsquery for trusts",
+      "sequence": 2,
+      "timestamp": "2026-01-30T04:25:05.000Z",
+      "log": {
+        "rule": {
+          "level": 10,
+          "description": "Sysmon - Event 1: Domain Trust Discovery via dsquery",
+          "id": "100100",
+          "mitre": {
+            "id": [
+              "T1482"
+            ],
+            "tactic": [
+              "Discovery"
+            ],
+            "technique": [
+              "Domain Trust Discovery"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000030.600002",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-01-30 04:25:05.000",
+              "processGuid": "{TRUST-001-0001-000000000002}",
+              "processId": "54100",
+              "image": "C:\\Windows\\System32\\dsquery.exe",
+              "commandLine": "dsquery * -filter \"(objectClass=trustedDomain)\" -attr *",
+              "currentDirectory": "C:\\Users\\attacker\\",
+              "user": "CORP\\attacker",
+              "integrityLevel": "Medium",
+              "hashes": "SHA256=DSQUERY_HASH_1234567890ABCDEF1234567890ABCDEF1234",
+              "parentProcessGuid": "{TRUST-001-0001-000000000000}",
+              "parentProcessId": "54000",
+              "parentImage": "C:\\Windows\\System32\\cmd.exe",
+              "parentCommandLine": "cmd.exe"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Sysmon Event 1 - PowerView Get-DomainTrust",
+      "sequence": 3,
+      "timestamp": "2026-01-30T04:25:10.000Z",
+      "log": {
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 1: Domain Trust Discovery via PowerView",
+          "id": "100100",
+          "mitre": {
+            "id": [
+              "T1482"
+            ],
+            "tactic": [
+              "Discovery"
+            ],
+            "technique": [
+              "Domain Trust Discovery"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000030.600003",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-01-30 04:25:10.000",
+              "processGuid": "{TRUST-001-0001-000000000003}",
+              "processId": "54200",
+              "image": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+              "commandLine": "powershell.exe -c \"Get-DomainTrust -Domain corp.local\"",
+              "currentDirectory": "C:\\Users\\attacker\\",
+              "user": "CORP\\attacker",
+              "integrityLevel": "Medium",
+              "hashes": "SHA256=PS_EXE_HASH_1234567890ABCDEF1234567890ABCDEF1234567",
+              "parentProcessGuid": "{TRUST-001-0001-000000000000}",
+              "parentProcessId": "54000",
+              "parentImage": "C:\\Windows\\System32\\cmd.exe",
+              "parentCommandLine": "cmd.exe"
+            }
+          }
+        }
+      }
+    }
+  ]
+}

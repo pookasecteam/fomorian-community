@@ -1,0 +1,251 @@
+{
+  "_metadata": {
+    "attack_id": "T1611",
+    "variation": "003",
+    "name": "CAP_SYS_ADMIN Container Escape",
+    "description": "Adversary escapes container by abusing CAP_SYS_ADMIN capability to mount host filesystem",
+    "expected_detection": "CRITICAL",
+    "kill_chain_phase": "privilege-escalation",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Auditd - Container checking capabilities",
+      "sequence": 1,
+      "timestamp": "2026-01-30T11:15:00.000Z",
+      "log": {
+        "rule": {
+          "level": 10,
+          "description": "Auditd - Container Capability Enumeration",
+          "id": "100001",
+          "mitre": {
+            "id": [
+              "T1611"
+            ],
+            "tactic": [
+              "Privilege Escalation"
+            ],
+            "technique": [
+              "Escape to Host"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "audit",
+            "linux",
+            "container"
+          ]
+        },
+        "agent": {
+          "id": "030",
+          "name": "DVLNX01",
+          "ip": "198.51.100.30"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700001120.000001",
+        "decoder": {
+          "name": "auditd"
+        },
+        "location": "audit",
+        "data": {
+          "audit": {
+            "type": "EXECVE",
+            "argc": "2",
+            "a0": "capsh",
+            "a1": "--print",
+            "pid": "14500",
+            "ppid": "14400",
+            "uid": "0",
+            "comm": "capsh",
+            "exe": "/sbin/capsh"
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Auditd - Creating block device for host disk",
+      "sequence": 2,
+      "timestamp": "2026-01-30T11:15:05.000Z",
+      "log": {
+        "rule": {
+          "level": 15,
+          "description": "Auditd - Container Creating Block Device",
+          "id": "100001",
+          "mitre": {
+            "id": [
+              "T1611"
+            ],
+            "tactic": [
+              "Privilege Escalation"
+            ],
+            "technique": [
+              "Escape to Host"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "audit",
+            "linux",
+            "container"
+          ]
+        },
+        "agent": {
+          "id": "030",
+          "name": "DVLNX01",
+          "ip": "198.51.100.30"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700001120.000002",
+        "decoder": {
+          "name": "auditd"
+        },
+        "location": "audit",
+        "data": {
+          "audit": {
+            "type": "MKNOD",
+            "syscall": "mknod",
+            "success": "yes",
+            "pid": "14510",
+            "ppid": "14500",
+            "uid": "0",
+            "comm": "mknod",
+            "exe": "/bin/mknod",
+            "key": "device_creation"
+          },
+          "file": {
+            "path": "/dev/sda1",
+            "mode": "060660"
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Auditd - Mounting host filesystem",
+      "sequence": 3,
+      "timestamp": "2026-01-30T11:15:10.000Z",
+      "log": {
+        "rule": {
+          "level": 15,
+          "description": "Auditd - Container Mounting Host Filesystem",
+          "id": "100001",
+          "mitre": {
+            "id": [
+              "T1611"
+            ],
+            "tactic": [
+              "Privilege Escalation"
+            ],
+            "technique": [
+              "Escape to Host"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "audit",
+            "linux",
+            "container"
+          ]
+        },
+        "agent": {
+          "id": "030",
+          "name": "DVLNX01",
+          "ip": "198.51.100.30"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700001120.000003",
+        "decoder": {
+          "name": "auditd"
+        },
+        "location": "audit",
+        "data": {
+          "audit": {
+            "type": "SYSCALL",
+            "syscall": "mount",
+            "success": "yes",
+            "pid": "14520",
+            "ppid": "14510",
+            "uid": "0",
+            "comm": "mount",
+            "exe": "/bin/mount",
+            "key": "mount_ops"
+          },
+          "file": {
+            "path": "/mnt/host"
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Auditd - Writing to host filesystem",
+      "sequence": 4,
+      "timestamp": "2026-01-30T11:15:15.000Z",
+      "log": {
+        "rule": {
+          "level": 15,
+          "description": "Auditd - Container Writing SSH Key to Host",
+          "id": "100001",
+          "mitre": {
+            "id": [
+              "T1611",
+              "T1098.004"
+            ],
+            "tactic": [
+              "Privilege Escalation",
+              "Persistence"
+            ],
+            "technique": [
+              "Escape to Host",
+              "SSH Authorized Keys"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "audit",
+            "linux",
+            "container"
+          ]
+        },
+        "agent": {
+          "id": "030",
+          "name": "DVLNX01",
+          "ip": "198.51.100.30"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700001120.000004",
+        "decoder": {
+          "name": "auditd"
+        },
+        "location": "audit",
+        "data": {
+          "audit": {
+            "type": "OPENAT",
+            "syscall": "openat",
+            "success": "yes",
+            "pid": "14530",
+            "ppid": "14520",
+            "uid": "0",
+            "comm": "tee",
+            "exe": "/usr/bin/tee",
+            "key": "ssh_keys"
+          },
+          "file": {
+            "path": "/mnt/host/root/.ssh/authorized_keys"
+          }
+        }
+      }
+    }
+  ]
+}

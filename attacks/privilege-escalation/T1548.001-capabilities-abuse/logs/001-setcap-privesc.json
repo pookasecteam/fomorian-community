@@ -1,0 +1,136 @@
+{
+  "_metadata": {
+    "attack_id": "T1548.001",
+    "variation": "001",
+    "name": "Linux Capabilities Abuse",
+    "description": "Setting cap_setuid capability on a binary to enable privilege escalation without SUID",
+    "expected_detection": "HIGH",
+    "kill_chain_phase": "privilege-escalation",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Sysmon Event 1 - Enumerating capabilities on installed binaries",
+      "sequence": 1,
+      "timestamp": "2026-02-22T03:00:00.400Z",
+      "log": {
+        "timestamp": "2026-02-22T03:00:00.400+0000",
+        "rule": {
+          "level": 8,
+          "description": "Sysmon - Event 1: Enumerating Linux capabilities on binaries",
+          "id": "100101",
+          "mitre": {
+            "id": [
+              "T1548.001"
+            ],
+            "tactic": [
+              "Privilege Escalation"
+            ],
+            "technique": [
+              "Setuid and Setgid"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "linux"
+          ]
+        },
+        "agent": {
+          "id": "030",
+          "name": "VULN01",
+          "ip": "198.51.100.30"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1708567200.000005",
+        "decoder": {
+          "name": "sysmon-linux"
+        },
+        "location": "/var/log/syslog",
+        "data": {
+          "eventdata": {
+            "utcTime": "2026-02-22 03:00:00.400",
+            "processGuid": "{a1b2c3d4-0003-0001-0001-000000000001}",
+            "processId": "31020",
+            "image": "/usr/sbin/getcap",
+            "commandLine": "getcap -r /usr/bin",
+            "currentDirectory": "/home/admin2",
+            "user": "admin2",
+            "integrityLevel": "no_level",
+            "hashes": "SHA256=ef2d127de37b942baad06145e54b0c619a1f22327b2ebbcfbec78f5564afe39d",
+            "parentProcessGuid": "{a1b2c3d4-0003-0001-0001-000000000000}",
+            "parentProcessId": "31019",
+            "parentImage": "/usr/bin/bash",
+            "parentCommandLine": "bash"
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Sysmon Event 1 - Setting cap_setuid on attacker binary for privilege escalation",
+      "sequence": 2,
+      "timestamp": "2026-02-22T03:00:00.500Z",
+      "log": {
+        "timestamp": "2026-02-22T03:00:00.500+0000",
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 1: Setting cap_setuid capability on binary for privilege escalation",
+          "id": "100101",
+          "mitre": {
+            "id": [
+              "T1548.001"
+            ],
+            "tactic": [
+              "Privilege Escalation"
+            ],
+            "technique": [
+              "Setuid and Setgid"
+            ]
+          },
+          "firedtimes": 2,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "linux"
+          ]
+        },
+        "agent": {
+          "id": "030",
+          "name": "VULN01",
+          "ip": "198.51.100.30"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1708567200.000006",
+        "decoder": {
+          "name": "sysmon-linux"
+        },
+        "location": "/var/log/syslog",
+        "data": {
+          "eventdata": {
+            "utcTime": "2026-02-22 03:00:00.500",
+            "processGuid": "{a1b2c3d4-0003-0001-0001-000000000002}",
+            "processId": "31021",
+            "image": "/usr/sbin/setcap",
+            "commandLine": "setcap cap_setuid+ep /tmp/campaign23_escalate",
+            "currentDirectory": "/home/admin2",
+            "user": "root",
+            "integrityLevel": "no_level",
+            "hashes": "SHA256=e7f6c011776e8db7cd330b54174fd76f7d0216b612387a5ffcfb81e6f0919683",
+            "parentProcessGuid": "{a1b2c3d4-0003-0001-0001-000000000003}",
+            "parentProcessId": "31020",
+            "parentImage": "/usr/bin/sudo",
+            "parentCommandLine": "sudo -S setcap cap_setuid+ep /tmp/campaign23_escalate"
+          }
+        }
+      }
+    }
+  ]
+}

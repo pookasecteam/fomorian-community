@@ -1,0 +1,170 @@
+{
+  "_metadata": {
+    "attack_id": "T1134.004",
+    "variation": "001",
+    "name": "Parent PID Spoofing - Privilege Escalation",
+    "description": "Spoof parent PID to point to privileged process (services.exe) for privilege escalation",
+    "expected_detection": "MEDIUM",
+    "kill_chain_phase": "privilege-escalation",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Sysmon Event 1 - PowerShell with spoofed parent PID pointing to services.exe",
+      "sequence": 1,
+      "timestamp": "2026-02-10T19:12:00.000Z",
+      "log": {
+        "timestamp": "2026-02-10T19:12:00.000+0000",
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 1: Process creation",
+          "id": "100101",
+          "mitre": {
+            "id": [
+              "T1134.004"
+            ],
+            "tactic": [
+              "Privilege Escalation",
+              "Defense Evasion"
+            ],
+            "technique": [
+              "Access Token Manipulation: Parent PID Spoofing"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": true,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1707588720.000001",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-10 19:12:00.000",
+              "processGuid": "{8df8f34e-2910-65c9-0012-000000029012}",
+              "processId": "18200",
+              "image": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+              "commandLine": "powershell.exe -File C:\\scripts\\ppid-spoof.ps1 -ParentPID 668 -Target cmd.exe",
+              "currentDirectory": "C:\\Users\\admin2\\",
+              "user": "CORP\\admin2",
+              "integrityLevel": "Medium",
+              "hashes": "SHA256=A8FDBA9DF15E41B6F5C69C79F66A26A9D48E174F9F1D8F7E6A5B4C3D2E1F0A9B",
+              "parentProcessGuid": "{8df8f34e-2910-65c9-0000-000000029000}",
+              "parentProcessId": "8456",
+              "parentImage": "C:\\Windows\\System32\\cmd.exe",
+              "parentCommandLine": "cmd.exe"
+            }
+          }
+        },
+        "_fomorian_test": true,
+        "fomorian_batch": 10,
+        "fomorian_campaign": 29,
+        "fomorian_technique": "T1134.004",
+        "fomorian_technique_name": "Parent PID Spoofing - Privilege Escalation"
+      }
+    },
+    {
+      "_comment": "Sysmon Event 1 - cmd.exe spawned with spoofed parent (services.exe PID 668)",
+      "sequence": 2,
+      "timestamp": "2026-02-10T19:12:02.000Z",
+      "log": {
+        "timestamp": "2026-02-10T19:12:02.000+0000",
+        "rule": {
+          "level": 14,
+          "description": "Sysmon - Event 1: Process creation with suspicious parent",
+          "id": "100101",
+          "mitre": {
+            "id": [
+              "T1134.004"
+            ],
+            "tactic": [
+              "Privilege Escalation",
+              "Defense Evasion"
+            ],
+            "technique": [
+              "Access Token Manipulation: Parent PID Spoofing"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": true,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1707588722.000002",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-10 19:12:02.000",
+              "processGuid": "{8df8f34e-2910-65c9-0012-000000029013}",
+              "processId": "18300",
+              "image": "C:\\Windows\\System32\\cmd.exe",
+              "commandLine": "cmd.exe",
+              "currentDirectory": "C:\\Windows\\System32\\",
+              "user": "NT AUTHORITY\\SYSTEM",
+              "integrityLevel": "System",
+              "hashes": "SHA256=C8D9E0F1A2B394857605948372615048372615904837261590483726159048372",
+              "parentProcessGuid": "{8df8f34e-2910-65c9-0000-000000000668}",
+              "parentProcessId": "668",
+              "parentImage": "C:\\Windows\\System32\\services.exe",
+              "parentCommandLine": "C:\\Windows\\System32\\services.exe"
+            }
+          }
+        },
+        "_fomorian_test": true,
+        "fomorian_batch": 10,
+        "fomorian_campaign": 29,
+        "fomorian_technique": "T1134.004",
+        "fomorian_technique_name": "Parent PID Spoofing - Privilege Escalation"
+      }
+    }
+  ]
+}

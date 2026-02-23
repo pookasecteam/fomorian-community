@@ -1,0 +1,161 @@
+{
+  "_metadata": {
+    "attack_id": "T1105",
+    "variation": "AMB-018",
+    "name": "curl.exe POSTing Data to External API",
+    "description": "curl.exe sending JSON data to external analytics vendor API - could be legitimate developer activity or data exfiltration",
+    "ground_truth": "AMBIGUOUS",
+    "legitimate_explanation": "Developer is testing integration with the approved analytics vendor API by sending a sample report payload from the command line. The vendor analytics-vendor.com is on the approved third-party integrations list.",
+    "suspicious_explanation": "curl.exe with -d @file posting data to an external domain could be data exfiltration. The report.json file may contain sensitive data being sent to an attacker-controlled endpoint disguised as a legitimate vendor.",
+    "expected_detection": "MEDIUM",
+    "kill_chain_phase": "exfiltration",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Sysmon Event 1 - curl.exe posting data to external API",
+      "sequence": 1,
+      "timestamp": "2026-02-08T11:18:42.000Z",
+      "log": {
+        "rule": {
+          "level": 6,
+          "description": "Sysmon - Event 1: curl.exe sending data to external endpoint",
+          "id": "100100",
+          "mitre": {
+            "id": [
+              "T1105"
+            ],
+            "tactic": [
+              "Command and Control"
+            ],
+            "technique": [
+              "Ingress Tool Transfer"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1707400004.223606797",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "opcode": "0",
+              "keywords": "0x8000000000000000",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-08 11:18:42.000",
+              "processGuid": "{AMB-018-0001-0001-000000000001}",
+              "processId": "10212",
+              "image": "C:\\Windows\\System32\\curl.exe",
+              "commandLine": "curl.exe -X POST -H \"Content-Type: application/json\" -H \"Authorization: Bearer eyJhbGciOi...\" -d @report.json https://api.analytics-vendor.com/v1/submit",
+              "currentDirectory": "C:\\Users\\mike.dev\\Projects\\analytics-integration\\",
+              "user": "CORP\\mike.dev",
+              "integrityLevel": "Medium",
+              "parentProcessGuid": "{AMB-018-0001-0001-000000000000}",
+              "parentProcessId": "9800",
+              "parentImage": "C:\\Windows\\System32\\cmd.exe",
+              "parentCommandLine": "cmd.exe"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Sysmon Event 3 - curl.exe connecting to external IP on port 443",
+      "sequence": 2,
+      "timestamp": "2026-02-08T11:18:43.000Z",
+      "log": {
+        "rule": {
+          "level": 4,
+          "description": "Sysmon - Event 3: curl.exe outbound HTTPS connection",
+          "id": "100100",
+          "mitre": {
+            "id": [
+              "T1105"
+            ],
+            "tactic": [
+              "Command and Control"
+            ],
+            "technique": [
+              "Ingress Tool Transfer"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event3",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1707400004.264575131",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "3",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "opcode": "0",
+              "keywords": "0x8000000000000000",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-08 11:18:43.000",
+              "processGuid": "{AMB-018-0001-0001-000000000001}",
+              "processId": "10212",
+              "image": "C:\\Windows\\System32\\curl.exe",
+              "user": "CORP\\mike.dev",
+              "protocol": "tcp",
+              "initiated": "true",
+              "sourceIp": "198.51.100.20",
+              "sourcePort": "54912",
+              "destinationIp": "104.26.13.205",
+              "destinationHostname": "api.analytics-vendor.com",
+              "destinationPort": "443"
+            }
+          }
+        }
+      }
+    }
+  ]
+}

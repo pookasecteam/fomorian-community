@@ -1,0 +1,139 @@
+{
+  "_metadata": {
+    "attack_id": "T1498.001",
+    "variation": "002",
+    "name": "Direct Network Flood - UDP Flood Detection",
+    "description": "DEFENSIVE - Detecting UDP flood attack against our infrastructure via Zeek and iptables",
+    "expected_detection": "HIGH",
+    "kill_chain_phase": "impact",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Wazuh custom rule - iptables UDP flood detection",
+      "sequence": 1,
+      "timestamp": "2026-02-08T20:10:00.000Z",
+      "log": {
+        "timestamp": "2026-02-08T20:10:00.000+0000",
+        "rule": {
+          "level": 14,
+          "description": "Firewall - UDP Flood Attack Detected",
+          "id": "100001",
+          "mitre": {
+            "id": [
+              "T1498.001"
+            ],
+            "tactic": [
+              "Impact"
+            ],
+            "technique": [
+              "Direct Network Flood"
+            ]
+          },
+          "firedtimes": 100,
+          "mail": true,
+          "groups": [
+            "firewall",
+            "ddos",
+            "iptables"
+          ]
+        },
+        "agent": {
+          "id": "001",
+          "name": "GW01",
+          "ip": "198.51.100.1"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1707400000.300052",
+        "decoder": {
+          "name": "iptables"
+        },
+        "location": "/var/log/syslog",
+        "full_log": "Feb  8 20:10:00 GW01 kernel: [UFW BLOCK] IN=eth0 OUT= MAC=00:0c:29:xx:xx:xx SRC=185.220.101.42 DST=198.51.100.1 LEN=1400 TOS=0x00 PREC=0x00 TTL=64 ID=12345 PROTO=UDP SPT=53 DPT=80 LEN=1380",
+        "data": {
+          "srcip": "185.220.101.42",
+          "dstip": "198.51.100.1",
+          "srcport": "53",
+          "dstport": "80",
+          "proto": "UDP",
+          "action": "BLOCK"
+        },
+        "_fomorian_batch": "PT-2026-003-batch2-impact",
+        "_fomorian_test": true,
+        "_fomorian_attack_id": "T1498.001",
+        "_fomorian_expected_detection": "Wazuh: UDP Flood Blocked (T1498.001)"
+      }
+    },
+    {
+      "_comment": "Zeek conn.log - High volume UDP traffic",
+      "sequence": 2,
+      "timestamp": "2026-02-08T20:10:01.000Z",
+      "log": {
+        "timestamp": "2026-02-08T20:10:01.000+0000",
+        "rule": {
+          "level": 12,
+          "description": "Zeek - Excessive UDP Traffic Volume",
+          "id": "100001",
+          "mitre": {
+            "id": [
+              "T1498.001"
+            ],
+            "tactic": [
+              "Impact"
+            ],
+            "technique": [
+              "Direct Network Flood"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "zeek",
+            "ddos",
+            "network_attack"
+          ]
+        },
+        "agent": {
+          "id": "001",
+          "name": "GW01",
+          "ip": "198.51.100.1"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1707400000.300053",
+        "decoder": {
+          "name": "zeek-conn"
+        },
+        "location": "/opt/zeek/logs/current/conn.log",
+        "data": {
+          "zeek": {
+            "ts": "1707423001.000000",
+            "uid": "CAbC3dEf4GhIjKl56",
+            "id_orig_h": "185.220.101.42",
+            "id_orig_p": "53",
+            "id_resp_h": "198.51.100.1",
+            "id_resp_p": "80",
+            "proto": "udp",
+            "service": "-",
+            "duration": "0.001",
+            "orig_bytes": 140000,
+            "resp_bytes": 0,
+            "conn_state": "S0",
+            "orig_pkts": 100,
+            "orig_ip_bytes": 144000,
+            "resp_pkts": 0,
+            "resp_ip_bytes": 0
+          }
+        },
+        "_fomorian_batch": "PT-2026-003-batch2-impact",
+        "_fomorian_test": true,
+        "_fomorian_attack_id": "T1498.001",
+        "_fomorian_expected_detection": "Wazuh: Zeek UDP Flood Detection (T1498.001)"
+      }
+    }
+  ]
+}

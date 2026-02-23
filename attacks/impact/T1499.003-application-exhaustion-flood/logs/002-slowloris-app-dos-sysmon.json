@@ -1,0 +1,140 @@
+{
+  "_metadata": {
+    "attack_id": "T1499.003",
+    "variation": "002",
+    "name": "Application Exhaustion Flood - Slowloris Application DoS Tool (Sysmon Detection)",
+    "description": "Detect application-layer DoS tools (slowloris variants, R.U.D.Y.) via process monitoring",
+    "expected_detection": "HIGH",
+    "kill_chain_phase": "impact",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Linux Sysmon Event 1 - Slowloris application DoS",
+      "sequence": 1,
+      "timestamp": "2026-02-08T22:00:00.000Z",
+      "log": {
+        "timestamp": "2026-02-08T22:00:00.000+0000",
+        "rule": {
+          "level": 14,
+          "description": "Sysmon for Linux - Event 1: Process Create",
+          "id": "100101",
+          "mitre": {
+            "id": [
+              "T1499.003"
+            ],
+            "tactic": [
+              "Impact"
+            ],
+            "technique": [
+              "Endpoint Denial of Service: Application Exhaustion Flood"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "linux"
+          ]
+        },
+        "agent": {
+          "id": "001",
+          "name": "GW01",
+          "ip": "198.51.100.1"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1707427200.400040",
+        "decoder": {
+          "name": "sysmon-linux"
+        },
+        "location": "/var/log/sysmon/sysmon.log",
+        "data": {
+          "eventdata": {
+            "utcTime": "2026-02-08 22:00:00.000",
+            "processGuid": "{A1B2C3D4-IMPC-1499-003-SYSMON-0001}",
+            "processId": "63123",
+            "image": "/usr/bin/python3",
+            "commandLine": "python3 /tmp/slowloris.py --port 443 --sockets 500 --sleeptime 15 198.51.100.1",
+            "currentDirectory": "/tmp",
+            "user": "attacker",
+            "parentProcessGuid": "{A1B2C3D4-IMPC-1499-003-PARENT-0001}",
+            "parentProcessId": "63100",
+            "parentImage": "/bin/bash",
+            "parentCommandLine": "-bash"
+          }
+        },
+        "_fomorian_batch": "PT-2026-003-batch2-impact-fixes",
+        "_fomorian_test": true,
+        "_fomorian_attack_id": "T1499.003",
+        "_fomorian_expected_detection": "Sigma: Application DoS Tool Execution (T1499.003)"
+      }
+    },
+    {
+      "_comment": "Linux Sysmon Event 1 - R.U.D.Y. (R-U-Dead-Yet) POST flood",
+      "sequence": 2,
+      "timestamp": "2026-02-08T22:01:00.000Z",
+      "log": {
+        "timestamp": "2026-02-08T22:01:00.000+0000",
+        "rule": {
+          "level": 14,
+          "description": "Sysmon for Linux - Event 1: Process Create",
+          "id": "100101",
+          "mitre": {
+            "id": [
+              "T1499.003"
+            ],
+            "tactic": [
+              "Impact"
+            ],
+            "technique": [
+              "Endpoint Denial of Service: Application Exhaustion Flood"
+            ]
+          },
+          "firedtimes": 2,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "linux"
+          ]
+        },
+        "agent": {
+          "id": "001",
+          "name": "GW01",
+          "ip": "198.51.100.1"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1707427200.400041",
+        "decoder": {
+          "name": "sysmon-linux"
+        },
+        "location": "/var/log/sysmon/sysmon.log",
+        "data": {
+          "eventdata": {
+            "utcTime": "2026-02-08 22:01:00.000",
+            "processGuid": "{A1B2C3D4-IMPC-1499-003-SYSMON-0002}",
+            "processId": "63234",
+            "image": "/usr/bin/python3",
+            "commandLine": "python3 /opt/tools/rudy.py --url http://198.51.100.1/upload --threads 200",
+            "currentDirectory": "/opt/tools",
+            "user": "attacker",
+            "parentProcessGuid": "{A1B2C3D4-IMPC-1499-003-PARENT-0002}",
+            "parentProcessId": "63100",
+            "parentImage": "/bin/bash",
+            "parentCommandLine": "-bash"
+          }
+        },
+        "_fomorian_batch": "PT-2026-003-batch2-impact-fixes",
+        "_fomorian_test": true,
+        "_fomorian_attack_id": "T1499.003",
+        "_fomorian_expected_detection": "Sigma: Application DoS Tool Execution (T1499.003)"
+      }
+    }
+  ]
+}

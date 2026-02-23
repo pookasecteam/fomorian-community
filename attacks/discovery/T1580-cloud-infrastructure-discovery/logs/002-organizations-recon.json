@@ -1,0 +1,144 @@
+{
+  "_metadata": {
+    "attack_id": "T1580",
+    "variation": "002",
+    "name": "AWS Organizations Discovery",
+    "description": "Enumerating AWS organization structure and member accounts to identify lateral movement targets across the organization",
+    "expected_detection": "MEDIUM",
+    "kill_chain_phase": "discovery",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "CloudTrail - DescribeOrganization to discover org structure (failed, not in org)",
+      "sequence": 1,
+      "timestamp": "2026-02-22T00:40:00.000Z",
+      "log": {
+        "rule": {
+          "level": 3,
+          "description": "Amazon AWS Cloudtrail - DescribeOrganization",
+          "id": "100803",
+          "mitre": {
+            "id": [
+              "T1580"
+            ],
+            "tactic": [
+              "Discovery"
+            ],
+            "technique": [
+              "Cloud Infrastructure Discovery"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "amazon",
+            "aws",
+            "aws-cloudtrail"
+          ]
+        },
+        "agent": {
+          "id": "040",
+          "name": "wazuh.manager",
+          "ip": "any"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000011.C21020",
+        "decoder": {
+          "name": "json"
+        },
+        "location": "wodles_aws",
+        "data": {
+          "aws": {
+            "source": "cloudtrail",
+            "eventVersion": "1.09",
+            "eventTime": "2026-02-22T00:40:00Z",
+            "eventSource": "organizations.amazonaws.com",
+            "eventName": "DescribeOrganization",
+            "awsRegion": "us-east-2",
+            "sourceIPAddress": "198.51.100.40",
+            "userAgent": "aws-cli/2.33.23 md/Botocore#1.42.54 ua/2.0 os/linux#6.11.2-amd64 md/arch#x86_64 lang/python#3.12.8",
+            "requestParameters": "{}",
+            "responseElements": "null",
+            "errorCode": "AWSOrganizationsNotInUseException",
+            "errorMessage": "Your account is not a member of an organization.",
+            "userIdentity": {
+              "type": "Root",
+              "arn": "arn:aws:iam::575084400239:root",
+              "accountId": "575084400239",
+              "principalId": "575084400239"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "CloudTrail - ListAccounts to enumerate member accounts (failed, not in org)",
+      "sequence": 2,
+      "timestamp": "2026-02-22T00:40:01.000Z",
+      "log": {
+        "rule": {
+          "level": 3,
+          "description": "Amazon AWS Cloudtrail - ListAccounts",
+          "id": "100803",
+          "mitre": {
+            "id": [
+              "T1580"
+            ],
+            "tactic": [
+              "Discovery"
+            ],
+            "technique": [
+              "Cloud Infrastructure Discovery"
+            ]
+          },
+          "firedtimes": 2,
+          "mail": false,
+          "groups": [
+            "amazon",
+            "aws",
+            "aws-cloudtrail"
+          ]
+        },
+        "agent": {
+          "id": "040",
+          "name": "wazuh.manager",
+          "ip": "any"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000011.C21021",
+        "decoder": {
+          "name": "json"
+        },
+        "location": "wodles_aws",
+        "data": {
+          "aws": {
+            "source": "cloudtrail",
+            "eventVersion": "1.09",
+            "eventTime": "2026-02-22T00:40:01Z",
+            "eventSource": "organizations.amazonaws.com",
+            "eventName": "ListAccounts",
+            "awsRegion": "us-east-2",
+            "sourceIPAddress": "198.51.100.40",
+            "userAgent": "aws-cli/2.33.23 md/Botocore#1.42.54 ua/2.0 os/linux#6.11.2-amd64 md/arch#x86_64 lang/python#3.12.8",
+            "requestParameters": "{}",
+            "responseElements": "null",
+            "errorCode": "AWSOrganizationsNotInUseException",
+            "errorMessage": "Your account is not a member of an organization.",
+            "userIdentity": {
+              "type": "Root",
+              "arn": "arn:aws:iam::575084400239:root",
+              "accountId": "575084400239",
+              "principalId": "575084400239"
+            }
+          }
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,219 @@
+{
+  "_metadata": {
+    "attack_id": "T1136.001",
+    "variation": "001",
+    "name": "UAT-8099 Hidden Admin Account Creation",
+    "description": "Simulates UAT-8099 Chinese cybercrime group creating hidden admin accounts with $ suffix for persistence",
+    "expected_detection": "HIGH",
+    "kill_chain_phase": "persistence",
+    "source_url": "https://blog.talosintelligence.com/uat-8099-new-persistence-mechanisms-and-regional-focus/",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Sysmon Event 1 - Initial recon with whoami",
+      "sequence": 1,
+      "timestamp": "2026-02-03T10:00:00.000Z",
+      "log": {
+        "rule": {
+          "level": 5,
+          "description": "Sysmon - Event 1: System information discovery",
+          "id": "100916",
+          "mitre": {
+            "id": [
+              "T1033"
+            ],
+            "tactic": [
+              "Discovery"
+            ],
+            "technique": [
+              "System Owner/User Discovery"
+            ]
+          },
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000003.000001",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-03 10:00:00.000",
+              "processGuid": "{4DC16835-CA1B-65B0-A100-000000001500}",
+              "processId": "4512",
+              "image": "C:\\Windows\\System32\\whoami.exe",
+              "commandLine": "whoami",
+              "currentDirectory": "C:\\Users\\admin\\",
+              "user": "CORP\\admin",
+              "integrityLevel": "High",
+              "parentProcessGuid": "{4DC16835-CA0A-65B0-A000-000000001500}",
+              "parentProcessId": "1892",
+              "parentImage": "C:\\Windows\\System32\\cmd.exe"
+            }
+          }
+        },
+        "_fomorian_test": true,
+        "_fomorian_attack_id": "T1033",
+        "_fomorian_batch": "morning-intel-20260203"
+      }
+    },
+    {
+      "_comment": "Sysmon Event 1 - Hidden admin$ account creation",
+      "sequence": 2,
+      "timestamp": "2026-02-03T10:00:30.000Z",
+      "log": {
+        "rule": {
+          "level": 14,
+          "description": "Sysmon - Event 1: Hidden account creation with $ suffix",
+          "id": "100916",
+          "mitre": {
+            "id": [
+              "T1136.001",
+              "T1564.002"
+            ],
+            "tactic": [
+              "Persistence",
+              "Defense Evasion"
+            ],
+            "technique": [
+              "Create Account: Local Account",
+              "Hide Artifacts: Hidden Users"
+            ]
+          },
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000003.000002",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-03 10:00:30.000",
+              "processGuid": "{4DC16835-CA2C-65B0-A200-000000001500}",
+              "processId": "5128",
+              "image": "C:\\Windows\\System32\\net.exe",
+              "commandLine": "net user admin$ P@ssw0rd123! /add",
+              "currentDirectory": "C:\\Users\\admin\\",
+              "user": "CORP\\admin",
+              "integrityLevel": "High",
+              "parentProcessGuid": "{4DC16835-CA0A-65B0-A000-000000001500}",
+              "parentProcessId": "1892",
+              "parentImage": "C:\\Windows\\System32\\cmd.exe"
+            }
+          }
+        },
+        "_fomorian_test": true,
+        "_fomorian_attack_id": "T1136.001",
+        "_fomorian_batch": "morning-intel-20260203"
+      }
+    },
+    {
+      "_comment": "Sysmon Event 1 - Adding hidden user to administrators",
+      "sequence": 3,
+      "timestamp": "2026-02-03T10:00:45.000Z",
+      "log": {
+        "rule": {
+          "level": 14,
+          "description": "Sysmon - Event 1: Adding user to administrators group",
+          "id": "100916",
+          "mitre": {
+            "id": [
+              "T1136.001"
+            ],
+            "tactic": [
+              "Persistence"
+            ],
+            "technique": [
+              "Create Account: Local Account"
+            ]
+          },
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000003.000003",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-03 10:00:45.000",
+              "processGuid": "{4DC16835-CA3D-65B0-A300-000000001500}",
+              "processId": "5256",
+              "image": "C:\\Windows\\System32\\net.exe",
+              "commandLine": "net localgroup administrators admin$ /add",
+              "currentDirectory": "C:\\Users\\admin\\",
+              "user": "CORP\\admin",
+              "integrityLevel": "High",
+              "parentProcessGuid": "{4DC16835-CA0A-65B0-A000-000000001500}",
+              "parentProcessId": "1892",
+              "parentImage": "C:\\Windows\\System32\\cmd.exe"
+            }
+          }
+        },
+        "_fomorian_test": true,
+        "_fomorian_attack_id": "T1136.001",
+        "_fomorian_batch": "morning-intel-20260203"
+      }
+    }
+  ]
+}

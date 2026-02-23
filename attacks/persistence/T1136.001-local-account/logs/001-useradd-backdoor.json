@@ -1,0 +1,198 @@
+{
+  "_metadata": {
+    "attack_id": "T1136.001",
+    "variation": "001",
+    "name": "Backdoor User Account Creation",
+    "description": "Attacker creates local user account for persistence",
+    "expected_detection": "CRITICAL",
+    "kill_chain_phase": "persistence",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "User account creation via useradd",
+      "sequence": 1,
+      "timestamp": "2026-01-29T14:10:00.000Z",
+      "log": {
+        "rule": {
+          "level": 10,
+          "description": "Backdoor User Account Creation",
+          "id": "100200",
+          "mitre": {
+            "id": [
+              "T1136.001"
+            ],
+            "tactic": [
+              "Persistence"
+            ]
+          },
+          "firedtimes": 1,
+          "groups": [
+            "syslog",
+            "linux"
+          ]
+        },
+        "agent": {
+          "id": "030",
+          "name": "DVLNX01",
+          "ip": "198.51.100.30"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000000.458564870",
+        "decoder": {
+          "name": "syslog"
+        },
+        "location": "/var/log/syslog",
+        "data": {
+          "facility": "authpriv",
+          "severity": "info",
+          "hostname": "DVLNX01",
+          "program": "useradd",
+          "message": "new user: name=support_admin, UID=1001, GID=1001, home=/home/support_admin, shell=/bin/bash"
+        },
+        "full_log": "new user: name=support_admin, UID=1001, GID=1001, home=/home/support_admin, shell=/bin/bash"
+      }
+    },
+    {
+      "_comment": "Audit log of useradd execution",
+      "sequence": 2,
+      "timestamp": "2026-01-29T14:10:00.500Z",
+      "log": {
+        "rule": {
+          "level": 10,
+          "description": "Backdoor User Account Creation",
+          "id": "100200",
+          "mitre": {
+            "id": [
+              "T1136.001"
+            ],
+            "tactic": [
+              "Persistence"
+            ]
+          },
+          "firedtimes": 1,
+          "groups": [
+            "syslog",
+            "linux"
+          ]
+        },
+        "agent": {
+          "id": "030",
+          "name": "DVLNX01",
+          "ip": "198.51.100.30"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000000.63431681",
+        "decoder": {
+          "name": "syslog"
+        },
+        "location": "/var/log/syslog",
+        "data": {
+          "facility": "authpriv",
+          "severity": "info",
+          "hostname": "DVLNX01",
+          "program": "auditd",
+          "message": "type=EXECVE msg=audit(1706537400.500:1020): argc=6 a0=\"useradd\" a1=\"-m\" a2=\"-s\" a3=\"/bin/bash\" a4=\"-G\" a5=\"sudo\" a6=\"support_admin\""
+        },
+        "full_log": "type=EXECVE msg=audit(1706537400.500:1020): argc=6 a0=\"useradd\" a1=\"-m\" a2=\"-s\" a3=\"/bin/bash\" a4=\"-G\" a5=\"sudo\" a6=\"support_admin\""
+      }
+    },
+    {
+      "_comment": "Password set for new account",
+      "sequence": 3,
+      "timestamp": "2026-01-29T14:10:05.000Z",
+      "log": {
+        "rule": {
+          "level": 10,
+          "description": "Backdoor User Account Creation",
+          "id": "100200",
+          "mitre": {
+            "id": [
+              "T1136.001"
+            ],
+            "tactic": [
+              "Persistence"
+            ]
+          },
+          "firedtimes": 1,
+          "groups": [
+            "syslog",
+            "linux"
+          ]
+        },
+        "agent": {
+          "id": "030",
+          "name": "DVLNX01",
+          "ip": "198.51.100.30"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000000.145279695",
+        "decoder": {
+          "name": "syslog"
+        },
+        "location": "/var/log/syslog",
+        "data": {
+          "facility": "authpriv",
+          "severity": "info",
+          "hostname": "DVLNX01",
+          "program": "passwd",
+          "message": "password changed for support_admin"
+        },
+        "full_log": "password changed for support_admin"
+      }
+    },
+    {
+      "_comment": "Shadow file modified",
+      "sequence": 4,
+      "timestamp": "2026-01-29T14:10:05.500Z",
+      "log": {
+        "rule": {
+          "level": 10,
+          "description": "Backdoor User Account Creation",
+          "id": "100200",
+          "mitre": {
+            "id": [
+              "T1136.001"
+            ],
+            "tactic": [
+              "Persistence"
+            ]
+          },
+          "firedtimes": 1,
+          "groups": [
+            "syslog",
+            "linux"
+          ]
+        },
+        "agent": {
+          "id": "030",
+          "name": "DVLNX01",
+          "ip": "198.51.100.30"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000000.64124601",
+        "decoder": {
+          "name": "syslog"
+        },
+        "location": "/var/log/syslog",
+        "data": {
+          "facility": "authpriv",
+          "severity": "info",
+          "hostname": "DVLNX01",
+          "program": "auditd",
+          "message": "type=PATH msg=audit(1706537405.500:1021): item=0 name=\"/etc/shadow\" inode=262147 dev=08:01 mode=0100640 ouid=0 ogid=42 rdev=00:00 nametype=NORMAL"
+        },
+        "full_log": "type=PATH msg=audit(1706537405.500:1021): item=0 name=\"/etc/shadow\" inode=262147 dev=08:01 mode=0100640 ouid=0 ogid=42 rdev=00:00 nametype=NORMAL"
+      }
+    }
+  ]
+}

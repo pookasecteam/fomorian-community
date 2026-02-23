@@ -1,0 +1,155 @@
+{
+  "_metadata": {
+    "attack_id": "T1055.001",
+    "name": "Pipetap Named Pipe Interception",
+    "description": "DLL injection for named pipe interception using pipetap tool",
+    "expected_detection": "HIGH",
+    "kill_chain_phase": "defense-evasion",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Sysmon Event 1 - pipetap-gui.exe execution",
+      "sequence": 1,
+      "timestamp": "2026-01-31T15:12:33.456Z",
+      "log": {
+        "timestamp": "2026-01-31T15:12:33.456+0000",
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 1: Pipetap Named Pipe Tool Execution",
+          "id": "100916",
+          "mitre": {
+            "id": [
+              "T1055.001"
+            ],
+            "tactic": [
+              "Defense Evasion",
+              "Privilege Escalation"
+            ],
+            "technique": [
+              "Dynamic-link Library Injection"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000002.100001",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local"
+            },
+            "eventdata": {
+              "utcTime": "2026-01-31 15:12:33.456",
+              "processGuid": "{12345678-1234-1234-1234-123456789abc}",
+              "processId": "4532",
+              "image": "C:\\Tools\\pipetap\\pipetap-gui.exe",
+              "commandLine": "pipetap-gui.exe",
+              "currentDirectory": "C:\\Tools\\pipetap\\",
+              "user": "CORP\\attacker",
+              "integrityLevel": "High",
+              "parentProcessGuid": "{12345678-1234-1234-1234-123456789000}",
+              "parentProcessId": "5432",
+              "parentImage": "C:\\Windows\\explorer.exe",
+              "parentCommandLine": "C:\\Windows\\explorer.exe"
+            }
+          }
+        },
+        "_fomorian_batch": "threat-intel-2024-01-31",
+        "_fomorian_test": true,
+        "_fomorian_attack_id": "T1055.001",
+        "_fomorian_expected_detection": "Pipetap Named Pipe Tool"
+      }
+    },
+    {
+      "_comment": "Sysmon Event 7 - pipetap DLL load",
+      "sequence": 2,
+      "timestamp": "2026-01-31T15:12:45.789Z",
+      "log": {
+        "timestamp": "2026-01-31T15:12:45.789+0000",
+        "rule": {
+          "level": 14,
+          "description": "Sysmon - Event 7: Pipetap DLL Injection",
+          "id": "100922",
+          "mitre": {
+            "id": [
+              "T1055.001"
+            ],
+            "tactic": [
+              "Defense Evasion",
+              "Privilege Escalation"
+            ],
+            "technique": [
+              "Dynamic-link Library Injection"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event7",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000002.100002",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "7",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local"
+            },
+            "eventdata": {
+              "utcTime": "2026-01-31 15:12:45.789",
+              "processGuid": "{12345678-1234-1234-1234-123456789111}",
+              "processId": "2468",
+              "image": "C:\\Windows\\System32\\lsass.exe",
+              "imageLoaded": "C:\\Tools\\pipetap\\pipetap-dll.dll",
+              "signed": "false",
+              "signatureStatus": "Unavailable",
+              "user": "NT AUTHORITY\\SYSTEM"
+            }
+          }
+        },
+        "_fomorian_batch": "threat-intel-2024-01-31",
+        "_fomorian_test": true,
+        "_fomorian_attack_id": "T1055.001",
+        "_fomorian_expected_detection": "Pipetap DLL Injection"
+      }
+    }
+  ]
+}

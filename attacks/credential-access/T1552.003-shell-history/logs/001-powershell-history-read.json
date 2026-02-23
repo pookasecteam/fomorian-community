@@ -1,0 +1,160 @@
+{
+  "_metadata": {
+    "attack_id": "T1552.003",
+    "variation": "001",
+    "name": "PowerShell Command History File Access",
+    "description": "Attacker reads PowerShell PSReadLine ConsoleHost_history.txt to extract previously executed commands that may contain credentials, connection strings, or sensitive parameters.",
+    "expected_detection": "HIGH",
+    "kill_chain_phase": "credential-access",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Sysmon Event 1 - PowerShell Get-Content reading ConsoleHost_history.txt",
+      "sequence": 1,
+      "timestamp": "2026-02-21T01:10:00.000Z",
+      "log": {
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 1: PowerShell reading PSReadLine command history file",
+          "id": "100330",
+          "mitre": {
+            "id": [
+              "T1552.003"
+            ],
+            "tactic": [
+              "Credential Access"
+            ],
+            "technique": [
+              "Bash History"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "010",
+          "name": "DC01",
+          "ip": "198.51.100.10"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1708470600.100330",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "DC01.corp.local",
+              "level": "4",
+              "task": "1",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-21 01:10:00.000",
+              "processGuid": "{c8e3a9b2-6daf-8a3c-2e00-000000001400}",
+              "processId": "5148",
+              "image": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+              "commandLine": "powershell.exe -c \"Get-Content $env:APPDATA\\Microsoft\\Windows\\PowerShell\\PSReadLine\\ConsoleHost_history.txt\"",
+              "currentDirectory": "C:\\Users\\attacker\\",
+              "user": "CORP\\attacker",
+              "logonGuid": "{c8e3a9b2-6d90-8a3c-4a8e-3f0000000000}",
+              "logonId": "0x4a8e3f",
+              "integrityLevel": "Medium",
+              "hashes": "SHA256=de96a6e69944335375dc1ac238336066889d9ffc7d73628ef4fe1b1b160ab32c",
+              "parentProcessGuid": "{c8e3a9b2-6d92-8a3c-2d00-000000001400}",
+              "parentProcessId": "4920",
+              "parentImage": "C:\\Windows\\System32\\cmd.exe",
+              "parentCommandLine": "cmd.exe /c"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Sysmon Event 1 - cmd.exe type command reading ConsoleHost_history.txt (alternate method)",
+      "sequence": 2,
+      "timestamp": "2026-02-21T01:10:15.000Z",
+      "log": {
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 1: CMD type command reading PowerShell history file",
+          "id": "100331",
+          "mitre": {
+            "id": [
+              "T1552.003"
+            ],
+            "tactic": [
+              "Credential Access"
+            ],
+            "technique": [
+              "Bash History"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "010",
+          "name": "DC01",
+          "ip": "198.51.100.10"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1708470615.100331",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "DC01.corp.local",
+              "level": "4",
+              "task": "1",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-21 01:10:15.000",
+              "processGuid": "{c8e3a9b2-6dc0-8a3c-2f00-000000001400}",
+              "processId": "5320",
+              "image": "C:\\Windows\\System32\\cmd.exe",
+              "commandLine": "cmd.exe /c type C:\\Users\\Administrator\\AppData\\Roaming\\Microsoft\\Windows\\PowerShell\\PSReadLine\\ConsoleHost_history.txt",
+              "currentDirectory": "C:\\Users\\attacker\\",
+              "user": "CORP\\attacker",
+              "logonGuid": "{c8e3a9b2-6d90-8a3c-4a8e-3f0000000000}",
+              "logonId": "0x4a8e3f",
+              "integrityLevel": "Medium",
+              "hashes": "SHA256=b99d61d874728edc0918ca0eb10eab93d381e7367e377406e65963366c874714",
+              "parentProcessGuid": "{c8e3a9b2-6d92-8a3c-2d00-000000001400}",
+              "parentProcessId": "4920",
+              "parentImage": "C:\\Windows\\System32\\cmd.exe",
+              "parentCommandLine": "cmd.exe"
+            }
+          }
+        }
+      }
+    }
+  ]
+}

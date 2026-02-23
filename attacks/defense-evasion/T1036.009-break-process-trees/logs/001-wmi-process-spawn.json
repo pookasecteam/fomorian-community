@@ -1,0 +1,227 @@
+{
+  "_metadata": {
+    "attack_id": "T1036.009",
+    "variation": "001",
+    "name": "WMI Process Spawn to Break Process Trees",
+    "description": "Attacker uses WMIC to create a process indirectly, causing the spawned process to appear as a child of WmiPrvSE.exe instead of the original parent. This breaks forensic process tree analysis and evades parent-child relationship detections. A second variation uses COM object scheduling to produce an orphaned process under svchost.exe.",
+    "expected_detection": "MEDIUM",
+    "kill_chain_phase": "defense-evasion",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Sysmon Event 1 - WMIC invoking process creation to break parent chain",
+      "sequence": 1,
+      "timestamp": "2026-02-21T04:30:00.000Z",
+      "log": {
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 1: WMIC process call create - process tree evasion",
+          "id": "100100",
+          "mitre": {
+            "id": [
+              "T1036.009"
+            ],
+            "tactic": [
+              "Defense Evasion"
+            ],
+            "technique": [
+              "Masquerading: Break Process Trees"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000020.4000007",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-21 04:30:00.000",
+              "processGuid": "{b3c285a4-7e40-6718-c100-000000002000}",
+              "processId": "5120",
+              "image": "C:\\Windows\\System32\\wbem\\WMIC.exe",
+              "commandLine": "wmic process call create \"cmd.exe /c whoami > C:\\Users\\Administrator\\output.txt\"",
+              "currentDirectory": "C:\\Users\\Administrator\\",
+              "user": "CORP\\Administrator",
+              "integrityLevel": "High",
+              "hashes": "SHA256=a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9b0c1d2e3f4a5b6c7d8e9f0a1b2",
+              "parentProcessGuid": "{b3c285a4-7e3a-6718-c000-000000002000}",
+              "parentProcessId": "4200",
+              "parentImage": "C:\\Windows\\System32\\cmd.exe",
+              "parentCommandLine": "cmd.exe"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Sysmon Event 1 - Orphaned cmd.exe spawned by WmiPrvSE (broken parent tree)",
+      "sequence": 2,
+      "timestamp": "2026-02-21T04:30:02.000Z",
+      "log": {
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 1: Orphaned cmd.exe from WmiPrvSE - broken process tree",
+          "id": "100100",
+          "mitre": {
+            "id": [
+              "T1036.009"
+            ],
+            "tactic": [
+              "Defense Evasion"
+            ],
+            "technique": [
+              "Masquerading: Break Process Trees"
+            ]
+          },
+          "firedtimes": 2,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000020.4000008",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-21 04:30:02.000",
+              "processGuid": "{b3c285a4-7e42-6718-c200-000000002000}",
+              "processId": "7788",
+              "image": "C:\\Windows\\System32\\cmd.exe",
+              "commandLine": "cmd.exe /c whoami > C:\\Users\\Administrator\\output.txt",
+              "currentDirectory": "C:\\Windows\\System32\\",
+              "user": "CORP\\Administrator",
+              "integrityLevel": "High",
+              "hashes": "SHA256=b94e0f9e8d7c6b5a4f3e2d1c0b9a8f7e6d5c4b3a2f1e0d9c8b7a6f5e4d3c2b1a",
+              "parentProcessGuid": "{b3c285a4-1000-6718-0100-000000002000}",
+              "parentProcessId": "2984",
+              "parentImage": "C:\\Windows\\System32\\wbem\\WmiPrvSE.exe",
+              "parentCommandLine": "C:\\Windows\\System32\\wbem\\WmiPrvSE.exe -Embedding"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Sysmon Event 1 - Another orphan cmd.exe via COM/svchost (broken process tree)",
+      "sequence": 3,
+      "timestamp": "2026-02-21T04:30:10.000Z",
+      "log": {
+        "rule": {
+          "level": 10,
+          "description": "Sysmon - Event 1: Orphaned cmd.exe from svchost - COM process tree break",
+          "id": "100100",
+          "mitre": {
+            "id": [
+              "T1036.009"
+            ],
+            "tactic": [
+              "Defense Evasion"
+            ],
+            "technique": [
+              "Masquerading: Break Process Trees"
+            ]
+          },
+          "firedtimes": 3,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000020.4000009",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-21 04:30:10.000",
+              "processGuid": "{b3c285a4-7e4a-6718-c300-000000002000}",
+              "processId": "9012",
+              "image": "C:\\Windows\\System32\\cmd.exe",
+              "commandLine": "cmd.exe /c net user attacker P@ssw0rd123 /add",
+              "currentDirectory": "C:\\Windows\\System32\\",
+              "user": "CORP\\Administrator",
+              "integrityLevel": "High",
+              "hashes": "SHA256=b94e0f9e8d7c6b5a4f3e2d1c0b9a8f7e6d5c4b3a2f1e0d9c8b7a6f5e4d3c2b1a",
+              "parentProcessGuid": "{b3c285a4-0500-6718-0200-000000002000}",
+              "parentProcessId": "892",
+              "parentImage": "C:\\Windows\\System32\\svchost.exe",
+              "parentCommandLine": "C:\\Windows\\System32\\svchost.exe -k DcomLaunch -p"
+            }
+          }
+        }
+      }
+    }
+  ]
+}

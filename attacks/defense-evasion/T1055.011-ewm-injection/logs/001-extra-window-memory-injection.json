@@ -1,0 +1,159 @@
+{
+  "_metadata": {
+    "attack_id": "T1055.011",
+    "variation": "001",
+    "name": "Extra Window Memory Injection into Explorer",
+    "description": "Attacker opens explorer.exe with full access to manipulate Extra Window Memory (EWM) of the Shell_TrayWnd window, then creates a remote thread to execute injected code",
+    "expected_detection": "HIGH",
+    "kill_chain_phase": "defense-evasion",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Sysmon Event 10 - Process access to explorer.exe with full access rights",
+      "sequence": 1,
+      "timestamp": "2026-02-22T09:35:42.000Z",
+      "log": {
+        "rule": {
+          "level": 14,
+          "description": "Sysmon - Event 10: Suspicious process access to explorer.exe with PROCESS_ALL_ACCESS",
+          "id": "100830",
+          "mitre": {
+            "id": [
+              "T1055.011"
+            ],
+            "tactic": [
+              "Defense Evasion",
+              "Privilege Escalation"
+            ],
+            "technique": [
+              "Process Injection: Extra Window Memory Injection"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event_10",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1708600030.000030",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "10",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "10",
+              "severityValue": "INFORMATION",
+              "systemTime": "2026-02-22T09:35:42.6194270Z"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-22 09:35:42.619",
+              "sourceProcessGuid": "{B2F7C3A1-8E4B-6719-D600-000000001400}",
+              "sourceProcessId": "5716",
+              "sourceThreadId": "5824",
+              "sourceImage": "C:\\Users\\Public\\ewm_inject.exe",
+              "targetProcessGuid": "{B2F7C3A1-1A2B-6719-0300-000000001400}",
+              "targetProcessId": "3284",
+              "targetImage": "C:\\Windows\\explorer.exe",
+              "grantedAccess": "0x1FFFFF",
+              "callTrace": "C:\\Windows\\SYSTEM32\\ntdll.dll+9D584|C:\\Windows\\System32\\KERNELBASE.dll+2C13E|C:\\Users\\Public\\ewm_inject.exe+2B10",
+              "sourceUser": "CORP\\attacker",
+              "targetUser": "CORP\\attacker"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Sysmon Event 8 - CreateRemoteThread in explorer.exe for EWM injection",
+      "sequence": 2,
+      "timestamp": "2026-02-22T09:35:43.000Z",
+      "log": {
+        "rule": {
+          "level": 14,
+          "description": "Sysmon - Event 8: CreateRemoteThread in explorer.exe (EWM injection)",
+          "id": "100831",
+          "mitre": {
+            "id": [
+              "T1055.011"
+            ],
+            "tactic": [
+              "Defense Evasion",
+              "Privilege Escalation"
+            ],
+            "technique": [
+              "Process Injection: Extra Window Memory Injection"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event_8",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1708600031.000031",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "8",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "8",
+              "severityValue": "INFORMATION",
+              "systemTime": "2026-02-22T09:35:43.1042810Z"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-22 09:35:43.104",
+              "sourceProcessGuid": "{B2F7C3A1-8E4B-6719-D600-000000001400}",
+              "sourceProcessId": "5716",
+              "sourceImage": "C:\\Users\\Public\\ewm_inject.exe",
+              "targetProcessGuid": "{B2F7C3A1-1A2B-6719-0300-000000001400}",
+              "targetProcessId": "3284",
+              "targetImage": "C:\\Windows\\explorer.exe",
+              "newThreadId": "6092",
+              "startAddress": "0x00007FFB3A4B5C6D",
+              "startModule": "-",
+              "startFunction": "-",
+              "sourceUser": "CORP\\attacker",
+              "targetUser": "CORP\\attacker"
+            }
+          }
+        }
+      }
+    }
+  ]
+}

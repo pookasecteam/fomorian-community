@@ -16,22 +16,39 @@
       "sequence": 1,
       "timestamp": "2026-02-03T11:00:00.000Z",
       "log": {
-        "timestamp": "",
         "rule": {
           "level": 10,
           "description": "Sysmon - Event 1: cmd.exe launched via Run dialog",
-          "id": "92151",
+          "id": "100916",
           "mitre": {
-            "id": ["T1204.002"],
-            "tactic": ["Execution"],
-            "technique": ["User Execution: Malicious File"]
+            "id": [
+              "T1204.002"
+            ],
+            "tactic": [
+              "Execution"
+            ],
+            "technique": [
+              "User Execution: Malicious File"
+            ]
           },
-          "groups": ["sysmon", "sysmon_event1", "windows"]
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
         },
-        "agent": {"id": "007", "name": "WS01", "ip": "10.1.0.20"},
-        "manager": {"name": "wazuh.manager"},
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
         "id": "1700000004.000001",
-        "decoder": {"name": "windows_eventchannel"},
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
         "location": "EventChannel",
         "data": {
           "win": {
@@ -66,22 +83,42 @@
       "sequence": 2,
       "timestamp": "2026-02-03T11:00:05.000Z",
       "log": {
-        "timestamp": "",
         "rule": {
           "level": 14,
           "description": "Sysmon - Event 1: Suspicious hidden PowerShell download cradle",
-          "id": "92151",
+          "id": "100916",
           "mitre": {
-            "id": ["T1059.001", "T1105"],
-            "tactic": ["Execution", "Command and Control"],
-            "technique": ["Command and Scripting Interpreter: PowerShell", "Ingress Tool Transfer"]
+            "id": [
+              "T1059.001",
+              "T1105"
+            ],
+            "tactic": [
+              "Execution",
+              "Command and Control"
+            ],
+            "technique": [
+              "Command and Scripting Interpreter: PowerShell",
+              "Ingress Tool Transfer"
+            ]
           },
-          "groups": ["sysmon", "sysmon_event1", "windows"]
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
         },
-        "agent": {"id": "007", "name": "WS01", "ip": "10.1.0.20"},
-        "manager": {"name": "wazuh.manager"},
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
         "id": "1700000004.000002",
-        "decoder": {"name": "windows_eventchannel"},
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
         "location": "EventChannel",
         "data": {
           "win": {
@@ -116,22 +153,39 @@
       "sequence": 3,
       "timestamp": "2026-02-03T11:00:30.000Z",
       "log": {
-        "timestamp": "",
         "rule": {
           "level": 12,
           "description": "Sysmon - Event 3: NetSupport RAT network connection",
-          "id": "92153",
+          "id": "100918",
           "mitre": {
-            "id": ["T1071.001"],
-            "tactic": ["Command and Control"],
-            "technique": ["Application Layer Protocol: Web Protocols"]
+            "id": [
+              "T1071.001"
+            ],
+            "tactic": [
+              "Command and Control"
+            ],
+            "technique": [
+              "Application Layer Protocol: Web Protocols"
+            ]
           },
-          "groups": ["sysmon", "sysmon_event3", "windows"]
+          "groups": [
+            "sysmon",
+            "sysmon_event3",
+            "windows"
+          ]
         },
-        "agent": {"id": "007", "name": "WS01", "ip": "10.1.0.20"},
-        "manager": {"name": "wazuh.manager"},
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
         "id": "1700000004.000003",
-        "decoder": {"name": "windows_eventchannel"},
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
         "location": "EventChannel",
         "data": {
           "win": {
@@ -149,7 +203,7 @@
               "user": "CORP\\victim",
               "protocol": "tcp",
               "initiated": "true",
-              "sourceIp": "10.1.0.20",
+              "sourceIp": "198.51.100.20",
               "sourcePort": "51234",
               "destinationIp": "185.234.73.46",
               "destinationPort": "443",

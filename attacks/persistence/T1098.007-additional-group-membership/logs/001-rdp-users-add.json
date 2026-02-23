@@ -1,0 +1,152 @@
+{
+  "_metadata": {
+    "attack_id": "T1098.007",
+    "variation": "001",
+    "name": "Add User to Remote Desktop Users Group",
+    "description": "Adding domain user to Remote Desktop Users group for persistent remote access",
+    "expected_detection": "HIGH",
+    "kill_chain_phase": "persistence",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Sysmon Event 1 - net localgroup adding user to Remote Desktop Users",
+      "sequence": 1,
+      "timestamp": "2026-02-21T01:35:00.000Z",
+      "log": {
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 1: User added to Remote Desktop Users group via net localgroup",
+          "id": "100100",
+          "mitre": {
+            "id": [
+              "T1098.007"
+            ],
+            "tactic": [
+              "Persistence"
+            ],
+            "technique": [
+              "Additional Cloud Credentials"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "010",
+          "name": "DC01",
+          "ip": "198.51.100.10"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000018.800001",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "DC01.corp.local",
+              "level": "4",
+              "task": "1",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-21 01:35:00.000",
+              "processGuid": "{a7b8c9d0-7777-4ab1-f253-e7f8a9b0c1d2}",
+              "processId": "2456",
+              "image": "C:\\Windows\\System32\\net.exe",
+              "commandLine": "net.exe localgroup \"Remote Desktop Users\" CORP\\PATSY_RILEY /add",
+              "currentDirectory": "C:\\Users\\attacker\\",
+              "user": "CORP\\attacker",
+              "integrityLevel": "High",
+              "hashes": "SHA256=7e8f90a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9b0c1d2e3f4a5b6c7d8e9",
+              "parentProcessGuid": "{a7b8c9d0-7770-4ab1-f253-e7f8a9b0c1d2}",
+              "parentProcessId": "7820",
+              "parentImage": "C:\\Windows\\System32\\cmd.exe",
+              "parentCommandLine": "cmd.exe"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Windows Security Event 4732 - Member added to security-enabled local group",
+      "sequence": 2,
+      "timestamp": "2026-02-21T01:35:01.000Z",
+      "log": {
+        "rule": {
+          "level": 12,
+          "description": "A member was added to a security-enabled local group: Remote Desktop Users",
+          "id": "100001",
+          "mitre": {
+            "id": [
+              "T1098.007"
+            ],
+            "tactic": [
+              "Persistence"
+            ],
+            "technique": [
+              "Additional Cloud Credentials"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "windows",
+            "windows_security",
+            "group_changed"
+          ]
+        },
+        "agent": {
+          "id": "010",
+          "name": "DC01",
+          "ip": "198.51.100.10"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000018.800002",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "4732",
+              "channel": "Security",
+              "providerName": "Microsoft-Windows-Security-Auditing",
+              "computer": "DC01.corp.local",
+              "level": "0",
+              "task": "13826",
+              "severityValue": "AUDIT_SUCCESS"
+            },
+            "eventdata": {
+              "memberName": "CN=Patsy Riley,CN=Users,DC=corp,DC=local",
+              "memberSid": "S-1-5-21-3623811015-3361044348-30300820-1147",
+              "targetUserName": "Remote Desktop Users",
+              "targetDomainName": "Builtin",
+              "targetSid": "S-1-5-32-555",
+              "subjectUserSid": "S-1-5-21-3623811015-3361044348-30300820-500",
+              "subjectUserName": "attacker",
+              "subjectDomainName": "CORP",
+              "subjectLogonId": "0x3e7"
+            }
+          }
+        }
+      }
+    }
+  ]
+}

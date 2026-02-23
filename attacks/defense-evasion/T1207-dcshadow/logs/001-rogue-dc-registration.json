@@ -1,0 +1,227 @@
+{
+  "_metadata": {
+    "attack_id": "T1207",
+    "variation": "001",
+    "name": "DCShadow Rogue Domain Controller Registration",
+    "description": "Registering a rogue domain controller by creating a computer object with DC-specific SPNs to enable DCShadow replication attacks",
+    "expected_detection": "CRITICAL",
+    "kill_chain_phase": "defense-evasion",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Sysmon Event 1 - dsquery enumerating existing domain controller SPNs",
+      "sequence": 1,
+      "timestamp": "2026-02-21T02:10:00.000Z",
+      "log": {
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 1: AD SPN enumeration via dsquery",
+          "id": "100100",
+          "mitre": {
+            "id": [
+              "T1207"
+            ],
+            "tactic": [
+              "Defense Evasion"
+            ],
+            "technique": [
+              "Rogue Domain Controller"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "010",
+          "name": "DC01",
+          "ip": "198.51.100.10"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000018.2000001",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "DC01.corp.local",
+              "level": "4",
+              "task": "1",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-21 02:10:00.000",
+              "processGuid": "{a1b2c3d4-1001-4cd3-b475-a9b0c1d2e3f4}",
+              "processId": "5120",
+              "image": "C:\\Windows\\System32\\dsquery.exe",
+              "commandLine": "dsquery * -attr servicePrincipalName -filter \"(objectClass=computer)\" -limit 50",
+              "currentDirectory": "C:\\Users\\Administrator\\",
+              "user": "CORP\\Administrator",
+              "integrityLevel": "High",
+              "hashes": "SHA256=b1c2d3e4f5a6b7c8d9e0f1a2b3c4d5e6f7a8b9c0d1e2f3a4b5c6d7e8f9a0b1c2",
+              "parentProcessGuid": "{a1b2c3d4-1000-4cd3-b475-a9b0c1d2e3f4}",
+              "parentProcessId": "4880",
+              "parentImage": "C:\\Windows\\System32\\cmd.exe",
+              "parentCommandLine": "cmd.exe"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Sysmon Event 1 - Creating fake DC computer object in AD",
+      "sequence": 2,
+      "timestamp": "2026-02-21T02:10:30.000Z",
+      "log": {
+        "rule": {
+          "level": 14,
+          "description": "Sysmon - Event 1: Rogue domain controller computer object creation",
+          "id": "100100",
+          "mitre": {
+            "id": [
+              "T1207"
+            ],
+            "tactic": [
+              "Defense Evasion"
+            ],
+            "technique": [
+              "Rogue Domain Controller"
+            ]
+          },
+          "firedtimes": 2,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "010",
+          "name": "DC01",
+          "ip": "198.51.100.10"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000018.2000002",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "DC01.corp.local",
+              "level": "4",
+              "task": "1",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-21 02:10:30.000",
+              "processGuid": "{a1b2c3d4-1002-4cd3-b475-a9b0c1d2e3f4}",
+              "processId": "5200",
+              "image": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+              "commandLine": "powershell.exe -c \"New-ADComputer -Name FAKEDC01 -Path 'OU=Domain Controllers,DC=corp,DC=local'\"",
+              "currentDirectory": "C:\\Users\\Administrator\\",
+              "user": "CORP\\Administrator",
+              "integrityLevel": "High",
+              "hashes": "SHA256=c2d3e4f5a6b7c8d9e0f1a2b3c4d5e6f7a8b9c0d1e2f3a4b5c6d7e8f9a0b1c2d3",
+              "parentProcessGuid": "{a1b2c3d4-1000-4cd3-b475-a9b0c1d2e3f4}",
+              "parentProcessId": "4880",
+              "parentImage": "C:\\Windows\\System32\\cmd.exe",
+              "parentCommandLine": "cmd.exe"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Sysmon Event 1 - Setting DC-specific SPNs on fake computer object",
+      "sequence": 3,
+      "timestamp": "2026-02-21T02:11:00.000Z",
+      "log": {
+        "rule": {
+          "level": 14,
+          "description": "Sysmon - Event 1: DC SPN assignment to non-DC computer object",
+          "id": "100100",
+          "mitre": {
+            "id": [
+              "T1207"
+            ],
+            "tactic": [
+              "Defense Evasion"
+            ],
+            "technique": [
+              "Rogue Domain Controller"
+            ]
+          },
+          "firedtimes": 3,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "010",
+          "name": "DC01",
+          "ip": "198.51.100.10"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000018.2000003",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "DC01.corp.local",
+              "level": "4",
+              "task": "1",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-21 02:11:00.000",
+              "processGuid": "{a1b2c3d4-1003-4cd3-b475-a9b0c1d2e3f4}",
+              "processId": "5280",
+              "image": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+              "commandLine": "powershell.exe -c \"Set-ADComputer FAKEDC01 -ServicePrincipalNames @{Add='E3514235-4B06-11D1-AB04-00C04FC2DCD2/FAKEDC01/corp.local','GC/FAKEDC01/corp.local','ldap/FAKEDC01/corp.local'}\"",
+              "currentDirectory": "C:\\Users\\Administrator\\",
+              "user": "CORP\\Administrator",
+              "integrityLevel": "High",
+              "hashes": "SHA256=c2d3e4f5a6b7c8d9e0f1a2b3c4d5e6f7a8b9c0d1e2f3a4b5c6d7e8f9a0b1c2d3",
+              "parentProcessGuid": "{a1b2c3d4-1000-4cd3-b475-a9b0c1d2e3f4}",
+              "parentProcessId": "4880",
+              "parentImage": "C:\\Windows\\System32\\cmd.exe",
+              "parentCommandLine": "cmd.exe"
+            }
+          }
+        }
+      }
+    }
+  ]
+}

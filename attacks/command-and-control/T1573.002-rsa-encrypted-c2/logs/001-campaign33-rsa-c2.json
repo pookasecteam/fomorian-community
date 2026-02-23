@@ -1,0 +1,135 @@
+{
+  "metadata": {
+    "technique_id": "T1573.002",
+    "technique_name": "Encrypted Channel: Asymmetric Cryptography",
+    "tactic": "command-and-control",
+    "description": "RSA encrypted key exchange for C2 communication",
+    "campaign": "33",
+    "batch": "14",
+    "expected_detection": "LOW",
+    "attack_time": "2026-02-10T14:08:00.000Z",
+    "target_host": "WS01",
+    "simulated_c2": "100.100.100.100"
+  },
+  "logs": [
+    {
+      "timestamp": "2026-02-10T14:08:00.000Z",
+      "rule": {
+        "level": 3,
+        "description": "Zeek - SSL/TLS connection with self-signed certificate",
+        "id": "100001",
+        "mitre": {
+          "id": [
+            "T1573.002"
+          ],
+          "tactic": [
+            "Command and Control"
+          ],
+          "technique": [
+            "Asymmetric Cryptography"
+          ]
+        },
+        "groups": [
+          "zeek",
+          "zeek_ssl"
+        ]
+      },
+      "agent": {
+        "id": "001",
+        "name": "GW01",
+        "ip": "198.51.100.1"
+      },
+      "manager": {
+        "name": "wazuh.manager"
+      },
+      "id": "1707577680.000001",
+      "decoder": {
+        "name": "zeek"
+      },
+      "location": "zeek_ssl",
+      "data": {
+        "zeek": {
+          "ts": "1707577680.000000",
+          "uid": "R1a2b3c4d5e6f7g8h9",
+          "id.orig_h": "198.51.100.20",
+          "id.orig_p": "59234",
+          "id.resp_h": "100.100.100.100",
+          "id.resp_p": "443",
+          "version": "TLSv12",
+          "cipher": "TLS_RSA_WITH_AES_256_GCM_SHA384",
+          "curve": "secp256r1",
+          "server_name": "c2.evil.com",
+          "subject": "CN=c2.evil.com",
+          "issuer": "CN=c2.evil.com",
+          "validation_status": "self signed certificate"
+        }
+      },
+      "fomorian_test": true,
+      "fomorian_batch": "14",
+      "fomorian_campaign": "33"
+    },
+    {
+      "timestamp": "2026-02-10T14:08:01.000Z",
+      "rule": {
+        "level": 3,
+        "description": "Zeek - Connection established",
+        "id": "100001",
+        "mitre": {
+          "id": [
+            "T1573.002"
+          ],
+          "tactic": [
+            "Command and Control"
+          ],
+          "technique": [
+            "Asymmetric Cryptography"
+          ]
+        },
+        "groups": [
+          "zeek",
+          "zeek_conn"
+        ]
+      },
+      "agent": {
+        "id": "001",
+        "name": "GW01",
+        "ip": "198.51.100.1"
+      },
+      "manager": {
+        "name": "wazuh.manager"
+      },
+      "id": "1707577681.000001",
+      "decoder": {
+        "name": "zeek"
+      },
+      "location": "zeek_conn",
+      "data": {
+        "zeek": {
+          "ts": "1707577681.000000",
+          "uid": "R1a2b3c4d5e6f7g8h9",
+          "id.orig_h": "198.51.100.20",
+          "id.orig_p": "59234",
+          "id.resp_h": "100.100.100.100",
+          "id.resp_p": "443",
+          "proto": "tcp",
+          "service": "ssl",
+          "duration": "5.234",
+          "orig_bytes": "2341",
+          "resp_bytes": "4512",
+          "conn_state": "SF",
+          "local_orig": "true",
+          "local_resp": "false",
+          "missed_bytes": "0",
+          "history": "ShADadFf",
+          "orig_pkts": "12",
+          "orig_ip_bytes": "2941",
+          "resp_pkts": "15",
+          "resp_ip_bytes": "5112"
+        }
+      },
+      "fomorian_test": true,
+      "fomorian_batch": "14",
+      "fomorian_campaign": "33"
+    }
+  ]
+}

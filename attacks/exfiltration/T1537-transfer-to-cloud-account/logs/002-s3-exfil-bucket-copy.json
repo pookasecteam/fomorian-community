@@ -1,0 +1,305 @@
+{
+  "_metadata": {
+    "attack_id": "T1537",
+    "variation": "002",
+    "name": "S3 Exfiltration via Bucket Creation and Copy",
+    "description": "Attacker creates S3 bucket for exfil staging, discovers objects in target bucket via ListObjectsV2, then copies CloudTrail logs to the exfil bucket using CopyObject.",
+    "expected_detection": "HIGH",
+    "kill_chain_phase": "exfiltration",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "CloudTrail: CreateBucket - attacker creates S3 bucket for exfil staging",
+      "sequence": 1,
+      "timestamp": "2026-02-23T11:20:00.000Z",
+      "log": {
+        "timestamp": "2026-02-23T11:20:01.000+0000",
+        "rule": {
+          "level": 3,
+          "description": "AWS Cloudtrail: s3.amazonaws.com - CreateBucket.",
+          "id": "100802",
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "amazon",
+            "aws",
+            "aws_cloudtrail"
+          ],
+          "pci_dss": [
+            "10.6.1"
+          ],
+          "hipaa": [
+            "164.312.b"
+          ],
+          "nist_800_53": [
+            "AU.6"
+          ],
+          "tsc": [
+            "CC7.2",
+            "CC7.3"
+          ],
+          "mitre": {
+            "id": [
+              "T1537"
+            ],
+            "tactic": [
+              "Exfiltration"
+            ],
+            "technique": [
+              "Transfer Data to Cloud Account"
+            ]
+          },
+          "gdpr": [
+            "IV_35.7.d"
+          ]
+        },
+        "agent": {
+          "id": "000",
+          "name": "wazuh.manager"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000028.007001",
+        "decoder": {
+          "name": "json"
+        },
+        "location": "Wazuh-AWS",
+        "data": {
+          "integration": "aws",
+          "aws": {
+            "eventVersion": "1.11",
+            "eventTime": "2026-02-23T11:20:00Z",
+            "eventSource": "s3.amazonaws.com",
+            "eventName": "CreateBucket",
+            "awsRegion": "us-east-1",
+            "sourceIPAddress": "203.0.113.42",
+            "userAgent": "Boto3/1.26.165 Python/3.13.9 Linux/6.16.8+kali-amd64 Botocore/1.29.165",
+            "userIdentity": {
+              "type": "IAMUser",
+              "arn": "arn:aws:iam::123456789012:user/compromised-dev",
+              "accountId": "123456789012",
+              "userName": "compromised-dev",
+              "principalId": "AIDACKCEVSQ6C2EXAMPLE",
+              "accessKeyId": "AKIAIOSFODNN7EXAMPLE"
+            },
+            "requestParameters": {
+              "bucketName": "tmp-data-export-feb23",
+              "Host": "tmp-data-export-feb23.s3.amazonaws.com",
+              "CreateBucketConfiguration": {
+                "LocationConstraint": "us-east-1",
+                "xmlns": "http://s3.amazonaws.com/doc/2006-03-01/"
+              }
+            },
+            "responseElements": null,
+            "eventID": "e1f2a3b4-c5d6-7890-ef01-234567890abc",
+            "requestID": "f2a3b4c5-d6e7-8901-f012-34567890abcd",
+            "readOnly": "false",
+            "eventType": "AwsApiCall",
+            "managementEvent": "true",
+            "recipientAccountId": "123456789012",
+            "eventCategory": "Management",
+            "source": "cloudtrail",
+            "aws_account_id": "123456789012"
+          }
+        }
+      }
+    },
+    {
+      "_comment": "CloudTrail: ListObjectsV2 - attacker enumerates target bucket contents for exfil target discovery",
+      "sequence": 2,
+      "timestamp": "2026-02-23T11:20:18.000Z",
+      "log": {
+        "timestamp": "2026-02-23T11:20:19.000+0000",
+        "rule": {
+          "level": 3,
+          "description": "AWS Cloudtrail: s3.amazonaws.com - ListObjectsV2.",
+          "id": "100802",
+          "firedtimes": 2,
+          "mail": false,
+          "groups": [
+            "amazon",
+            "aws",
+            "aws_cloudtrail"
+          ],
+          "pci_dss": [
+            "10.6.1"
+          ],
+          "hipaa": [
+            "164.312.b"
+          ],
+          "nist_800_53": [
+            "AU.6"
+          ],
+          "tsc": [
+            "CC7.2",
+            "CC7.3"
+          ],
+          "mitre": {
+            "id": [
+              "T1537"
+            ],
+            "tactic": [
+              "Exfiltration"
+            ],
+            "technique": [
+              "Transfer Data to Cloud Account"
+            ]
+          },
+          "gdpr": [
+            "IV_35.7.d"
+          ]
+        },
+        "agent": {
+          "id": "000",
+          "name": "wazuh.manager"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000028.007002",
+        "decoder": {
+          "name": "json"
+        },
+        "location": "Wazuh-AWS",
+        "data": {
+          "integration": "aws",
+          "aws": {
+            "eventVersion": "1.11",
+            "eventTime": "2026-02-23T11:20:18Z",
+            "eventSource": "s3.amazonaws.com",
+            "eventName": "ListObjectsV2",
+            "awsRegion": "us-east-1",
+            "sourceIPAddress": "203.0.113.42",
+            "userAgent": "Boto3/1.26.165 Python/3.13.9 Linux/6.16.8+kali-amd64 Botocore/1.29.165",
+            "userIdentity": {
+              "type": "IAMUser",
+              "arn": "arn:aws:iam::123456789012:user/compromised-dev",
+              "accountId": "123456789012",
+              "userName": "compromised-dev",
+              "principalId": "AIDACKCEVSQ6C2EXAMPLE",
+              "accessKeyId": "AKIAIOSFODNN7EXAMPLE"
+            },
+            "requestParameters": {
+              "bucketName": "aws-cloudtrail-logs-123456789012-9d89045e",
+              "prefix": "AWSLogs/123456789012/CloudTrail/us-east-1/2026/02/",
+              "Host": "aws-cloudtrail-logs-123456789012-9d89045e.s3.amazonaws.com",
+              "max-keys": "1000",
+              "list-type": "2"
+            },
+            "responseElements": null,
+            "eventID": "a2b3c4d5-e6f7-8901-abcd-ef2345678901",
+            "requestID": "b3c4d5e6-f7a8-9012-bcde-f23456789012",
+            "readOnly": "true",
+            "eventType": "AwsApiCall",
+            "managementEvent": "false",
+            "recipientAccountId": "123456789012",
+            "eventCategory": "Data",
+            "source": "cloudtrail",
+            "aws_account_id": "123456789012"
+          }
+        }
+      }
+    },
+    {
+      "_comment": "CloudTrail: CopyObject - attacker copies CloudTrail logs to exfil bucket",
+      "sequence": 3,
+      "timestamp": "2026-02-23T11:20:45.000Z",
+      "log": {
+        "timestamp": "2026-02-23T11:20:46.000+0000",
+        "rule": {
+          "level": 3,
+          "description": "AWS Cloudtrail: s3.amazonaws.com - CopyObject.",
+          "id": "100802",
+          "firedtimes": 3,
+          "mail": false,
+          "groups": [
+            "amazon",
+            "aws",
+            "aws_cloudtrail"
+          ],
+          "pci_dss": [
+            "10.6.1"
+          ],
+          "hipaa": [
+            "164.312.b"
+          ],
+          "nist_800_53": [
+            "AU.6"
+          ],
+          "tsc": [
+            "CC7.2",
+            "CC7.3"
+          ],
+          "mitre": {
+            "id": [
+              "T1537"
+            ],
+            "tactic": [
+              "Exfiltration"
+            ],
+            "technique": [
+              "Transfer Data to Cloud Account"
+            ]
+          },
+          "gdpr": [
+            "IV_35.7.d"
+          ]
+        },
+        "agent": {
+          "id": "000",
+          "name": "wazuh.manager"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000028.007003",
+        "decoder": {
+          "name": "json"
+        },
+        "location": "Wazuh-AWS",
+        "data": {
+          "integration": "aws",
+          "aws": {
+            "eventVersion": "1.11",
+            "eventTime": "2026-02-23T11:20:45Z",
+            "eventSource": "s3.amazonaws.com",
+            "eventName": "CopyObject",
+            "awsRegion": "us-east-1",
+            "sourceIPAddress": "203.0.113.42",
+            "userAgent": "Boto3/1.26.165 Python/3.13.9 Linux/6.16.8+kali-amd64 Botocore/1.29.165",
+            "userIdentity": {
+              "type": "IAMUser",
+              "arn": "arn:aws:iam::123456789012:user/compromised-dev",
+              "accountId": "123456789012",
+              "userName": "compromised-dev",
+              "principalId": "AIDACKCEVSQ6C2EXAMPLE",
+              "accessKeyId": "AKIAIOSFODNN7EXAMPLE"
+            },
+            "requestParameters": {
+              "bucketName": "tmp-data-export-feb23",
+              "Host": "tmp-data-export-feb23.s3.amazonaws.com",
+              "key": "exfil/cloudtrail-2026-02-23.json.gz",
+              "x-amz-copy-source": "aws-cloudtrail-logs-123456789012-9d89045e/AWSLogs/123456789012/CloudTrail/us-east-1/2026/02/23/123456789012_CloudTrail_us-east-1_20260223T1100Z_abcdef12.json.gz"
+            },
+            "responseElements": {
+              "x-amz-copy-source-version-id": "null",
+              "x-amz-server-side-encryption": "AES256"
+            },
+            "eventID": "c4d5e6f7-a8b9-0123-cdef-a34567890123",
+            "requestID": "d5e6f7a8-b9c0-1234-defa-b45678901234",
+            "readOnly": "false",
+            "eventType": "AwsApiCall",
+            "managementEvent": "false",
+            "recipientAccountId": "123456789012",
+            "eventCategory": "Data",
+            "source": "cloudtrail",
+            "aws_account_id": "123456789012"
+          }
+        }
+      }
+    }
+  ]
+}

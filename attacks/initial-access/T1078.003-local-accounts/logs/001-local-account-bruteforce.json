@@ -1,0 +1,334 @@
+{
+  "_metadata": {
+    "attack_id": "T1078.003",
+    "variation": "001",
+    "name": "Local Account Brute Force Attack",
+    "description": "Multiple failed login attempts followed by successful authentication - brute force attack pattern",
+    "expected_detection": "HIGH",
+    "kill_chain_phase": "initial-access",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Windows Security Event 4625 - Failed logon attempt 1",
+      "sequence": 1,
+      "timestamp": "2026-02-08T12:10:00.000Z",
+      "log": {
+        "timestamp": "2026-02-08T12:10:00.000+0000",
+        "rule": {
+          "level": 5,
+          "description": "Windows - Event 4625: Failed Logon",
+          "id": "100625",
+          "mitre": {
+            "id": [
+              "T1078.003",
+              "T1110"
+            ],
+            "tactic": [
+              "Initial Access",
+              "Credential Access"
+            ],
+            "technique": [
+              "Valid Accounts: Local Accounts",
+              "Brute Force"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "windows",
+            "authentication_failed"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1707400000.400005",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "4625",
+              "channel": "Security",
+              "providerName": "Microsoft-Windows-Security-Auditing",
+              "computer": "WS01.corp.local",
+              "level": "0",
+              "task": "12544",
+              "severityValue": "AUDIT_FAILURE"
+            },
+            "eventdata": {
+              "subjectUserSid": "S-1-0-0",
+              "subjectUserName": "-",
+              "subjectDomainName": "-",
+              "targetUserSid": "S-1-0-0",
+              "targetUserName": "localadmin",
+              "targetDomainName": "WS01",
+              "status": "0xc000006d",
+              "failureReason": "%%2313",
+              "subStatus": "0xc000006a",
+              "logonType": "3",
+              "logonProcessName": "NtLmSsp",
+              "authenticationPackageName": "NTLM",
+              "workstationName": "KALI01",
+              "ipAddress": "198.51.100.110",
+              "ipPort": "49601"
+            }
+          }
+        },
+        "_fomorian_batch": "PT-2026-003-batch1-initial-access",
+        "_fomorian_test": true,
+        "_fomorian_attack_id": "T1078.003",
+        "_fomorian_expected_detection": "Sigma: Local Account Brute Force (T1078.003)"
+      }
+    },
+    {
+      "_comment": "Windows Security Event 4625 - Failed logon attempt 2",
+      "sequence": 2,
+      "timestamp": "2026-02-08T12:10:02.000Z",
+      "log": {
+        "timestamp": "2026-02-08T12:10:02.000+0000",
+        "rule": {
+          "level": 5,
+          "description": "Windows - Event 4625: Failed Logon",
+          "id": "100625",
+          "mitre": {
+            "id": [
+              "T1078.003",
+              "T1110"
+            ],
+            "tactic": [
+              "Initial Access",
+              "Credential Access"
+            ],
+            "technique": [
+              "Valid Accounts: Local Accounts",
+              "Brute Force"
+            ]
+          },
+          "firedtimes": 2,
+          "mail": false,
+          "groups": [
+            "windows",
+            "authentication_failed"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1707400000.400006",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "4625",
+              "channel": "Security",
+              "providerName": "Microsoft-Windows-Security-Auditing",
+              "computer": "WS01.corp.local",
+              "level": "0",
+              "task": "12544",
+              "severityValue": "AUDIT_FAILURE"
+            },
+            "eventdata": {
+              "subjectUserSid": "S-1-0-0",
+              "subjectUserName": "-",
+              "subjectDomainName": "-",
+              "targetUserSid": "S-1-0-0",
+              "targetUserName": "localadmin",
+              "targetDomainName": "WS01",
+              "status": "0xc000006d",
+              "failureReason": "%%2313",
+              "subStatus": "0xc000006a",
+              "logonType": "3",
+              "logonProcessName": "NtLmSsp",
+              "authenticationPackageName": "NTLM",
+              "workstationName": "KALI01",
+              "ipAddress": "198.51.100.110",
+              "ipPort": "49602"
+            }
+          }
+        },
+        "_fomorian_batch": "PT-2026-003-batch1-initial-access",
+        "_fomorian_test": true,
+        "_fomorian_attack_id": "T1078.003",
+        "_fomorian_expected_detection": "Sigma: Local Account Brute Force (T1078.003)"
+      }
+    },
+    {
+      "_comment": "Windows Security Event 4625 - Failed logon attempt 3",
+      "sequence": 3,
+      "timestamp": "2026-02-08T12:10:04.000Z",
+      "log": {
+        "timestamp": "2026-02-08T12:10:04.000+0000",
+        "rule": {
+          "level": 5,
+          "description": "Windows - Event 4625: Failed Logon",
+          "id": "100625",
+          "mitre": {
+            "id": [
+              "T1078.003",
+              "T1110"
+            ],
+            "tactic": [
+              "Initial Access",
+              "Credential Access"
+            ],
+            "technique": [
+              "Valid Accounts: Local Accounts",
+              "Brute Force"
+            ]
+          },
+          "firedtimes": 3,
+          "mail": false,
+          "groups": [
+            "windows",
+            "authentication_failed"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1707400000.400007",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "4625",
+              "channel": "Security",
+              "providerName": "Microsoft-Windows-Security-Auditing",
+              "computer": "WS01.corp.local",
+              "level": "0",
+              "task": "12544",
+              "severityValue": "AUDIT_FAILURE"
+            },
+            "eventdata": {
+              "subjectUserSid": "S-1-0-0",
+              "subjectUserName": "-",
+              "subjectDomainName": "-",
+              "targetUserSid": "S-1-0-0",
+              "targetUserName": "localadmin",
+              "targetDomainName": "WS01",
+              "status": "0xc000006d",
+              "failureReason": "%%2313",
+              "subStatus": "0xc000006a",
+              "logonType": "3",
+              "logonProcessName": "NtLmSsp",
+              "authenticationPackageName": "NTLM",
+              "workstationName": "KALI01",
+              "ipAddress": "198.51.100.110",
+              "ipPort": "49603"
+            }
+          }
+        },
+        "_fomorian_batch": "PT-2026-003-batch1-initial-access",
+        "_fomorian_test": true,
+        "_fomorian_attack_id": "T1078.003",
+        "_fomorian_expected_detection": "Sigma: Local Account Brute Force (T1078.003)"
+      }
+    },
+    {
+      "_comment": "Windows Security Event 4624 - Successful logon after brute force",
+      "sequence": 4,
+      "timestamp": "2026-02-08T12:10:06.000Z",
+      "log": {
+        "timestamp": "2026-02-08T12:10:06.000+0000",
+        "rule": {
+          "level": 10,
+          "description": "Windows - Event 4624: Successful Logon",
+          "id": "100624",
+          "mitre": {
+            "id": [
+              "T1078.003"
+            ],
+            "tactic": [
+              "Initial Access",
+              "Defense Evasion",
+              "Persistence",
+              "Privilege Escalation"
+            ],
+            "technique": [
+              "Valid Accounts: Local Accounts"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "windows",
+            "authentication_success"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1707400000.400008",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "4624",
+              "channel": "Security",
+              "providerName": "Microsoft-Windows-Security-Auditing",
+              "computer": "WS01.corp.local",
+              "level": "0",
+              "task": "12544",
+              "severityValue": "AUDIT_SUCCESS"
+            },
+            "eventdata": {
+              "subjectUserSid": "S-1-0-0",
+              "subjectUserName": "-",
+              "subjectDomainName": "-",
+              "targetUserSid": "S-1-5-21-9876543210-9876543210-9876543210-1001",
+              "targetUserName": "localadmin",
+              "targetDomainName": "WS01",
+              "logonType": "3",
+              "logonProcessName": "NtLmSsp",
+              "authenticationPackageName": "NTLM",
+              "workstationName": "KALI01",
+              "logonGuid": "{00000000-0000-0000-0000-000000000000}",
+              "lmPackageName": "NTLM V2",
+              "keyLength": "128",
+              "ipAddress": "198.51.100.110",
+              "ipPort": "49604"
+            }
+          }
+        },
+        "_fomorian_batch": "PT-2026-003-batch1-initial-access",
+        "_fomorian_test": true,
+        "_fomorian_attack_id": "T1078.003",
+        "_fomorian_expected_detection": "Sigma: Local Account Brute Force Success (T1078.003)"
+      }
+    }
+  ]
+}

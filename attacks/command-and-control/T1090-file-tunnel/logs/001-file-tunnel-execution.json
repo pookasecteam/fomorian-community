@@ -1,0 +1,227 @@
+{
+  "_metadata": {
+    "attack_id": "T1090.001",
+    "variation": "001",
+    "name": "File-Tunnel Proxy Execution",
+    "description": "File-Tunnel TCP tunneling through file shares for covert channel",
+    "expected_detection": "HIGH",
+    "kill_chain_phase": "command_and_control",
+    "format": "wazuh-native",
+    "format_version": "1.0",
+    "tool": "File-Tunnel",
+    "tool_url": "https://github.com/fiddyschmitt/File-Tunnel",
+    "mitre_techniques": [
+      "T1090.001",
+      "T1572",
+      "T1021.002"
+    ]
+  },
+  "logs": [
+    {
+      "_comment": "Sysmon Event 1 - File-Tunnel execution with port forwarding",
+      "sequence": 1,
+      "timestamp": "2026-01-31T15:00:00.000Z",
+      "log": {
+        "rule": {
+          "level": 14,
+          "description": "Sysmon - Event 1: File-Tunnel Proxy Tool Execution",
+          "id": "100300",
+          "mitre": {
+            "id": [
+              "T1090.001",
+              "T1572"
+            ],
+            "tactic": [
+              "Command and Control"
+            ],
+            "technique": [
+              "Proxy",
+              "Protocol Tunneling"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows",
+            "proxy",
+            "tunnel"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000004.000001",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-01-31 15:00:00.000",
+              "processGuid": "{B2C3D4E5-2345-6789-ABCD-EF0123456789}",
+              "processId": "6789",
+              "image": "C:\\Users\\attacker\\Tools\\ft.exe",
+              "commandLine": "ft.exe -L 5000:198.51.100.1:3389 --write \"\\\\fileserver\\share$\\tunnel1.dat\" --read \"\\\\fileserver\\share$\\tunnel2.dat\"",
+              "currentDirectory": "C:\\Users\\attacker\\Tools\\",
+              "user": "CORP\\attacker",
+              "integrityLevel": "High",
+              "hashes": "SHA256=1a2b3c4d5e6f7890abcdef1234567890abcdef1234567890abcdef12345678",
+              "parentProcessGuid": "{B2C3D4E5-1111-2222-3333-444455556666}",
+              "parentProcessId": "2345",
+              "parentImage": "C:\\Windows\\System32\\cmd.exe",
+              "parentCommandLine": "cmd.exe"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Sysmon Event 11 - Tunnel data file created on network share",
+      "sequence": 2,
+      "timestamp": "2026-01-31T15:00:01.000Z",
+      "log": {
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 11: Suspicious .dat file created on network share",
+          "id": "100301",
+          "mitre": {
+            "id": [
+              "T1090.001",
+              "T1021.002"
+            ],
+            "tactic": [
+              "Command and Control",
+              "Lateral Movement"
+            ],
+            "technique": [
+              "Proxy",
+              "SMB/Windows Admin Shares"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event11",
+            "windows",
+            "tunnel"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000004.000002",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "11",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local"
+            },
+            "eventdata": {
+              "utcTime": "2026-01-31 15:00:01.000",
+              "processGuid": "{B2C3D4E5-2345-6789-ABCD-EF0123456789}",
+              "processId": "6789",
+              "image": "C:\\Users\\attacker\\Tools\\ft.exe",
+              "targetFilename": "\\\\fileserver\\share$\\tunnel1.dat",
+              "creationUtcTime": "2026-01-31 15:00:01.000"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Sysmon Event 3 - Local listening port for tunnel",
+      "sequence": 3,
+      "timestamp": "2026-01-31T15:00:02.000Z",
+      "log": {
+        "rule": {
+          "level": 10,
+          "description": "Sysmon - Event 3: File-Tunnel listening on local port",
+          "id": "100302",
+          "mitre": {
+            "id": [
+              "T1090.001"
+            ],
+            "tactic": [
+              "Command and Control"
+            ],
+            "technique": [
+              "Proxy"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event3",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000004.000003",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "3",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local"
+            },
+            "eventdata": {
+              "utcTime": "2026-01-31 15:00:02.000",
+              "processGuid": "{B2C3D4E5-2345-6789-ABCD-EF0123456789}",
+              "processId": "6789",
+              "image": "C:\\Users\\attacker\\Tools\\ft.exe",
+              "user": "CORP\\attacker",
+              "protocol": "tcp",
+              "initiated": "false",
+              "sourceIp": "0.0.0.0",
+              "sourcePort": "5000",
+              "destinationIp": "",
+              "destinationPort": ""
+            }
+          }
+        }
+      }
+    }
+  ]
+}

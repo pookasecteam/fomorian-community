@@ -1,0 +1,95 @@
+{
+  "_metadata": {
+    "attack_id": "T1619",
+    "variation": "001",
+    "name": "Cloud Storage Object Discovery - AWS S3 List Objects",
+    "description": "Using AWS CLI to enumerate objects within S3 buckets for data discovery",
+    "expected_detection": "MEDIUM",
+    "kill_chain_phase": "discovery",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "AWS CloudTrail - ListObjects API call",
+      "sequence": 1,
+      "timestamp": "2026-02-08T10:23:00.000Z",
+      "log": {
+        "timestamp": "2026-02-08T10:23:00.000+0000",
+        "rule": {
+          "level": 8,
+          "description": "AWS CloudTrail - S3 Object Enumeration",
+          "id": "100001",
+          "mitre": {
+            "id": [
+              "T1619"
+            ],
+            "tactic": [
+              "Discovery"
+            ],
+            "technique": [
+              "Cloud Storage Object Discovery"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "aws",
+            "cloudtrail"
+          ]
+        },
+        "agent": {
+          "id": "000",
+          "name": "wazuh.manager",
+          "ip": "127.0.0.1"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1707400000.200025",
+        "decoder": {
+          "name": "json"
+        },
+        "location": "aws-cloudtrail",
+        "data": {
+          "aws": {
+            "eventVersion": "1.08",
+            "eventTime": "2026-02-08T10:23:00Z",
+            "eventSource": "s3.amazonaws.com",
+            "eventName": "ListObjects",
+            "awsRegion": "us-east-1",
+            "sourceIPAddress": "185.220.101.42",
+            "userAgent": "aws-cli/2.9.0 Python/3.9.11 Windows/10 exe/AMD64 prompt/off command/s3.ls",
+            "requestParameters": {
+              "bucketName": "company-confidential-data",
+              "Host": "company-confidential-data.s3.us-east-1.amazonaws.com",
+              "prefix": ""
+            },
+            "responseElements": null,
+            "eventID": "d4e5f6a7-b8c9-0123-def0-234567890123",
+            "eventType": "AwsApiCall",
+            "recipientAccountId": "123456789012",
+            "userIdentity": {
+              "type": "IAMUser",
+              "principalId": "AIDAEXAMPLEUSERID",
+              "arn": "arn:aws:iam::123456789012:user/attacker",
+              "accountId": "123456789012",
+              "userName": "attacker",
+              "accessKeyId": "AKIAIOSFODNN7EXAMPLE"
+            },
+            "resources": [
+              {
+                "type": "AWS::S3::Bucket",
+                "ARN": "arn:aws:s3:::company-confidential-data"
+              }
+            ]
+          }
+        },
+        "_fomorian_batch": "PT-2026-003-batch1-discovery",
+        "_fomorian_test": true,
+        "_fomorian_attack_id": "T1619",
+        "_fomorian_expected_detection": "Sigma: AWS S3 Object Enumeration (T1619)"
+      }
+    }
+  ]
+}

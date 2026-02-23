@@ -1,0 +1,138 @@
+{
+  "_metadata": {
+    "attack_id": "T1558.004",
+    "variation": "001",
+    "name": "PowerShell AS-REP Roasting",
+    "description": "Attacker performs AS-REP Roasting to extract hashes for accounts without pre-auth",
+    "expected_detection": "HIGH",
+    "kill_chain_phase": "credential-access",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Query accounts without Kerberos pre-auth",
+      "sequence": 1,
+      "timestamp": "2026-02-04T14:50:00.000Z",
+      "log": {
+        "rule": {
+          "level": 14,
+          "description": "Sysmon - Event 1: AS-REP Roasting Query",
+          "id": "100916",
+          "mitre": {
+            "id": [
+              "T1558.004"
+            ],
+            "tactic": [
+              "Credential Access"
+            ],
+            "technique": [
+              "AS-REP Roasting"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000001.558004001",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local"
+            },
+            "eventdata": {
+              "image": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+              "commandLine": "powershell.exe -c \"Get-ADUser -Filter {DoesNotRequirePreAuth -eq $true} -Properties DoesNotRequirePreAuth\"",
+              "user": "CORP\\attacker",
+              "parentImage": "C:\\Windows\\System32\\cmd.exe"
+            }
+          }
+        },
+        "_fomorian_test": true,
+        "_fomorian_attack_id": "T1558.004",
+        "_fomorian_batch": "campaign8-powerstrike"
+      }
+    },
+    {
+      "_comment": "LDAP query for userAccountControl",
+      "sequence": 2,
+      "timestamp": "2026-02-04T14:50:10.000Z",
+      "log": {
+        "rule": {
+          "level": 14,
+          "description": "Sysmon - Event 1: AS-REP Roasting LDAP Query",
+          "id": "100916",
+          "mitre": {
+            "id": [
+              "T1558.004"
+            ],
+            "tactic": [
+              "Credential Access"
+            ],
+            "technique": [
+              "AS-REP Roasting"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000001.558004002",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local"
+            },
+            "eventdata": {
+              "image": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+              "commandLine": "powershell.exe -c \"([adsisearcher]'(&(objectCategory=user)(userAccountControl:1.2.840.113556.1.4.803:=4194304))').FindAll()\"",
+              "user": "CORP\\attacker",
+              "parentImage": "C:\\Windows\\System32\\cmd.exe"
+            }
+          }
+        },
+        "_fomorian_test": true,
+        "_fomorian_attack_id": "T1558.004",
+        "_fomorian_batch": "campaign8-powerstrike"
+      }
+    }
+  ]
+}

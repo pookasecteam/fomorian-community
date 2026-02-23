@@ -1,0 +1,213 @@
+{
+  "_metadata": {
+    "attack_id": "T1027.006",
+    "variation": "001",
+    "name": "HTML Smuggling Payload Delivery",
+    "description": "Creating an HTML file with embedded JavaScript that uses Blob objects and atob() to decode and deliver a hidden payload, bypassing network inspection",
+    "expected_detection": "MEDIUM",
+    "kill_chain_phase": "defense-evasion",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Sysmon Event 11 - HTML file with smuggled payload created on disk",
+      "sequence": 1,
+      "timestamp": "2026-02-21T02:50:00.000Z",
+      "log": {
+        "rule": {
+          "level": 10,
+          "description": "Sysmon - Event 11: HTML file created with potential smuggling payload",
+          "id": "100100",
+          "mitre": {
+            "id": [
+              "T1027.006"
+            ],
+            "tactic": [
+              "Defense Evasion"
+            ],
+            "technique": [
+              "Obfuscated Files or Information: HTML Smuggling"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event11",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000020.2500001",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "11",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "11",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-21 02:50:00.000",
+              "processGuid": "{b8c9d0e1-8001-4cd3-b475-a9b0c1d2e3f4}",
+              "processId": "12100",
+              "image": "C:\\Windows\\System32\\cmd.exe",
+              "targetFilename": "C:\\Users\\Administrator\\Desktop\\download.html",
+              "creationUtcTime": "2026-02-21 02:50:00.000"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Sysmon Event 1 - cmd.exe creating HTML with smuggling JavaScript (atob/Blob)",
+      "sequence": 2,
+      "timestamp": "2026-02-21T02:50:01.000Z",
+      "log": {
+        "rule": {
+          "level": 10,
+          "description": "Sysmon - Event 1: HTML file generation with base64 decode payload",
+          "id": "100100",
+          "mitre": {
+            "id": [
+              "T1027.006"
+            ],
+            "tactic": [
+              "Defense Evasion"
+            ],
+            "technique": [
+              "Obfuscated Files or Information: HTML Smuggling"
+            ]
+          },
+          "firedtimes": 2,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000020.2500002",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-21 02:50:01.000",
+              "processGuid": "{b8c9d0e1-8002-4cd3-b475-a9b0c1d2e3f4}",
+              "processId": "12120",
+              "image": "C:\\Windows\\System32\\cmd.exe",
+              "commandLine": "cmd.exe /c echo ^<html^>^<script^>var b=atob('TVqQAAMAAAAE');var blob=new Blob([b]);^</script^>^</html^> > C:\\Users\\Administrator\\Desktop\\download.html",
+              "currentDirectory": "C:\\Users\\Administrator\\",
+              "user": "CORP\\Administrator",
+              "integrityLevel": "High",
+              "hashes": "SHA256=f1a2b3c4d5e6f7a8b9c0d1e2f3a4b5c6d7e8f9a0b1c2d3e4f5a6b7c8d9e0f1a2",
+              "parentProcessGuid": "{b8c9d0e1-8000-4cd3-b475-a9b0c1d2e3f4}",
+              "parentProcessId": "4880",
+              "parentImage": "C:\\Windows\\System32\\cmd.exe",
+              "parentCommandLine": "cmd.exe"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Sysmon Event 11 - Extracted payload from HTML smuggling written to disk",
+      "sequence": 3,
+      "timestamp": "2026-02-21T02:50:30.000Z",
+      "log": {
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 11: Payload extracted from HTML smuggling file",
+          "id": "100100",
+          "mitre": {
+            "id": [
+              "T1027.006"
+            ],
+            "tactic": [
+              "Defense Evasion"
+            ],
+            "technique": [
+              "Obfuscated Files or Information: HTML Smuggling"
+            ]
+          },
+          "firedtimes": 3,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event11",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000020.2500003",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "11",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "11",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-21 02:50:30.000",
+              "processGuid": "{b8c9d0e1-8003-4cd3-b475-a9b0c1d2e3f4}",
+              "processId": "12200",
+              "image": "C:\\Program Files\\Internet Explorer\\iexplore.exe",
+              "targetFilename": "C:\\Users\\Administrator\\Downloads\\payload.exe",
+              "creationUtcTime": "2026-02-21 02:50:30.000"
+            }
+          }
+        }
+      }
+    }
+  ]
+}

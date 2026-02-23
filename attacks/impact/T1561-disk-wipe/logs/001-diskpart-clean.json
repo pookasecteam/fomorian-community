@@ -1,0 +1,80 @@
+{
+  "_metadata": {
+    "attack_id": "T1561",
+    "variation": "001",
+    "name": "Disk Wipe via Diskpart",
+    "description": "Using diskpart to wipe disk contents",
+    "expected_detection": "CRITICAL",
+    "kill_chain_phase": "impact",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Sysmon Event 1 - Diskpart execution",
+      "sequence": 1,
+      "timestamp": "2026-02-04T10:21:00.000Z",
+      "log": {
+        "timestamp": "2026-02-04T10:21:00.000+0000",
+        "rule": {
+          "level": 15,
+          "description": "Sysmon - Event 1: Disk Wipe Attempt",
+          "id": "100927",
+          "mitre": {
+            "id": [
+              "T1561"
+            ],
+            "tactic": [
+              "Impact"
+            ],
+            "technique": [
+              "Disk Wipe"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": true,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows",
+            "impact"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000001.100022",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-04 10:21:00.000",
+              "processGuid": "{A1B2C3D4-1561-0001-0001-000000000001}",
+              "processId": "7890",
+              "image": "C:\\Windows\\System32\\diskpart.exe",
+              "commandLine": "diskpart.exe /s C:\\Windows\\Temp\\wipe.txt",
+              "currentDirectory": "C:\\Windows\\System32\\",
+              "user": "CORP\\attacker",
+              "parentImage": "C:\\Windows\\System32\\cmd.exe",
+              "parentCommandLine": "cmd.exe"
+            }
+          }
+        }
+      }
+    }
+  ]
+}

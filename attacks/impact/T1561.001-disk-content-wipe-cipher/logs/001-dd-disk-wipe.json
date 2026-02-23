@@ -1,0 +1,79 @@
+{
+  "_metadata": {
+    "attack_id": "T1561.001",
+    "variation": "001",
+    "name": "Disk Wipe - Disk Content Wipe with DD",
+    "description": "Use dd to overwrite disk contents with zeros for data destruction",
+    "expected_detection": "HIGH",
+    "kill_chain_phase": "impact",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Linux Sysmon Event 1 - dd disk wipe",
+      "sequence": 1,
+      "timestamp": "2026-02-10T20:20:00.000Z",
+      "log": {
+        "timestamp": "2026-02-10T20:20:00.000+0000",
+        "rule": {
+          "level": 14,
+          "description": "Sysmon for Linux - Event 1: Process Create - Disk Wipe",
+          "id": "100101",
+          "mitre": {
+            "id": [
+              "T1561",
+              "T1561.001"
+            ],
+            "tactic": [
+              "Impact"
+            ],
+            "technique": [
+              "Disk Wipe - Disk Content Wipe"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": true,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "linux"
+          ]
+        },
+        "agent": {
+          "id": "001",
+          "name": "GW01",
+          "ip": "198.51.100.1"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1707596400.000001",
+        "decoder": {
+          "name": "sysmon-linux"
+        },
+        "location": "/var/log/sysmon/syslog",
+        "data": {
+          "eventdata": {
+            "utcTime": "2026-02-10 20:20:00.000",
+            "processGuid": "{B1C2D3E4-3001-65c9-0010-000000030010}",
+            "processId": "12400",
+            "image": "/usr/bin/dd",
+            "commandLine": "dd if=/dev/zero of=/dev/sdb bs=1M count=1000",
+            "currentDirectory": "/home/admin2",
+            "user": "root",
+            "parentProcessGuid": "{B1C2D3E4-3001-65c9-0000-000000030000}",
+            "parentProcessId": "12300",
+            "parentImage": "/usr/bin/sudo",
+            "parentCommandLine": "sudo dd if=/dev/zero of=/dev/sdb bs=1M count=1000"
+          }
+        },
+        "_fomorian_test": true,
+        "fomorian_batch": 11,
+        "fomorian_campaign": 30,
+        "fomorian_technique": "T1561.001",
+        "fomorian_technique_name": "Disk Wipe - Disk Content Wipe"
+      }
+    }
+  ]
+}

@@ -1,0 +1,224 @@
+{
+  "_metadata": {
+    "attack_id": "T1040",
+    "variation": "001",
+    "name": "Network Sniffing via tcpdump",
+    "description": "Packet capture to intercept credentials and sensitive data",
+    "expected_detection": "MEDIUM",
+    "kill_chain_phase": "discovery",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Linux Sysmon Event 1 - tcpdump execution",
+      "sequence": 1,
+      "timestamp": "2026-01-29T20:00:00.000Z",
+      "log": {
+        "rule": {
+          "level": 10,
+          "description": "Sysmon - Event 1: Network Sniffing Tool",
+          "id": "100100",
+          "mitre": {
+            "id": [
+              "T1040"
+            ],
+            "tactic": [
+              "Discovery",
+              "Credential Access"
+            ],
+            "technique": [
+              "Network Sniffing"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "linux"
+          ]
+        },
+        "agent": {
+          "id": "030",
+          "name": "DVLNX01",
+          "ip": "198.51.100.50"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000000.800001",
+        "decoder": {
+          "name": "sysmon-linux"
+        },
+        "location": "EventChannel",
+        "data": {
+          "system": {
+            "eventID": "1",
+            "channel": "Linux-Sysmon/Operational",
+            "providerName": "Linux-Sysmon",
+            "computer": "DVLNX01",
+            "level": "4",
+            "task": "1",
+            "opcode": "0",
+            "keywords": "0x8000000000000000",
+            "severityValue": "INFORMATION"
+          },
+          "eventdata": {
+            "utcTime": "2026-01-29 20:00:00.000",
+            "processGuid": "{SNIFF-001-0001-0001-000000000001}",
+            "processId": "16000",
+            "image": "/usr/sbin/tcpdump",
+            "commandLine": "tcpdump -i eth0 -w /tmp/capture.pcap port 21 or port 23 or port 110 or port 143 or port 80",
+            "currentDirectory": "/root",
+            "user": "root",
+            "logonId": "0",
+            "hashes": "SHA256=TCPDUMPHASH1234567890ABCDEF1234567890ABCDEF1234567890",
+            "parentProcessGuid": "{SNIFF-001-0001-0001-000000000000}",
+            "parentProcessId": "15900",
+            "parentImage": "/bin/bash",
+            "parentCommandLine": "bash"
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Linux Sysmon Event 11 - Packet capture file created",
+      "sequence": 2,
+      "timestamp": "2026-01-29T20:05:00.000Z",
+      "log": {
+        "rule": {
+          "level": 10,
+          "description": "Sysmon - Event 11: PCAP File Created",
+          "id": "100100",
+          "mitre": {
+            "id": [
+              "T1040"
+            ],
+            "tactic": [
+              "Discovery"
+            ],
+            "technique": [
+              "Network Sniffing"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event11",
+            "linux"
+          ]
+        },
+        "agent": {
+          "id": "030",
+          "name": "DVLNX01",
+          "ip": "198.51.100.50"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000000.800002",
+        "decoder": {
+          "name": "sysmon-linux"
+        },
+        "location": "EventChannel",
+        "data": {
+          "system": {
+            "eventID": "11",
+            "channel": "Linux-Sysmon/Operational",
+            "providerName": "Linux-Sysmon",
+            "computer": "DVLNX01",
+            "level": "4",
+            "task": "11",
+            "opcode": "0",
+            "keywords": "0x8000000000000000",
+            "severityValue": "INFORMATION"
+          },
+          "eventdata": {
+            "utcTime": "2026-01-29 20:05:00.000",
+            "processGuid": "{SNIFF-001-0001-0001-000000000001}",
+            "processId": "16000",
+            "image": "/usr/sbin/tcpdump",
+            "targetFilename": "/tmp/capture.pcap",
+            "creationUtcTime": "2026-01-29 20:05:00.000",
+            "user": "root"
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Sysmon Event 1 - Wireshark on Windows",
+      "sequence": 3,
+      "timestamp": "2026-01-29T20:10:00.000Z",
+      "log": {
+        "rule": {
+          "level": 10,
+          "description": "Sysmon - Event 1: Wireshark Network Capture",
+          "id": "100100",
+          "mitre": {
+            "id": [
+              "T1040"
+            ],
+            "tactic": [
+              "Discovery"
+            ],
+            "technique": [
+              "Network Sniffing"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000000.800003",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "opcode": "0",
+              "keywords": "0x8000000000000000",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-01-29 20:10:00.000",
+              "processGuid": "{SNIFF-001-0001-0001-000000000002}",
+              "processId": "10200",
+              "image": "C:\\Program Files\\Wireshark\\dumpcap.exe",
+              "commandLine": "dumpcap.exe -i \\Device\\NPF_{12345678-1234-1234-1234-123456789012} -w C:\\Users\\Public\\network.pcapng",
+              "currentDirectory": "C:\\Program Files\\Wireshark\\",
+              "user": "CORP\\attacker",
+              "integrityLevel": "High",
+              "hashes": "SHA256=WIRESHARKHASH1234567890ABCDEF1234567890ABCDEF1234567890",
+              "parentProcessGuid": "{SNIFF-001-0001-0001-000000000001}",
+              "parentProcessId": "10100",
+              "parentImage": "C:\\Program Files\\Wireshark\\Wireshark.exe",
+              "parentCommandLine": "\"C:\\Program Files\\Wireshark\\Wireshark.exe\""
+            }
+          }
+        }
+      }
+    }
+  ]
+}

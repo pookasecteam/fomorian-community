@@ -1,0 +1,43 @@
+{
+  "_metadata": {
+    "attack_id": "T1562.008",
+    "variation": "001",
+    "name": "O365 Audit Log Disabled",
+    "description": "Attacker disables unified audit logging to evade detection",
+    "expected_detection": "CRITICAL",
+    "kill_chain_phase": "defense-evasion",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Unified audit logging disabled",
+      "sequence": 1,
+      "timestamp": "2026-01-29T16:30:00.000Z",
+      "log": {
+        "o365": {
+          "audit": {
+            "CreationTime": "2026-01-29T16:30:00.000Z",
+            "RecordType": 1,
+            "Operation": "Set-AdminAuditLogConfig",
+            "OrganizationId": "corp-tenant-guid",
+            "Workload": "Exchange",
+            "ClientIP": "185.220.101.45",
+            "UserId": "john.doe@corp.local",
+            "Parameters": [
+              {
+                "Name": "UnifiedAuditLogIngestionEnabled",
+                "Value": "False"
+              }
+            ],
+            "ResultStatus": "True"
+          }
+        },
+        "agent": {
+          "name": "O365-Audit",
+          "id": "o365"
+        }
+      }
+    }
+  ]
+}

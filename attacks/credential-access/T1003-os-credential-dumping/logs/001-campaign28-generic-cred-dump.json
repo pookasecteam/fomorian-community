@@ -1,0 +1,236 @@
+{
+  "_metadata": {
+    "attack_id": "T1003",
+    "variation": "001",
+    "name": "ProcDump LSASS Memory Dump (Parent Technique)",
+    "description": "procdump.exe -ma lsass.exe for generic credential dumping. Parent technique catch-all for OS credential dumping not tied to a specific subtechnique.",
+    "expected_detection": "CRITICAL",
+    "kill_chain_phase": "credential-access",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Sysmon Event 1 - procdump.exe targeting lsass.exe for memory dump",
+      "sequence": 1,
+      "timestamp": "2026-02-22T14:35:00.000Z",
+      "log": {
+        "rule": {
+          "level": 15,
+          "description": "Sysmon - Event 1: ProcDump Targeting LSASS",
+          "id": "100100",
+          "mitre": {
+            "id": [
+              "T1003"
+            ],
+            "tactic": [
+              "Credential Access"
+            ],
+            "technique": [
+              "OS Credential Dumping"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1708612500.100280017",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "opcode": "0",
+              "keywords": "0x8000000000000000",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-22 14:35:00.000",
+              "processGuid": "{C28-T1003-0001-0001-000000000001}",
+              "processId": "10204",
+              "image": "C:\\Tools\\SysinternalsSuite\\procdump64.exe",
+              "fileVersion": "198.51.100.0",
+              "description": "Sysinternals process dump utility",
+              "product": "ProcDump",
+              "company": "Sysinternals - www.sysinternals.com",
+              "originalFileName": "procdump.exe",
+              "commandLine": "procdump64.exe -accepteula -ma lsass.exe C:\\Windows\\Temp\\debug.dmp",
+              "currentDirectory": "C:\\Tools\\SysinternalsSuite\\",
+              "user": "CORP\\jsmith",
+              "logonGuid": "{C28-T1003-0001-0000-000000000001}",
+              "logonId": "0x3E7",
+              "terminalSessionId": "0",
+              "integrityLevel": "System",
+              "hashes": "SHA256=A7B2C3D4E5F6A7B8C9D0E1F2A3B4C5D6E7F8A9B0C1D2E3F4A5B6C7D8E9F0A1B2",
+              "parentProcessGuid": "{C28-T1003-0001-0000-000000000001}",
+              "parentProcessId": "4520",
+              "parentImage": "C:\\Windows\\System32\\cmd.exe",
+              "parentCommandLine": "cmd.exe",
+              "parentUser": "CORP\\jsmith"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Sysmon Event 10 - Process access to lsass.exe with PROCESS_ALL_ACCESS",
+      "sequence": 2,
+      "timestamp": "2026-02-22T14:35:01.000Z",
+      "log": {
+        "rule": {
+          "level": 15,
+          "description": "Sysmon - Event 10: LSASS Process Access with Full Permissions",
+          "id": "100100",
+          "mitre": {
+            "id": [
+              "T1003"
+            ],
+            "tactic": [
+              "Credential Access"
+            ],
+            "technique": [
+              "OS Credential Dumping"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event10",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1708612501.100280018",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "10",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "10",
+              "opcode": "0",
+              "keywords": "0x8000000000000000",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "ruleName": "technique_id=T1003,technique_name=Credential Dumping",
+              "utcTime": "2026-02-22 14:35:01.000",
+              "sourceProcessGUID": "{C28-T1003-0001-0001-000000000001}",
+              "sourceProcessId": "10204",
+              "sourceThreadId": "10208",
+              "sourceImage": "C:\\Tools\\SysinternalsSuite\\procdump64.exe",
+              "targetProcessGUID": "{00000000-0000-0000-0000-000000000672}",
+              "targetProcessId": "672",
+              "targetImage": "C:\\Windows\\System32\\lsass.exe",
+              "grantedAccess": "0x1FFFFF",
+              "callTrace": "C:\\Windows\\SYSTEM32\\ntdll.dll+9d4c4|C:\\Windows\\System32\\KERNELBASE.dll+2bcce|C:\\Tools\\SysinternalsSuite\\procdump64.exe+1a234",
+              "sourceUser": "CORP\\jsmith",
+              "targetUser": "NT AUTHORITY\\SYSTEM"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Sysmon Event 11 - LSASS dump file created on disk",
+      "sequence": 3,
+      "timestamp": "2026-02-22T14:35:05.000Z",
+      "log": {
+        "rule": {
+          "level": 14,
+          "description": "Sysmon - Event 11: LSASS Memory Dump File Created",
+          "id": "100100",
+          "mitre": {
+            "id": [
+              "T1003"
+            ],
+            "tactic": [
+              "Credential Access"
+            ],
+            "technique": [
+              "OS Credential Dumping"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event11",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1708612505.100280019",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "11",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "11",
+              "opcode": "0",
+              "keywords": "0x8000000000000000",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-22 14:35:05.000",
+              "processGuid": "{C28-T1003-0001-0001-000000000001}",
+              "processId": "10204",
+              "image": "C:\\Tools\\SysinternalsSuite\\procdump64.exe",
+              "targetFilename": "C:\\Windows\\Temp\\debug.dmp",
+              "creationUtcTime": "2026-02-22 14:35:05.000",
+              "user": "CORP\\jsmith"
+            }
+          }
+        }
+      }
+    }
+  ]
+}

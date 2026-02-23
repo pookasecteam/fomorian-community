@@ -1,0 +1,162 @@
+{
+  "_metadata": {
+    "attack_id": "T1030",
+    "variation": "001",
+    "name": "Data Transfer Size Limits - PowerShell Chunking",
+    "description": "Stage files smaller than 10MB to evade size-based detection",
+    "expected_detection": "MEDIUM",
+    "kill_chain_phase": "exfiltration",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Sysmon Event 1 - PowerShell chunk staging command",
+      "sequence": 1,
+      "timestamp": "2026-02-10T18:00:00.000Z",
+      "log": {
+        "timestamp": "2026-02-10T18:00:00.000+0000",
+        "rule": {
+          "level": 8,
+          "description": "Sysmon - Event 1: Process Creation",
+          "id": "100603",
+          "mitre": {
+            "id": [
+              "T1030"
+            ],
+            "tactic": [
+              "Exfiltration"
+            ],
+            "technique": [
+              "Data Transfer Size Limits"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1707588000.000001",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-10 18:00:00.000",
+              "processGuid": "{8df8f34e-2810-65c7-0030-000000000400}",
+              "processId": "8920",
+              "image": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+              "commandLine": "powershell.exe -Command \"Get-ChildItem C:\\Sensitive\\ -Recurse | Where-Object {$_.Length -lt 10485760} | Copy-Item -Destination C:\\staging\\\"",
+              "currentDirectory": "C:\\Users\\admin2\\",
+              "user": "CORP\\admin2",
+              "integrityLevel": "Medium",
+              "hashes": "SHA256=A1B2C3D4E5F6789012345678901234567890ABCDEF1234567890ABCDEF123456",
+              "parentProcessGuid": "{8df8f34e-2810-65c7-0000-000000000400}",
+              "parentProcessId": "4456",
+              "parentImage": "C:\\Windows\\System32\\cmd.exe",
+              "parentCommandLine": "cmd.exe"
+            }
+          }
+        },
+        "_fomorian_test": true,
+        "fomorian_batch": 9,
+        "fomorian_campaign": 28,
+        "fomorian_technique": "T1030",
+        "fomorian_technique_name": "Data Transfer Size Limits - PowerShell Chunking"
+      }
+    },
+    {
+      "_comment": "Sysmon Event 11 - File create in staging directory",
+      "sequence": 2,
+      "timestamp": "2026-02-10T18:00:02.000Z",
+      "log": {
+        "timestamp": "2026-02-10T18:00:02.000+0000",
+        "rule": {
+          "level": 5,
+          "description": "Sysmon - Event 11: File Created",
+          "id": "100001",
+          "mitre": {
+            "id": [
+              "T1030"
+            ],
+            "tactic": [
+              "Exfiltration"
+            ],
+            "technique": [
+              "Data Transfer Size Limits"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event11",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1707588002.000001",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "11",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "11",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-10 18:00:02.000",
+              "processGuid": "{8df8f34e-2810-65c7-0030-000000000400}",
+              "processId": "8920",
+              "image": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+              "targetFilename": "C:\\staging\\passwords.xlsx",
+              "creationUtcTime": "2026-02-10 18:00:02.000",
+              "user": "CORP\\admin2"
+            }
+          }
+        },
+        "_fomorian_test": true,
+        "fomorian_batch": 9,
+        "fomorian_campaign": 28,
+        "fomorian_technique": "T1030",
+        "fomorian_technique_name": "Data Transfer Size Limits - PowerShell Chunking"
+      }
+    }
+  ]
+}

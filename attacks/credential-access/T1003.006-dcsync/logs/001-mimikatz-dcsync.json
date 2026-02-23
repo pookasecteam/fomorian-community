@@ -5,9 +5,7 @@
     "name": "DCSync via Mimikatz",
     "description": "Mimikatz performing DCSync to extract domain credentials",
     "expected_detection": "CRITICAL",
-    "expected_soar": "credential-access-detection",
     "kill_chain_phase": "credential-access",
-    "notes": "DCSync can extract all domain hashes - immediate response required",
     "format": "wazuh-native",
     "format_version": "1.0"
   },
@@ -17,7 +15,6 @@
       "sequence": 1,
       "timestamp": "2026-01-29T12:30:00.000Z",
       "log": {
-        "timestamp": "",
         "rule": {
           "level": 12,
           "description": "Sysmon - Event 1: DCSync via Mimikatz",
@@ -42,9 +39,9 @@
           ]
         },
         "agent": {
-          "id": "007",
+          "id": "020",
           "name": "WS01",
-          "ip": "10.1.0.20"
+          "ip": "198.51.100.20"
         },
         "manager": {
           "name": "wazuh.manager"
@@ -90,7 +87,6 @@
       "sequence": 2,
       "timestamp": "2026-01-29T12:30:01.000Z",
       "log": {
-        "timestamp": "",
         "rule": {
           "level": 12,
           "description": "Sysmon - Event 4662: DCSync via Mimikatz",
@@ -117,7 +113,7 @@
         "agent": {
           "id": "001",
           "name": "DC01",
-          "ip": "10.1.0.20"
+          "ip": "198.51.100.20"
         },
         "manager": {
           "name": "wazuh.manager"
@@ -165,7 +161,6 @@
       "sequence": 3,
       "timestamp": "2026-01-29T12:30:01.100Z",
       "log": {
-        "timestamp": "",
         "rule": {
           "level": 12,
           "description": "Sysmon - Event 4662: DCSync via Mimikatz",
@@ -192,7 +187,7 @@
         "agent": {
           "id": "001",
           "name": "DC01",
-          "ip": "10.1.0.20"
+          "ip": "198.51.100.20"
         },
         "manager": {
           "name": "wazuh.manager"
@@ -240,7 +235,6 @@
       "sequence": 4,
       "timestamp": "2026-01-29T12:30:00.500Z",
       "log": {
-        "timestamp": "",
         "rule": {
           "level": 12,
           "description": "Sysmon - Event 3: DCSync via Mimikatz",
@@ -265,9 +259,9 @@
           ]
         },
         "agent": {
-          "id": "007",
+          "id": "020",
           "name": "WS01",
-          "ip": "10.1.0.20"
+          "ip": "198.51.100.20"
         },
         "manager": {
           "name": "wazuh.manager"
@@ -298,9 +292,9 @@
               "user": "CORP\\admin.user",
               "protocol": "tcp",
               "initiated": "true",
-              "sourceIp": "10.1.1.50",
+              "sourceIp": "198.51.100.50",
               "sourcePort": "56000",
-              "destinationIp": "10.1.1.10",
+              "destinationIp": "198.51.100.10",
               "destinationHostname": "DC01.corp.local",
               "destinationPort": "135"
             }

@@ -1,0 +1,124 @@
+{
+  "_metadata": {
+    "attack_id": "T1037.004",
+    "variation": "002",
+    "name": "if-up.d and MOTD Backdoor Persistence",
+    "description": "Creating malicious scripts in /etc/network/if-up.d/ (runs on network interface activation) and /etc/update-motd.d/ (runs as root on SSH login) for persistence",
+    "expected_detection": "HIGH",
+    "kill_chain_phase": "persistence",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Sysmon Event 1 - cp backdoor to /etc/network/if-up.d/",
+      "sequence": 1,
+      "timestamp": "2026-02-22T02:06:19.200Z",
+      "log": {
+        "rule": {
+          "level": 8,
+          "description": "Sysmon - Event 1: Process creation /usr/bin/cp",
+          "id": "100101",
+          "mitre": {
+            "id": [
+              "T1037.004"
+            ],
+            "tactic": [
+              "Persistence"
+            ],
+            "technique": [
+              "Boot or Logon Initialization Scripts: Network Logon Script"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "linux",
+            "sysmon",
+            "sysmon_event1"
+          ]
+        },
+        "agent": {
+          "id": "030",
+          "name": "VULN01",
+          "ip": "198.51.100.30"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000022.C22004",
+        "decoder": {
+          "name": "json"
+        },
+        "location": "EventChannel",
+        "data": {
+          "eventdata": {
+            "utcTime": "2026-02-22 02:06:19.200",
+            "processId": "48210",
+            "image": "/usr/bin/cp",
+            "commandLine": "cp /tmp/upstart_backdoor /etc/network/if-up.d/persistence_test",
+            "currentDirectory": "/home/admin2",
+            "user": "root",
+            "parentImage": "/usr/bin/sudo",
+            "parentCommandLine": "sudo -S cp /tmp/upstart_backdoor /etc/network/if-up.d/persistence_test"
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Sysmon Event 1 - cp backdoor to /etc/update-motd.d/",
+      "sequence": 2,
+      "timestamp": "2026-02-22T02:06:19.300Z",
+      "log": {
+        "rule": {
+          "level": 8,
+          "description": "Sysmon - Event 1: Process creation /usr/bin/cp",
+          "id": "100101",
+          "mitre": {
+            "id": [
+              "T1037.004"
+            ],
+            "tactic": [
+              "Persistence"
+            ],
+            "technique": [
+              "Boot or Logon Initialization Scripts: MOTD Modification"
+            ]
+          },
+          "firedtimes": 2,
+          "mail": false,
+          "groups": [
+            "linux",
+            "sysmon",
+            "sysmon_event1"
+          ]
+        },
+        "agent": {
+          "id": "030",
+          "name": "VULN01",
+          "ip": "198.51.100.30"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000022.C22005",
+        "decoder": {
+          "name": "json"
+        },
+        "location": "EventChannel",
+        "data": {
+          "eventdata": {
+            "utcTime": "2026-02-22 02:06:19.300",
+            "processId": "48211",
+            "image": "/usr/bin/cp",
+            "commandLine": "cp /tmp/motd_backdoor /etc/update-motd.d/99-backdoor",
+            "currentDirectory": "/home/admin2",
+            "user": "root",
+            "parentImage": "/usr/bin/sudo",
+            "parentCommandLine": "sudo -S cp /tmp/motd_backdoor /etc/update-motd.d/99-backdoor"
+          }
+        }
+      }
+    }
+  ]
+}

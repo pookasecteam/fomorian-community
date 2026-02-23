@@ -1,0 +1,173 @@
+{
+  "_metadata": {
+    "attack_id": "T1566.004",
+    "variation": "001",
+    "name": "Spearphishing Voice - BazarCall Callback Phishing",
+    "description": "Victim receives phishing email claiming subscription charge, calls attacker-provided number, and is guided to install RMM tool (AnyDesk/TeamViewer/ScreenConnect) for 'support'. Real campaigns: BazarCall (BazarLoader delivery), Luna Moth (data extortion), Royal ransomware (callback phishing to BatLoader). Detection: RMM tool installation from browser download shortly after suspicious email.",
+    "expected_detection": "HIGH",
+    "kill_chain_phase": "initial-access",
+    "references": [
+      "https://attack.mitre.org/techniques/T1566/004/",
+      "https://www.microsoft.com/en-us/security/blog/2022/05/11/bazacall-phishing-attackers"
+    ],
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Sysmon Event 11 - AnyDesk installer downloaded to user's Downloads folder (victim guided by phone to download it)",
+      "sequence": 1,
+      "timestamp": "2026-02-08T12:30:00.000Z",
+      "log": {
+        "timestamp": "2026-02-08T12:30:00.000+0000",
+        "rule": {
+          "level": 8,
+          "description": "Sysmon - Event 11: File Create",
+          "id": "100920",
+          "mitre": {
+            "id": [
+              "T1566.004",
+              "T1219"
+            ],
+            "tactic": [
+              "Initial Access"
+            ],
+            "technique": [
+              "Phishing: Spearphishing Voice"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event11",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1707400000.400050",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "11",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "11",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-08 12:30:00.000",
+              "processGuid": "{A1B2C3D4-IA-1566-0004-000000000001}",
+              "processId": "8200",
+              "image": "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
+              "targetFilename": "C:\\Users\\admin.user\\Downloads\\AnyDesk.exe",
+              "creationUtcTime": "2026-02-08 12:30:00.000",
+              "user": "CORP\\admin.user",
+              "hashes": "SHA256=7E8F9A0B1C2D3E4F5A6B7C8D9E0F1A2B3C4D5E6F7A8B9C0D1E2F3A4B5C6D7E8"
+            }
+          }
+        },
+        "_fomorian_batch": "PT-2026-003-batch1-initial-access",
+        "_fomorian_test": true,
+        "_fomorian_attack_id": "T1566.004",
+        "_fomorian_expected_detection": "Sigma: Callback Phishing RMM Installation (T1566.004)"
+      }
+    },
+    {
+      "_comment": "Sysmon Event 1 - AnyDesk.exe executed from Downloads folder. BazarCall pattern: victim downloads and runs RMM tool as instructed by attacker on phone.",
+      "sequence": 2,
+      "timestamp": "2026-02-08T12:31:00.000Z",
+      "log": {
+        "timestamp": "2026-02-08T12:31:00.000+0000",
+        "rule": {
+          "level": 10,
+          "description": "Sysmon - Event 1: Process Create",
+          "id": "100916",
+          "mitre": {
+            "id": [
+              "T1566.004",
+              "T1219"
+            ],
+            "tactic": [
+              "Initial Access"
+            ],
+            "technique": [
+              "Phishing: Spearphishing Voice"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1707400000.400051",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-08 12:31:00.000",
+              "processGuid": "{A1B2C3D4-IA-1566-0004-000000000002}",
+              "processId": "8340",
+              "image": "C:\\Users\\admin.user\\Downloads\\AnyDesk.exe",
+              "fileVersion": "7.0.14",
+              "description": "AnyDesk",
+              "product": "AnyDesk",
+              "company": "AnyDesk Software GmbH",
+              "originalFileName": "AnyDesk.exe",
+              "commandLine": "\"C:\\Users\\admin.user\\Downloads\\AnyDesk.exe\"",
+              "currentDirectory": "C:\\Users\\admin.user\\Downloads\\",
+              "user": "CORP\\admin.user",
+              "integrityLevel": "Medium",
+              "hashes": "SHA256=7E8F9A0B1C2D3E4F5A6B7C8D9E0F1A2B3C4D5E6F7A8B9C0D1E2F3A4B5C6D7E8",
+              "parentProcessGuid": "{A1B2C3D4-IA-1566-0004-PARENT000002}",
+              "parentProcessId": "4100",
+              "parentImage": "C:\\Windows\\explorer.exe",
+              "parentCommandLine": "C:\\Windows\\explorer.exe",
+              "parentUser": "CORP\\admin.user"
+            }
+          }
+        },
+        "_fomorian_batch": "PT-2026-003-batch1-initial-access",
+        "_fomorian_test": true,
+        "_fomorian_attack_id": "T1566.004",
+        "_fomorian_expected_detection": "Sigma: Callback Phishing RMM Installation (T1566.004)"
+      }
+    }
+  ]
+}

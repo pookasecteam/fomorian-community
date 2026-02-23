@@ -1,0 +1,203 @@
+{
+  "_metadata": {
+    "attack_id": "T1499.002",
+    "variation": "002",
+    "name": "Service Exhaustion Flood - Slowloris HTTP Flood Tool (Sysmon Detection)",
+    "description": "Detect HTTP flood attack tools (slowloris, LOIC, ApacheBench abuse) via process monitoring",
+    "expected_detection": "HIGH",
+    "kill_chain_phase": "impact",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Linux Sysmon Event 1 - slowloris.py HTTP flood",
+      "sequence": 1,
+      "timestamp": "2026-02-08T21:30:00.000Z",
+      "log": {
+        "timestamp": "2026-02-08T21:30:00.000+0000",
+        "rule": {
+          "level": 14,
+          "description": "Sysmon for Linux - Event 1: Process Create",
+          "id": "100101",
+          "mitre": {
+            "id": [
+              "T1499.002"
+            ],
+            "tactic": [
+              "Impact"
+            ],
+            "technique": [
+              "Endpoint Denial of Service: Service Exhaustion Flood"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "linux"
+          ]
+        },
+        "agent": {
+          "id": "001",
+          "name": "GW01",
+          "ip": "198.51.100.1"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1707425400.400030",
+        "decoder": {
+          "name": "sysmon-linux"
+        },
+        "location": "/var/log/sysmon/sysmon.log",
+        "data": {
+          "eventdata": {
+            "utcTime": "2026-02-08 21:30:00.000",
+            "processGuid": "{A1B2C3D4-IMPC-1499-002-SYSMON-0001}",
+            "processId": "62123",
+            "image": "/usr/bin/python3",
+            "commandLine": "python3 /tmp/slowloris.py -s 500 -t 198.51.100.1",
+            "currentDirectory": "/tmp",
+            "user": "attacker",
+            "parentProcessGuid": "{A1B2C3D4-IMPC-1499-002-PARENT-0001}",
+            "parentProcessId": "62100",
+            "parentImage": "/bin/bash",
+            "parentCommandLine": "-bash"
+          }
+        },
+        "_fomorian_batch": "PT-2026-003-batch2-impact-fixes",
+        "_fomorian_test": true,
+        "_fomorian_attack_id": "T1499.002",
+        "_fomorian_expected_detection": "Sigma: HTTP Flood Tool Execution (T1499.002)"
+      }
+    },
+    {
+      "_comment": "Linux Sysmon Event 1 - LOIC (Low Orbit Ion Cannon) HTTP flood",
+      "sequence": 2,
+      "timestamp": "2026-02-08T21:31:00.000Z",
+      "log": {
+        "timestamp": "2026-02-08T21:31:00.000+0000",
+        "rule": {
+          "level": 14,
+          "description": "Sysmon for Linux - Event 1: Process Create",
+          "id": "100101",
+          "mitre": {
+            "id": [
+              "T1499.002"
+            ],
+            "tactic": [
+              "Impact"
+            ],
+            "technique": [
+              "Endpoint Denial of Service: Service Exhaustion Flood"
+            ]
+          },
+          "firedtimes": 2,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "linux"
+          ]
+        },
+        "agent": {
+          "id": "001",
+          "name": "GW01",
+          "ip": "198.51.100.1"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1707425400.400031",
+        "decoder": {
+          "name": "sysmon-linux"
+        },
+        "location": "/var/log/sysmon/sysmon.log",
+        "data": {
+          "eventdata": {
+            "utcTime": "2026-02-08 21:31:00.000",
+            "processGuid": "{A1B2C3D4-IMPC-1499-002-SYSMON-0002}",
+            "processId": "62234",
+            "image": "/usr/bin/python3",
+            "commandLine": "python3 /opt/tools/loic.py --url http://198.51.100.1 --threads 1000 --method GET",
+            "currentDirectory": "/opt/tools",
+            "user": "attacker",
+            "parentProcessGuid": "{A1B2C3D4-IMPC-1499-002-PARENT-0002}",
+            "parentProcessId": "62100",
+            "parentImage": "/bin/bash",
+            "parentCommandLine": "-bash"
+          }
+        },
+        "_fomorian_batch": "PT-2026-003-batch2-impact-fixes",
+        "_fomorian_test": true,
+        "_fomorian_attack_id": "T1499.002",
+        "_fomorian_expected_detection": "Sigma: HTTP Flood Tool Execution (T1499.002)"
+      }
+    },
+    {
+      "_comment": "Linux Sysmon Event 1 - ApacheBench (ab) flood abuse",
+      "sequence": 3,
+      "timestamp": "2026-02-08T21:32:00.000Z",
+      "log": {
+        "timestamp": "2026-02-08T21:32:00.000+0000",
+        "rule": {
+          "level": 12,
+          "description": "Sysmon for Linux - Event 1: Process Create",
+          "id": "100101",
+          "mitre": {
+            "id": [
+              "T1499.002"
+            ],
+            "tactic": [
+              "Impact"
+            ],
+            "technique": [
+              "Endpoint Denial of Service: Service Exhaustion Flood"
+            ]
+          },
+          "firedtimes": 3,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "linux"
+          ]
+        },
+        "agent": {
+          "id": "001",
+          "name": "GW01",
+          "ip": "198.51.100.1"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1707425400.400032",
+        "decoder": {
+          "name": "sysmon-linux"
+        },
+        "location": "/var/log/sysmon/sysmon.log",
+        "data": {
+          "eventdata": {
+            "utcTime": "2026-02-08 21:32:00.000",
+            "processGuid": "{A1B2C3D4-IMPC-1499-002-SYSMON-0003}",
+            "processId": "62345",
+            "image": "/usr/bin/ab",
+            "commandLine": "ab -n 1000000 -c 10000 http://198.51.100.1/",
+            "currentDirectory": "/tmp",
+            "user": "attacker",
+            "parentProcessGuid": "{A1B2C3D4-IMPC-1499-002-PARENT-0003}",
+            "parentProcessId": "62100",
+            "parentImage": "/bin/bash",
+            "parentCommandLine": "-bash"
+          }
+        },
+        "_fomorian_batch": "PT-2026-003-batch2-impact-fixes",
+        "_fomorian_test": true,
+        "_fomorian_attack_id": "T1499.002",
+        "_fomorian_expected_detection": "Sigma: HTTP Flood Tool Execution (T1499.002)"
+      }
+    }
+  ]
+}

@@ -1,0 +1,132 @@
+{
+  "_metadata": {
+    "attack_id": "T1667",
+    "variation": "002",
+    "name": "Email Bombing - Direct SMTP Mass Send via Mailbomber",
+    "description": "Attacker uses mailbomber tools to send thousands of emails directly via SMTP relay",
+    "expected_detection": "HIGH",
+    "kill_chain_phase": "impact",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Sysmon Linux Event 1 - sendmail/postfix mass sending",
+      "sequence": 1,
+      "timestamp": "2026-02-09T00:10:00.000Z",
+      "log": {
+        "timestamp": "2026-02-09T00:10:00.000+0000",
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 1: Mass Email Send Script",
+          "id": "100101",
+          "mitre": {
+            "id": [
+              "T1667"
+            ],
+            "tactic": [
+              "Impact"
+            ],
+            "technique": [
+              "Email Bombing"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "linux"
+          ]
+        },
+        "agent": {
+          "id": "001",
+          "name": "GW01",
+          "ip": "198.51.100.1"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1707400000.300142",
+        "decoder": {
+          "name": "sysmon-linux"
+        },
+        "location": "/var/log/sysmon/sysmon.log",
+        "data": {
+          "eventdata": {
+            "utcTime": "2026-02-09 00:10:00.000",
+            "processGuid": "{A1B2C3D4-IMPC-1667-0002-000000000001}",
+            "processId": "45200",
+            "image": "/bin/bash",
+            "commandLine": "/bin/bash -c 'for i in {1..10000}; do echo \"Spam message $i\" | mail -s \"Important Notice\" victim@company.com; done'",
+            "currentDirectory": "/tmp",
+            "user": "attacker",
+            "parentProcessGuid": "{A1B2C3D4-IMPC-1667-0002-PARENT000001}",
+            "parentProcessId": "45100",
+            "parentImage": "/bin/bash",
+            "parentCommandLine": "/bin/bash -i"
+          }
+        },
+        "_fomorian_batch": "PT-2026-003-batch2-impact",
+        "_fomorian_test": true,
+        "_fomorian_attack_id": "T1667",
+        "_fomorian_expected_detection": "Sigma: Mass Email Send Loop (T1667)"
+      }
+    },
+    {
+      "_comment": "Postfix maillog - Excessive outbound email rate",
+      "sequence": 2,
+      "timestamp": "2026-02-09T00:10:05.000Z",
+      "log": {
+        "timestamp": "2026-02-09T00:10:05.000+0000",
+        "rule": {
+          "level": 14,
+          "description": "Postfix - Excessive Outbound Email Rate",
+          "id": "100001",
+          "mitre": {
+            "id": [
+              "T1667"
+            ],
+            "tactic": [
+              "Impact"
+            ],
+            "technique": [
+              "Email Bombing"
+            ]
+          },
+          "firedtimes": 100,
+          "mail": true,
+          "groups": [
+            "postfix",
+            "mail",
+            "spam"
+          ]
+        },
+        "agent": {
+          "id": "001",
+          "name": "GW01",
+          "ip": "198.51.100.1"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1707400000.300143",
+        "decoder": {
+          "name": "postfix"
+        },
+        "location": "/var/log/mail.log",
+        "full_log": "Feb  9 00:10:05 GW01 postfix/smtp[45250]: 1234567890AB: to=<victim@company.com>, relay=mail.company.com[198.51.100.25]:25, delay=0.1, delays=0/0/0.1/0, dsn=2.0.0, status=sent (250 OK)",
+        "data": {
+          "srcuser": "attacker",
+          "dstuser": "victim@company.com",
+          "status": "sent",
+          "relay": "mail.company.com"
+        },
+        "_fomorian_batch": "PT-2026-003-batch2-impact",
+        "_fomorian_test": true,
+        "_fomorian_attack_id": "T1667",
+        "_fomorian_expected_detection": "Wazuh: Email Bombing via SMTP (T1667)"
+      }
+    }
+  ]
+}

@@ -1,0 +1,91 @@
+{
+  "_metadata": {
+    "attack_id": "T1087.002",
+    "variation": "001",
+    "name": "Account Discovery: Domain Account - net user /domain",
+    "description": "Enumerate domain user accounts using net user /domain command",
+    "expected_detection": "MEDIUM",
+    "kill_chain_phase": "discovery",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Sysmon Event 1 - net user /domain command execution",
+      "sequence": 1,
+      "timestamp": "2026-02-10T16:12:00.000Z",
+      "log": {
+        "timestamp": "2026-02-10T16:12:00.000+0000",
+        "rule": {
+          "level": 5,
+          "description": "Sysmon - Event 1: Process Creation",
+          "id": "100603",
+          "mitre": {
+            "id": [
+              "T1087.002"
+            ],
+            "tactic": [
+              "Discovery"
+            ],
+            "technique": [
+              "Account Discovery: Domain Account"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "010",
+          "name": "DC01",
+          "ip": "198.51.100.10"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1707582720.000001",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "DC01.corp.local",
+              "level": "4",
+              "task": "1",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-10 16:12:00.000",
+              "processGuid": "{8df8f34e-2710-65c7-0012-000000000400}",
+              "processId": "4788",
+              "image": "C:\\Windows\\System32\\net.exe",
+              "commandLine": "net user /domain",
+              "currentDirectory": "C:\\Windows\\System32\\",
+              "user": "CORP\\Administrator",
+              "integrityLevel": "High",
+              "hashes": "SHA256=C9B4E36F8D2A1B7C5E3F4D6A8B9C0E1F2A3B4C5D6E7F8A9B0C1D2E3F4A5B6C7",
+              "parentProcessGuid": "{8df8f34e-2710-65c7-0000-000000000400}",
+              "parentProcessId": "2112",
+              "parentImage": "C:\\Windows\\System32\\cmd.exe",
+              "parentCommandLine": "cmd.exe"
+            }
+          }
+        },
+        "_fomorian_test": true,
+        "fomorian_batch": 8,
+        "fomorian_campaign": 27,
+        "fomorian_technique": "T1087.002",
+        "fomorian_technique_name": "Account Discovery: Domain Account - net user /domain"
+      }
+    }
+  ]
+}

@@ -1,0 +1,57 @@
+{
+  "_metadata": {
+    "attack_id": "T1041",
+    "variation": "001",
+    "name": "Exfiltration Over C2 Channel - DNS",
+    "description": "Data exfiltration via DNS queries",
+    "expected_detection": "HIGH",
+    "kill_chain_phase": "exfiltration",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Sysmon Event 22 - DNS query with base64 encoded data",
+      "sequence": 1,
+      "log": {
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 22: DNS Exfiltration",
+          "id": "100041",
+          "mitre": {
+            "id": [
+              "T1041"
+            ],
+            "tactic": [
+              "Exfiltration"
+            ],
+            "technique": [
+              "Exfiltration Over C2 Channel"
+            ]
+          },
+          "groups": [
+            "sysmon",
+            "sysmon_event22"
+          ]
+        },
+        "agent": {
+          "id": "010",
+          "name": "DC01"
+        },
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "22"
+            },
+            "eventdata": {
+              "queryName": "ZGF0YWV4ZmlsdHJhdGlvbnRlc3Q.attacker-c2.com",
+              "queryResults": "type: 5 attacker-c2.com;",
+              "image": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+              "user": "CORP\\Administrator"
+            }
+          }
+        }
+      }
+    }
+  ]
+}

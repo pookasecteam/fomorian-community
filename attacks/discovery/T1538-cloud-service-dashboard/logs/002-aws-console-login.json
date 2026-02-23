@@ -1,0 +1,91 @@
+{
+  "_metadata": {
+    "attack_id": "T1538",
+    "variation": "002",
+    "name": "Cloud Service Dashboard - AWS Console Login",
+    "description": "AWS Management Console login from suspicious IP for cloud infrastructure reconnaissance",
+    "expected_detection": "MEDIUM",
+    "kill_chain_phase": "discovery",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "AWS CloudTrail - Console Login event",
+      "sequence": 1,
+      "timestamp": "2026-02-08T10:15:00.000Z",
+      "log": {
+        "timestamp": "2026-02-08T10:15:00.000+0000",
+        "rule": {
+          "level": 8,
+          "description": "AWS CloudTrail - Console Login from Suspicious IP",
+          "id": "100803",
+          "mitre": {
+            "id": [
+              "T1538"
+            ],
+            "tactic": [
+              "Discovery"
+            ],
+            "technique": [
+              "Cloud Service Dashboard"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "aws",
+            "cloudtrail"
+          ]
+        },
+        "agent": {
+          "id": "000",
+          "name": "wazuh.manager",
+          "ip": "127.0.0.1"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1707400000.200017",
+        "decoder": {
+          "name": "json"
+        },
+        "location": "aws-cloudtrail",
+        "data": {
+          "aws": {
+            "eventVersion": "1.08",
+            "eventTime": "2026-02-08T10:15:00Z",
+            "eventSource": "signin.amazonaws.com",
+            "eventName": "ConsoleLogin",
+            "awsRegion": "us-east-1",
+            "sourceIPAddress": "185.220.101.42",
+            "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36",
+            "requestParameters": null,
+            "responseElements": {
+              "ConsoleLogin": "Success"
+            },
+            "additionalEventData": {
+              "LoginTo": "https://console.aws.amazon.com/console/home",
+              "MobileVersion": "No",
+              "MFAUsed": "No"
+            },
+            "eventID": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+            "eventType": "AwsConsoleSignIn",
+            "recipientAccountId": "123456789012",
+            "userIdentity": {
+              "type": "IAMUser",
+              "principalId": "AIDAEXAMPLEUSERID",
+              "arn": "arn:aws:iam::123456789012:user/attacker",
+              "accountId": "123456789012",
+              "userName": "attacker"
+            }
+          }
+        },
+        "_fomorian_batch": "PT-2026-003-batch1-discovery",
+        "_fomorian_test": true,
+        "_fomorian_attack_id": "T1538",
+        "_fomorian_expected_detection": "Sigma: AWS Console Login from Suspicious IP (T1538)"
+      }
+    }
+  ]
+}

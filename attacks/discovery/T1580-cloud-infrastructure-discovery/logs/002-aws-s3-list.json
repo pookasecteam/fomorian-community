@@ -1,0 +1,87 @@
+{
+  "_metadata": {
+    "attack_id": "T1580",
+    "variation": "002",
+    "name": "Cloud Infrastructure Discovery - AWS S3 List Buckets",
+    "description": "Using AWS CLI to enumerate S3 buckets for cloud storage reconnaissance",
+    "expected_detection": "MEDIUM",
+    "kill_chain_phase": "discovery",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "AWS CloudTrail - ListBuckets API call",
+      "sequence": 1,
+      "timestamp": "2026-02-08T10:17:00.000Z",
+      "log": {
+        "timestamp": "2026-02-08T10:17:00.000+0000",
+        "rule": {
+          "level": 6,
+          "description": "AWS CloudTrail - S3 Bucket Enumeration",
+          "id": "100001",
+          "mitre": {
+            "id": [
+              "T1580"
+            ],
+            "tactic": [
+              "Discovery"
+            ],
+            "technique": [
+              "Cloud Infrastructure Discovery"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "aws",
+            "cloudtrail"
+          ]
+        },
+        "agent": {
+          "id": "000",
+          "name": "wazuh.manager",
+          "ip": "127.0.0.1"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1707400000.200019",
+        "decoder": {
+          "name": "json"
+        },
+        "location": "aws-cloudtrail",
+        "data": {
+          "aws": {
+            "eventVersion": "1.08",
+            "eventTime": "2026-02-08T10:17:00Z",
+            "eventSource": "s3.amazonaws.com",
+            "eventName": "ListBuckets",
+            "awsRegion": "us-east-1",
+            "sourceIPAddress": "185.220.101.42",
+            "userAgent": "aws-cli/2.9.0 Python/3.9.11 Windows/10 exe/AMD64 prompt/off command/s3.ls",
+            "requestParameters": {
+              "Host": "s3.us-east-1.amazonaws.com"
+            },
+            "responseElements": null,
+            "eventID": "c3d4e5f6-a7b8-9012-cdef-123456789012",
+            "eventType": "AwsApiCall",
+            "recipientAccountId": "123456789012",
+            "userIdentity": {
+              "type": "IAMUser",
+              "principalId": "AIDAEXAMPLEUSERID",
+              "arn": "arn:aws:iam::123456789012:user/attacker",
+              "accountId": "123456789012",
+              "userName": "attacker",
+              "accessKeyId": "AKIAIOSFODNN7EXAMPLE"
+            }
+          }
+        },
+        "_fomorian_batch": "PT-2026-003-batch1-discovery",
+        "_fomorian_test": true,
+        "_fomorian_attack_id": "T1580",
+        "_fomorian_expected_detection": "Sigma: AWS S3 Bucket Enumeration (T1580)"
+      }
+    }
+  ]
+}

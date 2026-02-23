@@ -1,0 +1,140 @@
+{
+  "_metadata": {
+    "attack_id": "T1561.001",
+    "variation": "001",
+    "name": "Disk Content Wipe - dd Zero Fill",
+    "description": "Attacker uses dd to overwrite disk contents with zeros to destroy data",
+    "expected_detection": "HIGH",
+    "kill_chain_phase": "impact",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Sysmon Linux Event 1 - dd writing zeros to disk",
+      "sequence": 1,
+      "timestamp": "2026-02-08T22:00:00.000Z",
+      "log": {
+        "timestamp": "2026-02-08T22:00:00.000+0000",
+        "rule": {
+          "level": 15,
+          "description": "Sysmon - Event 1: Disk Wipe Command Detected",
+          "id": "100101",
+          "mitre": {
+            "id": [
+              "T1561.001"
+            ],
+            "tactic": [
+              "Impact"
+            ],
+            "technique": [
+              "Disk Content Wipe"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": true,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "linux"
+          ]
+        },
+        "agent": {
+          "id": "030",
+          "name": "VULN01",
+          "ip": "198.51.100.30"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1707400000.300090",
+        "decoder": {
+          "name": "sysmon-linux"
+        },
+        "location": "/var/log/sysmon/sysmon.log",
+        "data": {
+          "eventdata": {
+            "utcTime": "2026-02-08 22:00:00.000",
+            "processGuid": "{A1B2C3D4-IMPC-1561-0001-000000000001}",
+            "processId": "20100",
+            "image": "/bin/dd",
+            "commandLine": "dd if=/dev/zero of=/dev/sda bs=4M status=progress",
+            "currentDirectory": "/root",
+            "user": "root",
+            "parentProcessGuid": "{A1B2C3D4-IMPC-1561-0001-PARENT000001}",
+            "parentProcessId": "20000",
+            "parentImage": "/bin/bash",
+            "parentCommandLine": "/bin/bash -c './wipe.sh'"
+          }
+        },
+        "_fomorian_batch": "PT-2026-003-batch2-impact",
+        "_fomorian_test": true,
+        "_fomorian_attack_id": "T1561.001",
+        "_fomorian_expected_detection": "Sigma: Disk Wipe via dd (T1561.001)"
+      }
+    },
+    {
+      "_comment": "Sysmon Linux Event 1 - shred secure deletion",
+      "sequence": 2,
+      "timestamp": "2026-02-08T22:00:30.000Z",
+      "log": {
+        "timestamp": "2026-02-08T22:00:30.000+0000",
+        "rule": {
+          "level": 14,
+          "description": "Sysmon - Event 1: Secure File Deletion Detected",
+          "id": "100101",
+          "mitre": {
+            "id": [
+              "T1561.001"
+            ],
+            "tactic": [
+              "Impact"
+            ],
+            "technique": [
+              "Disk Content Wipe"
+            ]
+          },
+          "firedtimes": 2,
+          "mail": true,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "linux"
+          ]
+        },
+        "agent": {
+          "id": "030",
+          "name": "VULN01",
+          "ip": "198.51.100.30"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1707400000.300091",
+        "decoder": {
+          "name": "sysmon-linux"
+        },
+        "location": "/var/log/sysmon/sysmon.log",
+        "data": {
+          "eventdata": {
+            "utcTime": "2026-02-08 22:00:30.000",
+            "processGuid": "{A1B2C3D4-IMPC-1561-0001-000000000002}",
+            "processId": "20150",
+            "image": "/usr/bin/shred",
+            "commandLine": "shred -vfz -n 3 /var/lib/mysql/*",
+            "currentDirectory": "/var/lib/mysql",
+            "user": "root",
+            "parentProcessGuid": "{A1B2C3D4-IMPC-1561-0001-PARENT000001}",
+            "parentProcessId": "20000",
+            "parentImage": "/bin/bash",
+            "parentCommandLine": "/bin/bash -c './wipe.sh'"
+          }
+        },
+        "_fomorian_batch": "PT-2026-003-batch2-impact",
+        "_fomorian_test": true,
+        "_fomorian_attack_id": "T1561.001",
+        "_fomorian_expected_detection": "Sigma: Secure File Deletion via shred (T1561.001)"
+      }
+    }
+  ]
+}

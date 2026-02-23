@@ -1,0 +1,63 @@
+{
+  "timestamp": "2026-01-31T23:02:00.000Z",
+  "rule": {
+    "level": 12,
+    "description": "Sysmon - Event 7: Suspicious DLL Load",
+    "id": "92157",
+    "mitre": {
+      "id": [
+        "T1574.001"
+      ],
+      "tactic": [
+        "Persistence",
+        "Privilege Escalation",
+        "Defense Evasion"
+      ],
+      "technique": [
+        "Hijack Execution Flow: DLL Search Order Hijacking"
+      ]
+    },
+    "groups": [
+      "sysmon",
+      "sysmon_event7",
+      "windows"
+    ]
+  },
+  "agent": {
+    "id": "007",
+    "name": "WS01",
+    "ip": "198.51.100.20"
+  },
+  "manager": {
+    "name": "wazuh.manager"
+  },
+  "id": "1700000032.000001",
+  "decoder": {
+    "name": "windows_eventchannel"
+  },
+  "location": "EventChannel",
+  "data": {
+    "win": {
+      "system": {
+        "eventID": "7",
+        "channel": "Microsoft-Windows-Sysmon/Operational",
+        "providerName": "Microsoft-Windows-Sysmon",
+        "computer": "WS01.corp.local"
+      },
+      "eventdata": {
+        "utcTime": "2026-01-31 23:02:00.000",
+        "processGuid": "{12345678-1234-1234-1234-123456789032}",
+        "processId": "2048",
+        "image": "C:\\Windows\\System32\\mmc.exe",
+        "imageLoaded": "C:\\Users\\attacker\\AppData\\Local\\Temp\\version.dll",
+        "signed": "false",
+        "signature": "N/A",
+        "signatureStatus": "Unavailable"
+      }
+    }
+  },
+  "_fomorian_batch": "threat-intel-batch3-2026-01-31",
+  "_fomorian_test": true,
+  "_fomorian_attack_id": "T1574.001",
+  "_fomorian_expected_detection": "Sigma: DLL Search Order Hijacking (T1574.001)"
+}

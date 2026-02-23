@@ -1,0 +1,228 @@
+{
+  "_metadata": {
+    "attack_id": "T1055.003",
+    "variation": "001",
+    "name": "Thread Execution Hijacking",
+    "description": "Injecting code into thread context of another process",
+    "expected_detection": "HIGH",
+    "kill_chain_phase": "defense-evasion",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Sysmon Event 8 - CreateRemoteThread",
+      "sequence": 1,
+      "timestamp": "2026-01-30T08:00:00.000Z",
+      "log": {
+        "rule": {
+          "level": 14,
+          "description": "Sysmon - Event 8: Remote Thread Creation Detected",
+          "id": "100100",
+          "mitre": {
+            "id": [
+              "T1055.003"
+            ],
+            "tactic": [
+              "Defense Evasion",
+              "Privilege Escalation"
+            ],
+            "technique": [
+              "Thread Execution Hijacking"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event8",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000040.000001",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "8",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "8",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-01-30 08:00:00.000",
+              "sourceProcessGuid": "{THREAD-001-0001-000000000001}",
+              "sourceProcessId": "85000",
+              "sourceImage": "C:\\Tools\\injector.exe",
+              "targetProcessGuid": "{THREAD-001-0001-000000000002}",
+              "targetProcessId": "4",
+              "targetImage": "System",
+              "newThreadId": "1234",
+              "startAddress": "0x00007FF812340000",
+              "startModule": "",
+              "startFunction": "",
+              "sourceUser": "CORP\\attacker",
+              "targetUser": "NT AUTHORITY\\SYSTEM"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Sysmon Event 10 - Process Access for thread manipulation",
+      "sequence": 2,
+      "timestamp": "2026-01-30T07:59:59.000Z",
+      "log": {
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 10: Process Access for Thread Hijacking",
+          "id": "100100",
+          "mitre": {
+            "id": [
+              "T1055.003"
+            ],
+            "tactic": [
+              "Defense Evasion",
+              "Privilege Escalation"
+            ],
+            "technique": [
+              "Thread Execution Hijacking"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event10",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000040.000002",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "10",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "10",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-01-30 07:59:59.000",
+              "sourceProcessGuid": "{THREAD-001-0001-000000000001}",
+              "sourceProcessId": "85000",
+              "sourceImage": "C:\\Tools\\injector.exe",
+              "targetProcessGuid": "{THREAD-001-0001-000000000002}",
+              "targetProcessId": "1234",
+              "targetImage": "C:\\Windows\\System32\\svchost.exe",
+              "grantedAccess": "0x1F3FFF",
+              "callTrace": "C:\\Windows\\SYSTEM32\\ntdll.dll+9d4c4|C:\\Tools\\injector.exe+1234",
+              "sourceUser": "CORP\\attacker",
+              "targetUser": "NT AUTHORITY\\SYSTEM"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Sysmon Event 1 - Suspicious injector process",
+      "sequence": 3,
+      "timestamp": "2026-01-30T07:59:58.000Z",
+      "log": {
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 1: Thread Injection Tool Execution",
+          "id": "100100",
+          "mitre": {
+            "id": [
+              "T1055.003"
+            ],
+            "tactic": [
+              "Defense Evasion",
+              "Privilege Escalation"
+            ],
+            "technique": [
+              "Thread Execution Hijacking"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000040.000003",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-01-30 07:59:58.000",
+              "processGuid": "{THREAD-001-0001-000000000001}",
+              "processId": "85000",
+              "image": "C:\\Tools\\injector.exe",
+              "commandLine": "injector.exe -p 1234 -t hijack",
+              "currentDirectory": "C:\\Tools\\",
+              "user": "CORP\\attacker",
+              "integrityLevel": "High",
+              "hashes": "SHA256=INJECTOR_HASH_1234567890ABCDEF1234567890ABCDEF12",
+              "parentProcessGuid": "{THREAD-001-0001-000000000000}",
+              "parentProcessId": "85000",
+              "parentImage": "C:\\Windows\\System32\\cmd.exe",
+              "parentCommandLine": "cmd.exe"
+            }
+          }
+        }
+      }
+    }
+  ]
+}

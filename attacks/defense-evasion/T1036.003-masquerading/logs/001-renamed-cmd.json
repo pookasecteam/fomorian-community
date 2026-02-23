@@ -5,7 +5,6 @@
     "name": "Renamed cmd.exe Masquerading",
     "description": "cmd.exe copied and renamed to evade detection",
     "expected_detection": "HIGH",
-    "expected_soar": "defense-evasion-response",
     "kill_chain_phase": "defense-evasion",
     "format": "wazuh-native",
     "format_version": "1.0"
@@ -16,7 +15,6 @@
       "sequence": 1,
       "timestamp": "2026-01-29T13:45:00.000Z",
       "log": {
-        "timestamp": "",
         "rule": {
           "level": 12,
           "description": "Sysmon - Event 11: Renamed cmd.exe Masquerading",
@@ -41,9 +39,9 @@
           ]
         },
         "agent": {
-          "id": "007",
+          "id": "020",
           "name": "WS01",
-          "ip": "10.1.0.20"
+          "ip": "198.51.100.20"
         },
         "manager": {
           "name": "wazuh.manager"
@@ -84,7 +82,6 @@
       "sequence": 2,
       "timestamp": "2026-01-29T13:45:05.000Z",
       "log": {
-        "timestamp": "",
         "rule": {
           "level": 12,
           "description": "Sysmon - Event 1: Renamed cmd.exe Masquerading",
@@ -109,9 +106,9 @@
           ]
         },
         "agent": {
-          "id": "007",
+          "id": "020",
           "name": "WS01",
-          "ip": "10.1.0.20"
+          "ip": "198.51.100.20"
         },
         "manager": {
           "name": "wazuh.manager"

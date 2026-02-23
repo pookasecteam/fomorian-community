@@ -1,0 +1,12 @@
+{
+  "_fomorian_test": true,
+  "_fomorian_technique": "T1561.001",
+  "_fomorian_tactic": "Impact",
+  "_fomorian_description": "Disk content wipe using cipher /w to securely delete free space",
+  "filebeat_data_win_system_eventID": "1",
+  "filebeat_data_win_eventdata_commandLine": "cipher  /w:C:\\\\Windows\\\\Temp",
+  "filebeat_data_win_eventdata_image": "C:\\\\Windows\\\\System32\\\\cipher.exe",
+  "filebeat_data_win_eventdata_user": "CORP\\\\Administrator",
+  "filebeat_agent_name": "DC01",
+  "timestamp": "2026-02-08T12:00:00.000Z"
+}

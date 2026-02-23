@@ -1,0 +1,402 @@
+{
+  "_metadata": {
+    "attack_id": "T1485",
+    "variation": "001",
+    "name": "AWS Multi-Service Data Destruction",
+    "description": "Attacker systematically destroys data across S3, RDS, and DynamoDB services to cause irreversible damage and hinder recovery",
+    "expected_detection": "HIGH",
+    "kill_chain_phase": "impact",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "CloudTrail: DeleteBucket - Destroy S3 bucket containing application data",
+      "sequence": 1,
+      "timestamp": "2026-02-23T14:14:00.000Z",
+      "log": {
+        "timestamp": "2026-02-23T14:14:01.000+0000",
+        "rule": {
+          "level": 8,
+          "description": "AWS Cloudtrail: s3.amazonaws.com - DeleteBucket.",
+          "id": "100802",
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "amazon",
+            "aws",
+            "aws_cloudtrail"
+          ],
+          "pci_dss": [
+            "10.6.1"
+          ],
+          "hipaa": [
+            "164.312.b"
+          ],
+          "nist_800_53": [
+            "AU.6"
+          ],
+          "tsc": [
+            "CC7.2",
+            "CC7.3"
+          ],
+          "mitre": {
+            "id": [
+              "T1485"
+            ],
+            "tactic": [
+              "Impact"
+            ],
+            "technique": [
+              "Data Destruction"
+            ]
+          },
+          "gdpr": [
+            "IV_35.7.d"
+          ]
+        },
+        "agent": {
+          "id": "000",
+          "name": "wazuh.manager"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000029.290023",
+        "decoder": {
+          "name": "json"
+        },
+        "location": "Wazuh-AWS",
+        "data": {
+          "integration": "aws",
+          "aws": {
+            "eventVersion": "1.11",
+            "eventTime": "2026-02-23T14:14:00Z",
+            "eventSource": "s3.amazonaws.com",
+            "eventName": "DeleteBucket",
+            "awsRegion": "us-east-2",
+            "sourceIPAddress": "198.51.100.77",
+            "userAgent": "aws-cli/2.15.0 Python/3.11.6 Linux/6.1.0-kali amd64",
+            "userIdentity": {
+              "type": "IAMUser",
+              "arn": "arn:aws:iam::575084400239:user/compromised-dev",
+              "accountId": "575084400239",
+              "userName": "compromised-dev",
+              "principalId": "AIDACKCEVSQ6C2EXAMPLE",
+              "accessKeyId": "AKIAIOSFODNN7EXAMPLE"
+            },
+            "requestParameters": {
+              "bucketName": "prod-customer-uploads",
+              "host": [
+                "prod-customer-uploads.s3.us-east-2.amazonaws.com"
+              ]
+            },
+            "responseElements": null,
+            "eventID": "e5a9b3c4-d6f8-4b0c-e3a5-9b8a4z2d6f03",
+            "requestID": "b6c7d8e9-f0a1-4b2c-e3d4-a5b6c7d8e9f0",
+            "readOnly": "false",
+            "eventType": "AwsApiCall",
+            "managementEvent": "true",
+            "recipientAccountId": "575084400239",
+            "eventCategory": "Management",
+            "source": "cloudtrail",
+            "aws_account_id": "575084400239"
+          }
+        }
+      }
+    },
+    {
+      "_comment": "CloudTrail: DeleteDBSnapshot - Destroy RDS backup snapshots to prevent recovery",
+      "sequence": 2,
+      "timestamp": "2026-02-23T14:14:11.000Z",
+      "log": {
+        "timestamp": "2026-02-23T14:14:12.000+0000",
+        "rule": {
+          "level": 8,
+          "description": "AWS Cloudtrail: rds.amazonaws.com - DeleteDBSnapshot.",
+          "id": "100802",
+          "firedtimes": 2,
+          "mail": false,
+          "groups": [
+            "amazon",
+            "aws",
+            "aws_cloudtrail"
+          ],
+          "pci_dss": [
+            "10.6.1"
+          ],
+          "hipaa": [
+            "164.312.b"
+          ],
+          "nist_800_53": [
+            "AU.6"
+          ],
+          "tsc": [
+            "CC7.2",
+            "CC7.3"
+          ],
+          "mitre": {
+            "id": [
+              "T1485"
+            ],
+            "tactic": [
+              "Impact"
+            ],
+            "technique": [
+              "Data Destruction"
+            ]
+          },
+          "gdpr": [
+            "IV_35.7.d"
+          ]
+        },
+        "agent": {
+          "id": "000",
+          "name": "wazuh.manager"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000029.290024",
+        "decoder": {
+          "name": "json"
+        },
+        "location": "Wazuh-AWS",
+        "data": {
+          "integration": "aws",
+          "aws": {
+            "eventVersion": "1.11",
+            "eventTime": "2026-02-23T14:14:11Z",
+            "eventSource": "rds.amazonaws.com",
+            "eventName": "DeleteDBSnapshot",
+            "awsRegion": "us-east-2",
+            "sourceIPAddress": "198.51.100.77",
+            "userAgent": "aws-cli/2.15.0 Python/3.11.6 Linux/6.1.0-kali amd64",
+            "userIdentity": {
+              "type": "IAMUser",
+              "arn": "arn:aws:iam::575084400239:user/compromised-dev",
+              "accountId": "575084400239",
+              "userName": "compromised-dev",
+              "principalId": "AIDACKCEVSQ6C2EXAMPLE",
+              "accessKeyId": "AKIAIOSFODNN7EXAMPLE"
+            },
+            "requestParameters": {
+              "dBSnapshotIdentifier": "prod-app-database-daily-20260222"
+            },
+            "responseElements": {
+              "dBSnapshotIdentifier": "prod-app-database-daily-20260222",
+              "status": "deleting",
+              "engine": "postgres",
+              "dBInstanceIdentifier": "prod-app-database"
+            },
+            "eventID": "f6b0c4d5-e7a9-4c1d-f4b6-0c9b5a3e7a14",
+            "requestID": "c7d8e9f0-a1b2-4c3d-f4e5-b6c7d8e9f0a1",
+            "readOnly": "false",
+            "eventType": "AwsApiCall",
+            "managementEvent": "true",
+            "recipientAccountId": "575084400239",
+            "eventCategory": "Management",
+            "source": "cloudtrail",
+            "aws_account_id": "575084400239"
+          }
+        }
+      }
+    },
+    {
+      "_comment": "CloudTrail: DeleteTable - Destroy DynamoDB table with customer records",
+      "sequence": 3,
+      "timestamp": "2026-02-23T14:14:23.000Z",
+      "log": {
+        "timestamp": "2026-02-23T14:14:24.000+0000",
+        "rule": {
+          "level": 8,
+          "description": "AWS Cloudtrail: dynamodb.amazonaws.com - DeleteTable.",
+          "id": "100802",
+          "firedtimes": 3,
+          "mail": false,
+          "groups": [
+            "amazon",
+            "aws",
+            "aws_cloudtrail"
+          ],
+          "pci_dss": [
+            "10.6.1"
+          ],
+          "hipaa": [
+            "164.312.b"
+          ],
+          "nist_800_53": [
+            "AU.6"
+          ],
+          "tsc": [
+            "CC7.2",
+            "CC7.3"
+          ],
+          "mitre": {
+            "id": [
+              "T1485"
+            ],
+            "tactic": [
+              "Impact"
+            ],
+            "technique": [
+              "Data Destruction"
+            ]
+          },
+          "gdpr": [
+            "IV_35.7.d"
+          ]
+        },
+        "agent": {
+          "id": "000",
+          "name": "wazuh.manager"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000029.290025",
+        "decoder": {
+          "name": "json"
+        },
+        "location": "Wazuh-AWS",
+        "data": {
+          "integration": "aws",
+          "aws": {
+            "eventVersion": "1.11",
+            "eventTime": "2026-02-23T14:14:23Z",
+            "eventSource": "dynamodb.amazonaws.com",
+            "eventName": "DeleteTable",
+            "awsRegion": "us-east-2",
+            "sourceIPAddress": "198.51.100.77",
+            "userAgent": "aws-cli/2.15.0 Python/3.11.6 Linux/6.1.0-kali amd64",
+            "userIdentity": {
+              "type": "IAMUser",
+              "arn": "arn:aws:iam::575084400239:user/compromised-dev",
+              "accountId": "575084400239",
+              "userName": "compromised-dev",
+              "principalId": "AIDACKCEVSQ6C2EXAMPLE",
+              "accessKeyId": "AKIAIOSFODNN7EXAMPLE"
+            },
+            "requestParameters": {
+              "tableName": "customer-data"
+            },
+            "responseElements": {
+              "tableDescription": {
+                "tableName": "customer-data",
+                "tableStatus": "DELETING",
+                "itemCount": 847293,
+                "tableSizeBytes": 2147483648
+              }
+            },
+            "eventID": "a7c1d5e6-f8b0-4d2e-a5c7-1d0c6b4f8b25",
+            "requestID": "d8e9f0a1-b2c3-4d4e-a5f6-c7d8e9f0a1b2",
+            "readOnly": "false",
+            "eventType": "AwsApiCall",
+            "managementEvent": "true",
+            "recipientAccountId": "575084400239",
+            "eventCategory": "Management",
+            "source": "cloudtrail",
+            "aws_account_id": "575084400239"
+          }
+        }
+      }
+    },
+    {
+      "_comment": "CloudTrail: DeleteDBClusterSnapshot - Destroy Aurora cluster backup to prevent recovery",
+      "sequence": 4,
+      "timestamp": "2026-02-23T14:14:35.000Z",
+      "log": {
+        "timestamp": "2026-02-23T14:14:36.000+0000",
+        "rule": {
+          "level": 8,
+          "description": "AWS Cloudtrail: rds.amazonaws.com - DeleteDBClusterSnapshot.",
+          "id": "100802",
+          "firedtimes": 4,
+          "mail": false,
+          "groups": [
+            "amazon",
+            "aws",
+            "aws_cloudtrail"
+          ],
+          "pci_dss": [
+            "10.6.1"
+          ],
+          "hipaa": [
+            "164.312.b"
+          ],
+          "nist_800_53": [
+            "AU.6"
+          ],
+          "tsc": [
+            "CC7.2",
+            "CC7.3"
+          ],
+          "mitre": {
+            "id": [
+              "T1485"
+            ],
+            "tactic": [
+              "Impact"
+            ],
+            "technique": [
+              "Data Destruction"
+            ]
+          },
+          "gdpr": [
+            "IV_35.7.d"
+          ]
+        },
+        "agent": {
+          "id": "000",
+          "name": "wazuh.manager"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000029.290026",
+        "decoder": {
+          "name": "json"
+        },
+        "location": "Wazuh-AWS",
+        "data": {
+          "integration": "aws",
+          "aws": {
+            "eventVersion": "1.11",
+            "eventTime": "2026-02-23T14:14:35Z",
+            "eventSource": "rds.amazonaws.com",
+            "eventName": "DeleteDBClusterSnapshot",
+            "awsRegion": "us-east-2",
+            "sourceIPAddress": "198.51.100.77",
+            "userAgent": "aws-cli/2.15.0 Python/3.11.6 Linux/6.1.0-kali amd64",
+            "userIdentity": {
+              "type": "IAMUser",
+              "arn": "arn:aws:iam::575084400239:user/compromised-dev",
+              "accountId": "575084400239",
+              "userName": "compromised-dev",
+              "principalId": "AIDACKCEVSQ6C2EXAMPLE",
+              "accessKeyId": "AKIAIOSFODNN7EXAMPLE"
+            },
+            "requestParameters": {
+              "dBClusterSnapshotIdentifier": "prod-aurora-cluster-weekly-20260216"
+            },
+            "responseElements": {
+              "dBClusterSnapshotIdentifier": "prod-aurora-cluster-weekly-20260216",
+              "status": "deleting",
+              "engine": "aurora-postgresql",
+              "dBClusterIdentifier": "prod-aurora-cluster"
+            },
+            "eventID": "b8d2e6f7-a9c1-4e3f-b6d8-2e1d7c5a9c36",
+            "requestID": "e9f0a1b2-c3d4-4e5f-b6a7-d8e9f0a1b2c3",
+            "readOnly": "false",
+            "eventType": "AwsApiCall",
+            "managementEvent": "true",
+            "recipientAccountId": "575084400239",
+            "eventCategory": "Management",
+            "source": "cloudtrail",
+            "aws_account_id": "575084400239"
+          }
+        }
+      }
+    }
+  ]
+}

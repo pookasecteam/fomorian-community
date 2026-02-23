@@ -1,0 +1,220 @@
+{
+  "_metadata": {
+    "attack_id": "T1553.003",
+    "variation": "001",
+    "name": "SIP DLL Hijack",
+    "description": "Hijacks Subject Interface Package (SIP) trust provider by modifying CryptSIPDll registry keys to point to a malicious DLL, subverting code signing verification",
+    "expected_detection": "HIGH",
+    "kill_chain_phase": "defense-evasion",
+    "mitre_tactic": "Defense Evasion",
+    "mitre_technique": "Subvert Trust Controls: SIP and Trust Provider Hijacking",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Sysmon Event 13 - Registry modification of CryptSIPDll path to malicious DLL",
+      "sequence": 1,
+      "timestamp": "2026-02-22T09:14:22.000Z",
+      "log": {
+        "rule": {
+          "level": 14,
+          "description": "Sysmon - Event 13: SIP Trust Provider DLL Path Modified",
+          "id": "100900",
+          "mitre": {
+            "id": [
+              "T1553.003"
+            ],
+            "tactic": [
+              "Defense Evasion"
+            ],
+            "technique": [
+              "Subvert Trust Controls: SIP and Trust Provider Hijacking"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event13",
+            "windows",
+            "registry"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1708600462.900001",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "13",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "13",
+              "severityValue": "INFORMATION",
+              "systemTime": "2026-02-22T09:14:22.000000000Z"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-22 09:14:22.341",
+              "processGuid": "{4DC501E3-A71F-67B9-1200-000000002400}",
+              "processId": "6148",
+              "image": "C:\\Windows\\System32\\reg.exe",
+              "eventType": "SetValue",
+              "targetObject": "HKLM\\SOFTWARE\\Microsoft\\Cryptography\\OID\\EncodingType 0\\CryptSIPDllVerifyIndirectData\\{C689AAB8-8E78-11D0-8C47-00C04FC295EE}\\Dll",
+              "details": "C:\\Users\\Public\\evil_sip.dll",
+              "user": "CORP\\jsmith"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Sysmon Event 13 - Registry modification of CryptSIPDll function name",
+      "sequence": 2,
+      "timestamp": "2026-02-22T09:14:23.000Z",
+      "log": {
+        "rule": {
+          "level": 14,
+          "description": "Sysmon - Event 13: SIP Trust Provider Function Name Modified",
+          "id": "100901",
+          "mitre": {
+            "id": [
+              "T1553.003"
+            ],
+            "tactic": [
+              "Defense Evasion"
+            ],
+            "technique": [
+              "Subvert Trust Controls: SIP and Trust Provider Hijacking"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event13",
+            "windows",
+            "registry"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1708600462.900002",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "13",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "13",
+              "severityValue": "INFORMATION",
+              "systemTime": "2026-02-22T09:14:23.000000000Z"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-22 09:14:23.102",
+              "processGuid": "{4DC501E3-A71F-67B9-1200-000000002400}",
+              "processId": "6148",
+              "image": "C:\\Windows\\System32\\reg.exe",
+              "eventType": "SetValue",
+              "targetObject": "HKLM\\SOFTWARE\\Microsoft\\Cryptography\\OID\\EncodingType 0\\CryptSIPDllVerifyIndirectData\\{C689AAB8-8E78-11D0-8C47-00C04FC295EE}\\FuncName",
+              "details": "CryptSIPVerifyIndirectData",
+              "user": "CORP\\jsmith"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Sysmon Event 7 - Malicious SIP DLL loaded by crypto subsystem",
+      "sequence": 3,
+      "timestamp": "2026-02-22T09:14:38.000Z",
+      "log": {
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 7: Unsigned SIP DLL Loaded by System Process",
+          "id": "100902",
+          "mitre": {
+            "id": [
+              "T1553.003"
+            ],
+            "tactic": [
+              "Defense Evasion"
+            ],
+            "technique": [
+              "Subvert Trust Controls: SIP and Trust Provider Hijacking"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event7",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1708600462.900003",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "7",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "7",
+              "severityValue": "INFORMATION",
+              "systemTime": "2026-02-22T09:14:38.000000000Z"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-22 09:14:38.774",
+              "processGuid": "{4DC501E3-B823-67B9-4400-000000002400}",
+              "processId": "1092",
+              "image": "C:\\Windows\\System32\\svchost.exe",
+              "imageLoaded": "C:\\Users\\Public\\evil_sip.dll",
+              "hashes": "SHA256=7E3F2A9B8C4D1E6F5A0B9C8D7E6F5A4B3C2D1E0F9A8B7C6D5E4F3A2B1C0D9E8F",
+              "signed": "false",
+              "signatureStatus": "Unavailable",
+              "user": "NT AUTHORITY\\SYSTEM"
+            }
+          }
+        }
+      }
+    }
+  ]
+}

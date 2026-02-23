@@ -1,0 +1,172 @@
+{
+  "_metadata": {
+    "attack_id": "T1548.002",
+    "variation": "001",
+    "name": "Insecure GUI Application Privilege Escalation",
+    "description": "Attacker identifies a GUI application running as SYSTEM and uses its File Open dialog to spawn a command prompt with SYSTEM privileges, escaping the application sandbox.",
+    "expected_detection": "HIGH",
+    "kill_chain_phase": "privilege-escalation",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Sysmon Event 1 - Enumerating SYSTEM-level GUI processes with tasklist",
+      "sequence": 1,
+      "timestamp": "2026-02-21T14:40:00.000Z",
+      "log": {
+        "timestamp": "2026-02-21T14:40:00.000+0000",
+        "rule": {
+          "level": 6,
+          "description": "Sysmon - Event 1: Enumerating SYSTEM processes to find exploitable GUI applications",
+          "id": "100101",
+          "mitre": {
+            "id": [
+              "T1548.002"
+            ],
+            "tactic": [
+              "Privilege Escalation",
+              "Defense Evasion"
+            ],
+            "technique": [
+              "Abuse Elevation Control Mechanism: Bypass User Account Control"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1708526400.100013",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "severityValue": "INFORMATION",
+              "systemTime": "2026-02-21T14:40:00.000000000Z"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-21 14:40:00.000",
+              "processGuid": "{A1B2C3D4-1005-6538-0100-000000005001}",
+              "processId": "1892",
+              "image": "C:\\Windows\\System32\\tasklist.exe",
+              "commandLine": "tasklist /v /fi \"USERNAME eq NT AUTHORITY\\SYSTEM\" /fi \"IMAGENAME eq paint.exe\"",
+              "currentDirectory": "C:\\Users\\attacker\\",
+              "user": "CORP\\attacker",
+              "logonGuid": "{A1B2C3D4-1005-6538-0100-000000009001}",
+              "logonId": "0x5A4E1",
+              "integrityLevel": "Medium",
+              "hashes": "SHA256=E6F7A8B9C0D1E2F3A4B5C6D7E8F9A0B1C2D3E4F5A6B7C8D9E0F1A2B3C4D5E6",
+              "parentProcessGuid": "{A1B2C3D4-1005-6538-0100-000000000901}",
+              "parentProcessId": "5104",
+              "parentImage": "C:\\Windows\\System32\\cmd.exe",
+              "parentCommandLine": "cmd.exe"
+            }
+          }
+        },
+        "_fomorian_test": true,
+        "fomorian_campaign": "Campaign 23",
+        "fomorian_technique": "T1548.002"
+      }
+    },
+    {
+      "_comment": "Sysmon Event 1 - cmd.exe spawned as SYSTEM from mspaint File Open dialog escape",
+      "sequence": 2,
+      "timestamp": "2026-02-21T14:40:30.000Z",
+      "log": {
+        "timestamp": "2026-02-21T14:40:30.000+0000",
+        "rule": {
+          "level": 15,
+          "description": "Sysmon - Event 1: SYSTEM shell spawned from GUI application file dialog escape",
+          "id": "100101",
+          "mitre": {
+            "id": [
+              "T1548.002"
+            ],
+            "tactic": [
+              "Privilege Escalation",
+              "Defense Evasion"
+            ],
+            "technique": [
+              "Abuse Elevation Control Mechanism: Bypass User Account Control"
+            ]
+          },
+          "firedtimes": 2,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1708526430.100014",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "severityValue": "INFORMATION",
+              "systemTime": "2026-02-21T14:40:30.000000000Z"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-21 14:40:30.000",
+              "processGuid": "{A1B2C3D4-1005-6538-0100-000000005002}",
+              "processId": "8844",
+              "image": "C:\\Windows\\System32\\cmd.exe",
+              "commandLine": "cmd.exe",
+              "currentDirectory": "C:\\Windows\\System32\\",
+              "user": "NT AUTHORITY\\SYSTEM",
+              "logonGuid": "{A1B2C3D4-1005-6538-0100-000000009999}",
+              "logonId": "0x3E7",
+              "integrityLevel": "System",
+              "hashes": "SHA256=B99D61D874728EDC0918CA0EB10EAB93D381E7367E377C1F67A0D3E70FAAF7B3",
+              "parentProcessGuid": "{A1B2C3D4-1005-6538-0100-000000005000}",
+              "parentProcessId": "3320",
+              "parentImage": "C:\\Windows\\System32\\mspaint.exe",
+              "parentCommandLine": "\"C:\\Windows\\System32\\mspaint.exe\""
+            }
+          }
+        },
+        "_fomorian_test": true,
+        "fomorian_campaign": "Campaign 23",
+        "fomorian_technique": "T1548.002"
+      }
+    }
+  ]
+}

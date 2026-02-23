@@ -1,0 +1,308 @@
+{
+  "_metadata": {
+    "attack_id": "T1659",
+    "variation": "001",
+    "name": "Watering Hole Content Injection",
+    "description": "Attacker injects malicious JavaScript into legitimate website frequently visited by target organization",
+    "expected_detection": "MEDIUM",
+    "kill_chain_phase": "initial-access",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Sysmon Event 22 - DNS query to legitimate site (watering hole)",
+      "sequence": 1,
+      "timestamp": "2026-02-08T13:00:00.000Z",
+      "log": {
+        "timestamp": "2026-02-08T13:00:00.000+0000",
+        "rule": {
+          "level": 4,
+          "description": "Sysmon - Event 22: DNS Query",
+          "id": "100001",
+          "mitre": {
+            "id": [
+              "T1659"
+            ],
+            "tactic": [
+              "Initial Access"
+            ],
+            "technique": [
+              "Content Injection"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event22",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1707400000.400041",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "22",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "22",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-08 13:00:00.000",
+              "processGuid": "{T1659-0001-0001-0001-000000000001}",
+              "processId": "7700",
+              "image": "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
+              "queryName": "industry-news-portal.com",
+              "queryStatus": "0",
+              "queryResults": "203.0.113.50",
+              "user": "CORP\\jsmith"
+            }
+          }
+        },
+        "_fomorian_batch": "PT-2026-003-batch1-initial-access",
+        "_fomorian_test": true,
+        "_fomorian_attack_id": "T1659",
+        "_fomorian_expected_detection": "Sigma: Watering Hole Site Access (T1659)"
+      }
+    },
+    {
+      "_comment": "Sysmon Event 22 - Injected script triggers redirect to malicious domain",
+      "sequence": 2,
+      "timestamp": "2026-02-08T13:00:05.000Z",
+      "log": {
+        "timestamp": "2026-02-08T13:00:05.000+0000",
+        "rule": {
+          "level": 10,
+          "description": "Sysmon - Event 22: DNS Query to Malicious Domain",
+          "id": "100001",
+          "mitre": {
+            "id": [
+              "T1659"
+            ],
+            "tactic": [
+              "Initial Access"
+            ],
+            "technique": [
+              "Content Injection"
+            ]
+          },
+          "firedtimes": 2,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event22",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1707400000.400042",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "22",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "22",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-08 13:00:05.000",
+              "processGuid": "{T1659-0001-0001-0001-000000000001}",
+              "processId": "7700",
+              "image": "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
+              "queryName": "cdn-analytics-tracker.com",
+              "queryStatus": "0",
+              "queryResults": "198.51.100.110",
+              "user": "CORP\\jsmith"
+            }
+          }
+        },
+        "_fomorian_batch": "PT-2026-003-batch1-initial-access",
+        "_fomorian_test": true,
+        "_fomorian_attack_id": "T1659",
+        "_fomorian_expected_detection": "Sigma: Redirect to Malicious Domain (T1659)"
+      }
+    },
+    {
+      "_comment": "Sysmon Event 11 - Payload download triggered by injected content",
+      "sequence": 3,
+      "timestamp": "2026-02-08T13:00:10.000Z",
+      "log": {
+        "timestamp": "2026-02-08T13:00:10.000+0000",
+        "rule": {
+          "level": 10,
+          "description": "Sysmon - Event 11: Payload Downloaded via Watering Hole",
+          "id": "100916",
+          "mitre": {
+            "id": [
+              "T1659",
+              "T1105"
+            ],
+            "tactic": [
+              "Initial Access",
+              "Command and Control"
+            ],
+            "technique": [
+              "Content Injection",
+              "Ingress Tool Transfer"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event11",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1707400000.400043",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "11",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "11",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-08 13:00:10.000",
+              "processGuid": "{T1659-0001-0001-0001-000000000001}",
+              "processId": "7700",
+              "image": "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
+              "targetFilename": "C:\\Users\\jsmith\\AppData\\Local\\Temp\\analytics-update.exe",
+              "creationUtcTime": "2026-02-08 13:00:10.000",
+              "user": "CORP\\jsmith"
+            }
+          }
+        },
+        "_fomorian_batch": "PT-2026-003-batch1-initial-access",
+        "_fomorian_test": true,
+        "_fomorian_attack_id": "T1659",
+        "_fomorian_expected_detection": "Sigma: Watering Hole Payload Download (T1659)"
+      }
+    },
+    {
+      "_comment": "Sysmon Event 1 - Browser spawns payload execution",
+      "sequence": 4,
+      "timestamp": "2026-02-08T13:00:15.000Z",
+      "log": {
+        "timestamp": "2026-02-08T13:00:15.000+0000",
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 1: Browser Spawns Executable",
+          "id": "100910",
+          "mitre": {
+            "id": [
+              "T1659",
+              "T1204.002"
+            ],
+            "tactic": [
+              "Initial Access",
+              "Execution"
+            ],
+            "technique": [
+              "Content Injection",
+              "User Execution: Malicious File"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1707400000.400044",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-08 13:00:15.000",
+              "processGuid": "{T1659-0001-0001-0001-000000000002}",
+              "processId": "7800",
+              "image": "C:\\Users\\jsmith\\AppData\\Local\\Temp\\analytics-update.exe",
+              "commandLine": "\"C:\\Users\\jsmith\\AppData\\Local\\Temp\\analytics-update.exe\"",
+              "currentDirectory": "C:\\Users\\jsmith\\AppData\\Local\\Temp\\",
+              "user": "CORP\\jsmith",
+              "integrityLevel": "Medium",
+              "hashes": "SHA256=WATERING_HOLE_PAYLOAD_HASH",
+              "parentProcessGuid": "{T1659-0001-0001-0001-000000000001}",
+              "parentProcessId": "7700",
+              "parentImage": "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
+              "parentCommandLine": "\"C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe\""
+            }
+          }
+        },
+        "_fomorian_batch": "PT-2026-003-batch1-initial-access",
+        "_fomorian_test": true,
+        "_fomorian_attack_id": "T1659",
+        "_fomorian_expected_detection": "Sigma: Browser Spawns Executable (T1659)"
+      }
+    }
+  ]
+}

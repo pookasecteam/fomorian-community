@@ -1,0 +1,156 @@
+{
+  "_metadata": {
+    "attack_id": "T1564.002",
+    "variation": "001",
+    "name": "Hidden User Account Creation",
+    "description": "Creating a Windows user account with a trailing dollar sign to hide it from standard user enumeration tools and adding it to the Administrators group",
+    "expected_detection": "HIGH",
+    "kill_chain_phase": "defense-evasion",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Sysmon Event 1 - net.exe creating hidden user account with trailing $",
+      "sequence": 1,
+      "timestamp": "2026-02-21T02:40:00.000Z",
+      "log": {
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 1: Hidden user account creation via net.exe",
+          "id": "100100",
+          "mitre": {
+            "id": [
+              "T1564.002"
+            ],
+            "tactic": [
+              "Defense Evasion"
+            ],
+            "technique": [
+              "Hide Artifacts: Hidden Users"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "010",
+          "name": "DC01",
+          "ip": "198.51.100.10"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000018.2400001",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "DC01.corp.local",
+              "level": "4",
+              "task": "1",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-21 02:40:00.000",
+              "processGuid": "{f6a7b8c9-6001-4cd3-b475-a9b0c1d2e3f4}",
+              "processId": "10100",
+              "image": "C:\\Windows\\System32\\net.exe",
+              "commandLine": "net user hidden_admin$ P@ssw0rd123 /add",
+              "currentDirectory": "C:\\Users\\Administrator\\",
+              "user": "CORP\\Administrator",
+              "integrityLevel": "High",
+              "hashes": "SHA256=d9e0f1a2b3c4d5e6f7a8b9c0d1e2f3a4b5c6d7e8f9a0b1c2d3e4f5a6b7c8d9e0",
+              "parentProcessGuid": "{f6a7b8c9-6000-4cd3-b475-a9b0c1d2e3f4}",
+              "parentProcessId": "4880",
+              "parentImage": "C:\\Windows\\System32\\cmd.exe",
+              "parentCommandLine": "cmd.exe"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Sysmon Event 1 - Adding hidden user to Administrators group",
+      "sequence": 2,
+      "timestamp": "2026-02-21T02:40:15.000Z",
+      "log": {
+        "rule": {
+          "level": 14,
+          "description": "Sysmon - Event 1: Hidden user added to Administrators group",
+          "id": "100100",
+          "mitre": {
+            "id": [
+              "T1564.002"
+            ],
+            "tactic": [
+              "Defense Evasion"
+            ],
+            "technique": [
+              "Hide Artifacts: Hidden Users"
+            ]
+          },
+          "firedtimes": 2,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "010",
+          "name": "DC01",
+          "ip": "198.51.100.10"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000018.2400002",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "DC01.corp.local",
+              "level": "4",
+              "task": "1",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-21 02:40:15.000",
+              "processGuid": "{f6a7b8c9-6002-4cd3-b475-a9b0c1d2e3f4}",
+              "processId": "10120",
+              "image": "C:\\Windows\\System32\\net.exe",
+              "commandLine": "net localgroup Administrators hidden_admin$ /add",
+              "currentDirectory": "C:\\Users\\Administrator\\",
+              "user": "CORP\\Administrator",
+              "integrityLevel": "High",
+              "hashes": "SHA256=d9e0f1a2b3c4d5e6f7a8b9c0d1e2f3a4b5c6d7e8f9a0b1c2d3e4f5a6b7c8d9e0",
+              "parentProcessGuid": "{f6a7b8c9-6000-4cd3-b475-a9b0c1d2e3f4}",
+              "parentProcessId": "4880",
+              "parentImage": "C:\\Windows\\System32\\cmd.exe",
+              "parentCommandLine": "cmd.exe"
+            }
+          }
+        }
+      }
+    }
+  ]
+}

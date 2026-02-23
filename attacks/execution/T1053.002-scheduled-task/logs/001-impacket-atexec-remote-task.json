@@ -1,0 +1,208 @@
+{
+  "_metadata": {
+    "attack_id": "T1053.002",
+    "variation": "001",
+    "name": "Scheduled Task Execution via AT Command - impacket-atexec",
+    "description": "Attacker uses impacket-atexec to create and execute a scheduled task on a remote system via the Task Scheduler service, enabling lateral movement and persistence",
+    "expected_detection": "HIGH",
+    "kill_chain_phase": "execution",
+    "format": "wazuh-native",
+    "format_version": "1.0",
+    "tool": "impacket-atexec"
+  },
+  "logs": [
+    {
+      "_comment": "Event 4698 - Scheduled task created",
+      "sequence": 1,
+      "timestamp": "2026-02-10T20:05:00.000Z",
+      "log": {
+        "timestamp": "2026-02-10T20:05:00.000Z",
+        "rule": {
+          "level": 12,
+          "description": "Scheduled Task Created - Suspicious Remote Creation",
+          "id": "100200",
+          "mitre": {
+            "id": [
+              "T1053.002"
+            ],
+            "tactic": [
+              "Execution",
+              "Persistence"
+            ],
+            "technique": [
+              "Scheduled Task/Job: At"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "windows",
+            "scheduled_task"
+          ]
+        },
+        "agent": {
+          "id": "010",
+          "name": "DC01",
+          "ip": "198.51.100.12"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1707600300.200001",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "4698",
+              "channel": "Security",
+              "providerName": "Microsoft-Windows-Security-Auditing",
+              "computer": "DC01.corp.local",
+              "level": "0",
+              "task": "12804",
+              "keywords": "0x8020000000000000",
+              "severityValue": "AUDIT_SUCCESS"
+            },
+            "eventdata": {
+              "subjectUserSid": "S-1-5-21-3298120035-3471069779-879265153-500",
+              "subjectUserName": "Administrator",
+              "subjectDomainName": "CORP",
+              "subjectLogonId": "0x12345",
+              "taskName": "\\At1",
+              "taskContent": "<?xml version=\"1.0\"?><Task><Actions><Exec><Command>cmd.exe</Command><Arguments>/C whoami</Arguments></Exec></Actions></Task>"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Sysmon Event 1 - Task execution (cmd.exe spawned by Task Scheduler)",
+      "sequence": 2,
+      "timestamp": "2026-02-10T20:05:01.000Z",
+      "log": {
+        "timestamp": "2026-02-10T20:05:01.000Z",
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 1: Command Execution via Scheduled Task",
+          "id": "100201",
+          "mitre": {
+            "id": [
+              "T1053.002",
+              "T1059.003"
+            ],
+            "tactic": [
+              "Execution"
+            ],
+            "technique": [
+              "Scheduled Task",
+              "Command and Scripting Interpreter: cmd"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "010",
+          "name": "DC01",
+          "ip": "198.51.100.12"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1707600300.200002",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "DC01.corp.local",
+              "level": "4",
+              "task": "1",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-10 20:05:01.000",
+              "processGuid": "{GUID-CMD}",
+              "processId": "3456",
+              "image": "C:\\Windows\\System32\\cmd.exe",
+              "commandLine": "cmd.exe /C whoami",
+              "currentDirectory": "C:\\Windows\\system32\\",
+              "user": "NT AUTHORITY\\SYSTEM",
+              "integrityLevel": "System",
+              "hashes": "SHA256=D1C7B5E6F7C8D9E0F1A2B3C4D5E6F7A8B9C0D1E2F3A4B5C6D7E8F9A0B1C2D3E4",
+              "parentProcessGuid": "{GUID-SVCHOST}",
+              "parentProcessId": "1234",
+              "parentImage": "C:\\Windows\\System32\\svchost.exe",
+              "parentCommandLine": "C:\\Windows\\system32\\svchost.exe -k netsvcs -p -s Schedule"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Event 4699 - Scheduled task deleted (cleanup)",
+      "sequence": 3,
+      "timestamp": "2026-02-10T20:05:02.000Z",
+      "log": {
+        "timestamp": "2026-02-10T20:05:02.000Z",
+        "rule": {
+          "level": 3,
+          "description": "Scheduled Task Deleted",
+          "id": "100202",
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "windows",
+            "scheduled_task"
+          ]
+        },
+        "agent": {
+          "id": "010",
+          "name": "DC01",
+          "ip": "198.51.100.12"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1707600300.200003",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "4699",
+              "channel": "Security",
+              "providerName": "Microsoft-Windows-Security-Auditing",
+              "computer": "DC01.corp.local",
+              "level": "0",
+              "task": "12804",
+              "keywords": "0x8020000000000000",
+              "severityValue": "AUDIT_SUCCESS"
+            },
+            "eventdata": {
+              "subjectUserSid": "S-1-5-21-3298120035-3471069779-879265153-500",
+              "subjectUserName": "Administrator",
+              "subjectDomainName": "CORP",
+              "subjectLogonId": "0x12345",
+              "taskName": "\\At1"
+            }
+          }
+        }
+      }
+    }
+  ]
+}

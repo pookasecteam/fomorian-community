@@ -1,0 +1,163 @@
+{
+  "_metadata": {
+    "attack_id": "T1620",
+    "variation": "001",
+    "name": ".NET Reflection API Abuse",
+    "description": "Dynamic code execution via .NET Reflection APIs (MethodInfo.Invoke, Assembly.Load)",
+    "expected_detection": "MEDIUM",
+    "kill_chain_phase": "execution",
+    "references": [
+      "https://github.com/TheMagicClaw/LOLAPI"
+    ],
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Sysmon Event 1 - PowerShell with reflection patterns",
+      "sequence": 1,
+      "timestamp": "2026-02-03T13:00:00.000Z",
+      "log": {
+        "timestamp": "2026-02-03T13:00:00.000+0000",
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 1: PowerShell with .NET reflection",
+          "id": "100916",
+          "mitre": {
+            "id": [
+              "T1620",
+              "T1059.001"
+            ],
+            "tactic": [
+              "Defense Evasion",
+              "Execution"
+            ],
+            "technique": [
+              "Reflective Code Loading",
+              "PowerShell"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows",
+            "powershell"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1706961600.100001",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-03 13:00:00.000",
+              "processGuid": "{12345678-1234-1234-1234-123456789220}",
+              "processId": "11456",
+              "image": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+              "commandLine": "powershell.exe -c \"[Reflection.Assembly]::Load([Convert]::FromBase64String('TVqQAAMAA...')); [Program]::Main()\"",
+              "currentDirectory": "C:\\Users\\attacker\\",
+              "user": "CORP\\attacker",
+              "integrityLevel": "Medium",
+              "parentImage": "C:\\Windows\\System32\\cmd.exe"
+            }
+          }
+        },
+        "_fomorian_batch": "lolapi-dotnet",
+        "_fomorian_test": true,
+        "_fomorian_attack_id": "T1620",
+        "_fomorian_technique": "reflection-assembly-load"
+      }
+    },
+    {
+      "_comment": "Sysmon Event 1 - PowerShell with MethodInfo.Invoke",
+      "sequence": 2,
+      "timestamp": "2026-02-03T13:00:05.000Z",
+      "log": {
+        "timestamp": "2026-02-03T13:00:05.000+0000",
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 1: PowerShell with MethodInfo.Invoke",
+          "id": "100916",
+          "mitre": {
+            "id": [
+              "T1620",
+              "T1059.001"
+            ],
+            "tactic": [
+              "Defense Evasion",
+              "Execution"
+            ],
+            "technique": [
+              "Reflective Code Loading",
+              "PowerShell"
+            ]
+          },
+          "firedtimes": 2,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows",
+            "powershell"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1706961605.100002",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-03 13:00:05.000",
+              "processGuid": "{12345678-1234-1234-1234-123456789221}",
+              "processId": "11600",
+              "image": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+              "commandLine": "powershell.exe -c \"$type = [Type]::GetType('System.Diagnostics.Process'); $method = $type.GetMethod('Start', [Type[]]@([String])); $method.Invoke($null, @('calc.exe'))\"",
+              "currentDirectory": "C:\\Users\\attacker\\",
+              "user": "CORP\\attacker",
+              "integrityLevel": "Medium",
+              "parentImage": "C:\\Windows\\System32\\cmd.exe"
+            }
+          }
+        },
+        "_fomorian_batch": "lolapi-dotnet",
+        "_fomorian_test": true,
+        "_fomorian_attack_id": "T1620",
+        "_fomorian_technique": "reflection-methodinfo-invoke"
+      }
+    }
+  ]
+}

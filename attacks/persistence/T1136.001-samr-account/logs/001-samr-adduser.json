@@ -1,0 +1,62 @@
+{
+  "timestamp": "2026-01-31T22:00:00.000Z",
+  "rule": {
+    "level": 12,
+    "description": "Sysmon - Event 1: SAMR Account Creation Tool",
+    "id": "92151",
+    "mitre": {
+      "id": [
+        "T1136.001"
+      ],
+      "tactic": [
+        "Persistence"
+      ],
+      "technique": [
+        "Create Account: Local Account"
+      ]
+    },
+    "groups": [
+      "sysmon",
+      "sysmon_event1",
+      "windows"
+    ]
+  },
+  "agent": {
+    "id": "007",
+    "name": "WS01",
+    "ip": "198.51.100.20"
+  },
+  "manager": {
+    "name": "wazuh.manager"
+  },
+  "id": "1700000020.000001",
+  "decoder": {
+    "name": "windows_eventchannel"
+  },
+  "location": "EventChannel",
+  "data": {
+    "win": {
+      "system": {
+        "eventID": "1",
+        "channel": "Microsoft-Windows-Sysmon/Operational",
+        "providerName": "Microsoft-Windows-Sysmon",
+        "computer": "WS01.corp.local"
+      },
+      "eventdata": {
+        "utcTime": "2026-01-31 22:00:00.000",
+        "processGuid": "{12345678-1234-1234-1234-123456789020}",
+        "processId": "3456",
+        "image": "C:\\Users\\attacker\\tools\\adduser.exe",
+        "commandLine": "adduser.exe -u backdoor -p P@ssw0rd123 -g Administrators",
+        "currentDirectory": "C:\\Users\\attacker\\tools\\",
+        "user": "CORP\\attacker",
+        "parentImage": "C:\\Windows\\System32\\cmd.exe",
+        "parentCommandLine": "cmd.exe"
+      }
+    }
+  },
+  "_fomorian_batch": "threat-intel-batch2-2026-01-31",
+  "_fomorian_test": true,
+  "_fomorian_attack_id": "T1136.001",
+  "_fomorian_expected_detection": "Sigma: SAMR API Account Creation (T1136.001)"
+}

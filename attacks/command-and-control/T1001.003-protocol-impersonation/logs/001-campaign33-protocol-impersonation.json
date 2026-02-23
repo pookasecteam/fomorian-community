@@ -1,0 +1,203 @@
+{
+  "metadata": {
+    "technique_id": "T1001.003",
+    "technique_name": "Data Obfuscation: Protocol Impersonation",
+    "tactic": "command-and-control",
+    "description": "C2 traffic masquerading as legitimate HTTP protocol on non-standard port",
+    "campaign": "33",
+    "batch": "14",
+    "expected_detection": "MEDIUM",
+    "attack_time": "2026-02-10T14:28:00.000Z",
+    "target_host": "WS01",
+    "simulated_c2": "100.100.100.100:8443"
+  },
+  "logs": [
+    {
+      "timestamp": "2026-02-10T14:28:00.000Z",
+      "rule": {
+        "level": 3,
+        "description": "Sysmon - Event 3: Network Connection to non-standard HTTP port",
+        "id": "100103",
+        "mitre": {
+          "id": [
+            "T1001.003"
+          ],
+          "tactic": [
+            "Command and Control"
+          ],
+          "technique": [
+            "Protocol Impersonation"
+          ]
+        },
+        "groups": [
+          "sysmon",
+          "sysmon_event3"
+        ]
+      },
+      "agent": {
+        "id": "020",
+        "name": "WS01",
+        "ip": "198.51.100.20"
+      },
+      "manager": {
+        "name": "wazuh.manager"
+      },
+      "id": "1707578880.000001",
+      "decoder": {
+        "name": "windows_eventchannel"
+      },
+      "location": "EventChannel",
+      "data": {
+        "win": {
+          "system": {
+            "eventID": "3",
+            "channel": "Microsoft-Windows-Sysmon/Operational",
+            "computer": "WS01.corp.local",
+            "systemTime": "2026-02-10T14:28:00.000Z"
+          },
+          "eventdata": {
+            "utcTime": "2026-02-10 14:28:00.000",
+            "processGuid": "{A1B2C3D4-1234-5678-90AB-CDEF12345686}",
+            "processId": "7456",
+            "image": "C:\\Windows\\System32\\curl.exe",
+            "user": "CORP\\attacker",
+            "protocol": "tcp",
+            "initiated": "true",
+            "sourceIsIpv6": "false",
+            "sourceIp": "198.51.100.20",
+            "sourcePort": "65567",
+            "destinationIsIpv6": "false",
+            "destinationIp": "100.100.100.100",
+            "destinationPort": "8443"
+          }
+        }
+      },
+      "fomorian_test": true,
+      "fomorian_batch": "14",
+      "fomorian_campaign": "33"
+    },
+    {
+      "timestamp": "2026-02-10T14:28:01.000Z",
+      "rule": {
+        "level": 3,
+        "description": "Zeek - HTTP protocol on non-standard port detected",
+        "id": "100001",
+        "mitre": {
+          "id": [
+            "T1001.003"
+          ],
+          "tactic": [
+            "Command and Control"
+          ],
+          "technique": [
+            "Protocol Impersonation"
+          ]
+        },
+        "groups": [
+          "zeek",
+          "zeek_http"
+        ]
+      },
+      "agent": {
+        "id": "001",
+        "name": "GW01",
+        "ip": "198.51.100.1"
+      },
+      "manager": {
+        "name": "wazuh.manager"
+      },
+      "id": "1707578881.000001",
+      "decoder": {
+        "name": "zeek"
+      },
+      "location": "zeek_http",
+      "data": {
+        "zeek": {
+          "ts": "1707578881.000000",
+          "uid": "I1a2b3c4d5e6f7g8h9",
+          "id.orig_h": "198.51.100.20",
+          "id.orig_p": "65567",
+          "id.resp_h": "100.100.100.100",
+          "id.resp_p": "8443",
+          "trans_depth": "1",
+          "method": "GET",
+          "host": "api.normal-service.com",
+          "uri": "/api/v1/status",
+          "version": "1.1",
+          "user_agent": "curl/7.68.0",
+          "request_body_len": "0",
+          "response_body_len": "512",
+          "status_code": "200",
+          "status_msg": "OK",
+          "tags": "[]"
+        }
+      },
+      "fomorian_test": true,
+      "fomorian_batch": "14",
+      "fomorian_campaign": "33"
+    },
+    {
+      "timestamp": "2026-02-10T14:28:02.000Z",
+      "rule": {
+        "level": 3,
+        "description": "Zeek - Connection analysis: service mismatch detected",
+        "id": "100001",
+        "mitre": {
+          "id": [
+            "T1001.003"
+          ],
+          "tactic": [
+            "Command and Control"
+          ],
+          "technique": [
+            "Protocol Impersonation"
+          ]
+        },
+        "groups": [
+          "zeek",
+          "zeek_conn"
+        ]
+      },
+      "agent": {
+        "id": "001",
+        "name": "GW01",
+        "ip": "198.51.100.1"
+      },
+      "manager": {
+        "name": "wazuh.manager"
+      },
+      "id": "1707578882.000001",
+      "decoder": {
+        "name": "zeek"
+      },
+      "location": "zeek_conn",
+      "data": {
+        "zeek": {
+          "ts": "1707578882.000000",
+          "uid": "I1a2b3c4d5e6f7g8h9",
+          "id.orig_h": "198.51.100.20",
+          "id.orig_p": "65567",
+          "id.resp_h": "100.100.100.100",
+          "id.resp_p": "8443",
+          "proto": "tcp",
+          "service": "http",
+          "duration": "2.345",
+          "orig_bytes": "1234",
+          "resp_bytes": "2345",
+          "conn_state": "SF",
+          "local_orig": "true",
+          "local_resp": "false",
+          "missed_bytes": "0",
+          "history": "ShADadFf",
+          "orig_pkts": "8",
+          "orig_ip_bytes": "1554",
+          "resp_pkts": "10",
+          "resp_ip_bytes": "2665"
+        }
+      },
+      "fomorian_test": true,
+      "fomorian_batch": "14",
+      "fomorian_campaign": "33"
+    }
+  ]
+}

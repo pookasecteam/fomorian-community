@@ -1,0 +1,224 @@
+{
+  "_metadata": {
+    "attack_id": "T1578.001",
+    "variation": "001",
+    "name": "EC2 Snapshot and AMI Creation",
+    "description": "Attacker creates an EBS snapshot of a target instance volume, then creates an AMI from it to exfiltrate data or clone the instance in another account",
+    "expected_detection": "MEDIUM",
+    "kill_chain_phase": "defense-evasion",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "CloudTrail: CreateSnapshot - Snapshot a running instance's EBS volume",
+      "sequence": 1,
+      "timestamp": "2026-02-23T14:02:00.000Z",
+      "log": {
+        "timestamp": "2026-02-23T14:02:01.000+0000",
+        "rule": {
+          "level": 3,
+          "description": "AWS Cloudtrail: ec2.amazonaws.com - CreateSnapshot.",
+          "id": "100802",
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "amazon",
+            "aws",
+            "aws_cloudtrail"
+          ],
+          "pci_dss": [
+            "10.6.1"
+          ],
+          "hipaa": [
+            "164.312.b"
+          ],
+          "nist_800_53": [
+            "AU.6"
+          ],
+          "tsc": [
+            "CC7.2",
+            "CC7.3"
+          ],
+          "mitre": {
+            "id": [
+              "T1578.001"
+            ],
+            "tactic": [
+              "Defense Evasion"
+            ],
+            "technique": [
+              "Create Snapshot"
+            ]
+          },
+          "gdpr": [
+            "IV_35.7.d"
+          ]
+        },
+        "agent": {
+          "id": "000",
+          "name": "wazuh.manager"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000029.200001",
+        "decoder": {
+          "name": "json"
+        },
+        "location": "Wazuh-AWS",
+        "data": {
+          "integration": "aws",
+          "aws": {
+            "eventVersion": "1.11",
+            "eventTime": "2026-02-23T14:02:00Z",
+            "eventSource": "ec2.amazonaws.com",
+            "eventName": "CreateSnapshot",
+            "awsRegion": "us-east-2",
+            "sourceIPAddress": "198.51.100.77",
+            "userAgent": "aws-cli/2.15.0 Python/3.11.6 Linux/6.1.0-kali amd64",
+            "userIdentity": {
+              "type": "IAMUser",
+              "arn": "arn:aws:iam::575084400239:user/compromised-dev",
+              "accountId": "575084400239",
+              "userName": "compromised-dev",
+              "principalId": "AIDACKCEVSQ6C2EXAMPLE",
+              "accessKeyId": "AKIAIOSFODNN7EXAMPLE"
+            },
+            "requestParameters": {
+              "volumeId": "vol-0a1b2c3d4e5f67890",
+              "description": "backup-20260223"
+            },
+            "responseElements": {
+              "snapshotId": "snap-0f1e2d3c4b5a69870",
+              "volumeId": "vol-0a1b2c3d4e5f67890",
+              "status": "pending",
+              "startTime": "2026-02-23T14:02:00Z",
+              "volumeSize": 100,
+              "encrypted": false,
+              "ownerId": "575084400239"
+            },
+            "eventID": "d6b1c7e5-04fa-4a91-e8d6-1i5f4a0b9d32",
+            "requestID": "f0a5b1c4-6e7d-8f9a-2b3c-4d5e6f7a8b92",
+            "readOnly": "false",
+            "eventType": "AwsApiCall",
+            "managementEvent": "true",
+            "recipientAccountId": "575084400239",
+            "eventCategory": "Management",
+            "source": "cloudtrail",
+            "aws_account_id": "575084400239"
+          }
+        }
+      }
+    },
+    {
+      "_comment": "CloudTrail: CreateImage - Create AMI from the snapshot for portability",
+      "sequence": 2,
+      "timestamp": "2026-02-23T14:02:14.000Z",
+      "log": {
+        "timestamp": "2026-02-23T14:02:15.000+0000",
+        "rule": {
+          "level": 3,
+          "description": "AWS Cloudtrail: ec2.amazonaws.com - CreateImage.",
+          "id": "100802",
+          "firedtimes": 2,
+          "mail": false,
+          "groups": [
+            "amazon",
+            "aws",
+            "aws_cloudtrail"
+          ],
+          "pci_dss": [
+            "10.6.1"
+          ],
+          "hipaa": [
+            "164.312.b"
+          ],
+          "nist_800_53": [
+            "AU.6"
+          ],
+          "tsc": [
+            "CC7.2",
+            "CC7.3"
+          ],
+          "mitre": {
+            "id": [
+              "T1578.001"
+            ],
+            "tactic": [
+              "Defense Evasion"
+            ],
+            "technique": [
+              "Create Snapshot"
+            ]
+          },
+          "gdpr": [
+            "IV_35.7.d"
+          ]
+        },
+        "agent": {
+          "id": "000",
+          "name": "wazuh.manager"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000029.200002",
+        "decoder": {
+          "name": "json"
+        },
+        "location": "Wazuh-AWS",
+        "data": {
+          "integration": "aws",
+          "aws": {
+            "eventVersion": "1.11",
+            "eventTime": "2026-02-23T14:02:14Z",
+            "eventSource": "ec2.amazonaws.com",
+            "eventName": "CreateImage",
+            "awsRegion": "us-east-2",
+            "sourceIPAddress": "198.51.100.77",
+            "userAgent": "aws-cli/2.15.0 Python/3.11.6 Linux/6.1.0-kali amd64",
+            "userIdentity": {
+              "type": "IAMUser",
+              "arn": "arn:aws:iam::575084400239:user/compromised-dev",
+              "accountId": "575084400239",
+              "userName": "compromised-dev",
+              "principalId": "AIDACKCEVSQ6C2EXAMPLE",
+              "accessKeyId": "AKIAIOSFODNN7EXAMPLE"
+            },
+            "requestParameters": {
+              "instanceId": "i-0a1b2c3d4e5f67890",
+              "name": "prod-db-backup-20260223",
+              "description": "Production database server image",
+              "noReboot": true,
+              "blockDeviceMapping": {
+                "items": [
+                  {
+                    "deviceName": "/dev/sda1",
+                    "ebs": {
+                      "snapshotId": "snap-0f1e2d3c4b5a69870",
+                      "volumeSize": 100,
+                      "volumeType": "gp3"
+                    }
+                  }
+                ]
+              }
+            },
+            "responseElements": {
+              "imageId": "ami-0b1c2d3e4f5a67890"
+            },
+            "eventID": "e7c2d8f6-15ab-5b02-f9e7-2j6a5b1c0e43",
+            "requestID": "a1b6c2d5-7f8e-9a0b-3c4d-5e6f7a8b9c03",
+            "readOnly": "false",
+            "eventType": "AwsApiCall",
+            "managementEvent": "true",
+            "recipientAccountId": "575084400239",
+            "eventCategory": "Management",
+            "source": "cloudtrail",
+            "aws_account_id": "575084400239"
+          }
+        }
+      }
+    }
+  ]
+}

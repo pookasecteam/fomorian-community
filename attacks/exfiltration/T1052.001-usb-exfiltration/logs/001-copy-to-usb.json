@@ -1,0 +1,162 @@
+{
+  "_metadata": {
+    "attack_id": "T1052.001",
+    "variation": "001",
+    "name": "Exfiltration Over USB",
+    "description": "Copy sensitive files to removable USB drive",
+    "expected_detection": "MEDIUM",
+    "kill_chain_phase": "exfiltration",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Sysmon Event 1 - PowerShell Copy-Item to USB",
+      "sequence": 1,
+      "timestamp": "2026-02-10T18:04:00.000Z",
+      "log": {
+        "timestamp": "2026-02-10T18:04:00.000+0000",
+        "rule": {
+          "level": 10,
+          "description": "Sysmon - Event 1: USB Exfiltration",
+          "id": "100603",
+          "mitre": {
+            "id": [
+              "T1052.001"
+            ],
+            "tactic": [
+              "Exfiltration"
+            ],
+            "technique": [
+              "Exfiltration Over Physical Medium"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1707588240.000001",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-10 18:04:00.000",
+              "processGuid": "{8df8f34e-2810-65c7-0034-000000000400}",
+              "processId": "9128",
+              "image": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+              "commandLine": "powershell.exe -Command \"Copy-Item -Path C:\\Sensitive\\*.* -Destination E:\\ -Recurse\"",
+              "currentDirectory": "C:\\Users\\admin2\\",
+              "user": "CORP\\admin2",
+              "integrityLevel": "Medium",
+              "hashes": "SHA256=C3D4E5F6789012345678901234567890123CDEF1234567890123CDEF12345678",
+              "parentProcessGuid": "{8df8f34e-2810-65c7-0000-000000000400}",
+              "parentProcessId": "4456",
+              "parentImage": "C:\\Windows\\System32\\cmd.exe",
+              "parentCommandLine": "cmd.exe"
+            }
+          }
+        },
+        "_fomorian_test": true,
+        "fomorian_batch": 9,
+        "fomorian_campaign": 28,
+        "fomorian_technique": "T1052.001",
+        "fomorian_technique_name": "Exfiltration Over USB"
+      }
+    },
+    {
+      "_comment": "Sysmon Event 11 - File created on USB drive",
+      "sequence": 2,
+      "timestamp": "2026-02-10T18:04:02.000Z",
+      "log": {
+        "timestamp": "2026-02-10T18:04:02.000+0000",
+        "rule": {
+          "level": 8,
+          "description": "Sysmon - Event 11: File Created on Removable Media",
+          "id": "100001",
+          "mitre": {
+            "id": [
+              "T1052.001"
+            ],
+            "tactic": [
+              "Exfiltration"
+            ],
+            "technique": [
+              "Exfiltration Over Physical Medium"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event11",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1707588242.000001",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "11",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "11",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-10 18:04:02.000",
+              "processGuid": "{8df8f34e-2810-65c7-0034-000000000400}",
+              "processId": "9128",
+              "image": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+              "targetFilename": "E:\\credentials.txt",
+              "creationUtcTime": "2026-02-10 18:04:02.000",
+              "user": "CORP\\admin2"
+            }
+          }
+        },
+        "_fomorian_test": true,
+        "fomorian_batch": 9,
+        "fomorian_campaign": 28,
+        "fomorian_technique": "T1052.001",
+        "fomorian_technique_name": "Exfiltration Over USB"
+      }
+    }
+  ]
+}

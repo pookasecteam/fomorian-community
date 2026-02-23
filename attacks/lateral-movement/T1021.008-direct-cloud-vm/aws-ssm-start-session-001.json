@@ -1,0 +1,123 @@
+{
+  "_metadata": {
+    "attack_id": "T1021.008",
+    "variation": "001",
+    "name": "AWS SSM StartSession Direct VM Connection",
+    "description": "Direct connection to AWS EC2 instance via SSM Session Manager bypassing traditional network controls",
+    "expected_detection": "MEDIUM",
+    "kill_chain_phase": "lateral-movement",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "AWS CloudTrail - Direct SSM session to EC2",
+      "sequence": 1,
+      "timestamp": "2026-02-08T11:20:00.000Z",
+      "log": {
+        "timestamp": "2026-02-08T11:20:00.000+0000",
+        "rule": {
+          "level": 10,
+          "description": "AWS CloudTrail: Direct VM connection via SSM StartSession",
+          "id": "100001",
+          "mitre": {
+            "id": [
+              "T1021.008"
+            ],
+            "tactic": [
+              "Lateral Movement"
+            ],
+            "technique": [
+              "Remote Services: Direct Cloud VM Connections"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "aws",
+            "aws_cloudtrail",
+            "cloud"
+          ]
+        },
+        "agent": {
+          "id": "000",
+          "name": "wazuh.manager",
+          "ip": "127.0.0.1"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1707400000.300009",
+        "decoder": {
+          "name": "json"
+        },
+        "location": "aws-cloudtrail",
+        "data": {
+          "aws": {
+            "eventVersion": "1.08",
+            "userIdentity": {
+              "type": "AssumedRole",
+              "principalId": "AROA1234567890EXAMPLE:admin.user",
+              "arn": "arn:aws:sts::123456789012:assumed-role/AdminRole/admin.user",
+              "accountId": "123456789012",
+              "accessKeyId": "ASIA1234567890EXAMPLE",
+              "sessionContext": {
+                "sessionIssuer": {
+                  "type": "Role",
+                  "principalId": "AROA1234567890EXAMPLE",
+                  "arn": "arn:aws:iam::123456789012:role/AdminRole",
+                  "accountId": "123456789012",
+                  "userName": "AdminRole"
+                },
+                "webIdFederationData": {},
+                "attributes": {
+                  "creationDate": "2026-02-08T10:00:00Z",
+                  "mfaAuthenticated": "false"
+                }
+              }
+            },
+            "eventTime": "2026-02-08T11:20:00Z",
+            "eventSource": "ssm.amazonaws.com",
+            "eventName": "StartSession",
+            "awsRegion": "us-west-2",
+            "sourceIPAddress": "203.0.113.50",
+            "userAgent": "aws-sdk-go/1.44.0 (go1.19; linux; amd64)",
+            "requestParameters": {
+              "target": "i-0b2c3d4e5f6789012",
+              "documentName": "SSM-SessionManagerRunShell",
+              "reason": "Direct access for troubleshooting"
+            },
+            "responseElements": {
+              "sessionId": "admin.user-0b2c3d4e5f6789012-20260208",
+              "tokenValue": "REDACTED",
+              "streamUrl": "wss://ssmmessages.us-west-2.amazonaws.com/v1/data-channel/session-id"
+            },
+            "requestID": "f3a4b5c6-d7e8-9012-3456-789abcdef012",
+            "eventID": "a4b5c6d7-e8f9-0123-4567-89abcdef0123",
+            "readOnly": false,
+            "resources": [
+              {
+                "accountId": "123456789012",
+                "type": "AWS::SSM::Session",
+                "ARN": "arn:aws:ssm:us-west-2:123456789012:session/admin.user-0b2c3d4e5f6789012-20260208"
+              },
+              {
+                "accountId": "123456789012",
+                "type": "AWS::EC2::Instance",
+                "ARN": "arn:aws:ec2:us-west-2:123456789012:instance/i-0b2c3d4e5f6789012"
+              }
+            ],
+            "eventType": "AwsApiCall",
+            "managementEvent": true,
+            "recipientAccountId": "123456789012",
+            "eventCategory": "Management"
+          }
+        },
+        "_fomorian_batch": "PT-2026-003-batch1-lateral",
+        "_fomorian_test": true,
+        "_fomorian_attack_id": "T1021.008",
+        "_fomorian_expected_detection": "Sigma: AWS Direct VM Connection via SSM (T1021.008)"
+      }
+    }
+  ]
+}

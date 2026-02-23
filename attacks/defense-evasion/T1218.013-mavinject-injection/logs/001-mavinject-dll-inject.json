@@ -1,0 +1,154 @@
+{
+  "_metadata": {
+    "attack_id": "T1218.013",
+    "variation": "001",
+    "name": "Mavinject.exe DLL Injection",
+    "description": "Abuse Microsoft signed mavinject.exe to inject DLL into remote process",
+    "expected_detection": "HIGH",
+    "kill_chain_phase": "defense-evasion",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Sysmon Event 1 - Process Creation: mavinject.exe injects DLL into target process",
+      "sequence": 1,
+      "timestamp": "2026-02-22T10:08:00.000Z",
+      "log": {
+        "rule": {
+          "level": 14,
+          "description": "Sysmon - Event 1: Process creation",
+          "id": "100101",
+          "mitre": {
+            "id": [
+              "T1218.013"
+            ],
+            "tactic": [
+              "Defense Evasion"
+            ],
+            "technique": [
+              "System Binary Proxy Execution: Mavinject"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": true,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1709002400.000020",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-22 10:08:00.000",
+              "processGuid": "{12345678-2400-2400-2400-000000000020}",
+              "processId": "13100",
+              "image": "C:\\Windows\\SysWOW64\\mavinject.exe",
+              "commandLine": "mavinject.exe 4820 /INJECTRUNNING C:\\Users\\Public\\beacon.dll",
+              "currentDirectory": "C:\\Users\\Public\\",
+              "user": "CORP\\Administrator",
+              "integrityLevel": "High",
+              "hashes": "SHA256=C3D4E5F6A1B2C3D4E5F6A1B2C3D4E5F6A1B2C3D4E5F6A1B2C3D4E5F6A1B2C3D4",
+              "parentProcessGuid": "{12345678-2400-2400-2400-000000000000}",
+              "parentProcessId": "1234",
+              "parentImage": "C:\\Windows\\System32\\cmd.exe",
+              "parentCommandLine": "cmd.exe"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Sysmon Event 10 - Process Access: mavinject opens target process",
+      "sequence": 2,
+      "timestamp": "2026-02-22T10:08:01.000Z",
+      "log": {
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 10: Process access",
+          "id": "100001",
+          "mitre": {
+            "id": [
+              "T1218.013"
+            ],
+            "tactic": [
+              "Defense Evasion"
+            ],
+            "technique": [
+              "System Binary Proxy Execution: Mavinject"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": true,
+          "groups": [
+            "sysmon",
+            "sysmon_event10",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1709002400.000021",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "10",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "10",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-22 10:08:01.000",
+              "sourceProcessGuid": "{12345678-2400-2400-2400-000000000020}",
+              "sourceProcessId": "13100",
+              "sourceImage": "C:\\Windows\\SysWOW64\\mavinject.exe",
+              "targetProcessGuid": "{12345678-2400-2400-2400-000000000200}",
+              "targetProcessId": "4820",
+              "targetImage": "C:\\Windows\\explorer.exe",
+              "grantedAccess": "0x1F0FFF",
+              "callTrace": "C:\\Windows\\SYSTEM32\\ntdll.dll+9D4C4",
+              "sourceUser": "CORP\\Administrator",
+              "targetUser": "CORP\\Administrator"
+            }
+          }
+        }
+      }
+    }
+  ]
+}

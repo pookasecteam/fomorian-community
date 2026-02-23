@@ -7,9 +7,7 @@
     "expected_detection": "LOW",
     "kill_chain_phase": "discovery",
     "format": "wazuh-native",
-    "format_version": "1.0",
-    "campaign": "Campaign 25",
-    "date_executed": "2026-02-09"
+    "format_version": "1.0"
   },
   "logs": [
     {
@@ -17,24 +15,41 @@
       "sequence": 1,
       "timestamp": "2026-02-09T14:00:00.000Z",
       "log": {
-        "timestamp": "",
         "rule": {
           "level": 3,
           "description": "Sysmon - Event 1: Process creation",
           "id": "100101",
           "mitre": {
-            "id": ["T1018"],
-            "tactic": ["Discovery"],
-            "technique": ["Remote System Discovery"]
+            "id": [
+              "T1018"
+            ],
+            "tactic": [
+              "Discovery"
+            ],
+            "technique": [
+              "Remote System Discovery"
+            ]
           },
           "firedtimes": 1,
           "mail": false,
-          "groups": ["sysmon", "sysmon_event1", "windows"]
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
         },
-        "agent": {"id": "012", "name": "DC01", "ip": "10.1.0.10"},
-        "manager": {"name": "wazuh.manager"},
+        "agent": {
+          "id": "010",
+          "name": "DC01",
+          "ip": "198.51.100.10"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
         "id": "1709000200.000001",
-        "decoder": {"name": "windows_eventchannel"},
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
         "location": "EventChannel",
         "data": {
           "win": {
@@ -42,7 +57,7 @@
               "eventID": "1",
               "channel": "Microsoft-Windows-Sysmon/Operational",
               "providerName": "Microsoft-Windows-Sysmon",
-              "computer": "DC01.yourcompany.local",
+              "computer": "DC01.corp.local",
               "level": "4",
               "task": "1",
               "severityValue": "INFORMATION"
@@ -54,7 +69,7 @@
               "image": "C:\\Windows\\System32\\net.exe",
               "commandLine": "net  view /domain",
               "currentDirectory": "C:\\Windows\\System32\\",
-              "user": "YOURCOMPANY\\Administrator",
+              "user": "CORP\\Administrator",
               "integrityLevel": "High",
               "hashes": "SHA256=A1B2C3D4E5F6A7B8C9D0E1F2A3B4C5D6E7F8A9B0C1D2E3F4A5B6C7D8E9F0A1B2",
               "parentProcessGuid": "{12345678-1234-1234-1234-000000200000}",

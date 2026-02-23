@@ -1,0 +1,162 @@
+{
+  "_metadata": {
+    "attack_id": "T1136",
+    "variation": "001",
+    "name": "Create Account - Backdoor Local Admin via net.exe",
+    "description": "Using net user /add to create a backdoor local account and adding it to the local Administrators group for persistent privileged access",
+    "expected_detection": "HIGH",
+    "kill_chain_phase": "persistence",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Sysmon Event 1 - net.exe creating a new local user account with password",
+      "sequence": 1,
+      "timestamp": "2026-02-22T15:45:00.000Z",
+      "log": {
+        "timestamp": "2026-02-22T15:45:00.000+0000",
+        "rule": {
+          "level": 14,
+          "description": "Sysmon - Event 1: Local Account Creation via net.exe",
+          "id": "100100",
+          "mitre": {
+            "id": [
+              "T1136"
+            ],
+            "tactic": [
+              "Persistence"
+            ],
+            "technique": [
+              "Create Account"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000028.100011",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "opcode": "0",
+              "keywords": "0x8000000000000000",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-22 15:45:00.000",
+              "processGuid": "{C28A0F3E-000A-6E1A-2800-000000000100}",
+              "processId": "17204",
+              "image": "C:\\Windows\\System32\\net.exe",
+              "commandLine": "net user svc_backup P@ssw0rd123! /add /y",
+              "currentDirectory": "C:\\Users\\attacker\\",
+              "user": "CORP\\attacker",
+              "integrityLevel": "High",
+              "hashes": "SHA256=0BD769B3448C1E95DFD69FA7F0F95B1F0E7F4D8E72D5C1B9A3E6F2D8C4A0B7E1",
+              "parentProcessGuid": "{C28A0F3E-000A-6E1A-2800-000000000099}",
+              "parentProcessId": "14100",
+              "parentImage": "C:\\Windows\\System32\\cmd.exe",
+              "parentCommandLine": "cmd.exe"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Sysmon Event 1 - net.exe adding the new account to local Administrators group",
+      "sequence": 2,
+      "timestamp": "2026-02-22T15:45:10.000Z",
+      "log": {
+        "timestamp": "2026-02-22T15:45:10.000+0000",
+        "rule": {
+          "level": 14,
+          "description": "Sysmon - Event 1: Account Added to Administrators Group via net.exe",
+          "id": "100100",
+          "mitre": {
+            "id": [
+              "T1136"
+            ],
+            "tactic": [
+              "Persistence"
+            ],
+            "technique": [
+              "Create Account"
+            ]
+          },
+          "firedtimes": 2,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000028.100012",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "opcode": "0",
+              "keywords": "0x8000000000000000",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-22 15:45:10.000",
+              "processGuid": "{C28A0F3E-000A-6E1A-2800-000000000101}",
+              "processId": "17232",
+              "image": "C:\\Windows\\System32\\net.exe",
+              "commandLine": "net localgroup Administrators svc_backup /add",
+              "currentDirectory": "C:\\Users\\attacker\\",
+              "user": "CORP\\attacker",
+              "integrityLevel": "High",
+              "hashes": "SHA256=0BD769B3448C1E95DFD69FA7F0F95B1F0E7F4D8E72D5C1B9A3E6F2D8C4A0B7E1",
+              "parentProcessGuid": "{C28A0F3E-000A-6E1A-2800-000000000099}",
+              "parentProcessId": "14100",
+              "parentImage": "C:\\Windows\\System32\\cmd.exe",
+              "parentCommandLine": "cmd.exe"
+            }
+          }
+        }
+      }
+    }
+  ]
+}

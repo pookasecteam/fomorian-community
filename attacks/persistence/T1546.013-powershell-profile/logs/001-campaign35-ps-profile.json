@@ -1,0 +1,158 @@
+{
+  "metadata": {
+    "campaign": "35",
+    "batch": "16",
+    "format": "wazuh-native",
+    "attack_id": "T1546.013",
+    "variation": "001",
+    "name": "PowerShell Profile",
+    "description": "Modify PowerShell profile to execute malicious code on every PS session",
+    "expected_detection": "HIGH",
+    "kill_chain_phase": "persistence"
+  },
+  "logs": [
+    {
+      "sequence": 1,
+      "timestamp": "2026-02-10T16:26:00.000Z",
+      "log": {
+        "timestamp": "2026-02-10T16:26:00.000-0500",
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 11: PowerShell profile modified",
+          "id": "100111",
+          "mitre": {
+            "id": [
+              "T1546.013"
+            ],
+            "tactic": [
+              "Persistence",
+              "Privilege Escalation"
+            ],
+            "technique": [
+              "PowerShell Profile"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event11",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1707582360.000001",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "11",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "11",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-10 16:26:00.000",
+              "processGuid": "{c1d2e3f4-1029-65a8-0000-001000000000}",
+              "processId": "10123",
+              "image": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+              "targetFilename": "C:\\Users\\attacker\\Documents\\WindowsPowerShell\\Microsoft.PowerShell_profile.ps1",
+              "creationUtcTime": "2026-02-10 16:26:00.000"
+            }
+          }
+        },
+        "_fomorian_batch": "16",
+        "_fomorian_campaign": "35"
+      }
+    },
+    {
+      "sequence": 2,
+      "timestamp": "2026-02-10T16:26:30.000Z",
+      "log": {
+        "timestamp": "2026-02-10T16:26:30.000-0500",
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 1: PowerShell loading profile with backdoor",
+          "id": "100101",
+          "mitre": {
+            "id": [
+              "T1546.013",
+              "T1059.001"
+            ],
+            "tactic": [
+              "Persistence",
+              "Execution"
+            ],
+            "technique": [
+              "PowerShell Profile",
+              "PowerShell"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1707582390.000001",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-10 16:26:30.000",
+              "processGuid": "{c1d2e3f4-1030-65a8-0000-001000000000}",
+              "processId": "10150",
+              "image": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+              "commandLine": "powershell.exe",
+              "currentDirectory": "C:\\Users\\attacker\\",
+              "user": "CORP\\attacker",
+              "integrityLevel": "Medium",
+              "hashes": "SHA256=B9C0D1E2F3A4B5C6D7E8F9A0B1C2D3E4F5A6B7C8D9E0F1A2B3C4D5E6F7A8B9C0",
+              "parentProcessGuid": "{c1d2e3f4-1000-65a8-0000-001000000000}",
+              "parentProcessId": "10100",
+              "parentImage": "C:\\Windows\\explorer.exe",
+              "parentCommandLine": "C:\\Windows\\explorer.exe"
+            }
+          }
+        },
+        "_fomorian_batch": "16",
+        "_fomorian_campaign": "35"
+      }
+    }
+  ]
+}

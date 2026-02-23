@@ -15,24 +15,41 @@
       "sequence": 1,
       "timestamp": "2026-01-29T23:20:00.000Z",
       "log": {
-        "timestamp": "",
         "rule": {
           "level": 8,
           "description": "Sysmon - Event 1: Staging Directory Created",
           "id": "100100",
           "mitre": {
-            "id": ["T1074.001"],
-            "tactic": ["Collection"],
-            "technique": ["Local Data Staging"]
+            "id": [
+              "T1074.001"
+            ],
+            "tactic": [
+              "Collection"
+            ],
+            "technique": [
+              "Local Data Staging"
+            ]
           },
           "firedtimes": 1,
           "mail": false,
-          "groups": ["sysmon", "sysmon_event1", "windows"]
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
         },
-        "agent": {"id": "007", "name": "WS01", "ip": "10.1.0.20"},
-        "manager": {"name": "wazuh.manager"},
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
         "id": "1700000001.900001",
-        "decoder": {"name": "windows_eventchannel"},
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
         "location": "EventChannel",
         "data": {
           "win": {
@@ -71,24 +88,41 @@
       "sequence": 2,
       "timestamp": "2026-01-29T23:20:05.000Z",
       "log": {
-        "timestamp": "",
         "rule": {
           "level": 10,
           "description": "Sysmon - Event 1: Sensitive Files Copied to Staging",
           "id": "100100",
           "mitre": {
-            "id": ["T1074.001"],
-            "tactic": ["Collection"],
-            "technique": ["Local Data Staging"]
+            "id": [
+              "T1074.001"
+            ],
+            "tactic": [
+              "Collection"
+            ],
+            "technique": [
+              "Local Data Staging"
+            ]
           },
           "firedtimes": 1,
           "mail": false,
-          "groups": ["sysmon", "sysmon_event1", "windows"]
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
         },
-        "agent": {"id": "007", "name": "WS01", "ip": "10.1.0.20"},
-        "manager": {"name": "wazuh.manager"},
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
         "id": "1700000001.900002",
-        "decoder": {"name": "windows_eventchannel"},
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
         "location": "EventChannel",
         "data": {
           "win": {
@@ -127,24 +161,41 @@
       "sequence": 3,
       "timestamp": "2026-01-29T23:20:10.000Z",
       "log": {
-        "timestamp": "",
         "rule": {
           "level": 10,
           "description": "Sysmon - Event 1: Robocopy Mass File Staging",
           "id": "100100",
           "mitre": {
-            "id": ["T1074.001"],
-            "tactic": ["Collection"],
-            "technique": ["Local Data Staging"]
+            "id": [
+              "T1074.001"
+            ],
+            "tactic": [
+              "Collection"
+            ],
+            "technique": [
+              "Local Data Staging"
+            ]
           },
           "firedtimes": 1,
           "mail": false,
-          "groups": ["sysmon", "sysmon_event1", "windows"]
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
         },
-        "agent": {"id": "007", "name": "WS01", "ip": "10.1.0.20"},
-        "manager": {"name": "wazuh.manager"},
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
         "id": "1700000001.900003",
-        "decoder": {"name": "windows_eventchannel"},
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
         "location": "EventChannel",
         "data": {
           "win": {

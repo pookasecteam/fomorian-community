@@ -5,9 +5,7 @@
     "name": "Macro-Enabled Document Execution",
     "description": "User opens malicious Word document with VBA macro that spawns PowerShell",
     "expected_detection": "CRITICAL",
-    "expected_soar": "lolbins-abuse-detection",
     "kill_chain_phase": "initial-access",
-    "notes": "Classic phishing attack. Office spawning shell is always suspicious.",
     "format": "wazuh-native",
     "format_version": "1.0"
   },
@@ -17,7 +15,6 @@
       "sequence": 1,
       "timestamp": "2026-01-29T08:30:00.000Z",
       "log": {
-        "timestamp": "",
         "rule": {
           "level": 12,
           "description": "Sysmon - Event 1: Macro-Enabled Document Execution",
@@ -42,9 +39,9 @@
           ]
         },
         "agent": {
-          "id": "007",
+          "id": "020",
           "name": "WS01",
-          "ip": "10.1.0.20"
+          "ip": "198.51.100.20"
         },
         "manager": {
           "name": "wazuh.manager"
@@ -91,7 +88,6 @@
       "sequence": 2,
       "timestamp": "2026-01-29T08:30:05.000Z",
       "log": {
-        "timestamp": "",
         "rule": {
           "level": 12,
           "description": "Sysmon - Event 1: Macro-Enabled Document Execution",
@@ -116,9 +112,9 @@
           ]
         },
         "agent": {
-          "id": "007",
+          "id": "020",
           "name": "WS01",
-          "ip": "10.1.0.20"
+          "ip": "198.51.100.20"
         },
         "manager": {
           "name": "wazuh.manager"
@@ -165,7 +161,6 @@
       "sequence": 3,
       "timestamp": "2026-01-29T08:30:06.000Z",
       "log": {
-        "timestamp": "",
         "rule": {
           "level": 12,
           "description": "Sysmon - Event 3: Macro-Enabled Document Execution",
@@ -190,9 +185,9 @@
           ]
         },
         "agent": {
-          "id": "007",
+          "id": "020",
           "name": "WS01",
-          "ip": "10.1.0.20"
+          "ip": "198.51.100.20"
         },
         "manager": {
           "name": "wazuh.manager"
@@ -223,9 +218,9 @@
               "user": "CORP\\john.doe",
               "protocol": "tcp",
               "initiated": "true",
-              "sourceIp": "10.1.1.50",
+              "sourceIp": "198.51.100.50",
               "sourcePort": "49721",
-              "destinationIp": "192.168.50.100",
+              "destinationIp": "198.51.100.100",
               "destinationHostname": "",
               "destinationPort": "80"
             }

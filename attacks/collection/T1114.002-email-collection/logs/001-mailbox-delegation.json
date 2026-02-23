@@ -1,0 +1,95 @@
+{
+  "_metadata": {
+    "attack_id": "T1114.002",
+    "variation": "001",
+    "name": "Exchange Online Mailbox Delegation Attack",
+    "description": "Attacker grants themselves access to executive mailboxes",
+    "expected_detection": "CRITICAL",
+    "kill_chain_phase": "collection",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Mailbox delegation granted",
+      "sequence": 1,
+      "timestamp": "2026-01-29T16:15:00.000Z",
+      "log": {
+        "o365": {
+          "audit": {
+            "CreationTime": "2026-01-29T16:15:00.000Z",
+            "RecordType": 1,
+            "Operation": "Add-MailboxPermission",
+            "OrganizationId": "corp-tenant-guid",
+            "UserType": 0,
+            "UserKey": "john.doe@corp.local",
+            "Workload": "Exchange",
+            "ClientIP": "185.220.101.45",
+            "UserId": "john.doe@corp.local",
+            "ObjectId": "ceo@corp.local",
+            "Parameters": [
+              {
+                "Name": "Identity",
+                "Value": "ceo@corp.local"
+              },
+              {
+                "Name": "User",
+                "Value": "john.doe@corp.local"
+              },
+              {
+                "Name": "AccessRights",
+                "Value": "FullAccess"
+              }
+            ],
+            "ResultStatus": "True"
+          }
+        },
+        "agent": {
+          "name": "O365-Audit",
+          "id": "o365"
+        }
+      }
+    },
+    {
+      "_comment": "Inbox rule created to forward emails",
+      "sequence": 2,
+      "timestamp": "2026-01-29T16:15:30.000Z",
+      "log": {
+        "o365": {
+          "audit": {
+            "CreationTime": "2026-01-29T16:15:30.000Z",
+            "RecordType": 1,
+            "Operation": "New-InboxRule",
+            "Workload": "Exchange",
+            "ClientIP": "185.220.101.45",
+            "UserId": "john.doe@corp.local",
+            "ObjectId": "ceo@corp.local",
+            "Parameters": [
+              {
+                "Name": "Name",
+                "Value": "Auto-Archive"
+              },
+              {
+                "Name": "ForwardTo",
+                "Value": "external-drop@protonmail.com"
+              },
+              {
+                "Name": "MarkAsRead",
+                "Value": "True"
+              },
+              {
+                "Name": "DeleteMessage",
+                "Value": "False"
+              }
+            ],
+            "ResultStatus": "True"
+          }
+        },
+        "agent": {
+          "name": "O365-Audit",
+          "id": "o365"
+        }
+      }
+    }
+  ]
+}

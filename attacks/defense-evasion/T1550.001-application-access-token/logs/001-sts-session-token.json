@@ -1,0 +1,112 @@
+{
+  "_metadata": {
+    "attack_id": "T1550.001",
+    "variation": "001",
+    "name": "STS Session Token Generation",
+    "description": "Attacker generates temporary STS session token to evade detection by using different credentials. The temporary credentials have a different access key ID, making correlation with the original compromised user harder.",
+    "expected_detection": "HIGH",
+    "kill_chain_phase": "defense-evasion",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "CloudTrail: GetSessionToken - attacker generates temporary STS session credentials for evasion",
+      "sequence": 1,
+      "timestamp": "2026-02-23T09:45:00.000Z",
+      "log": {
+        "timestamp": "2026-02-23T09:45:01.000+0000",
+        "rule": {
+          "level": 3,
+          "description": "AWS Cloudtrail: sts.amazonaws.com - GetSessionToken.",
+          "id": "100802",
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "amazon",
+            "aws",
+            "aws_cloudtrail"
+          ],
+          "pci_dss": [
+            "10.6.1"
+          ],
+          "hipaa": [
+            "164.312.b"
+          ],
+          "nist_800_53": [
+            "AU.6"
+          ],
+          "tsc": [
+            "CC7.2",
+            "CC7.3"
+          ],
+          "mitre": {
+            "id": [
+              "T1550.001"
+            ],
+            "tactic": [
+              "Defense Evasion"
+            ],
+            "technique": [
+              "Use Alternate Authentication Material: Application Access Token"
+            ]
+          },
+          "gdpr": [
+            "IV_35.7.d"
+          ]
+        },
+        "agent": {
+          "id": "000",
+          "name": "wazuh.manager"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000028.010001",
+        "decoder": {
+          "name": "json"
+        },
+        "location": "Wazuh-AWS",
+        "data": {
+          "integration": "aws",
+          "aws": {
+            "eventVersion": "1.11",
+            "eventTime": "2026-02-23T09:45:00Z",
+            "eventSource": "sts.amazonaws.com",
+            "eventName": "GetSessionToken",
+            "awsRegion": "us-east-1",
+            "sourceIPAddress": "203.0.113.42",
+            "userAgent": "Boto3/1.26.165 Python/3.13.9 Linux/6.16.8+kali-amd64 Botocore/1.29.165",
+            "userIdentity": {
+              "type": "IAMUser",
+              "arn": "arn:aws:iam::123456789012:user/compromised-dev",
+              "accountId": "123456789012",
+              "userName": "compromised-dev",
+              "principalId": "AIDACKCEVSQ6C2EXAMPLE",
+              "accessKeyId": "AKIAIOSFODNN7EXAMPLE"
+            },
+            "requestParameters": {
+              "durationSeconds": 43200
+            },
+            "responseElements": {
+              "credentials": {
+                "accessKeyId": "ASIAEXAMPLETEMP001",
+                "expiration": "2026-02-24T09:45:00Z",
+                "sessionToken": "FwoGZXIvYXdzEBYaDME...TRUNCATED"
+              }
+            },
+            "eventID": "01234567-89ab-cdef-0123-456789abcdef",
+            "requestID": "12345678-9abc-def0-1234-56789abcdef0",
+            "readOnly": "false",
+            "eventType": "AwsApiCall",
+            "managementEvent": "true",
+            "recipientAccountId": "123456789012",
+            "eventCategory": "Management",
+            "source": "cloudtrail",
+            "aws_account_id": "123456789012"
+          }
+        }
+      }
+    }
+  ]
+}

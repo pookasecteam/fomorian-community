@@ -1,0 +1,385 @@
+{
+  "_metadata": {
+    "attack_id": "T1531",
+    "variation": "001",
+    "name": "AWS Account Access Removal Attack",
+    "description": "Attacker systematically removes access for legitimate users by detaching policies, deleting access keys, deactivating MFA, and deleting login profiles to lock administrators out",
+    "expected_detection": "HIGH",
+    "kill_chain_phase": "impact",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "CloudTrail: DetachUserPolicy - Remove admin policy from target user",
+      "sequence": 1,
+      "timestamp": "2026-02-23T14:18:00.000Z",
+      "log": {
+        "timestamp": "2026-02-23T14:18:01.000+0000",
+        "rule": {
+          "level": 6,
+          "description": "AWS Cloudtrail: iam.amazonaws.com - DetachUserPolicy.",
+          "id": "100802",
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "amazon",
+            "aws",
+            "aws_cloudtrail"
+          ],
+          "pci_dss": [
+            "10.6.1"
+          ],
+          "hipaa": [
+            "164.312.b"
+          ],
+          "nist_800_53": [
+            "AU.6"
+          ],
+          "tsc": [
+            "CC7.2",
+            "CC7.3"
+          ],
+          "mitre": {
+            "id": [
+              "T1531"
+            ],
+            "tactic": [
+              "Impact"
+            ],
+            "technique": [
+              "Account Access Removal"
+            ]
+          },
+          "gdpr": [
+            "IV_35.7.d"
+          ]
+        },
+        "agent": {
+          "id": "000",
+          "name": "wazuh.manager"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000029.290030",
+        "decoder": {
+          "name": "json"
+        },
+        "location": "Wazuh-AWS",
+        "data": {
+          "integration": "aws",
+          "aws": {
+            "eventVersion": "1.11",
+            "eventTime": "2026-02-23T14:18:00Z",
+            "eventSource": "iam.amazonaws.com",
+            "eventName": "DetachUserPolicy",
+            "awsRegion": "us-east-2",
+            "sourceIPAddress": "198.51.100.77",
+            "userAgent": "aws-cli/2.15.0 Python/3.11.6 Linux/6.1.0-kali amd64",
+            "userIdentity": {
+              "type": "IAMUser",
+              "arn": "arn:aws:iam::575084400239:user/compromised-dev",
+              "accountId": "575084400239",
+              "userName": "compromised-dev",
+              "principalId": "AIDACKCEVSQ6C2EXAMPLE",
+              "accessKeyId": "AKIAIOSFODNN7EXAMPLE"
+            },
+            "requestParameters": {
+              "userName": "admin-ops",
+              "policyArn": "arn:aws:iam::aws:policy/AdministratorAccess"
+            },
+            "responseElements": null,
+            "eventID": "f2b6c0d1-e3a5-4c7d-f0b2-6c5b1a9e3a70",
+            "requestID": "c3d4e5f6-a7b8-4c9d-f0e1-b2c3d4e5f6a7",
+            "readOnly": "false",
+            "eventType": "AwsApiCall",
+            "managementEvent": "true",
+            "recipientAccountId": "575084400239",
+            "eventCategory": "Management",
+            "source": "cloudtrail",
+            "aws_account_id": "575084400239"
+          }
+        }
+      }
+    },
+    {
+      "_comment": "CloudTrail: DeleteAccessKey - Delete the admin's programmatic access key",
+      "sequence": 2,
+      "timestamp": "2026-02-23T14:18:09.000Z",
+      "log": {
+        "timestamp": "2026-02-23T14:18:10.000+0000",
+        "rule": {
+          "level": 6,
+          "description": "AWS Cloudtrail: iam.amazonaws.com - DeleteAccessKey.",
+          "id": "100802",
+          "firedtimes": 2,
+          "mail": false,
+          "groups": [
+            "amazon",
+            "aws",
+            "aws_cloudtrail"
+          ],
+          "pci_dss": [
+            "10.6.1"
+          ],
+          "hipaa": [
+            "164.312.b"
+          ],
+          "nist_800_53": [
+            "AU.6"
+          ],
+          "tsc": [
+            "CC7.2",
+            "CC7.3"
+          ],
+          "mitre": {
+            "id": [
+              "T1531"
+            ],
+            "tactic": [
+              "Impact"
+            ],
+            "technique": [
+              "Account Access Removal"
+            ]
+          },
+          "gdpr": [
+            "IV_35.7.d"
+          ]
+        },
+        "agent": {
+          "id": "000",
+          "name": "wazuh.manager"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000029.290031",
+        "decoder": {
+          "name": "json"
+        },
+        "location": "Wazuh-AWS",
+        "data": {
+          "integration": "aws",
+          "aws": {
+            "eventVersion": "1.11",
+            "eventTime": "2026-02-23T14:18:09Z",
+            "eventSource": "iam.amazonaws.com",
+            "eventName": "DeleteAccessKey",
+            "awsRegion": "us-east-2",
+            "sourceIPAddress": "198.51.100.77",
+            "userAgent": "aws-cli/2.15.0 Python/3.11.6 Linux/6.1.0-kali amd64",
+            "userIdentity": {
+              "type": "IAMUser",
+              "arn": "arn:aws:iam::575084400239:user/compromised-dev",
+              "accountId": "575084400239",
+              "userName": "compromised-dev",
+              "principalId": "AIDACKCEVSQ6C2EXAMPLE",
+              "accessKeyId": "AKIAIOSFODNN7EXAMPLE"
+            },
+            "requestParameters": {
+              "userName": "admin-ops",
+              "accessKeyId": "AKIAI44QH8DHBEXAMPLE"
+            },
+            "responseElements": null,
+            "eventID": "a3c7d1e2-f4b6-4d8e-a1c3-7d6c2b0f4b81",
+            "requestID": "d4e5f6a7-b8c9-4d0e-a1f2-c3d4e5f6a7b8",
+            "readOnly": "false",
+            "eventType": "AwsApiCall",
+            "managementEvent": "true",
+            "recipientAccountId": "575084400239",
+            "eventCategory": "Management",
+            "source": "cloudtrail",
+            "aws_account_id": "575084400239"
+          }
+        }
+      }
+    },
+    {
+      "_comment": "CloudTrail: DeactivateMFADevice - Disable the admin's MFA device",
+      "sequence": 3,
+      "timestamp": "2026-02-23T14:18:22.000Z",
+      "log": {
+        "timestamp": "2026-02-23T14:18:23.000+0000",
+        "rule": {
+          "level": 8,
+          "description": "AWS Cloudtrail: iam.amazonaws.com - DeactivateMFADevice.",
+          "id": "100802",
+          "firedtimes": 3,
+          "mail": false,
+          "groups": [
+            "amazon",
+            "aws",
+            "aws_cloudtrail"
+          ],
+          "pci_dss": [
+            "10.6.1"
+          ],
+          "hipaa": [
+            "164.312.b"
+          ],
+          "nist_800_53": [
+            "AU.6"
+          ],
+          "tsc": [
+            "CC7.2",
+            "CC7.3"
+          ],
+          "mitre": {
+            "id": [
+              "T1531"
+            ],
+            "tactic": [
+              "Impact"
+            ],
+            "technique": [
+              "Account Access Removal"
+            ]
+          },
+          "gdpr": [
+            "IV_35.7.d"
+          ]
+        },
+        "agent": {
+          "id": "000",
+          "name": "wazuh.manager"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000029.290032",
+        "decoder": {
+          "name": "json"
+        },
+        "location": "Wazuh-AWS",
+        "data": {
+          "integration": "aws",
+          "aws": {
+            "eventVersion": "1.11",
+            "eventTime": "2026-02-23T14:18:22Z",
+            "eventSource": "iam.amazonaws.com",
+            "eventName": "DeactivateMFADevice",
+            "awsRegion": "us-east-2",
+            "sourceIPAddress": "198.51.100.77",
+            "userAgent": "aws-cli/2.15.0 Python/3.11.6 Linux/6.1.0-kali amd64",
+            "userIdentity": {
+              "type": "IAMUser",
+              "arn": "arn:aws:iam::575084400239:user/compromised-dev",
+              "accountId": "575084400239",
+              "userName": "compromised-dev",
+              "principalId": "AIDACKCEVSQ6C2EXAMPLE",
+              "accessKeyId": "AKIAIOSFODNN7EXAMPLE"
+            },
+            "requestParameters": {
+              "userName": "admin-ops",
+              "serialNumber": "arn:aws:iam::575084400239:mfa/admin-ops"
+            },
+            "responseElements": null,
+            "eventID": "b4d8e2f3-a5c7-4e9f-b2d4-8e7d3c1a5c92",
+            "requestID": "e5f6a7b8-c9d0-4e1f-b2a3-d4e5f6a7b8c9",
+            "readOnly": "false",
+            "eventType": "AwsApiCall",
+            "managementEvent": "true",
+            "recipientAccountId": "575084400239",
+            "eventCategory": "Management",
+            "source": "cloudtrail",
+            "aws_account_id": "575084400239"
+          }
+        }
+      }
+    },
+    {
+      "_comment": "CloudTrail: DeleteLoginProfile - Remove console login capability entirely",
+      "sequence": 4,
+      "timestamp": "2026-02-23T14:18:35.000Z",
+      "log": {
+        "timestamp": "2026-02-23T14:18:36.000+0000",
+        "rule": {
+          "level": 8,
+          "description": "AWS Cloudtrail: iam.amazonaws.com - DeleteLoginProfile.",
+          "id": "100802",
+          "firedtimes": 4,
+          "mail": false,
+          "groups": [
+            "amazon",
+            "aws",
+            "aws_cloudtrail"
+          ],
+          "pci_dss": [
+            "10.6.1"
+          ],
+          "hipaa": [
+            "164.312.b"
+          ],
+          "nist_800_53": [
+            "AU.6"
+          ],
+          "tsc": [
+            "CC7.2",
+            "CC7.3"
+          ],
+          "mitre": {
+            "id": [
+              "T1531"
+            ],
+            "tactic": [
+              "Impact"
+            ],
+            "technique": [
+              "Account Access Removal"
+            ]
+          },
+          "gdpr": [
+            "IV_35.7.d"
+          ]
+        },
+        "agent": {
+          "id": "000",
+          "name": "wazuh.manager"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000029.290033",
+        "decoder": {
+          "name": "json"
+        },
+        "location": "Wazuh-AWS",
+        "data": {
+          "integration": "aws",
+          "aws": {
+            "eventVersion": "1.11",
+            "eventTime": "2026-02-23T14:18:35Z",
+            "eventSource": "iam.amazonaws.com",
+            "eventName": "DeleteLoginProfile",
+            "awsRegion": "us-east-2",
+            "sourceIPAddress": "198.51.100.77",
+            "userAgent": "aws-cli/2.15.0 Python/3.11.6 Linux/6.1.0-kali amd64",
+            "userIdentity": {
+              "type": "IAMUser",
+              "arn": "arn:aws:iam::575084400239:user/compromised-dev",
+              "accountId": "575084400239",
+              "userName": "compromised-dev",
+              "principalId": "AIDACKCEVSQ6C2EXAMPLE",
+              "accessKeyId": "AKIAIOSFODNN7EXAMPLE"
+            },
+            "requestParameters": {
+              "userName": "admin-ops"
+            },
+            "responseElements": null,
+            "eventID": "c5e9f3a4-b6d8-4f0a-c3e5-9f8e4d2b6d03",
+            "requestID": "f6a7b8c9-d0e1-4f2a-c3b4-e5f6a7b8c9d0",
+            "readOnly": "false",
+            "eventType": "AwsApiCall",
+            "managementEvent": "true",
+            "recipientAccountId": "575084400239",
+            "eventCategory": "Management",
+            "source": "cloudtrail",
+            "aws_account_id": "575084400239"
+          }
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,89 @@
+{
+  "_metadata": {
+    "attack_id": "T1566.003",
+    "variation": "003",
+    "name": "Spearphishing via Service - OneDrive/Teams File Execution",
+    "description": "Malicious file shared via OneDrive/Teams leading to code execution (cloud collaboration platform abuse)",
+    "expected_detection": "LOW",
+    "kill_chain_phase": "initial-access",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Sysmon Event 1 - Execution from OneDrive sync folder",
+      "sequence": 1,
+      "timestamp": "2026-02-10T21:04:00.000Z",
+      "log": {
+        "timestamp": "2026-02-10T21:04:00.000Z",
+        "rule": {
+          "level": 10,
+          "description": "Sysmon - Event 1: Suspicious Execution from Cloud Sync Folder",
+          "id": "100100",
+          "mitre": {
+            "id": [
+              "T1566.003"
+            ],
+            "tactic": [
+              "Initial Access"
+            ],
+            "technique": [
+              "Spearphishing via Service"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1710000003.000001",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-10 21:04:00.000",
+              "processGuid": "{a23d45b8-c8f2-65e7-1234-000000003100}",
+              "processId": "6244",
+              "image": "C:\\Users\\analyst\\OneDrive - Company\\Shared Documents\\Q1_Report_2026.exe",
+              "commandLine": "\"C:\\Users\\analyst\\OneDrive - Company\\Shared Documents\\Q1_Report_2026.exe\"",
+              "currentDirectory": "C:\\Users\\analyst\\OneDrive - Company\\Shared Documents\\",
+              "user": "CORP\\analyst",
+              "integrityLevel": "Medium",
+              "hashes": "SHA256=CAFEBABE0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF01234567",
+              "parentProcessGuid": "{a23d45b8-c8f2-65e7-1234-000000003000}",
+              "parentProcessId": "4532",
+              "parentImage": "C:\\Windows\\explorer.exe",
+              "parentCommandLine": "C:\\Windows\\explorer.exe"
+            }
+          }
+        },
+        "_fomorian_test": true,
+        "fomorian_campaign": 31,
+        "fomorian_batch": 12
+      }
+    }
+  ]
+}

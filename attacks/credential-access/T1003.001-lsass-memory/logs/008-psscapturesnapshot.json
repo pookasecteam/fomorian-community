@@ -6,7 +6,9 @@
     "description": "LSASS memory dump using PssCaptureSnapshot API to clone process then dump",
     "expected_detection": "HIGH",
     "kill_chain_phase": "credential-access",
-    "references": ["https://github.com/yo-yo-yo-jbo/dumping_lsass"],
+    "references": [
+      "https://github.com/yo-yo-yo-jbo/dumping_lsass"
+    ],
     "format": "wazuh-native",
     "format_version": "1.0"
   },
@@ -20,20 +22,38 @@
         "rule": {
           "level": 12,
           "description": "Sysmon - Event 1: Suspicious process execution",
-          "id": "92151",
+          "id": "100916",
           "mitre": {
-            "id": ["T1003.001"],
-            "tactic": ["Credential Access"],
-            "technique": ["LSASS Memory"]
+            "id": [
+              "T1003.001"
+            ],
+            "tactic": [
+              "Credential Access"
+            ],
+            "technique": [
+              "LSASS Memory"
+            ]
           },
           "firedtimes": 1,
           "mail": false,
-          "groups": ["sysmon", "sysmon_event1", "windows"]
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
         },
-        "agent": {"id": "007", "name": "WS01", "ip": "10.1.0.20"},
-        "manager": {"name": "wazuh.manager"},
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
         "id": "1706884200.100001",
-        "decoder": {"name": "windows_eventchannel"},
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
         "location": "EventChannel",
         "data": {
           "win": {
@@ -88,20 +108,39 @@
         "rule": {
           "level": 14,
           "description": "Sysmon - Event 10: Process accessing LSASS with DUP_HANDLE",
-          "id": "92052",
+          "id": "100905",
           "mitre": {
-            "id": ["T1003.001"],
-            "tactic": ["Credential Access"],
-            "technique": ["LSASS Memory"]
+            "id": [
+              "T1003.001"
+            ],
+            "tactic": [
+              "Credential Access"
+            ],
+            "technique": [
+              "LSASS Memory"
+            ]
           },
           "firedtimes": 1,
           "mail": false,
-          "groups": ["sysmon", "sysmon_event_10", "windows", "credential_access"]
+          "groups": [
+            "sysmon",
+            "sysmon_event_10",
+            "windows",
+            "credential_access"
+          ]
         },
-        "agent": {"id": "007", "name": "WS01", "ip": "10.1.0.20"},
-        "manager": {"name": "wazuh.manager"},
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
         "id": "1706884201.100002",
-        "decoder": {"name": "windows_eventchannel"},
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
         "location": "EventChannel",
         "data": {
           "win": {
@@ -146,20 +185,38 @@
         "rule": {
           "level": 12,
           "description": "Sysmon - Event 8: CreateRemoteThread detected",
-          "id": "92080",
+          "id": "100001",
           "mitre": {
-            "id": ["T1003.001"],
-            "tactic": ["Credential Access"],
-            "technique": ["LSASS Memory"]
+            "id": [
+              "T1003.001"
+            ],
+            "tactic": [
+              "Credential Access"
+            ],
+            "technique": [
+              "LSASS Memory"
+            ]
           },
           "firedtimes": 1,
           "mail": false,
-          "groups": ["sysmon", "sysmon_event_8", "windows"]
+          "groups": [
+            "sysmon",
+            "sysmon_event_8",
+            "windows"
+          ]
         },
-        "agent": {"id": "007", "name": "WS01", "ip": "10.1.0.20"},
-        "manager": {"name": "wazuh.manager"},
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
         "id": "1706884201.100003",
-        "decoder": {"name": "windows_eventchannel"},
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
         "location": "EventChannel",
         "data": {
           "win": {
@@ -205,20 +262,39 @@
         "rule": {
           "level": 14,
           "description": "Sysmon - Event 11: LSASS dump file created",
-          "id": "92101",
+          "id": "100910",
           "mitre": {
-            "id": ["T1003.001"],
-            "tactic": ["Credential Access"],
-            "technique": ["LSASS Memory"]
+            "id": [
+              "T1003.001"
+            ],
+            "tactic": [
+              "Credential Access"
+            ],
+            "technique": [
+              "LSASS Memory"
+            ]
           },
           "firedtimes": 1,
           "mail": false,
-          "groups": ["sysmon", "sysmon_event_11", "windows", "credential_access"]
+          "groups": [
+            "sysmon",
+            "sysmon_event_11",
+            "windows",
+            "credential_access"
+          ]
         },
-        "agent": {"id": "007", "name": "WS01", "ip": "10.1.0.20"},
-        "manager": {"name": "wazuh.manager"},
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
         "id": "1706884202.100004",
-        "decoder": {"name": "windows_eventchannel"},
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
         "location": "EventChannel",
         "data": {
           "win": {

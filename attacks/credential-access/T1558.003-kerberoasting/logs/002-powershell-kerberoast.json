@@ -15,24 +15,41 @@
       "sequence": 1,
       "timestamp": "2026-02-04T14:40:00.000Z",
       "log": {
-        "timestamp": "",
         "rule": {
           "level": 14,
           "description": "Sysmon - Event 1: PowerShell Kerberoasting - SPN Query",
-          "id": "92151",
+          "id": "100916",
           "mitre": {
-            "id": ["T1558.003"],
-            "tactic": ["Credential Access"],
-            "technique": ["Kerberoasting"]
+            "id": [
+              "T1558.003"
+            ],
+            "tactic": [
+              "Credential Access"
+            ],
+            "technique": [
+              "Kerberoasting"
+            ]
           },
           "firedtimes": 1,
           "mail": false,
-          "groups": ["sysmon", "sysmon_event1", "windows"]
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
         },
-        "agent": {"id": "007", "name": "WS01", "ip": "10.1.0.20"},
-        "manager": {"name": "wazuh.manager"},
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
         "id": "1700000001.558003001",
-        "decoder": {"name": "windows_eventchannel"},
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
         "location": "EventChannel",
         "data": {
           "win": {
@@ -60,24 +77,41 @@
       "sequence": 2,
       "timestamp": "2026-02-04T14:40:10.000Z",
       "log": {
-        "timestamp": "",
         "rule": {
           "level": 15,
           "description": "Sysmon - Event 1: PowerShell Kerberoasting - TGS Request",
-          "id": "92151",
+          "id": "100916",
           "mitre": {
-            "id": ["T1558.003"],
-            "tactic": ["Credential Access"],
-            "technique": ["Kerberoasting"]
+            "id": [
+              "T1558.003"
+            ],
+            "tactic": [
+              "Credential Access"
+            ],
+            "technique": [
+              "Kerberoasting"
+            ]
           },
           "firedtimes": 1,
           "mail": false,
-          "groups": ["sysmon", "sysmon_event1", "windows"]
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
         },
-        "agent": {"id": "007", "name": "WS01", "ip": "10.1.0.20"},
-        "manager": {"name": "wazuh.manager"},
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
         "id": "1700000001.558003002",
-        "decoder": {"name": "windows_eventchannel"},
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
         "location": "EventChannel",
         "data": {
           "win": {

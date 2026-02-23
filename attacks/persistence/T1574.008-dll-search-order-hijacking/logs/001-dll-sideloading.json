@@ -1,0 +1,218 @@
+{
+  "_metadata": {
+    "attack_id": "T1574.008",
+    "variation": "001",
+    "name": "DLL Search Order Hijacking via Sideloading",
+    "description": "Placing a malicious DLL in the Windows directory to hijack the search order of legitimate applications that load DLLs without full path specification",
+    "expected_detection": "HIGH",
+    "kill_chain_phase": "persistence",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Sysmon Event 11 - Malicious DLL created in Windows root directory",
+      "sequence": 1,
+      "timestamp": "2026-02-21T02:35:00.000Z",
+      "log": {
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 11: Suspicious DLL created in Windows directory",
+          "id": "100100",
+          "mitre": {
+            "id": [
+              "T1574.008"
+            ],
+            "tactic": [
+              "Persistence",
+              "Privilege Escalation"
+            ],
+            "technique": [
+              "Hijack Execution Flow: DLL Search Order Hijacking"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event11",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000020.2350001",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "11",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "11",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-21 02:35:00.000",
+              "processGuid": "{e5f6a7b8-5001-4cd3-b475-a9b0c1d2e3f4}",
+              "processId": "9100",
+              "image": "C:\\Windows\\System32\\cmd.exe",
+              "targetFilename": "C:\\Windows\\version.dll",
+              "creationUtcTime": "2026-02-21 02:35:00.000"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Sysmon Event 1 - copy command placing DLL in Windows directory",
+      "sequence": 2,
+      "timestamp": "2026-02-21T02:35:01.000Z",
+      "log": {
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 1: DLL copy to Windows directory for search order hijacking",
+          "id": "100100",
+          "mitre": {
+            "id": [
+              "T1574.008"
+            ],
+            "tactic": [
+              "Persistence",
+              "Privilege Escalation"
+            ],
+            "technique": [
+              "Hijack Execution Flow: DLL Search Order Hijacking"
+            ]
+          },
+          "firedtimes": 2,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000020.2350002",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-21 02:35:01.000",
+              "processGuid": "{e5f6a7b8-5002-4cd3-b475-a9b0c1d2e3f4}",
+              "processId": "9120",
+              "image": "C:\\Windows\\System32\\cmd.exe",
+              "commandLine": "cmd.exe /c copy C:\\Users\\Administrator\\evil.dll C:\\Windows\\version.dll",
+              "currentDirectory": "C:\\Users\\Administrator\\",
+              "user": "CORP\\Administrator",
+              "integrityLevel": "High",
+              "hashes": "SHA256=b7c8d9e0f1a2b3c4d5e6f7a8b9c0d1e2f3a4b5c6d7e8f9a0b1c2d3e4f5a6b7c8",
+              "parentProcessGuid": "{e5f6a7b8-5000-4cd3-b475-a9b0c1d2e3f4}",
+              "parentProcessId": "4880",
+              "parentImage": "C:\\Windows\\System32\\cmd.exe",
+              "parentCommandLine": "cmd.exe"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Sysmon Event 7 - Unsigned DLL loaded from unexpected Windows directory path",
+      "sequence": 3,
+      "timestamp": "2026-02-21T02:35:30.000Z",
+      "log": {
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 7: Unsigned DLL loaded from Windows root directory",
+          "id": "100100",
+          "mitre": {
+            "id": [
+              "T1574.008"
+            ],
+            "tactic": [
+              "Persistence",
+              "Privilege Escalation"
+            ],
+            "technique": [
+              "Hijack Execution Flow: DLL Search Order Hijacking"
+            ]
+          },
+          "firedtimes": 3,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event7",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000020.2350003",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "7",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "7",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-21 02:35:30.000",
+              "processGuid": "{e5f6a7b8-5003-4cd3-b475-a9b0c1d2e3f4}",
+              "processId": "9200",
+              "image": "C:\\Windows\\System32\\notepad.exe",
+              "imageLoaded": "C:\\Windows\\version.dll",
+              "signed": "false",
+              "signature": "N/A",
+              "hashes": "SHA256=c8d9e0f1a2b3c4d5e6f7a8b9c0d1e2f3a4b5c6d7e8f9a0b1c2d3e4f5a6b7c8d9"
+            }
+          }
+        }
+      }
+    }
+  ]
+}

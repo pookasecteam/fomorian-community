@@ -1,0 +1,214 @@
+{
+  "_metadata": {
+    "attack_id": "T1200",
+    "variation": "001",
+    "name": "Rogue Network Device Detection",
+    "description": "Unauthorized network device (drop box, network tap, rogue access point) connected to the network",
+    "expected_detection": "HIGH",
+    "kill_chain_phase": "initial-access",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Zeek DHCP log - Unknown device requesting IP",
+      "sequence": 1,
+      "timestamp": "2026-02-08T12:35:00.000Z",
+      "log": {
+        "timestamp": "2026-02-08T12:35:00.000+0000",
+        "rule": {
+          "level": 10,
+          "description": "Zeek - Unknown DHCP Client Request",
+          "id": "100001",
+          "mitre": {
+            "id": [
+              "T1200"
+            ],
+            "tactic": [
+              "Initial Access"
+            ],
+            "technique": [
+              "Hardware Additions"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "zeek",
+            "network",
+            "dhcp"
+          ]
+        },
+        "agent": {
+          "id": "001",
+          "name": "GW01",
+          "ip": "198.51.100.1"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1707400000.400022",
+        "decoder": {
+          "name": "zeek_dhcp"
+        },
+        "location": "/var/log/zeek/current/dhcp.log",
+        "data": {
+          "zeek": {
+            "ts": "2026-02-08T12:35:00.000Z",
+            "uid": "CHhAvVGS1DHFjwGM9",
+            "id.orig_h": "0.0.0.0",
+            "id.orig_p": 68,
+            "id.resp_h": "255.255.255.255",
+            "id.resp_p": 67,
+            "mac": "aa:bb:cc:dd:ee:ff",
+            "assigned_addr": "198.51.100.200",
+            "lease_time": 86400,
+            "client_fqdn": "raspberrypi",
+            "msg_types": "DISCOVER,OFFER,REQUEST,ACK",
+            "host_name": "raspberrypi"
+          }
+        },
+        "_fomorian_batch": "PT-2026-003-batch1-initial-access",
+        "_fomorian_test": true,
+        "_fomorian_attack_id": "T1200",
+        "_fomorian_expected_detection": "Sigma: Unknown Device DHCP Request (T1200)"
+      }
+    },
+    {
+      "_comment": "Zeek conn log - New device making connections",
+      "sequence": 2,
+      "timestamp": "2026-02-08T12:35:30.000Z",
+      "log": {
+        "timestamp": "2026-02-08T12:35:30.000+0000",
+        "rule": {
+          "level": 8,
+          "description": "Zeek - New Device Network Activity",
+          "id": "100001",
+          "mitre": {
+            "id": [
+              "T1200"
+            ],
+            "tactic": [
+              "Initial Access"
+            ],
+            "technique": [
+              "Hardware Additions"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "zeek",
+            "network",
+            "connection"
+          ]
+        },
+        "agent": {
+          "id": "001",
+          "name": "GW01",
+          "ip": "198.51.100.1"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1707400000.400023",
+        "decoder": {
+          "name": "zeek_conn"
+        },
+        "location": "/var/log/zeek/current/conn.log",
+        "data": {
+          "zeek": {
+            "ts": "2026-02-08T12:35:30.000Z",
+            "uid": "CYeji4kAasmC1n8fj",
+            "id.orig_h": "198.51.100.200",
+            "id.orig_p": 54321,
+            "id.resp_h": "198.51.100.10",
+            "id.resp_p": 445,
+            "proto": "tcp",
+            "service": "smb",
+            "duration": 0.5,
+            "orig_bytes": 1024,
+            "resp_bytes": 512,
+            "conn_state": "SF",
+            "orig_pkts": 10,
+            "resp_pkts": 8
+          }
+        },
+        "_fomorian_batch": "PT-2026-003-batch1-initial-access",
+        "_fomorian_test": true,
+        "_fomorian_attack_id": "T1200",
+        "_fomorian_expected_detection": "Sigma: Rogue Device SMB Scanning (T1200)"
+      }
+    },
+    {
+      "_comment": "Zeek notice log - Possible network implant behavior",
+      "sequence": 3,
+      "timestamp": "2026-02-08T12:36:00.000Z",
+      "log": {
+        "timestamp": "2026-02-08T12:36:00.000+0000",
+        "rule": {
+          "level": 12,
+          "description": "Zeek - Potential Network Implant Detected",
+          "id": "100001",
+          "mitre": {
+            "id": [
+              "T1200",
+              "T1040"
+            ],
+            "tactic": [
+              "Initial Access",
+              "Credential Access"
+            ],
+            "technique": [
+              "Hardware Additions",
+              "Network Sniffing"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "zeek",
+            "network",
+            "notice"
+          ]
+        },
+        "agent": {
+          "id": "001",
+          "name": "GW01",
+          "ip": "198.51.100.1"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1707400000.400024",
+        "decoder": {
+          "name": "zeek_notice"
+        },
+        "location": "/var/log/zeek/current/notice.log",
+        "data": {
+          "zeek": {
+            "ts": "2026-02-08T12:36:00.000Z",
+            "uid": "-",
+            "id.orig_h": "198.51.100.200",
+            "id.orig_p": "-",
+            "id.resp_h": "-",
+            "id.resp_p": "-",
+            "note": "Scan::Port_Scan",
+            "msg": "198.51.100.200 scanned at least 15 unique ports of host 198.51.100.10 in 0m30s",
+            "src": "198.51.100.200",
+            "dst": "198.51.100.10",
+            "p": "-",
+            "n": 15,
+            "peer_descr": "zeek",
+            "actions": "Notice::ACTION_LOG",
+            "suppress_for": 3600
+          }
+        },
+        "_fomorian_batch": "PT-2026-003-batch1-initial-access",
+        "_fomorian_test": true,
+        "_fomorian_attack_id": "T1200",
+        "_fomorian_expected_detection": "Sigma: Rogue Device Port Scanning (T1200)"
+      }
+    }
+  ]
+}

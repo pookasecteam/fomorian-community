@@ -1,0 +1,203 @@
+{
+  "_metadata": {
+    "attack_id": "T1574.006",
+    "variation": "001",
+    "name": "Shared Library Hijacking via ldconfig",
+    "description": "Adding a malicious library path to ld.so.conf.d and running ldconfig to hijack shared library loading",
+    "expected_detection": "HIGH",
+    "kill_chain_phase": "privilege-escalation",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Sysmon Event 1 - ldd to enumerate shared library dependencies",
+      "sequence": 1,
+      "timestamp": "2026-02-22T03:01:00.000Z",
+      "log": {
+        "timestamp": "2026-02-22T03:01:00.000+0000",
+        "rule": {
+          "level": 6,
+          "description": "Sysmon - Event 1: Shared Library Dependency Enumeration via ldd",
+          "id": "100101",
+          "mitre": {
+            "id": [
+              "T1574.006"
+            ],
+            "tactic": [
+              "Privilege Escalation",
+              "Persistence",
+              "Defense Evasion"
+            ],
+            "technique": [
+              "Dynamic Linker Hijacking"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "linux"
+          ]
+        },
+        "agent": {
+          "id": "030",
+          "name": "VULN01",
+          "ip": "198.51.100.30"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1708567260.000003",
+        "decoder": {
+          "name": "sysmon-linux"
+        },
+        "location": "/var/log/syslog",
+        "data": {
+          "eventdata": {
+            "utcTime": "2026-02-22 03:01:00.000",
+            "processGuid": "{a1b2c3d4-0002-0001-0001-000000000001}",
+            "processId": "19301",
+            "image": "/usr/bin/ldd",
+            "commandLine": "ldd /opt/custom_binary",
+            "currentDirectory": "/home/admin2",
+            "user": "admin2",
+            "integrityLevel": "no_level",
+            "hashes": "SHA256=d5f9b04e3a6c1d8e7f2b3a4c5d6e7f8a9b0c1d2e3f4a5b6c7d8e9f0a1b2c3d4",
+            "parentProcessGuid": "{a1b2c3d4-0002-0001-0001-000000000000}",
+            "parentProcessId": "19200",
+            "parentImage": "/usr/bin/bash",
+            "parentCommandLine": "bash"
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Sysmon Event 1 - Writing malicious library path to ld.so.conf.d",
+      "sequence": 2,
+      "timestamp": "2026-02-22T03:01:00.100Z",
+      "log": {
+        "timestamp": "2026-02-22T03:01:00.100+0000",
+        "rule": {
+          "level": 10,
+          "description": "Sysmon - Event 1: Malicious Library Path Written to ld.so.conf.d",
+          "id": "100101",
+          "mitre": {
+            "id": [
+              "T1574.006"
+            ],
+            "tactic": [
+              "Privilege Escalation",
+              "Persistence",
+              "Defense Evasion"
+            ],
+            "technique": [
+              "Dynamic Linker Hijacking"
+            ]
+          },
+          "firedtimes": 2,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "linux"
+          ]
+        },
+        "agent": {
+          "id": "030",
+          "name": "VULN01",
+          "ip": "198.51.100.30"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1708567260.000004",
+        "decoder": {
+          "name": "sysmon-linux"
+        },
+        "location": "/var/log/syslog",
+        "data": {
+          "eventdata": {
+            "utcTime": "2026-02-22 03:01:00.100",
+            "processGuid": "{a1b2c3d4-0002-0001-0001-000000000002}",
+            "processId": "19315",
+            "image": "/usr/bin/bash",
+            "commandLine": "bash -c echo /tmp > /etc/ld.so.conf.d/malicious.conf",
+            "currentDirectory": "/home/admin2",
+            "user": "root",
+            "integrityLevel": "no_level",
+            "hashes": "SHA256=e6a0c15f4b7d2e9f8a3c4b5d6e7f0a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6e7",
+            "parentProcessGuid": "{a1b2c3d4-0002-0001-0001-000000000001}",
+            "parentProcessId": "19310",
+            "parentImage": "/usr/bin/sudo",
+            "parentCommandLine": "sudo -S bash -c echo /tmp > /etc/ld.so.conf.d/malicious.conf"
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Sysmon Event 1 - ldconfig to reload shared library cache with malicious path",
+      "sequence": 3,
+      "timestamp": "2026-02-22T03:01:00.200Z",
+      "log": {
+        "timestamp": "2026-02-22T03:01:00.200+0000",
+        "rule": {
+          "level": 10,
+          "description": "Sysmon - Event 1: ldconfig Shared Library Cache Reload",
+          "id": "100101",
+          "mitre": {
+            "id": [
+              "T1574.006"
+            ],
+            "tactic": [
+              "Privilege Escalation",
+              "Persistence",
+              "Defense Evasion"
+            ],
+            "technique": [
+              "Dynamic Linker Hijacking"
+            ]
+          },
+          "firedtimes": 3,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "linux"
+          ]
+        },
+        "agent": {
+          "id": "030",
+          "name": "VULN01",
+          "ip": "198.51.100.30"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1708567260.000005",
+        "decoder": {
+          "name": "sysmon-linux"
+        },
+        "location": "/var/log/syslog",
+        "data": {
+          "eventdata": {
+            "utcTime": "2026-02-22 03:01:00.200",
+            "processGuid": "{a1b2c3d4-0002-0001-0001-000000000003}",
+            "processId": "19330",
+            "image": "/sbin/ldconfig",
+            "commandLine": "ldconfig",
+            "currentDirectory": "/home/admin2",
+            "user": "root",
+            "integrityLevel": "no_level",
+            "hashes": "SHA256=f7b1d26a5c8e3f0a9b4d5c6e7f1a2b3c4d5e6f7a8b9c0d1e2f3a4b5c6d7e8f9",
+            "parentProcessGuid": "{a1b2c3d4-0002-0001-0001-000000000002}",
+            "parentProcessId": "19325",
+            "parentImage": "/usr/bin/sudo",
+            "parentCommandLine": "sudo -S ldconfig"
+          }
+        }
+      }
+    }
+  ]
+}

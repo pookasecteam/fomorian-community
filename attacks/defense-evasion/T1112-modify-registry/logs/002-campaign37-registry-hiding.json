@@ -1,0 +1,221 @@
+{
+  "_metadata": {
+    "attack_id": "T1112",
+    "variation": "002",
+    "name": "Modify Registry - Advanced Hiding Techniques",
+    "description": "Advanced registry manipulation using NULL characters, symbolic links, and hive mounting for evasion",
+    "expected_detection": "HIGH",
+    "kill_chain_phase": "defense-evasion",
+    "tactic": "Defense Evasion",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Sysmon Event 13 - Registry key creation with NULL character",
+      "sequence": 1,
+      "timestamp": "2026-02-10T20:14:00.000Z",
+      "log": {
+        "timestamp": "2026-02-10T20:14:00.000Z",
+        "rule": {
+          "level": 13,
+          "description": "Sysmon - Event 13: Registry key with NULL character (hidden from RegEdit)",
+          "id": "100001",
+          "mitre": {
+            "id": [
+              "T1112"
+            ],
+            "tactic": [
+              "Defense Evasion"
+            ],
+            "technique": [
+              "Modify Registry"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event13",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1707599640.000001",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "13",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "13",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-10 20:14:00.000",
+              "processGuid": "{B5A2D3E4-1234-5678-9ABC-DEF012345693}",
+              "processId": "5432",
+              "image": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+              "eventType": "SetValue",
+              "targetObject": "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run\\Update\\x00Hidden",
+              "details": "C:\\Users\\Public\\malware.exe",
+              "user": "CORP\\attacker"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Sysmon Event 13 - Registry symbolic link creation",
+      "sequence": 2,
+      "timestamp": "2026-02-10T20:14:15.000Z",
+      "log": {
+        "timestamp": "2026-02-10T20:14:15.000Z",
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 13: Registry symbolic link to redirect access",
+          "id": "100001",
+          "mitre": {
+            "id": [
+              "T1112"
+            ],
+            "tactic": [
+              "Defense Evasion"
+            ],
+            "technique": [
+              "Modify Registry"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event13",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1707599655.000001",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "13",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "13",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-10 20:14:15.000",
+              "processGuid": "{B5A2D3E4-1234-5678-9ABC-DEF012345693}",
+              "processId": "5432",
+              "image": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+              "eventType": "CreateKey",
+              "targetObject": "HKLM\\SOFTWARE\\Classes\\CLSID\\{12345678-1234-1234-1234-123456789ABC}\\SymbolicLink",
+              "details": "\\Registry\\Machine\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run",
+              "user": "CORP\\attacker"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Sysmon Event 1 - Registry hive mount for offline modification",
+      "sequence": 3,
+      "timestamp": "2026-02-10T20:14:30.000Z",
+      "log": {
+        "timestamp": "2026-02-10T20:14:30.000Z",
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 1: Registry hive mount for offline modification",
+          "id": "100001",
+          "mitre": {
+            "id": [
+              "T1112"
+            ],
+            "tactic": [
+              "Defense Evasion"
+            ],
+            "technique": [
+              "Modify Registry"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1707599670.000001",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-10 20:14:30.000",
+              "processGuid": "{B5A2D3E4-1234-5678-9ABC-DEF012345694}",
+              "processId": "6248",
+              "image": "C:\\Windows\\System32\\reg.exe",
+              "commandLine": "reg.exe load HKLM\\TempHive C:\\Windows\\System32\\config\\SOFTWARE",
+              "currentDirectory": "C:\\Windows\\System32\\",
+              "user": "NT AUTHORITY\\SYSTEM",
+              "integrityLevel": "System",
+              "hashes": "SHA256=LEGIT_REG_HASH",
+              "parentProcessGuid": "{B5A2D3E4-1234-5678-9ABC-DEF012345693}",
+              "parentProcessId": "5432",
+              "parentImage": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+              "parentCommandLine": "powershell.exe"
+            }
+          }
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,79 @@
+{
+  "_metadata": {
+    "attack_id": "T1498.002",
+    "variation": "001",
+    "name": "Network DoS - DNS Reflection Amplification",
+    "description": "DNS amplification attack using hping3 for reflection-based DDoS",
+    "expected_detection": "MEDIUM",
+    "kill_chain_phase": "impact",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Linux Sysmon Event 1 - hping3 DNS flood",
+      "sequence": 1,
+      "timestamp": "2026-02-10T20:16:00.000Z",
+      "log": {
+        "timestamp": "2026-02-10T20:16:00.000+0000",
+        "rule": {
+          "level": 12,
+          "description": "Sysmon for Linux - Event 1: Process Create - Network DoS Tool",
+          "id": "100101",
+          "mitre": {
+            "id": [
+              "T1498",
+              "T1498.002"
+            ],
+            "tactic": [
+              "Impact"
+            ],
+            "technique": [
+              "Network DoS - Reflection Amplification"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": true,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "linux"
+          ]
+        },
+        "agent": {
+          "id": "001",
+          "name": "GW01",
+          "ip": "198.51.100.1"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1707596160.000001",
+        "decoder": {
+          "name": "sysmon-linux"
+        },
+        "location": "/var/log/sysmon/syslog",
+        "data": {
+          "eventdata": {
+            "utcTime": "2026-02-10 20:16:00.000",
+            "processGuid": "{B1C2D3E4-3001-65c9-0009-000000030009}",
+            "processId": "12300",
+            "image": "/usr/sbin/hping3",
+            "commandLine": "hping3 --flood --rand-source --udp -p 53 198.51.100.100",
+            "currentDirectory": "/home/admin2",
+            "user": "admin2",
+            "parentProcessGuid": "{B1C2D3E4-3001-65c9-0000-000000030000}",
+            "parentProcessId": "12200",
+            "parentImage": "/bin/bash",
+            "parentCommandLine": "bash"
+          }
+        },
+        "_fomorian_test": true,
+        "fomorian_batch": 11,
+        "fomorian_campaign": 30,
+        "fomorian_technique": "T1498.002",
+        "fomorian_technique_name": "Network DoS - Reflection Amplification"
+      }
+    }
+  ]
+}

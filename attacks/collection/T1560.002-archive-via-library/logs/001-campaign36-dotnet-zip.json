@@ -1,0 +1,230 @@
+{
+  "_metadata": {
+    "attack_id": "T1560.002",
+    "variation": "001",
+    "name": "Archive via Library - .NET System.IO.Compression",
+    "description": "PowerShell uses .NET ZipFile class to compress collected data without calling external tools like 7z.exe",
+    "expected_detection": "MEDIUM",
+    "kill_chain_phase": "collection",
+    "format": "wazuh-native",
+    "format_version": "1.0",
+    "os": "Windows 11 Pro"
+  },
+  "logs": [
+    {
+      "_comment": "Sysmon Event 1 - Process Create: PowerShell loading System.IO.Compression",
+      "sequence": 1,
+      "timestamp": "2026-02-10T18:42:00.000Z",
+      "log": {
+        "timestamp": "2026-02-10T18:42:00.000+0000",
+        "rule": {
+          "level": 10,
+          "description": "Sysmon - Event 1: PowerShell with Compression Library",
+          "id": "100100",
+          "mitre": {
+            "id": [
+              "T1560.002"
+            ],
+            "tactic": [
+              "Collection"
+            ],
+            "technique": [
+              "Archive via Library"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000001.000022",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-10 18:42:00.000",
+              "processGuid": "{A1B2C3D4-AAAA-BBBB-CCCC-111122223333}",
+              "processId": "3456",
+              "image": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+              "commandLine": "powershell.exe -Command \"Add-Type -AssemblyName System.IO.Compression.FileSystem; [System.IO.Compression.ZipFile]::CreateFromDirectory('C:\\Users\\attacker\\Documents\\collected', 'C:\\Users\\attacker\\Documents\\collected_data.zip')\"",
+              "currentDirectory": "C:\\Users\\attacker\\",
+              "user": "CORP\\attacker",
+              "logonGuid": "{A1B2C3D4-0000-1111-2222-333344445555}",
+              "logonId": "0x123456",
+              "terminalSessionId": "1",
+              "integrityLevel": "Medium",
+              "hashes": "SHA256=908B64B1971A979C7E3E8CE4621945CBA84854CB98D23B0D0D0E8F4E0D8D2E8F",
+              "parentProcessGuid": "{A1B2C3D4-DDDD-EEEE-FFFF-000011112222}",
+              "parentProcessId": "2345",
+              "parentImage": "C:\\Windows\\System32\\cmd.exe",
+              "parentCommandLine": "cmd.exe"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Sysmon Event 7 - Image Load: .NET assembly load for ZipFile",
+      "sequence": 2,
+      "timestamp": "2026-02-10T18:44:00.000Z",
+      "log": {
+        "timestamp": "2026-02-10T18:44:00.000+0000",
+        "rule": {
+          "level": 9,
+          "description": "Sysmon - Event 7: System.IO.Compression.FileSystem Loaded",
+          "id": "100107",
+          "mitre": {
+            "id": [
+              "T1560.002"
+            ],
+            "tactic": [
+              "Collection"
+            ],
+            "technique": [
+              "Archive via Library"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event7",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000001.000023",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "7",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "7",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-10 18:44:00.000",
+              "processGuid": "{A1B2C3D4-AAAA-BBBB-CCCC-111122223333}",
+              "processId": "3456",
+              "image": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+              "imageLoaded": "C:\\Windows\\Microsoft.NET\\assembly\\GAC_MSIL\\System.IO.Compression.FileSystem\\v4.0_4.0.0.0__b77a5c561934e089\\System.IO.Compression.FileSystem.dll",
+              "fileVersion": "4.8.9232.0",
+              "description": ".NET Framework",
+              "product": "Microsoft .NET Framework",
+              "company": "Microsoft Corporation",
+              "originalFileName": "System.IO.Compression.FileSystem.dll",
+              "hashes": "SHA256=1111222233334444555566667777888899990000AAAABBBBCCCCDDDDEEEEFFFF",
+              "signed": "true",
+              "signature": "Microsoft Corporation",
+              "signatureStatus": "Valid",
+              "user": "CORP\\attacker"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Sysmon Event 11 - File Create: collected_data.zip created without 7z.exe",
+      "sequence": 3,
+      "timestamp": "2026-02-10T18:46:00.000Z",
+      "log": {
+        "timestamp": "2026-02-10T18:46:00.000+0000",
+        "rule": {
+          "level": 10,
+          "description": "Sysmon - Event 11: ZIP Archive Created by PowerShell",
+          "id": "100511",
+          "mitre": {
+            "id": [
+              "T1560.002"
+            ],
+            "tactic": [
+              "Collection"
+            ],
+            "technique": [
+              "Archive via Library"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event11",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000001.000024",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "11",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "11",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-10 18:46:00.000",
+              "processGuid": "{A1B2C3D4-AAAA-BBBB-CCCC-111122223333}",
+              "processId": "3456",
+              "image": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+              "targetFilename": "C:\\Users\\attacker\\Documents\\collected_data.zip",
+              "creationUtcTime": "2026-02-10 18:46:00.000",
+              "user": "CORP\\attacker"
+            }
+          }
+        }
+      }
+    }
+  ]
+}

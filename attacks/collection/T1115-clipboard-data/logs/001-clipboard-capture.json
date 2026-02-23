@@ -1,0 +1,227 @@
+{
+  "_metadata": {
+    "attack_id": "T1115",
+    "variation": "001",
+    "name": "Clipboard Data",
+    "description": "Capturing clipboard data for credential theft",
+    "expected_detection": "MEDIUM",
+    "kill_chain_phase": "collection",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Sysmon Event 1 - PowerShell clipboard access",
+      "sequence": 1,
+      "timestamp": "2026-01-30T06:05:00.000Z",
+      "log": {
+        "rule": {
+          "level": 10,
+          "description": "Sysmon - Event 1: Clipboard Data Access via PowerShell",
+          "id": "100100",
+          "mitre": {
+            "id": [
+              "T1115"
+            ],
+            "tactic": [
+              "Collection"
+            ],
+            "technique": [
+              "Clipboard Data"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000032.200001",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-01-30 06:05:00.000",
+              "processGuid": "{CLIP-001-0001-000000000001}",
+              "processId": "71000",
+              "image": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+              "commandLine": "powershell.exe -c \"Get-Clipboard | Out-File C:\\Temp\\clipboard.txt\"",
+              "currentDirectory": "C:\\Users\\attacker\\",
+              "user": "CORP\\attacker",
+              "integrityLevel": "Medium",
+              "hashes": "SHA256=PS_HASH_1234567890ABCDEF1234567890ABCDEF1234567890",
+              "parentProcessGuid": "{CLIP-001-0001-000000000000}",
+              "parentProcessId": "71000",
+              "parentImage": "C:\\Windows\\System32\\cmd.exe",
+              "parentCommandLine": "cmd.exe"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Sysmon Event 1 - clip.exe usage",
+      "sequence": 2,
+      "timestamp": "2026-01-30T06:05:05.000Z",
+      "log": {
+        "rule": {
+          "level": 8,
+          "description": "Sysmon - Event 1: Clipboard Access via clip.exe",
+          "id": "100100",
+          "mitre": {
+            "id": [
+              "T1115"
+            ],
+            "tactic": [
+              "Collection"
+            ],
+            "technique": [
+              "Clipboard Data"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000032.200002",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-01-30 06:05:05.000",
+              "processGuid": "{CLIP-001-0001-000000000002}",
+              "processId": "71100",
+              "image": "C:\\Windows\\System32\\clip.exe",
+              "commandLine": "cmd /c echo password123 | clip",
+              "currentDirectory": "C:\\Users\\attacker\\",
+              "user": "CORP\\attacker",
+              "integrityLevel": "Medium",
+              "hashes": "SHA256=CLIP_HASH_1234567890ABCDEF1234567890ABCDEF123456",
+              "parentProcessGuid": "{CLIP-001-0001-000000000000}",
+              "parentProcessId": "71000",
+              "parentImage": "C:\\Windows\\System32\\cmd.exe",
+              "parentCommandLine": "cmd.exe"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Sysmon Event 1 - Clipboard monitor tool",
+      "sequence": 3,
+      "timestamp": "2026-01-30T06:05:10.000Z",
+      "log": {
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 1: Clipboard Monitoring Tool Execution",
+          "id": "100100",
+          "mitre": {
+            "id": [
+              "T1115"
+            ],
+            "tactic": [
+              "Collection"
+            ],
+            "technique": [
+              "Clipboard Data"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000032.200003",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-01-30 06:05:10.000",
+              "processGuid": "{CLIP-001-0001-000000000003}",
+              "processId": "71200",
+              "image": "C:\\Tools\\ClipboardLogger.exe",
+              "commandLine": "ClipboardLogger.exe -output C:\\Temp\\clips.log",
+              "currentDirectory": "C:\\Tools\\",
+              "user": "CORP\\attacker",
+              "integrityLevel": "Medium",
+              "hashes": "SHA256=CLIPLOGGER_HASH_1234567890ABCDEF1234567890ABCDE",
+              "parentProcessGuid": "{CLIP-001-0001-000000000000}",
+              "parentProcessId": "71000",
+              "parentImage": "C:\\Windows\\System32\\cmd.exe",
+              "parentCommandLine": "cmd.exe"
+            }
+          }
+        }
+      }
+    }
+  ]
+}

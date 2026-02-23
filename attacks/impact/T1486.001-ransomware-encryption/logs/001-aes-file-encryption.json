@@ -1,0 +1,164 @@
+{
+  "_metadata": {
+    "attack_id": "T1486.001",
+    "variation": "001",
+    "name": "Ransomware - AES File Encryption",
+    "description": "PowerShell AES encryption of user files with ransom note creation",
+    "expected_detection": "MEDIUM",
+    "kill_chain_phase": "impact",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Sysmon Event 1 - PowerShell ransomware encryption script",
+      "sequence": 1,
+      "timestamp": "2026-02-10T20:02:00.000Z",
+      "log": {
+        "timestamp": "2026-02-10T20:02:00.000+0000",
+        "rule": {
+          "level": 14,
+          "description": "Sysmon - Event 1: Process Create - Ransomware Behavior",
+          "id": "100101",
+          "mitre": {
+            "id": [
+              "T1486",
+              "T1486.001"
+            ],
+            "tactic": [
+              "Impact"
+            ],
+            "technique": [
+              "Data Encrypted for Impact"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": true,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows",
+            "ransomware"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1707595320.000001",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-10 20:02:00.000",
+              "processGuid": "{A1B2C3D4-3001-65c9-0002-000000030002}",
+              "processId": "5200",
+              "image": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+              "commandLine": "powershell.exe -ExecutionPolicy Bypass -File C:\\Users\\Public\\encrypt.ps1",
+              "currentDirectory": "C:\\Users\\Public\\",
+              "user": "CORP\\admin2",
+              "integrityLevel": "High",
+              "hashes": "SHA256=DE96A6E69944335375DC1AC238336066889D9FFC7D73628EF4FE1B1B160AB32C",
+              "parentProcessGuid": "{A1B2C3D4-3001-65c9-0000-000000030000}",
+              "parentProcessId": "4800",
+              "parentImage": "C:\\Users\\Public\\ransomware.exe",
+              "parentCommandLine": "ransomware.exe --encrypt-all"
+            }
+          }
+        },
+        "_fomorian_test": true,
+        "fomorian_batch": 11,
+        "fomorian_campaign": 30,
+        "fomorian_technique": "T1486.001",
+        "fomorian_technique_name": "Data Encrypted for Impact - Ransomware"
+      }
+    },
+    {
+      "_comment": "Sysmon Event 11 - Ransom note creation",
+      "sequence": 2,
+      "timestamp": "2026-02-10T20:02:30.000Z",
+      "log": {
+        "timestamp": "2026-02-10T20:02:30.000+0000",
+        "rule": {
+          "level": 14,
+          "description": "Sysmon - Event 11: File Create - Ransom Note",
+          "id": "100111",
+          "mitre": {
+            "id": [
+              "T1486"
+            ],
+            "tactic": [
+              "Impact"
+            ],
+            "technique": [
+              "Data Encrypted for Impact"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": true,
+          "groups": [
+            "sysmon",
+            "sysmon_event11",
+            "windows",
+            "ransomware"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1707595350.000002",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "11",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "11",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-10 20:02:30.000",
+              "processGuid": "{A1B2C3D4-3001-65c9-0002-000000030002}",
+              "processId": "5200",
+              "image": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+              "targetFilename": "C:\\Users\\admin2\\Desktop\\README_DECRYPT.txt",
+              "creationUtcTime": "2026-02-10 20:02:30.000"
+            }
+          }
+        },
+        "_fomorian_test": true,
+        "fomorian_batch": 11,
+        "fomorian_campaign": 30,
+        "fomorian_technique": "T1486",
+        "fomorian_technique_name": "Data Encrypted for Impact"
+      }
+    }
+  ]
+}

@@ -1,0 +1,168 @@
+{
+  "_metadata": {
+    "attack_id": "T1059.001",
+    "variation": "AMB-013",
+    "name": "PowerShell Invoke-WebRequest Download",
+    "description": "PowerShell using Invoke-WebRequest to download SysinternalsSuite.zip from the official Microsoft download site",
+    "ground_truth": "AMBIGUOUS",
+    "legitimate_explanation": "System administrator downloading Sysinternals Suite from the official Microsoft download site for troubleshooting. Sysinternals is a widely-used, Microsoft-owned set of system utilities. The URL is the legitimate distribution endpoint.",
+    "suspicious_explanation": "PowerShell Invoke-WebRequest is a common download cradle used in attacks. Even downloads from legitimate sites can be suspicious - attackers download legitimate tools (like Sysinternals) to use them for reconnaissance and credential theft (e.g., ProcDump for LSASS dumping).",
+    "expected_detection": "MEDIUM",
+    "kill_chain_phase": "execution",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Sysmon Event 1 - PowerShell Invoke-WebRequest downloading file",
+      "sequence": 1,
+      "timestamp": "2026-01-29T14:00:00.000Z",
+      "log": {
+        "rule": {
+          "level": 10,
+          "description": "Sysmon - Event 1: PowerShell Web Download",
+          "id": "100100",
+          "mitre": {
+            "id": [
+              "T1059.001",
+              "T1105"
+            ],
+            "tactic": [
+              "Execution",
+              "Command and Control"
+            ],
+            "technique": [
+              "PowerShell",
+              "Ingress Tool Transfer"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.30"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000000.101300001",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "opcode": "0",
+              "keywords": "0x8000000000000000",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-01-29 14:00:00.000",
+              "processGuid": "{AMB-013-0001-0001-000000000001}",
+              "processId": "9560",
+              "image": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+              "commandLine": "powershell.exe -Command \"Invoke-WebRequest -Uri 'https://download.sysinternals.com/files/SysinternalsSuite.zip' -OutFile C:\\Tools\\SysinternalsSuite.zip\"",
+              "currentDirectory": "C:\\Users\\it.admin\\Desktop\\",
+              "user": "CORP\\it.admin",
+              "integrityLevel": "High",
+              "hashes": "SHA256=9F86D081884C7D659A2FEAA0C55AD015A3BF4F1B2B0B822CD15D6C15B0F00A08",
+              "parentProcessGuid": "{AMB-013-0001-0001-000000000000}",
+              "parentProcessId": "8800",
+              "parentImage": "C:\\Windows\\explorer.exe",
+              "parentCommandLine": "C:\\Windows\\explorer.exe"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Sysmon Event 3 - PowerShell connecting to download.sysinternals.com",
+      "sequence": 2,
+      "timestamp": "2026-01-29T14:00:02.000Z",
+      "log": {
+        "rule": {
+          "level": 10,
+          "description": "Sysmon - Event 3: PowerShell HTTPS Download",
+          "id": "100100",
+          "mitre": {
+            "id": [
+              "T1059.001",
+              "T1105"
+            ],
+            "tactic": [
+              "Execution",
+              "Command and Control"
+            ],
+            "technique": [
+              "PowerShell",
+              "Ingress Tool Transfer"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event3",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.30"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000000.101300002",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "3",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "opcode": "0",
+              "keywords": "0x8000000000000000",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-01-29 14:00:02.000",
+              "processGuid": "{AMB-013-0001-0001-000000000001}",
+              "processId": "9560",
+              "image": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+              "user": "CORP\\it.admin",
+              "protocol": "tcp",
+              "initiated": "true",
+              "sourceIp": "198.51.100.30",
+              "sourcePort": "52400",
+              "destinationIp": "104.208.16.90",
+              "destinationHostname": "download.sysinternals.com",
+              "destinationPort": "443"
+            }
+          }
+        }
+      }
+    }
+  ]
+}

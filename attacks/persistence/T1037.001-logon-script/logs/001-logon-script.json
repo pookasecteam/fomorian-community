@@ -1,0 +1,225 @@
+{
+  "_metadata": {
+    "attack_id": "T1037.001",
+    "variation": "001",
+    "name": "Boot or Logon Initialization Scripts: Logon Script",
+    "description": "Using logon scripts for persistence",
+    "expected_detection": "HIGH",
+    "kill_chain_phase": "persistence",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Sysmon Event 13 - User logon script registry modification",
+      "sequence": 1,
+      "timestamp": "2026-01-30T09:20:00.000Z",
+      "log": {
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 13: Logon Script Registry Modification",
+          "id": "100100",
+          "mitre": {
+            "id": [
+              "T1037.001"
+            ],
+            "tactic": [
+              "Persistence",
+              "Privilege Escalation"
+            ],
+            "technique": [
+              "Logon Script (Windows)"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event13",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000060.000001",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "13",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "13",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-01-30 09:20:00.000",
+              "processGuid": "{LOGON-001-0001-000000000001}",
+              "processId": "10000",
+              "image": "C:\\Windows\\System32\\reg.exe",
+              "eventType": "SetValue",
+              "targetObject": "HKU\\S-1-5-21-1234567890-1234567890-1234567890-1001\\Environment\\UserInitMprLogonScript",
+              "details": "C:\\Users\\attacker\\malicious.bat",
+              "user": "CORP\\attacker"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Sysmon Event 1 - Setting logon script via reg.exe",
+      "sequence": 2,
+      "timestamp": "2026-01-30T09:19:59.000Z",
+      "log": {
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 1: Logon Script Configuration",
+          "id": "100100",
+          "mitre": {
+            "id": [
+              "T1037.001"
+            ],
+            "tactic": [
+              "Persistence",
+              "Privilege Escalation"
+            ],
+            "technique": [
+              "Logon Script (Windows)"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000060.000002",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-01-30 09:19:59.000",
+              "processGuid": "{LOGON-001-0001-000000000001}",
+              "processId": "10000",
+              "image": "C:\\Windows\\System32\\reg.exe",
+              "commandLine": "reg add \"HKU\\S-1-5-21-1234567890-1234567890-1234567890-1001\\Environment\" /v UserInitMprLogonScript /t REG_SZ /d \"C:\\Users\\attacker\\malicious.bat\" /f",
+              "currentDirectory": "C:\\Users\\attacker\\",
+              "user": "CORP\\attacker",
+              "integrityLevel": "Medium",
+              "hashes": "SHA256=REG_HASH_1234567890ABCDEF1234567890ABCDEF12345678",
+              "parentProcessGuid": "{LOGON-001-0001-000000000000}",
+              "parentProcessId": "10000",
+              "parentImage": "C:\\Windows\\System32\\cmd.exe",
+              "parentCommandLine": "cmd.exe"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Sysmon Event 1 - Logon script execution on login",
+      "sequence": 3,
+      "timestamp": "2026-01-30T09:25:00.000Z",
+      "log": {
+        "rule": {
+          "level": 10,
+          "description": "Sysmon - Event 1: Logon Script Executed",
+          "id": "100100",
+          "mitre": {
+            "id": [
+              "T1037.001"
+            ],
+            "tactic": [
+              "Persistence",
+              "Privilege Escalation"
+            ],
+            "technique": [
+              "Logon Script (Windows)"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000060.000003",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-01-30 09:25:00.000",
+              "processGuid": "{LOGON-001-0001-000000000002}",
+              "processId": "10100",
+              "image": "C:\\Windows\\System32\\cmd.exe",
+              "commandLine": "cmd.exe /c \"C:\\Users\\attacker\\malicious.bat\"",
+              "currentDirectory": "C:\\Users\\attacker\\",
+              "user": "CORP\\attacker",
+              "integrityLevel": "Medium",
+              "hashes": "SHA256=CMD_HASH_1234567890ABCDEF1234567890ABCDEF12345678",
+              "parentProcessGuid": "{LOGON-001-0001-000000000000}",
+              "parentProcessId": "1",
+              "parentImage": "C:\\Windows\\System32\\userinit.exe",
+              "parentCommandLine": "userinit.exe"
+            }
+          }
+        }
+      }
+    }
+  ]
+}

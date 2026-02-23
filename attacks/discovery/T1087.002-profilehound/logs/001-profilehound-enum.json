@@ -1,0 +1,157 @@
+{
+  "_metadata": {
+    "attack_id": "T1087.002",
+    "name": "ProfileHound User Profile Enumeration",
+    "description": "BloodHound extension for user profile enumeration via admin shares",
+    "expected_detection": "MEDIUM",
+    "kill_chain_phase": "discovery",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Sysmon Event 1 - ProfileHound.exe execution",
+      "sequence": 1,
+      "timestamp": "2026-01-31T21:05:11.123Z",
+      "log": {
+        "timestamp": "2026-01-31T21:05:11.123+0000",
+        "rule": {
+          "level": 10,
+          "description": "Sysmon - Event 1: ProfileHound Tool Execution",
+          "id": "100916",
+          "mitre": {
+            "id": [
+              "T1087.002"
+            ],
+            "tactic": [
+              "Discovery"
+            ],
+            "technique": [
+              "Domain Account Discovery"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000006.100001",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local"
+            },
+            "eventdata": {
+              "utcTime": "2026-01-31 21:05:11.123",
+              "processGuid": "{12345678-prof-1234-prof-123456789abc}",
+              "processId": "5678",
+              "image": "C:\\Tools\\ProfileHound\\ProfileHound.exe",
+              "commandLine": "ProfileHound.exe -d corp.local -c All -o profiles.json",
+              "currentDirectory": "C:\\Tools\\ProfileHound\\",
+              "user": "CORP\\attacker",
+              "integrityLevel": "High",
+              "hashes": "SHA256=ABCDEF1234567890ABCDEF1234567890ABCDEF1234567890ABCDEF1234567890",
+              "parentProcessGuid": "{12345678-prof-1234-prof-123456789000}",
+              "parentProcessId": "4567",
+              "parentImage": "C:\\Windows\\System32\\cmd.exe",
+              "parentCommandLine": "cmd.exe"
+            }
+          }
+        },
+        "_fomorian_batch": "threat-intel-2024-01-31",
+        "_fomorian_test": true,
+        "_fomorian_attack_id": "T1087.002",
+        "_fomorian_expected_detection": "ProfileHound Enumeration"
+      }
+    },
+    {
+      "_comment": "Sysmon Event 1 - ProfileHound with different flags",
+      "sequence": 2,
+      "timestamp": "2026-01-31T21:05:45.789Z",
+      "log": {
+        "timestamp": "2026-01-31T21:05:45.789+0000",
+        "rule": {
+          "level": 10,
+          "description": "Sysmon - Event 1: ProfileHound Tool Execution",
+          "id": "100916",
+          "mitre": {
+            "id": [
+              "T1087.002"
+            ],
+            "tactic": [
+              "Discovery"
+            ],
+            "technique": [
+              "Domain Account Discovery"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000006.100002",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local"
+            },
+            "eventdata": {
+              "utcTime": "2026-01-31 21:05:45.789",
+              "processGuid": "{12345678-prof-1234-prof-123456789def}",
+              "processId": "6789",
+              "image": "C:\\Users\\attacker\\Downloads\\ProfileHound.exe",
+              "commandLine": "ProfileHound.exe --domain corp.local --collect DPAPI",
+              "currentDirectory": "C:\\Users\\attacker\\Downloads\\",
+              "user": "CORP\\attacker",
+              "integrityLevel": "High",
+              "parentProcessGuid": "{12345678-prof-1234-prof-123456789111}",
+              "parentProcessId": "5678",
+              "parentImage": "C:\\Windows\\explorer.exe"
+            }
+          }
+        },
+        "_fomorian_batch": "threat-intel-2024-01-31",
+        "_fomorian_test": true,
+        "_fomorian_attack_id": "T1087.002",
+        "_fomorian_expected_detection": "ProfileHound Enumeration"
+      }
+    }
+  ]
+}

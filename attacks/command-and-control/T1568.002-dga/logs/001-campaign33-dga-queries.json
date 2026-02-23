@@ -1,0 +1,208 @@
+{
+  "metadata": {
+    "technique_id": "T1568.002",
+    "technique_name": "Dynamic Resolution: Domain Generation Algorithms",
+    "tactic": "command-and-control",
+    "description": "DGA-generated domain queries for C2 communication (high entropy, multiple NXDOMAIN responses)",
+    "campaign": "33",
+    "batch": "14",
+    "expected_detection": "MEDIUM",
+    "attack_time": "2026-02-10T14:02:00.000Z",
+    "target_host": "WS01",
+    "simulated_c2": "DGA domains"
+  },
+  "logs": [
+    {
+      "timestamp": "2026-02-10T14:02:00.000Z",
+      "rule": {
+        "level": 3,
+        "description": "Zeek - DNS NXDOMAIN response",
+        "id": "100001",
+        "mitre": {
+          "id": [
+            "T1568.002"
+          ],
+          "tactic": [
+            "Command and Control"
+          ],
+          "technique": [
+            "DGA"
+          ]
+        },
+        "groups": [
+          "zeek",
+          "zeek_dns"
+        ]
+      },
+      "agent": {
+        "id": "001",
+        "name": "GW01",
+        "ip": "198.51.100.1"
+      },
+      "manager": {
+        "name": "wazuh.manager"
+      },
+      "id": "1707577320.000001",
+      "decoder": {
+        "name": "zeek"
+      },
+      "location": "zeek_dns",
+      "data": {
+        "zeek": {
+          "ts": "1707577320.000000",
+          "uid": "D1a2b3c4d5e6f7g8h9",
+          "id.orig_h": "198.51.100.20",
+          "id.orig_p": "54321",
+          "id.resp_h": "8.8.8.8",
+          "id.resp_p": "53",
+          "proto": "udp",
+          "trans_id": "12346",
+          "rtt": "0.018",
+          "query": "xzklqwerpvbnm.com",
+          "qclass": "1",
+          "qclass_name": "C_INTERNET",
+          "qtype": "1",
+          "qtype_name": "A",
+          "rcode": "3",
+          "rcode_name": "NXDOMAIN",
+          "AA": "false",
+          "TC": "false",
+          "RD": "true",
+          "RA": "true",
+          "Z": "0"
+        }
+      },
+      "fomorian_test": true,
+      "fomorian_batch": "14",
+      "fomorian_campaign": "33"
+    },
+    {
+      "timestamp": "2026-02-10T14:02:02.000Z",
+      "rule": {
+        "level": 3,
+        "description": "Zeek - DNS NXDOMAIN response",
+        "id": "100001",
+        "mitre": {
+          "id": [
+            "T1568.002"
+          ],
+          "tactic": [
+            "Command and Control"
+          ],
+          "technique": [
+            "DGA"
+          ]
+        },
+        "groups": [
+          "zeek",
+          "zeek_dns"
+        ]
+      },
+      "agent": {
+        "id": "001",
+        "name": "GW01",
+        "ip": "198.51.100.1"
+      },
+      "manager": {
+        "name": "wazuh.manager"
+      },
+      "id": "1707577322.000001",
+      "decoder": {
+        "name": "zeek"
+      },
+      "location": "zeek_dns",
+      "data": {
+        "zeek": {
+          "ts": "1707577322.000000",
+          "uid": "D2a2b3c4d5e6f7g8h9",
+          "id.orig_h": "198.51.100.20",
+          "id.orig_p": "54322",
+          "id.resp_h": "8.8.8.8",
+          "id.resp_p": "53",
+          "proto": "udp",
+          "trans_id": "12347",
+          "rtt": "0.019",
+          "query": "ghjklmnpqrstuv.com",
+          "qclass": "1",
+          "qclass_name": "C_INTERNET",
+          "qtype": "1",
+          "qtype_name": "A",
+          "rcode": "3",
+          "rcode_name": "NXDOMAIN",
+          "AA": "false",
+          "TC": "false",
+          "RD": "true",
+          "RA": "true",
+          "Z": "0"
+        }
+      },
+      "fomorian_test": true,
+      "fomorian_batch": "14",
+      "fomorian_campaign": "33"
+    },
+    {
+      "timestamp": "2026-02-10T14:02:04.000Z",
+      "rule": {
+        "level": 3,
+        "description": "Zeek - DNS NXDOMAIN response",
+        "id": "100001",
+        "mitre": {
+          "id": [
+            "T1568.002"
+          ],
+          "tactic": [
+            "Command and Control"
+          ],
+          "technique": [
+            "DGA"
+          ]
+        },
+        "groups": [
+          "zeek",
+          "zeek_dns"
+        ]
+      },
+      "agent": {
+        "id": "001",
+        "name": "GW01",
+        "ip": "198.51.100.1"
+      },
+      "manager": {
+        "name": "wazuh.manager"
+      },
+      "id": "1707577324.000001",
+      "decoder": {
+        "name": "zeek"
+      },
+      "location": "zeek_dns",
+      "data": {
+        "zeek": {
+          "ts": "1707577324.000000",
+          "uid": "D3a2b3c4d5e6f7g8h9",
+          "id.orig_h": "198.51.100.20",
+          "id.orig_p": "54323",
+          "id.resp_h": "8.8.8.8",
+          "id.resp_p": "53",
+          "proto": "udp",
+          "trans_id": "12348",
+          "rtt": "0.021",
+          "query": "zxcvbnmasdfghjk.net",
+          "qclass": "1",
+          "qclass_name": "C_INTERNET",
+          "qtype": "1",
+          "qtype_name": "A",
+          "rcode": "3",
+          "rcode_name": "NXDOMAIN",
+          "AA": "false",
+          "TC": "false",
+          "RD": "true",
+          "RA": "true",
+          "Z": "0"
+        }
+      },
+      "fomorian_test": true,
+      "fomorian_batch": "14",
+      "fomorian_campaign": "33"
+    }
+  ]
+}

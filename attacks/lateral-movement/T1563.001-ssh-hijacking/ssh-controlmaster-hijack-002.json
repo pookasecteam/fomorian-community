@@ -1,0 +1,302 @@
+{
+  "_metadata": {
+    "attack_id": "T1563.001",
+    "variation": "002",
+    "name": "SSH ControlMaster Socket Hijacking",
+    "description": "Lateral movement by hijacking SSH ControlMaster socket to multiplex into existing SSH sessions without authentication",
+    "expected_detection": "HIGH",
+    "kill_chain_phase": "lateral-movement",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Linux auditd - ControlMaster socket discovery",
+      "sequence": 1,
+      "timestamp": "2026-02-08T13:10:00.000Z",
+      "log": {
+        "timestamp": "2026-02-08T13:10:00.000+0000",
+        "rule": {
+          "level": 8,
+          "description": "Linux: SSH ControlMaster socket enumeration",
+          "id": "100001",
+          "mitre": {
+            "id": [
+              "T1563.001",
+              "T1083"
+            ],
+            "tactic": [
+              "Lateral Movement",
+              "Discovery"
+            ],
+            "technique": [
+              "SSH Hijacking",
+              "File and Directory Discovery"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "linux",
+            "auditd",
+            "ssh"
+          ]
+        },
+        "agent": {
+          "id": "001",
+          "name": "GW01",
+          "ip": "198.51.100.1"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1707400000.300043",
+        "decoder": {
+          "name": "auditd"
+        },
+        "location": "/var/log/audit/audit.log",
+        "data": {
+          "audit": {
+            "type": "SYSCALL",
+            "arch": "x86_64",
+            "syscall": "257",
+            "success": "yes",
+            "exit": "3",
+            "items": "1",
+            "ppid": "13000",
+            "pid": "13010",
+            "auid": "0",
+            "uid": "0",
+            "gid": "0",
+            "euid": "0",
+            "tty": "pts1",
+            "ses": "2",
+            "comm": "find",
+            "exe": "/usr/bin/find",
+            "key": "controlmaster_discovery",
+            "cwd": "/home",
+            "name": "/home/admin/.ssh/sockets/admin@198.51.100.10:22",
+            "inode": "234567",
+            "mode": "socket",
+            "ouid": "1000",
+            "ogid": "1000"
+          }
+        },
+        "_fomorian_batch": "PT-2026-003-batch1-lateral",
+        "_fomorian_test": true,
+        "_fomorian_attack_id": "T1563.001",
+        "_fomorian_expected_detection": "Sigma: SSH ControlMaster Socket Discovery (T1563.001)"
+      }
+    },
+    {
+      "_comment": "Linux auditd - SSH command execution via ControlMaster",
+      "sequence": 2,
+      "timestamp": "2026-02-08T13:10:30.000Z",
+      "log": {
+        "timestamp": "2026-02-08T13:10:30.000+0000",
+        "rule": {
+          "level": 12,
+          "description": "Linux: SSH session hijacking via ControlMaster socket",
+          "id": "100001",
+          "mitre": {
+            "id": [
+              "T1563.001"
+            ],
+            "tactic": [
+              "Lateral Movement"
+            ],
+            "technique": [
+              "SSH Hijacking"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": true,
+          "groups": [
+            "linux",
+            "auditd",
+            "ssh",
+            "hijacking"
+          ]
+        },
+        "agent": {
+          "id": "001",
+          "name": "GW01",
+          "ip": "198.51.100.1"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1707400000.300044",
+        "decoder": {
+          "name": "auditd"
+        },
+        "location": "/var/log/audit/audit.log",
+        "data": {
+          "audit": {
+            "type": "EXECVE",
+            "argc": "6",
+            "a0": "/usr/bin/ssh",
+            "a1": "-S",
+            "a2": "/home/admin/.ssh/sockets/admin@198.51.100.10:22",
+            "a3": "-O",
+            "a4": "check",
+            "a5": "admin@198.51.100.10",
+            "ppid": "13010",
+            "pid": "13020",
+            "auid": "0",
+            "uid": "0",
+            "gid": "0",
+            "euid": "0",
+            "tty": "pts1",
+            "ses": "2",
+            "comm": "ssh",
+            "exe": "/usr/bin/ssh",
+            "key": "controlmaster_hijack"
+          }
+        },
+        "_fomorian_batch": "PT-2026-003-batch1-lateral",
+        "_fomorian_test": true,
+        "_fomorian_attack_id": "T1563.001",
+        "_fomorian_expected_detection": "Sigma: SSH ControlMaster Hijacking Attempt (T1563.001)"
+      }
+    },
+    {
+      "_comment": "Linux auditd - Command execution through hijacked session",
+      "sequence": 3,
+      "timestamp": "2026-02-08T13:11:00.000Z",
+      "log": {
+        "timestamp": "2026-02-08T13:11:00.000+0000",
+        "rule": {
+          "level": 12,
+          "description": "Linux: Remote command execution via hijacked SSH ControlMaster",
+          "id": "100001",
+          "mitre": {
+            "id": [
+              "T1563.001",
+              "T1059.004"
+            ],
+            "tactic": [
+              "Lateral Movement",
+              "Execution"
+            ],
+            "technique": [
+              "SSH Hijacking",
+              "Unix Shell"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": true,
+          "groups": [
+            "linux",
+            "auditd",
+            "ssh",
+            "hijacking",
+            "execution"
+          ]
+        },
+        "agent": {
+          "id": "001",
+          "name": "GW01",
+          "ip": "198.51.100.1"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1707400000.300045",
+        "decoder": {
+          "name": "auditd"
+        },
+        "location": "/var/log/audit/audit.log",
+        "data": {
+          "audit": {
+            "type": "EXECVE",
+            "argc": "5",
+            "a0": "/usr/bin/ssh",
+            "a1": "-S",
+            "a2": "/home/admin/.ssh/sockets/admin@198.51.100.10:22",
+            "a3": "admin@198.51.100.10",
+            "a4": "cat /etc/shadow",
+            "ppid": "13020",
+            "pid": "13030",
+            "auid": "0",
+            "uid": "0",
+            "gid": "0",
+            "euid": "0",
+            "tty": "pts1",
+            "ses": "2",
+            "comm": "ssh",
+            "exe": "/usr/bin/ssh",
+            "key": "controlmaster_exec"
+          }
+        },
+        "_fomorian_batch": "PT-2026-003-batch1-lateral",
+        "_fomorian_test": true,
+        "_fomorian_attack_id": "T1563.001",
+        "_fomorian_expected_detection": "Sigma: SSH ControlMaster Session Hijacking with Command (T1563.001)"
+      }
+    },
+    {
+      "_comment": "Target host - SSH session without new authentication",
+      "sequence": 4,
+      "timestamp": "2026-02-08T13:11:01.000Z",
+      "log": {
+        "timestamp": "2026-02-08T13:11:01.000+0000",
+        "rule": {
+          "level": 8,
+          "description": "Linux: SSH multiplexed session command execution",
+          "id": "100001",
+          "mitre": {
+            "id": [
+              "T1563.001",
+              "T1059.004"
+            ],
+            "tactic": [
+              "Lateral Movement",
+              "Execution"
+            ],
+            "technique": [
+              "SSH Hijacking",
+              "Unix Shell"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "linux",
+            "syslog",
+            "sshd"
+          ]
+        },
+        "agent": {
+          "id": "001",
+          "name": "GW01",
+          "ip": "198.51.100.1"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1707400000.300046",
+        "decoder": {
+          "name": "sshd"
+        },
+        "location": "/var/log/auth.log",
+        "data": {
+          "srcip": "198.51.100.1",
+          "dstuser": "admin",
+          "program_name": "sshd",
+          "message": "Received command \"cat /etc/shadow\" from multiplexed session"
+        },
+        "predecoder": {
+          "program_name": "sshd",
+          "timestamp": "Feb  8 13:11:01",
+          "hostname": "DC01"
+        },
+        "full_log": "Feb  8 13:11:01 DC01 sshd[23456]: Received command \"cat /etc/shadow\" from multiplexed session for admin from 198.51.100.1",
+        "_fomorian_batch": "PT-2026-003-batch1-lateral",
+        "_fomorian_test": true,
+        "_fomorian_attack_id": "T1563.001",
+        "_fomorian_expected_detection": "Sigma: SSH Multiplexed Session Command Execution (T1563.001)"
+      }
+    }
+  ]
+}

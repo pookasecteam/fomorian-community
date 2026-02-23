@@ -1,0 +1,152 @@
+{
+  "_metadata": {
+    "attack_id": "T1021.004",
+    "variation": "001",
+    "name": "SSH Lateral Movement",
+    "description": "Attacker uses stolen SSH key for lateral movement",
+    "expected_detection": "HIGH",
+    "kill_chain_phase": "lateral-movement",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "SSH connection initiated",
+      "sequence": 1,
+      "timestamp": "2026-01-29T14:45:00.000Z",
+      "log": {
+        "rule": {
+          "level": 10,
+          "description": "SSH Lateral Movement",
+          "id": "100200",
+          "mitre": {
+            "id": [
+              "T1021.004"
+            ],
+            "tactic": [
+              "Lateral Movement"
+            ]
+          },
+          "firedtimes": 1,
+          "groups": [
+            "syslog",
+            "linux"
+          ]
+        },
+        "agent": {
+          "id": "030",
+          "name": "DVLNX01",
+          "ip": "198.51.100.30"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000000.685836786",
+        "decoder": {
+          "name": "syslog"
+        },
+        "location": "/var/log/syslog",
+        "data": {
+          "facility": "authpriv",
+          "severity": "info",
+          "hostname": "DVLNX01",
+          "program": "auditd",
+          "message": "type=EXECVE msg=audit(1706539500.000:1090): argc=4 a0=\"ssh\" a1=\"-i\" a2=\"/tmp/.hidden/id_rsa\" a3=\"root@198.51.100.20\""
+        },
+        "full_log": "type=EXECVE msg=audit(1706539500.000:1090): argc=4 a0=\"ssh\" a1=\"-i\" a2=\"/tmp/.hidden/id_rsa\" a3=\"root@198.51.100.20\""
+      }
+    },
+    {
+      "_comment": "Successful SSH authentication on target",
+      "sequence": 2,
+      "timestamp": "2026-01-29T14:45:01.000Z",
+      "log": {
+        "rule": {
+          "level": 10,
+          "description": "SSH Lateral Movement",
+          "id": "100200",
+          "mitre": {
+            "id": [
+              "T1021.004"
+            ],
+            "tactic": [
+              "Lateral Movement"
+            ]
+          },
+          "firedtimes": 1,
+          "groups": [
+            "syslog",
+            "linux"
+          ]
+        },
+        "agent": {
+          "id": "030",
+          "name": "DVLNX01",
+          "ip": "198.51.100.30"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000000.147458813",
+        "decoder": {
+          "name": "syslog"
+        },
+        "location": "/var/log/syslog",
+        "data": {
+          "facility": "authpriv",
+          "severity": "info",
+          "hostname": "DB01",
+          "program": "sshd",
+          "message": "Accepted publickey for root from 198.51.100.40 port 52345 ssh2: RSA SHA256:abc123compromisedkey456"
+        },
+        "full_log": "Accepted publickey for root from 198.51.100.40 port 52345 ssh2: RSA SHA256:abc123compromisedkey456"
+      }
+    },
+    {
+      "_comment": "Session opened on target",
+      "sequence": 3,
+      "timestamp": "2026-01-29T14:45:02.000Z",
+      "log": {
+        "rule": {
+          "level": 10,
+          "description": "SSH Lateral Movement",
+          "id": "100200",
+          "mitre": {
+            "id": [
+              "T1021.004"
+            ],
+            "tactic": [
+              "Lateral Movement"
+            ]
+          },
+          "firedtimes": 1,
+          "groups": [
+            "syslog",
+            "linux"
+          ]
+        },
+        "agent": {
+          "id": "030",
+          "name": "DVLNX01",
+          "ip": "198.51.100.30"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000000.466910963",
+        "decoder": {
+          "name": "syslog"
+        },
+        "location": "/var/log/syslog",
+        "data": {
+          "facility": "authpriv",
+          "severity": "info",
+          "hostname": "DB01",
+          "program": "sshd",
+          "message": "pam_unix(sshd:session): session opened for user root by (uid=0)"
+        },
+        "full_log": "pam_unix(sshd:session): session opened for user root by (uid=0)"
+      }
+    }
+  ]
+}

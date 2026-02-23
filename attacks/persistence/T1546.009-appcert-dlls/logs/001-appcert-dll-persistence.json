@@ -1,0 +1,152 @@
+{
+  "_metadata": {
+    "attack_id": "T1546.009",
+    "variation": "001",
+    "name": "AppCert DLLs Persistence",
+    "description": "Setting the AppCertDLLs registry key to load a malicious DLL into every process that calls Win32 API functions, achieving persistent code execution",
+    "expected_detection": "HIGH",
+    "kill_chain_phase": "persistence",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Sysmon Event 13 - AppCertDLLs registry key set to load malicious DLL",
+      "sequence": 1,
+      "timestamp": "2026-02-21T02:55:00.000Z",
+      "log": {
+        "rule": {
+          "level": 14,
+          "description": "Sysmon - Event 13: AppCertDLLs registry persistence mechanism",
+          "id": "100100",
+          "mitre": {
+            "id": [
+              "T1546.009"
+            ],
+            "tactic": [
+              "Persistence",
+              "Privilege Escalation"
+            ],
+            "technique": [
+              "Event Triggered Execution: AppCert DLLs"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event13",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000020.2550001",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "13",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "13",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-21 02:55:00.000",
+              "processGuid": "{c9d0e1f2-9001-4cd3-b475-a9b0c1d2e3f4}",
+              "processId": "13100",
+              "image": "C:\\Windows\\System32\\reg.exe",
+              "targetObject": "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Session Manager\\AppCertDLLs",
+              "details": "C:\\Windows\\evil.dll",
+              "eventType": "SetValue"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Sysmon Event 1 - reg.exe adding AppCertDLLs registry value",
+      "sequence": 2,
+      "timestamp": "2026-02-21T02:55:01.000Z",
+      "log": {
+        "rule": {
+          "level": 14,
+          "description": "Sysmon - Event 1: AppCertDLLs registry modification via reg.exe",
+          "id": "100100",
+          "mitre": {
+            "id": [
+              "T1546.009"
+            ],
+            "tactic": [
+              "Persistence",
+              "Privilege Escalation"
+            ],
+            "technique": [
+              "Event Triggered Execution: AppCert DLLs"
+            ]
+          },
+          "firedtimes": 2,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000020.2550002",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-21 02:55:01.000",
+              "processGuid": "{c9d0e1f2-9002-4cd3-b475-a9b0c1d2e3f4}",
+              "processId": "13120",
+              "image": "C:\\Windows\\System32\\reg.exe",
+              "commandLine": "reg add \"HKLM\\SYSTEM\\CurrentControlSet\\Control\\Session Manager\" /v AppCertDLLs /t REG_MULTI_SZ /d \"C:\\Windows\\evil.dll\" /f",
+              "currentDirectory": "C:\\Users\\Administrator\\",
+              "user": "CORP\\Administrator",
+              "integrityLevel": "High",
+              "hashes": "SHA256=a2b3c4d5e6f7a8b9c0d1e2f3a4b5c6d7e8f9a0b1c2d3e4f5a6b7c8d9e0f1a2b3",
+              "parentProcessGuid": "{c9d0e1f2-9000-4cd3-b475-a9b0c1d2e3f4}",
+              "parentProcessId": "4880",
+              "parentImage": "C:\\Windows\\System32\\cmd.exe",
+              "parentCommandLine": "cmd.exe"
+            }
+          }
+        }
+      }
+    }
+  ]
+}

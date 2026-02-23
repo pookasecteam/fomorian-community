@@ -1,0 +1,228 @@
+{
+  "_metadata": {
+    "attack_id": "T1560.003",
+    "variation": "001",
+    "name": "Archive via Custom Method - XOR Encoding",
+    "description": "PowerShell script reads files and XOR-encodes them with a custom key to evade detection during exfiltration",
+    "expected_detection": "LOW",
+    "kill_chain_phase": "collection",
+    "format": "wazuh-native",
+    "format_version": "1.0",
+    "os": "Windows 11 Pro"
+  },
+  "logs": [
+    {
+      "_comment": "Sysmon Event 1 - Process Create: PowerShell XOR encoding script",
+      "sequence": 1,
+      "timestamp": "2026-02-10T18:48:00.000Z",
+      "log": {
+        "timestamp": "2026-02-10T18:48:00.000+0000",
+        "rule": {
+          "level": 11,
+          "description": "Sysmon - Event 1: PowerShell XOR Encoding Execution",
+          "id": "100100",
+          "mitre": {
+            "id": [
+              "T1560.003",
+              "T1027"
+            ],
+            "tactic": [
+              "Collection",
+              "Defense Evasion"
+            ],
+            "technique": [
+              "Archive via Custom Method",
+              "Obfuscated Files or Information"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000001.000025",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-10 18:48:00.000",
+              "processGuid": "{A1B2C3D4-7777-8888-9999-AAAABBBBCCCC}",
+              "processId": "7654",
+              "image": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+              "commandLine": "powershell.exe -ExecutionPolicy Bypass -File C:\\Users\\attacker\\AppData\\Local\\Temp\\xor_encode.ps1 -InputFile C:\\Users\\attacker\\Documents\\sensitive.txt -OutputFile C:\\Users\\attacker\\Documents\\encoded_data.enc -Key 0xDEADBEEF",
+              "currentDirectory": "C:\\Users\\attacker\\",
+              "user": "CORP\\attacker",
+              "logonGuid": "{A1B2C3D4-0000-1111-2222-333344445555}",
+              "logonId": "0x123456",
+              "terminalSessionId": "1",
+              "integrityLevel": "Medium",
+              "hashes": "SHA256=908B64B1971A979C7E3E8CE4621945CBA84854CB98D23B0D0D0E8F4E0D8D2E8F",
+              "parentProcessGuid": "{A1B2C3D4-DDDD-EEEE-FFFF-000011112222}",
+              "parentProcessId": "6543",
+              "parentImage": "C:\\Windows\\System32\\cmd.exe",
+              "parentCommandLine": "cmd.exe"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Sysmon Event 11 - File Create: File read + encode operations (temp file)",
+      "sequence": 2,
+      "timestamp": "2026-02-10T18:50:00.000Z",
+      "log": {
+        "timestamp": "2026-02-10T18:50:00.000+0000",
+        "rule": {
+          "level": 8,
+          "description": "Sysmon - Event 11: Temporary Encoded File Created",
+          "id": "100511",
+          "mitre": {
+            "id": [
+              "T1560.003"
+            ],
+            "tactic": [
+              "Collection"
+            ],
+            "technique": [
+              "Archive via Custom Method"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event11",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000001.000026",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "11",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "11",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-10 18:50:00.000",
+              "processGuid": "{A1B2C3D4-7777-8888-9999-AAAABBBBCCCC}",
+              "processId": "7654",
+              "image": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+              "targetFilename": "C:\\Users\\attacker\\AppData\\Local\\Temp\\xor_temp_chunk_001.tmp",
+              "creationUtcTime": "2026-02-10 18:50:00.000",
+              "user": "CORP\\attacker"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Sysmon Event 11 - File Create: encoded_data.enc created with high entropy",
+      "sequence": 3,
+      "timestamp": "2026-02-10T18:52:00.000Z",
+      "log": {
+        "timestamp": "2026-02-10T18:52:00.000+0000",
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 11: High-Entropy Encoded File Created",
+          "id": "100511",
+          "mitre": {
+            "id": [
+              "T1560.003",
+              "T1027"
+            ],
+            "tactic": [
+              "Collection",
+              "Defense Evasion"
+            ],
+            "technique": [
+              "Archive via Custom Method",
+              "Obfuscated Files or Information"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event11",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000001.000027",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "11",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "11",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-10 18:52:00.000",
+              "processGuid": "{A1B2C3D4-7777-8888-9999-AAAABBBBCCCC}",
+              "processId": "7654",
+              "image": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+              "targetFilename": "C:\\Users\\attacker\\Documents\\encoded_data.enc",
+              "creationUtcTime": "2026-02-10 18:52:00.000",
+              "user": "CORP\\attacker"
+            }
+          }
+        }
+      }
+    }
+  ]
+}

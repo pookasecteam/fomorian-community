@@ -5,9 +5,7 @@
     "name": "Mimikatz sekurlsa::logonpasswords",
     "description": "Mimikatz credential dumping via sekurlsa module",
     "expected_detection": "CRITICAL",
-    "expected_soar": "credential-access-detection",
     "kill_chain_phase": "credential-access",
-    "notes": "Mimikatz is the most common credential theft tool",
     "format": "wazuh-native",
     "format_version": "1.0"
   },
@@ -17,7 +15,6 @@
       "sequence": 1,
       "timestamp": "2026-01-29T15:00:00.000Z",
       "log": {
-        "timestamp": "",
         "rule": {
           "level": 12,
           "description": "Sysmon - Event 1: Mimikatz sekurlsa::logonpasswords",
@@ -42,9 +39,9 @@
           ]
         },
         "agent": {
-          "id": "007",
+          "id": "020",
           "name": "WS01",
-          "ip": "10.1.0.20"
+          "ip": "198.51.100.20"
         },
         "manager": {
           "name": "wazuh.manager"
@@ -91,7 +88,6 @@
       "sequence": 2,
       "timestamp": "2026-01-29T15:00:01.000Z",
       "log": {
-        "timestamp": "",
         "rule": {
           "level": 12,
           "description": "Sysmon - Event 10: Mimikatz sekurlsa::logonpasswords",
@@ -116,9 +112,9 @@
           ]
         },
         "agent": {
-          "id": "007",
+          "id": "020",
           "name": "WS01",
-          "ip": "10.1.0.20"
+          "ip": "198.51.100.20"
         },
         "manager": {
           "name": "wazuh.manager"
@@ -162,7 +158,6 @@
       "sequence": 3,
       "timestamp": "2026-01-29T15:00:01.000Z",
       "log": {
-        "timestamp": "",
         "rule": {
           "level": 12,
           "description": "Sysmon - Event 4656: Mimikatz sekurlsa::logonpasswords",
@@ -187,9 +182,9 @@
           ]
         },
         "agent": {
-          "id": "007",
+          "id": "020",
           "name": "WS01",
-          "ip": "10.1.0.20"
+          "ip": "198.51.100.20"
         },
         "manager": {
           "name": "wazuh.manager"

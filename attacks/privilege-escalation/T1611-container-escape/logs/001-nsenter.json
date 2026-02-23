@@ -1,0 +1,156 @@
+{
+  "_metadata": {
+    "attack_id": "T1611",
+    "variation": "001",
+    "name": "Container Escape via nsenter",
+    "description": "Attacker with access to a privileged container uses nsenter to enter host namespaces and escape container isolation",
+    "expected_detection": "CRITICAL",
+    "kill_chain_phase": "privilege-escalation",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Linux Sysmon Event 1 - nsenter executed from docker context to escape into host namespaces",
+      "sequence": 1,
+      "timestamp": "2026-02-17T10:00:00.000Z",
+      "log": {
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 1: Suspicious nsenter Execution",
+          "id": "100100",
+          "mitre": {
+            "id": [
+              "T1611"
+            ],
+            "tactic": [
+              "Privilege Escalation"
+            ],
+            "technique": [
+              "Escape to Host"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "linux"
+          ]
+        },
+        "agent": {
+          "id": "030",
+          "name": "VULN01",
+          "ip": "198.51.100.30"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000000.611001",
+        "decoder": {
+          "name": "sysmon-linux"
+        },
+        "location": "EventChannel",
+        "data": {
+          "system": {
+            "eventID": "1",
+            "channel": "Linux-Sysmon/Operational",
+            "providerName": "Linux-Sysmon",
+            "computer": "VULN01",
+            "level": "4",
+            "task": "1",
+            "opcode": "0",
+            "keywords": "0x8000000000000000",
+            "severityValue": "INFORMATION"
+          },
+          "eventdata": {
+            "utcTime": "2026-02-17 10:00:00.000",
+            "processGuid": "{T1611-001-0001-0001-000000000001}",
+            "processId": "8001",
+            "image": "/usr/bin/nsenter",
+            "commandLine": "nsenter --target 1 --mount --uts --ipc --net --pid -- bash",
+            "currentDirectory": "/",
+            "user": "root",
+            "logonId": "0",
+            "hashes": "SHA256=NSENTER_HASH_PLACEHOLDER_1234567890ABCDEF1234567890ABCDEF",
+            "parentProcessGuid": "{T1611-001-0001-0001-000000000000}",
+            "parentProcessId": "8000",
+            "parentImage": "/usr/bin/docker",
+            "parentCommandLine": "docker exec -it vulnerable-container bash"
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Linux Sysmon Event 1 - bash spawned inside host namespace after nsenter escape",
+      "sequence": 2,
+      "timestamp": "2026-02-17T10:00:05.000Z",
+      "log": {
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 1: Shell Spawned from nsenter",
+          "id": "100100",
+          "mitre": {
+            "id": [
+              "T1611"
+            ],
+            "tactic": [
+              "Privilege Escalation"
+            ],
+            "technique": [
+              "Escape to Host"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "linux"
+          ]
+        },
+        "agent": {
+          "id": "030",
+          "name": "VULN01",
+          "ip": "198.51.100.30"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000000.611002",
+        "decoder": {
+          "name": "sysmon-linux"
+        },
+        "location": "EventChannel",
+        "data": {
+          "system": {
+            "eventID": "1",
+            "channel": "Linux-Sysmon/Operational",
+            "providerName": "Linux-Sysmon",
+            "computer": "VULN01",
+            "level": "4",
+            "task": "1",
+            "opcode": "0",
+            "keywords": "0x8000000000000000",
+            "severityValue": "INFORMATION"
+          },
+          "eventdata": {
+            "utcTime": "2026-02-17 10:00:05.000",
+            "processGuid": "{T1611-001-0001-0001-000000000002}",
+            "processId": "8002",
+            "image": "/bin/bash",
+            "commandLine": "bash",
+            "currentDirectory": "/",
+            "user": "root",
+            "logonId": "0",
+            "hashes": "SHA256=BASH_HASH_PLACEHOLDER_1234567890ABCDEF1234567890ABCDEF12",
+            "parentProcessGuid": "{T1611-001-0001-0001-000000000001}",
+            "parentProcessId": "8001",
+            "parentImage": "/usr/bin/nsenter",
+            "parentCommandLine": "nsenter --target 1 --mount --uts --ipc --net --pid -- bash"
+          }
+        }
+      }
+    }
+  ]
+}

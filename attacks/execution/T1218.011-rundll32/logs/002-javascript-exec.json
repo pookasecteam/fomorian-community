@@ -5,9 +5,7 @@
     "name": "Rundll32 JavaScript Execution",
     "description": "Attacker uses rundll32 with mshtml to execute JavaScript",
     "expected_detection": "CRITICAL",
-    "expected_soar": "lolbins-abuse-detection",
     "kill_chain_phase": "execution",
-    "notes": "Bypasses script execution policies",
     "format": "wazuh-native",
     "format_version": "1.0"
   },
@@ -17,7 +15,6 @@
       "sequence": 1,
       "timestamp": "2026-01-29T15:05:00.000Z",
       "log": {
-        "timestamp": "",
         "rule": {
           "level": 12,
           "description": "Sysmon - Event 1: Rundll32 JavaScript Execution",
@@ -42,9 +39,9 @@
           ]
         },
         "agent": {
-          "id": "007",
+          "id": "020",
           "name": "WS01",
-          "ip": "10.1.0.20"
+          "ip": "198.51.100.20"
         },
         "manager": {
           "name": "wazuh.manager"

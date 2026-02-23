@@ -1,0 +1,216 @@
+{
+  "_metadata": {
+    "attack_id": "T1496.003",
+    "variation": "002",
+    "name": "SMS Pumping - API Calls with curl (FIXED)",
+    "description": "Attacker uses curl/wget to send mass SMS via Twilio/Nexmo APIs - FIXED to show actual API calls",
+    "expected_detection": "HIGH",
+    "kill_chain_phase": "impact",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Linux Sysmon Event 1 - curl to Twilio API (FIXED - shows actual API call)",
+      "sequence": 1,
+      "timestamp": "2026-02-08T18:00:00.000Z",
+      "log": {
+        "timestamp": "2026-02-08T18:00:00.000+0000",
+        "rule": {
+          "level": 12,
+          "description": "Sysmon for Linux - Event 1: Process Create",
+          "id": "100101",
+          "mitre": {
+            "id": [
+              "T1496.003"
+            ],
+            "tactic": [
+              "Impact"
+            ],
+            "technique": [
+              "Resource Hijacking: SMS Pumping"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "linux"
+          ]
+        },
+        "agent": {
+          "id": "001",
+          "name": "GW01",
+          "ip": "198.51.100.1"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1707400000.400080",
+        "decoder": {
+          "name": "sysmon-linux"
+        },
+        "location": "/var/log/sysmon/sysmon.log",
+        "data": {
+          "eventdata": {
+            "utcTime": "2026-02-08 18:00:00.000",
+            "processGuid": "{A1B2C3D4-IMPC-1496-003-FIXED-0001}",
+            "processId": "71123",
+            "image": "/usr/bin/curl",
+            "commandLine": "curl -X POST https://api.twilio.com/2010-04-01/Accounts/ACxyz123/Messages.json -u ACxyz123:token123 --data To=+882123456789 --data From=+15551234567 --data Body=VerificationCode",
+            "currentDirectory": "/tmp",
+            "user": "www-data",
+            "parentProcessGuid": "{A1B2C3D4-IMPC-1496-003-PARENT-0001}",
+            "parentProcessId": "71100",
+            "parentImage": "/bin/bash",
+            "parentCommandLine": "/bin/bash -c 'for i in {1..1000}; do curl...'"
+          }
+        },
+        "_fomorian_batch": "PT-2026-003-batch2-impact-fixes",
+        "_fomorian_test": true,
+        "_fomorian_attack_id": "T1496.003",
+        "_fomorian_expected_detection": "Sigma: SMS Pumping Activity (T1496.003)"
+      }
+    },
+    {
+      "_comment": "Linux Sysmon Event 1 - wget to Nexmo/Vonage API",
+      "sequence": 2,
+      "timestamp": "2026-02-08T18:00:15.000Z",
+      "log": {
+        "timestamp": "2026-02-08T18:00:15.000+0000",
+        "rule": {
+          "level": 12,
+          "description": "Sysmon for Linux - Event 1: Process Create",
+          "id": "100101",
+          "mitre": {
+            "id": [
+              "T1496.003"
+            ],
+            "tactic": [
+              "Impact"
+            ],
+            "technique": [
+              "Resource Hijacking: SMS Pumping"
+            ]
+          },
+          "firedtimes": 2,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "linux"
+          ]
+        },
+        "agent": {
+          "id": "030",
+          "name": "VULN01",
+          "ip": "198.51.100.30"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1707400000.400081",
+        "decoder": {
+          "name": "sysmon-linux"
+        },
+        "location": "/var/log/sysmon/sysmon.log",
+        "data": {
+          "eventdata": {
+            "utcTime": "2026-02-08 18:00:15.000",
+            "processGuid": "{A1B2C3D4-IMPC-1496-003-FIXED-0002}",
+            "processId": "71234",
+            "image": "/usr/bin/wget",
+            "commandLine": "wget --post-data=api_key=abc123&to=882987654321&text=Code https://api.nexmo.com/sms/json",
+            "currentDirectory": "/var/www/html",
+            "user": "www-data",
+            "parentProcessGuid": "{A1B2C3D4-IMPC-1496-003-PARENT-0002}",
+            "parentProcessId": "71200",
+            "parentImage": "/usr/sbin/apache2",
+            "parentCommandLine": "/usr/sbin/apache2 -k start"
+          }
+        },
+        "_fomorian_batch": "PT-2026-003-batch2-impact-fixes",
+        "_fomorian_test": true,
+        "_fomorian_attack_id": "T1496.003",
+        "_fomorian_expected_detection": "Sigma: SMS Pumping Activity (T1496.003)"
+      }
+    },
+    {
+      "_comment": "Windows Sysmon Event 1 - PowerShell Invoke-WebRequest to Plivo API",
+      "sequence": 3,
+      "timestamp": "2026-02-08T18:00:30.000Z",
+      "log": {
+        "timestamp": "2026-02-08T18:00:30.000+0000",
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 1: Process Create",
+          "id": "100916",
+          "mitre": {
+            "id": [
+              "T1496.003"
+            ],
+            "tactic": [
+              "Impact"
+            ],
+            "technique": [
+              "Resource Hijacking: SMS Pumping"
+            ]
+          },
+          "firedtimes": 3,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1707400000.400082",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-08 18:00:30.000",
+              "processGuid": "{A1B2C3D4-IMPC-1496-003-WIN-0001}",
+              "processId": "19234",
+              "image": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+              "commandLine": "powershell.exe -c \"Invoke-WebRequest -Uri 'https://api.plivo.com/v1/Account/XXXXX/Message/' -Method POST -Body @{src='+15551234567';dst='+882123456789';text='Code'} -Headers @{Authorization='Basic BASE64'}\"",
+              "currentDirectory": "C:\\inetpub\\wwwroot\\",
+              "user": "NT AUTHORITY\\SYSTEM",
+              "integrityLevel": "System",
+              "hashes": "SHA256=E3F4A5B6C7D8E9F0A1B2C3D4E5F6A7B8C9D0E1F2A3B4C5D6E7F8A9B0C1D2E3F4",
+              "parentProcessGuid": "{A1B2C3D4-IMPC-1496-003-WIN-PARENT-0001}",
+              "parentProcessId": "19100",
+              "parentImage": "C:\\Windows\\System32\\inetsrv\\w3wp.exe",
+              "parentCommandLine": "c:\\windows\\system32\\inetsrv\\w3wp.exe -ap \"DefaultAppPool\""
+            }
+          }
+        },
+        "_fomorian_batch": "PT-2026-003-batch2-impact-fixes",
+        "_fomorian_test": true,
+        "_fomorian_attack_id": "T1496.003",
+        "_fomorian_expected_detection": "Sigma: SMS Pumping Activity (T1496.003)"
+      }
+    }
+  ]
+}

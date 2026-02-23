@@ -1,0 +1,155 @@
+{
+  "_metadata": {
+    "attack_id": "NONE",
+    "variation": "FP-036",
+    "name": "Outlook Startup and Exchange Connection",
+    "description": "OUTLOOK.EXE starting up, loading DLLs, and connecting to Exchange server - normal email client operations",
+    "expected_detection": "NONE",
+    "kill_chain_phase": "none",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "OUTLOOK.EXE loading MAPI DLL at startup - LEGITIMATE",
+      "sequence": 1,
+      "timestamp": "2026-01-29T08:05:00.000Z",
+      "log": {
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 7: Outlook Startup and Exchange Connection",
+          "id": "100100",
+          "mitre": {
+            "id": [
+              "NONE"
+            ],
+            "tactic": [
+              "None"
+            ],
+            "technique": [
+              "Outlook Startup and Exchange Connection"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event7",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.50"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000000.132036001",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "7",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "opcode": "0",
+              "keywords": "0x8000000000000000",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-01-29 08:05:00.000",
+              "processGuid": "{FP-036-E5F6-A7B8-000000000001}",
+              "processId": "8240",
+              "image": "C:\\Program Files\\Microsoft Office\\root\\Office16\\OUTLOOK.EXE",
+              "imageLoaded": "C:\\Program Files\\Microsoft Office\\root\\Office16\\OLMAPI32.DLL",
+              "signed": "true",
+              "signature": "Microsoft Corporation",
+              "signatureStatus": "Valid",
+              "user": "CORP\\jane.smith"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "OUTLOOK.EXE connecting to Exchange server over HTTPS - LEGITIMATE",
+      "sequence": 2,
+      "timestamp": "2026-01-29T08:05:04.000Z",
+      "log": {
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 3: Outlook Startup and Exchange Connection",
+          "id": "100100",
+          "mitre": {
+            "id": [
+              "NONE"
+            ],
+            "tactic": [
+              "None"
+            ],
+            "technique": [
+              "Outlook Startup and Exchange Connection"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event3",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.50"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000000.132036002",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "3",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "opcode": "0",
+              "keywords": "0x8000000000000000",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-01-29 08:05:04.000",
+              "processGuid": "{FP-036-E5F6-A7B8-000000000001}",
+              "processId": "8240",
+              "image": "C:\\Program Files\\Microsoft Office\\root\\Office16\\OUTLOOK.EXE",
+              "user": "CORP\\jane.smith",
+              "protocol": "tcp",
+              "initiated": "true",
+              "sourceIp": "198.51.100.50",
+              "sourcePort": "52890",
+              "destinationIp": "198.51.100.15",
+              "destinationHostname": "mail.corp.local",
+              "destinationPort": "443"
+            }
+          }
+        }
+      }
+    }
+  ]
+}

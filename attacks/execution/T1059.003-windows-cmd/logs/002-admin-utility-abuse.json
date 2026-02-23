@@ -1,0 +1,241 @@
+{
+  "_metadata": {
+    "attack_id": "T1059.003",
+    "name": "Administrative Utility Abuse via CMD",
+    "description": "CMD spawning suspicious processes abusing legitimate administrative utilities",
+    "expected_detection": "MEDIUM",
+    "kill_chain_phase": "execution",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "CMD spawning net.exe for reconnaissance",
+      "sequence": 1,
+      "timestamp": "2026-01-31T18:15:30.123Z",
+      "log": {
+        "timestamp": "2026-01-31T18:15:30.123+0000",
+        "rule": {
+          "level": 8,
+          "description": "Sysmon - Event 1: CMD Spawning Net.exe for Discovery",
+          "id": "100916",
+          "mitre": {
+            "id": [
+              "T1059.003",
+              "T1087.002"
+            ],
+            "tactic": [
+              "Execution",
+              "Discovery"
+            ],
+            "technique": [
+              "Windows Command Shell",
+              "Domain Account"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000007.600001",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local"
+            },
+            "eventdata": {
+              "utcTime": "2026-01-31 18:15:30.123",
+              "processGuid": "{12345678-cmd1-1234-cmd1-123456789abc}",
+              "processId": "2345",
+              "image": "C:\\Windows\\System32\\net.exe",
+              "commandLine": "net user /domain",
+              "currentDirectory": "C:\\Users\\attacker\\",
+              "user": "CORP\\attacker",
+              "integrityLevel": "Medium",
+              "hashes": "SHA256=D4E24D5B0D3ECEE5C8E87B44E4A33D3A4AA8B5C6D7E8F9A0B1C2D3E4F5A6B7C8",
+              "parentProcessGuid": "{12345678-cmd1-1234-cmd1-123456789000}",
+              "parentProcessId": "1234",
+              "parentImage": "C:\\Windows\\System32\\cmd.exe",
+              "parentCommandLine": "cmd.exe /c"
+            }
+          }
+        },
+        "_fomorian_batch": "threat-intel-2026-01-31",
+        "_fomorian_test": true,
+        "_fomorian_attack_id": "T1059.003",
+        "_fomorian_expected_detection": "Sigma: Admin Utility Abuse - Net.exe Domain Enumeration"
+      }
+    },
+    {
+      "_comment": "CMD spawning nltest for domain trust discovery",
+      "sequence": 2,
+      "timestamp": "2026-01-31T18:15:45.456Z",
+      "log": {
+        "timestamp": "2026-01-31T18:15:45.456+0000",
+        "rule": {
+          "level": 10,
+          "description": "Sysmon - Event 1: CMD Spawning Nltest for Domain Trust Discovery",
+          "id": "100916",
+          "mitre": {
+            "id": [
+              "T1059.003",
+              "T1482"
+            ],
+            "tactic": [
+              "Execution",
+              "Discovery"
+            ],
+            "technique": [
+              "Windows Command Shell",
+              "Domain Trust Discovery"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000007.600002",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local"
+            },
+            "eventdata": {
+              "utcTime": "2026-01-31 18:15:45.456",
+              "processGuid": "{12345678-cmd2-1234-cmd2-123456789abc}",
+              "processId": "3456",
+              "image": "C:\\Windows\\System32\\nltest.exe",
+              "commandLine": "nltest /domain_trusts /all_trusts",
+              "currentDirectory": "C:\\Users\\attacker\\",
+              "user": "CORP\\attacker",
+              "integrityLevel": "Medium",
+              "hashes": "SHA256=E5F35D6C1E98F6B5A4E33C2B1D0A9F8E7D6C5B4A3929180716253443526172819",
+              "parentProcessGuid": "{12345678-cmd2-1234-cmd2-123456789000}",
+              "parentProcessId": "2345",
+              "parentImage": "C:\\Windows\\System32\\cmd.exe",
+              "parentCommandLine": "cmd.exe"
+            }
+          }
+        },
+        "_fomorian_batch": "threat-intel-2026-01-31",
+        "_fomorian_test": true,
+        "_fomorian_attack_id": "T1059.003",
+        "_fomorian_expected_detection": "Sigma: Admin Utility Abuse - Nltest Domain Trust Discovery"
+      }
+    },
+    {
+      "_comment": "CMD spawning dsquery for AD enumeration",
+      "sequence": 3,
+      "timestamp": "2026-01-31T18:16:00.789Z",
+      "log": {
+        "timestamp": "2026-01-31T18:16:00.789+0000",
+        "rule": {
+          "level": 10,
+          "description": "Sysmon - Event 1: CMD Spawning Dsquery for AD Enumeration",
+          "id": "100916",
+          "mitre": {
+            "id": [
+              "T1059.003",
+              "T1087.002"
+            ],
+            "tactic": [
+              "Execution",
+              "Discovery"
+            ],
+            "technique": [
+              "Windows Command Shell",
+              "Domain Account"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000007.600003",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local"
+            },
+            "eventdata": {
+              "utcTime": "2026-01-31 18:16:00.789",
+              "processGuid": "{12345678-cmd3-1234-cmd3-123456789abc}",
+              "processId": "4567",
+              "image": "C:\\Windows\\System32\\dsquery.exe",
+              "commandLine": "dsquery user -limit 0",
+              "currentDirectory": "C:\\Users\\attacker\\",
+              "user": "CORP\\attacker",
+              "integrityLevel": "Medium",
+              "hashes": "SHA256=F6A47E8D2F09A7C6B5D44E3C2A19B0F8E7D6C5B4A3928170615243433516162717",
+              "parentProcessGuid": "{12345678-cmd3-1234-cmd3-123456789000}",
+              "parentProcessId": "3456",
+              "parentImage": "C:\\Windows\\System32\\cmd.exe",
+              "parentCommandLine": "cmd.exe"
+            }
+          }
+        },
+        "_fomorian_batch": "threat-intel-2026-01-31",
+        "_fomorian_test": true,
+        "_fomorian_attack_id": "T1059.003",
+        "_fomorian_expected_detection": "Sigma: Admin Utility Abuse - Dsquery AD Enumeration"
+      }
+    }
+  ]
+}

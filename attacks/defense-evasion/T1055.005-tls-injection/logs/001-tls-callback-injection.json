@@ -1,0 +1,159 @@
+{
+  "_metadata": {
+    "attack_id": "T1055.005",
+    "variation": "001",
+    "name": "Thread Local Storage Callback Injection",
+    "description": "Attacker opens target process with full access, then creates a remote thread to execute code via TLS callback mechanism in the target process address space",
+    "expected_detection": "HIGH",
+    "kill_chain_phase": "defense-evasion",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Sysmon Event 10 - Process access to target process with full access rights",
+      "sequence": 1,
+      "timestamp": "2026-02-22T09:22:10.000Z",
+      "log": {
+        "rule": {
+          "level": 14,
+          "description": "Sysmon - Event 10: Suspicious process access with PROCESS_ALL_ACCESS",
+          "id": "100810",
+          "mitre": {
+            "id": [
+              "T1055.005"
+            ],
+            "tactic": [
+              "Defense Evasion",
+              "Privilege Escalation"
+            ],
+            "technique": [
+              "Process Injection: Thread Local Storage"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event_10",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1708600010.000010",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "10",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "10",
+              "severityValue": "INFORMATION",
+              "systemTime": "2026-02-22T09:22:10.7413620Z"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-22 09:22:10.741",
+              "sourceProcessGuid": "{B2F7C3A1-6D1A-6719-C400-000000001400}",
+              "sourceProcessId": "4392",
+              "sourceThreadId": "5108",
+              "sourceImage": "C:\\Users\\Public\\tls_inject.exe",
+              "targetProcessGuid": "{B2F7C3A1-3B7E-6719-9100-000000001400}",
+              "targetProcessId": "7620",
+              "targetImage": "C:\\Windows\\System32\\notepad.exe",
+              "grantedAccess": "0x1FFFFF",
+              "callTrace": "C:\\Windows\\SYSTEM32\\ntdll.dll+9D584|C:\\Windows\\System32\\KERNELBASE.dll+2C13E|C:\\Users\\Public\\tls_inject.exe+1A48",
+              "sourceUser": "CORP\\attacker",
+              "targetUser": "CORP\\attacker"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Sysmon Event 8 - CreateRemoteThread in target process for TLS callback execution",
+      "sequence": 2,
+      "timestamp": "2026-02-22T09:22:11.000Z",
+      "log": {
+        "rule": {
+          "level": 14,
+          "description": "Sysmon - Event 8: CreateRemoteThread detected (TLS injection)",
+          "id": "100811",
+          "mitre": {
+            "id": [
+              "T1055.005"
+            ],
+            "tactic": [
+              "Defense Evasion",
+              "Privilege Escalation"
+            ],
+            "technique": [
+              "Process Injection: Thread Local Storage"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event_8",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1708600011.000011",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "8",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "8",
+              "severityValue": "INFORMATION",
+              "systemTime": "2026-02-22T09:22:11.0287930Z"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-22 09:22:11.028",
+              "sourceProcessGuid": "{B2F7C3A1-6D1A-6719-C400-000000001400}",
+              "sourceProcessId": "4392",
+              "sourceImage": "C:\\Users\\Public\\tls_inject.exe",
+              "targetProcessGuid": "{B2F7C3A1-3B7E-6719-9100-000000001400}",
+              "targetProcessId": "7620",
+              "targetImage": "C:\\Windows\\System32\\notepad.exe",
+              "newThreadId": "8244",
+              "startAddress": "0x00007FFB2A3B4C5D",
+              "startModule": "-",
+              "startFunction": "-",
+              "sourceUser": "CORP\\attacker",
+              "targetUser": "CORP\\attacker"
+            }
+          }
+        }
+      }
+    }
+  ]
+}

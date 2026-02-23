@@ -1,0 +1,141 @@
+{
+  "_metadata": {
+    "attack_id": "T1498.002",
+    "variation": "002",
+    "name": "Reflection Amplification - NTP Amplification Attack Detection",
+    "description": "DEFENSIVE - Detecting NTP amplification attack (monlist) against our infrastructure",
+    "expected_detection": "HIGH",
+    "kill_chain_phase": "impact",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Zeek conn.log - Large NTP responses from multiple sources",
+      "sequence": 1,
+      "timestamp": "2026-02-08T20:30:00.000Z",
+      "log": {
+        "timestamp": "2026-02-08T20:30:00.000+0000",
+        "rule": {
+          "level": 14,
+          "description": "Zeek - NTP Amplification Attack Detected",
+          "id": "100001",
+          "mitre": {
+            "id": [
+              "T1498.002"
+            ],
+            "tactic": [
+              "Impact"
+            ],
+            "technique": [
+              "Reflection Amplification"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": true,
+          "groups": [
+            "zeek",
+            "ddos",
+            "ntp",
+            "amplification"
+          ]
+        },
+        "agent": {
+          "id": "001",
+          "name": "GW01",
+          "ip": "198.51.100.1"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1707400000.300062",
+        "decoder": {
+          "name": "zeek-conn"
+        },
+        "location": "/opt/zeek/logs/current/conn.log",
+        "data": {
+          "zeek": {
+            "ts": "1707424200.000000",
+            "uid": "CNtPaM3vWn4TpKmNq4",
+            "id_orig_h": "216.239.35.0",
+            "id_orig_p": "123",
+            "id_resp_h": "198.51.100.1",
+            "id_resp_p": "45678",
+            "proto": "udp",
+            "service": "ntp",
+            "duration": "0.001",
+            "orig_bytes": 468,
+            "resp_bytes": 0,
+            "conn_state": "S0",
+            "orig_pkts": 1,
+            "orig_ip_bytes": 496,
+            "resp_pkts": 0,
+            "resp_ip_bytes": 0
+          }
+        },
+        "_fomorian_batch": "PT-2026-003-batch2-impact",
+        "_fomorian_test": true,
+        "_fomorian_attack_id": "T1498.002",
+        "_fomorian_expected_detection": "Wazuh: NTP Amplification Attack (T1498.002)"
+      }
+    },
+    {
+      "_comment": "Wazuh custom - NTP monlist response flood",
+      "sequence": 2,
+      "timestamp": "2026-02-08T20:30:05.000Z",
+      "log": {
+        "timestamp": "2026-02-08T20:30:05.000+0000",
+        "rule": {
+          "level": 12,
+          "description": "Network - Unsolicited NTP Monlist Responses",
+          "id": "100850",
+          "mitre": {
+            "id": [
+              "T1498.002"
+            ],
+            "tactic": [
+              "Impact"
+            ],
+            "technique": [
+              "Reflection Amplification"
+            ]
+          },
+          "firedtimes": 50,
+          "mail": false,
+          "groups": [
+            "network",
+            "ddos",
+            "ntp"
+          ]
+        },
+        "agent": {
+          "id": "001",
+          "name": "GW01",
+          "ip": "198.51.100.1"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1707400000.300063",
+        "decoder": {
+          "name": "network-traffic"
+        },
+        "location": "/var/log/syslog",
+        "data": {
+          "proto": "udp",
+          "srcip": "129.6.15.28",
+          "srcport": "123",
+          "dstip": "198.51.100.1",
+          "dstport": "45678",
+          "bytes": 468,
+          "ntp_mode": "7",
+          "ntp_request_code": "42"
+        },
+        "_fomorian_batch": "PT-2026-003-batch2-impact",
+        "_fomorian_test": true,
+        "_fomorian_attack_id": "T1498.002",
+        "_fomorian_expected_detection": "Wazuh: NTP Monlist Amplification (T1498.002)"
+      }
+    }
+  ]
+}

@@ -1,0 +1,76 @@
+{
+  "_metadata": {
+    "attack_id": "T1556.006",
+    "variation": "001",
+    "name": "Shadow Credentials via KeyCred",
+    "description": "msDS-KeyCredentialLink modification for shadow credential attack",
+    "expected_detection": "Sigma: Shadow Credentials - KeyCredentialLink Modification (T1556.006)",
+    "kill_chain_phase": "credential-access",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "AD Event 5136 - Directory Service Object Modified",
+      "sequence": 1,
+      "timestamp": "2026-01-31T15:00:00.000Z",
+      "log": {
+        "timestamp": "2026-01-31T15:00:00.000Z",
+        "rule": {
+          "level": 12,
+          "description": "Active Directory Object Modified",
+          "id": "100001",
+          "mitre": {
+            "id": [
+              "T1556.006"
+            ],
+            "tactic": [
+              "Credential Access",
+              "Persistence"
+            ],
+            "technique": [
+              "Shadow Credentials"
+            ]
+          },
+          "groups": [
+            "windows",
+            "ad",
+            "directory_service"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000001.000001",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "5136",
+              "channel": "Security",
+              "providerName": "Microsoft-Windows-Security-Auditing",
+              "computer": "DC01.corp.local"
+            },
+            "eventdata": {
+              "subjectUserName": "attacker",
+              "subjectDomainName": "CORP",
+              "objectClass": "user",
+              "objectDN": "CN=admin,CN=Users,DC=corp,DC=local",
+              "attributeLDAPDisplayName": "msDS-KeyCredentialLink",
+              "operationType": "%%14674",
+              "attributeValue": "B:828:..."
+            }
+          }
+        }
+      }
+    }
+  ]
+}

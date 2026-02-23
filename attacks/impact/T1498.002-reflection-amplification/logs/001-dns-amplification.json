@@ -1,0 +1,153 @@
+{
+  "_metadata": {
+    "attack_id": "T1498.002",
+    "variation": "001",
+    "name": "Reflection Amplification - DNS Amplification Attack Detection",
+    "description": "DEFENSIVE - Detecting DNS amplification attack where our server is receiving spoofed DNS responses",
+    "expected_detection": "HIGH",
+    "kill_chain_phase": "impact",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Zeek dns.log - Unsolicited large DNS responses",
+      "sequence": 1,
+      "timestamp": "2026-02-08T20:20:00.000Z",
+      "log": {
+        "timestamp": "2026-02-08T20:20:00.000+0000",
+        "rule": {
+          "level": 14,
+          "description": "Zeek - DNS Amplification Attack Detected",
+          "id": "100001",
+          "mitre": {
+            "id": [
+              "T1498.002"
+            ],
+            "tactic": [
+              "Impact"
+            ],
+            "technique": [
+              "Reflection Amplification"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": true,
+          "groups": [
+            "zeek",
+            "ddos",
+            "dns",
+            "amplification"
+          ]
+        },
+        "agent": {
+          "id": "001",
+          "name": "GW01",
+          "ip": "198.51.100.1"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1707400000.300060",
+        "decoder": {
+          "name": "zeek-dns"
+        },
+        "location": "/opt/zeek/logs/current/dns.log",
+        "data": {
+          "zeek": {
+            "ts": "1707423600.000000",
+            "uid": "CXyZaB3vWn4TpKmNq3",
+            "id_orig_h": "8.8.8.8",
+            "id_orig_p": "53",
+            "id_resp_h": "198.51.100.1",
+            "id_resp_p": "12345",
+            "proto": "udp",
+            "query": ".",
+            "qclass": 1,
+            "qtype": 255,
+            "rcode": 0,
+            "AA": false,
+            "TC": true,
+            "RD": true,
+            "RA": true,
+            "answers": [
+              "Multiple TXT records with large payload"
+            ],
+            "TTLs": [
+              300.0
+            ],
+            "rejected": false
+          }
+        },
+        "_fomorian_batch": "PT-2026-003-batch2-impact",
+        "_fomorian_test": true,
+        "_fomorian_attack_id": "T1498.002",
+        "_fomorian_expected_detection": "Wazuh: DNS Amplification Attack (T1498.002)"
+      }
+    },
+    {
+      "_comment": "Zeek notice.log - DNS amplification pattern",
+      "sequence": 2,
+      "timestamp": "2026-02-08T20:20:05.000Z",
+      "log": {
+        "timestamp": "2026-02-08T20:20:05.000+0000",
+        "rule": {
+          "level": 12,
+          "description": "Zeek - Unsolicited DNS Responses Detected",
+          "id": "100001",
+          "mitre": {
+            "id": [
+              "T1498.002"
+            ],
+            "tactic": [
+              "Impact"
+            ],
+            "technique": [
+              "Reflection Amplification"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "zeek",
+            "ddos",
+            "dns"
+          ]
+        },
+        "agent": {
+          "id": "001",
+          "name": "GW01",
+          "ip": "198.51.100.1"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1707400000.300061",
+        "decoder": {
+          "name": "zeek-notice"
+        },
+        "location": "/opt/zeek/logs/current/notice.log",
+        "data": {
+          "zeek": {
+            "ts": "1707423605.000000",
+            "note": "DNS::External_Name",
+            "msg": "Received 500+ unsolicited DNS responses from multiple sources in 10 seconds",
+            "src": "various",
+            "dst": "198.51.100.1",
+            "p": 12345,
+            "proto": "udp",
+            "actions": [
+              "Notice::ACTION_LOG",
+              "Notice::ACTION_ALARM"
+            ],
+            "suppress_for": 300.0
+          }
+        },
+        "_fomorian_batch": "PT-2026-003-batch2-impact",
+        "_fomorian_test": true,
+        "_fomorian_attack_id": "T1498.002",
+        "_fomorian_expected_detection": "Wazuh: Unsolicited DNS Response Flood (T1498.002)"
+      }
+    }
+  ]
+}

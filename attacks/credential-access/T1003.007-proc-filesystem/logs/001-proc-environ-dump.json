@@ -1,0 +1,161 @@
+{
+  "_metadata": {
+    "attack_id": "T1003.007",
+    "variation": "001",
+    "name": "Proc Filesystem Credential Dump",
+    "description": "Accessing /proc filesystem to dump process environment variables, memory maps, and credentials from running processes on Linux",
+    "expected_detection": "HIGH",
+    "kill_chain_phase": "credential-access",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Linux auditd - cat /proc/self/environ to dump current process environment variables",
+      "sequence": 1,
+      "timestamp": "2026-02-21T02:20:00.000Z",
+      "log": {
+        "rule": {
+          "level": 10,
+          "description": "Process environment variable dump via /proc filesystem",
+          "id": "100200",
+          "mitre": {
+            "id": [
+              "T1003.007"
+            ],
+            "tactic": [
+              "Credential Access"
+            ],
+            "technique": [
+              "OS Credential Dumping: Proc Filesystem"
+            ]
+          },
+          "firedtimes": 1,
+          "groups": [
+            "syslog",
+            "linux"
+          ]
+        },
+        "agent": {
+          "id": "001",
+          "name": "GW01",
+          "ip": "198.51.100.1"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000021.2200001",
+        "decoder": {
+          "name": "syslog"
+        },
+        "location": "/var/log/syslog",
+        "data": {
+          "facility": "authpriv",
+          "severity": "info",
+          "hostname": "GW01",
+          "program": "auditd",
+          "message": "type=EXECVE msg=audit(1708480800.000:2001): argc=2 a0=\"cat\" a1=\"/proc/self/environ\""
+        },
+        "full_log": "type=EXECVE msg=audit(1708480800.000:2001): argc=2 a0=\"cat\" a1=\"/proc/self/environ\""
+      }
+    },
+    {
+      "_comment": "Linux auditd - strings /proc/*/maps searching for credential artifacts in process memory maps",
+      "sequence": 2,
+      "timestamp": "2026-02-21T02:20:15.000Z",
+      "log": {
+        "rule": {
+          "level": 12,
+          "description": "Process memory map enumeration via /proc filesystem",
+          "id": "100200",
+          "mitre": {
+            "id": [
+              "T1003.007"
+            ],
+            "tactic": [
+              "Credential Access"
+            ],
+            "technique": [
+              "OS Credential Dumping: Proc Filesystem"
+            ]
+          },
+          "firedtimes": 2,
+          "groups": [
+            "syslog",
+            "linux"
+          ]
+        },
+        "agent": {
+          "id": "001",
+          "name": "GW01",
+          "ip": "198.51.100.1"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000021.2200002",
+        "decoder": {
+          "name": "syslog"
+        },
+        "location": "/var/log/syslog",
+        "data": {
+          "facility": "authpriv",
+          "severity": "info",
+          "hostname": "GW01",
+          "program": "auditd",
+          "message": "type=EXECVE msg=audit(1708480815.000:2002): argc=2 a0=\"strings\" a1=\"/proc/1/maps\""
+        },
+        "full_log": "type=EXECVE msg=audit(1708480815.000:2002): argc=2 a0=\"strings\" a1=\"/proc/1/maps\""
+      }
+    },
+    {
+      "_comment": "Linux auditd - Accessing init process environment for credential harvesting",
+      "sequence": 3,
+      "timestamp": "2026-02-21T02:20:30.000Z",
+      "log": {
+        "rule": {
+          "level": 12,
+          "description": "Init process environment access via /proc filesystem",
+          "id": "100200",
+          "mitre": {
+            "id": [
+              "T1003.007"
+            ],
+            "tactic": [
+              "Credential Access"
+            ],
+            "technique": [
+              "OS Credential Dumping: Proc Filesystem"
+            ]
+          },
+          "firedtimes": 3,
+          "groups": [
+            "syslog",
+            "linux"
+          ]
+        },
+        "agent": {
+          "id": "001",
+          "name": "GW01",
+          "ip": "198.51.100.1"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000021.2200003",
+        "decoder": {
+          "name": "syslog"
+        },
+        "location": "/var/log/syslog",
+        "data": {
+          "facility": "authpriv",
+          "severity": "info",
+          "hostname": "GW01",
+          "program": "auditd",
+          "message": "type=EXECVE msg=audit(1708480830.000:2003): argc=2 a0=\"cat\" a1=\"/proc/1/environ\""
+        },
+        "full_log": "type=EXECVE msg=audit(1708480830.000:2003): argc=2 a0=\"cat\" a1=\"/proc/1/environ\""
+      }
+    }
+  ]
+}

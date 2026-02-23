@@ -1,0 +1,81 @@
+{
+  "_metadata": {
+    "attack_id": "T1003.008",
+    "variation": "001",
+    "name": "OS Credential Dumping: /etc/passwd and /etc/shadow",
+    "description": "Read /etc/passwd file to enumerate user accounts",
+    "expected_detection": "LOW",
+    "kill_chain_phase": "credential-access",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Linux Sysmon Event 1 - cat /etc/passwd execution",
+      "sequence": 1,
+      "timestamp": "2026-02-10T16:24:00.000Z",
+      "log": {
+        "timestamp": "2026-02-10T16:24:00.000+0000",
+        "rule": {
+          "level": 5,
+          "description": "Sysmon - Event 1: Process Create",
+          "id": "100101",
+          "mitre": {
+            "id": [
+              "T1003.008"
+            ],
+            "tactic": [
+              "Credential Access"
+            ],
+            "technique": [
+              "OS Credential Dumping: /etc/passwd and /etc/shadow"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "linux"
+          ]
+        },
+        "agent": {
+          "id": "001",
+          "name": "GW01",
+          "ip": "198.51.100.1"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1707583440.000001",
+        "decoder": {
+          "name": "sysmon_event1"
+        },
+        "location": "EventChannel",
+        "data": {
+          "eventdata": {
+            "utcTime": "2026-02-10 16:24:00.000",
+            "processGuid": "{A1B2C3D4-CA-1003-0001-000000000001}",
+            "processId": "12456",
+            "image": "/usr/bin/cat",
+            "commandLine": "cat /etc/passwd",
+            "currentDirectory": "/home/admin2",
+            "user": "admin2",
+            "logonId": "1000",
+            "hashes": "SHA256=1A2B3C4D5E6F7A8B9C0D1E2F3A4B5C6D7E8F9A0B1C2D3E4F5A6B7C8D9E0F1A2",
+            "parentProcessGuid": "{A1B2C3D4-CA-1003-0001-PARENT000001}",
+            "parentProcessId": "12400",
+            "parentImage": "/bin/bash",
+            "parentCommandLine": "/bin/bash",
+            "parentUser": "admin2"
+          }
+        },
+        "_fomorian_test": true,
+        "fomorian_batch": 8,
+        "fomorian_campaign": 27,
+        "fomorian_technique": "T1003.008",
+        "fomorian_technique_name": "OS Credential Dumping: /etc/passwd and /etc/shadow"
+      }
+    }
+  ]
+}

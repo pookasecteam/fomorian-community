@@ -1,0 +1,221 @@
+{
+  "_metadata": {
+    "attack_id": "T1562.009",
+    "variation": "001",
+    "name": "Safe Mode Boot Persistence",
+    "description": "Attacker uses bcdedit to force Windows into Safe Mode on next boot. Safe Mode disables most security tools (AV, EDR, Sysmon) while allowing attacker persistence mechanisms registered as Safe Mode services to execute. After performing malicious actions, the attacker reverts the setting to avoid detection.",
+    "expected_detection": "HIGH",
+    "kill_chain_phase": "defense-evasion",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Sysmon Event 1 - bcdedit setting safe mode boot",
+      "sequence": 1,
+      "timestamp": "2026-02-21T04:20:00.000Z",
+      "log": {
+        "rule": {
+          "level": 14,
+          "description": "Sysmon - Event 1: bcdedit Safe Mode boot configuration",
+          "id": "100100",
+          "mitre": {
+            "id": [
+              "T1562.009"
+            ],
+            "tactic": [
+              "Defense Evasion"
+            ],
+            "technique": [
+              "Impair Defenses: Safe Mode Boot"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": true,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000020.4000004",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-21 04:20:00.000",
+              "processGuid": "{b3c285a4-7e20-6718-b100-000000002000}",
+              "processId": "3412",
+              "image": "C:\\Windows\\System32\\bcdedit.exe",
+              "commandLine": "bcdedit.exe /set safeboot minimal",
+              "currentDirectory": "C:\\Users\\Administrator\\",
+              "user": "CORP\\Administrator",
+              "integrityLevel": "High",
+              "hashes": "SHA256=c67de0a24168b84a21476f58fb67e82a19b62c2cc4a4f0e3d9bfe1f6a7d53c09",
+              "parentProcessGuid": "{b3c285a4-7e1a-6718-b000-000000002000}",
+              "parentProcessId": "6520",
+              "parentImage": "C:\\Windows\\System32\\cmd.exe",
+              "parentCommandLine": "cmd.exe /c C:\\Users\\Administrator\\attack.bat"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Sysmon Event 13 - Registry modification for BCD safe mode setting",
+      "sequence": 2,
+      "timestamp": "2026-02-21T04:20:01.000Z",
+      "log": {
+        "rule": {
+          "level": 14,
+          "description": "Sysmon - Event 13: BCD store registry modification for Safe Mode",
+          "id": "100100",
+          "mitre": {
+            "id": [
+              "T1562.009"
+            ],
+            "tactic": [
+              "Defense Evasion"
+            ],
+            "technique": [
+              "Impair Defenses: Safe Mode Boot"
+            ]
+          },
+          "firedtimes": 2,
+          "mail": true,
+          "groups": [
+            "sysmon",
+            "sysmon_event13",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000020.4000005",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "13",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "13",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-21 04:20:01.000",
+              "processGuid": "{b3c285a4-7e20-6718-b100-000000002000}",
+              "processId": "3412",
+              "image": "C:\\Windows\\System32\\bcdedit.exe",
+              "eventType": "SetValue",
+              "targetObject": "HKLM\\BCD00000000\\Objects\\{bootmgr}\\Elements\\25000080\\Element",
+              "details": "safeboot: Minimal"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Sysmon Event 1 - bcdedit reverting safe mode (cleanup)",
+      "sequence": 3,
+      "timestamp": "2026-02-21T04:25:00.000Z",
+      "log": {
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 1: bcdedit removing Safe Mode configuration",
+          "id": "100100",
+          "mitre": {
+            "id": [
+              "T1562.009"
+            ],
+            "tactic": [
+              "Defense Evasion"
+            ],
+            "technique": [
+              "Impair Defenses: Safe Mode Boot"
+            ]
+          },
+          "firedtimes": 3,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000020.4000006",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-21 04:25:00.000",
+              "processGuid": "{b3c285a4-7e32-6718-b200-000000002000}",
+              "processId": "2108",
+              "image": "C:\\Windows\\System32\\bcdedit.exe",
+              "commandLine": "bcdedit.exe /deletevalue safeboot",
+              "currentDirectory": "C:\\Users\\Administrator\\",
+              "user": "CORP\\Administrator",
+              "integrityLevel": "High",
+              "hashes": "SHA256=c67de0a24168b84a21476f58fb67e82a19b62c2cc4a4f0e3d9bfe1f6a7d53c09",
+              "parentProcessGuid": "{b3c285a4-7e1a-6718-b000-000000002000}",
+              "parentProcessId": "6520",
+              "parentImage": "C:\\Windows\\System32\\cmd.exe",
+              "parentCommandLine": "cmd.exe /c C:\\Users\\Administrator\\attack.bat"
+            }
+          }
+        }
+      }
+    }
+  ]
+}

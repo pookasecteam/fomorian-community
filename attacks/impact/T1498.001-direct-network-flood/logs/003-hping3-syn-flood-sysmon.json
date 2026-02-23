@@ -1,0 +1,203 @@
+{
+  "_metadata": {
+    "attack_id": "T1498.001",
+    "variation": "003",
+    "name": "Direct Network Flood - hping3 SYN Flood Tool (Sysmon Detection)",
+    "description": "Detect SYN flood attack TOOL execution (hping3/nmap/netwox) via process monitoring",
+    "expected_detection": "HIGH",
+    "kill_chain_phase": "impact",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Linux Sysmon Event 1 - hping3 SYN flood",
+      "sequence": 1,
+      "timestamp": "2026-02-08T20:00:00.000Z",
+      "log": {
+        "timestamp": "2026-02-08T20:00:00.000+0000",
+        "rule": {
+          "level": 14,
+          "description": "Sysmon for Linux - Event 1: Process Create",
+          "id": "100101",
+          "mitre": {
+            "id": [
+              "T1498.001"
+            ],
+            "tactic": [
+              "Impact"
+            ],
+            "technique": [
+              "Network Denial of Service: Direct Network Flood"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "linux"
+          ]
+        },
+        "agent": {
+          "id": "001",
+          "name": "GW01",
+          "ip": "198.51.100.1"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1707422400.400010",
+        "decoder": {
+          "name": "sysmon-linux"
+        },
+        "location": "/var/log/sysmon/sysmon.log",
+        "data": {
+          "eventdata": {
+            "utcTime": "2026-02-08 20:00:00.000",
+            "processGuid": "{A1B2C3D4-IMPC-1498-001-SYSMON-0001}",
+            "processId": "60123",
+            "image": "/usr/sbin/hping3",
+            "commandLine": "hping3 -S -p 80 --flood --rand-source 198.51.100.1",
+            "currentDirectory": "/tmp",
+            "user": "root",
+            "parentProcessGuid": "{A1B2C3D4-IMPC-1498-001-PARENT-0001}",
+            "parentProcessId": "60100",
+            "parentImage": "/bin/bash",
+            "parentCommandLine": "-bash"
+          }
+        },
+        "_fomorian_batch": "PT-2026-003-batch2-impact-fixes",
+        "_fomorian_test": true,
+        "_fomorian_attack_id": "T1498.001",
+        "_fomorian_expected_detection": "Sigma: Network Flood Tool Execution (T1498.001)"
+      }
+    },
+    {
+      "_comment": "Linux Sysmon Event 1 - nmap SYN scan with flood rate",
+      "sequence": 2,
+      "timestamp": "2026-02-08T20:01:00.000Z",
+      "log": {
+        "timestamp": "2026-02-08T20:01:00.000+0000",
+        "rule": {
+          "level": 14,
+          "description": "Sysmon for Linux - Event 1: Process Create",
+          "id": "100101",
+          "mitre": {
+            "id": [
+              "T1498.001"
+            ],
+            "tactic": [
+              "Impact"
+            ],
+            "technique": [
+              "Network Denial of Service: Direct Network Flood"
+            ]
+          },
+          "firedtimes": 2,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "linux"
+          ]
+        },
+        "agent": {
+          "id": "001",
+          "name": "GW01",
+          "ip": "198.51.100.1"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1707422400.400011",
+        "decoder": {
+          "name": "sysmon-linux"
+        },
+        "location": "/var/log/sysmon/sysmon.log",
+        "data": {
+          "eventdata": {
+            "utcTime": "2026-02-08 20:01:00.000",
+            "processGuid": "{A1B2C3D4-IMPC-1498-001-SYSMON-0002}",
+            "processId": "60234",
+            "image": "/usr/bin/nmap",
+            "commandLine": "nmap -sS --max-rate 10000 -p 1-65535 198.51.100.0/24",
+            "currentDirectory": "/home/attacker",
+            "user": "attacker",
+            "parentProcessGuid": "{A1B2C3D4-IMPC-1498-001-PARENT-0002}",
+            "parentProcessId": "60200",
+            "parentImage": "/usr/bin/python3",
+            "parentCommandLine": "python3 /tmp/dos_launcher.py"
+          }
+        },
+        "_fomorian_batch": "PT-2026-003-batch2-impact-fixes",
+        "_fomorian_test": true,
+        "_fomorian_attack_id": "T1498.001",
+        "_fomorian_expected_detection": "Sigma: Network Flood Tool Execution (T1498.001)"
+      }
+    },
+    {
+      "_comment": "Linux Sysmon Event 1 - UDP flood with hping3",
+      "sequence": 3,
+      "timestamp": "2026-02-08T20:02:00.000Z",
+      "log": {
+        "timestamp": "2026-02-08T20:02:00.000+0000",
+        "rule": {
+          "level": 14,
+          "description": "Sysmon for Linux - Event 1: Process Create",
+          "id": "100101",
+          "mitre": {
+            "id": [
+              "T1498.001"
+            ],
+            "tactic": [
+              "Impact"
+            ],
+            "technique": [
+              "Network Denial of Service: Direct Network Flood"
+            ]
+          },
+          "firedtimes": 3,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "linux"
+          ]
+        },
+        "agent": {
+          "id": "001",
+          "name": "GW01",
+          "ip": "198.51.100.1"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1707422400.400012",
+        "decoder": {
+          "name": "sysmon-linux"
+        },
+        "location": "/var/log/sysmon/sysmon.log",
+        "data": {
+          "eventdata": {
+            "utcTime": "2026-02-08 20:02:00.000",
+            "processGuid": "{A1B2C3D4-IMPC-1498-001-SYSMON-0003}",
+            "processId": "60345",
+            "image": "/usr/sbin/hping3",
+            "commandLine": "hping3 --udp -p 53 --flood 198.51.100.1",
+            "currentDirectory": "/tmp",
+            "user": "root",
+            "parentProcessGuid": "{A1B2C3D4-IMPC-1498-001-PARENT-0003}",
+            "parentProcessId": "60100",
+            "parentImage": "/bin/bash",
+            "parentCommandLine": "-bash"
+          }
+        },
+        "_fomorian_batch": "PT-2026-003-batch2-impact-fixes",
+        "_fomorian_test": true,
+        "_fomorian_attack_id": "T1498.001",
+        "_fomorian_expected_detection": "Sigma: Network Flood Tool Execution (T1498.001)"
+      }
+    }
+  ]
+}

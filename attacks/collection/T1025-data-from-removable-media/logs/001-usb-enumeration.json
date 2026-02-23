@@ -1,0 +1,63 @@
+{
+  "_metadata": {
+    "technique_id": "T1025",
+    "technique_name": "Data from Removable Media",
+    "tactic": "Collection",
+    "platform": "Windows",
+    "description": "Adversary searches for USB drives and removable media using wmic",
+    "severity": "HIGH",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "rule": {
+        "level": 3,
+        "description": "Sysmon - Event 1",
+        "id": "100603",
+        "mitre": {
+          "id": [
+            "T1025"
+          ],
+          "tactic": [
+            "Collection"
+          ],
+          "technique": [
+            "Data from Removable Media"
+          ]
+        }
+      },
+      "agent": {
+        "id": "010",
+        "name": "DC01"
+      },
+      "data": {
+        "win": {
+          "eventdata": {
+            "commandLine": "wmic.exe  logicaldisk where drivetype=2 get deviceid,volumename",
+            "currentDirectory": "C:\\Windows\\system32\\",
+            "image": "C:\\Windows\\System32\\Wbem\\wmic.exe",
+            "integrityLevel": "High",
+            "parentImage": "C:\\Windows\\System32\\cmd.exe",
+            "processId": "3228",
+            "user": "CORP\\Administrator",
+            "utcTime": "2026-02-08 20:16:20.123"
+          },
+          "system": {
+            "channel": "Microsoft-Windows-Sysmon/Operational",
+            "computer": "DC01.corp.local",
+            "eventID": "1",
+            "providerName": "Microsoft-Windows-Sysmon",
+            "systemTime": "2026-02-08T20:16:20.123Z"
+          }
+        }
+      },
+      "decoder": {
+        "name": "windows_eventchannel"
+      },
+      "location": "EventChannel",
+      "timestamp": "2026-02-08T20:16:20.123+0000",
+      "_fomorian_test": true
+    }
+  ]
+}

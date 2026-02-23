@@ -1,0 +1,156 @@
+{
+  "_metadata": {
+    "attack_id": "T1078.003",
+    "variation": "002",
+    "name": "Valid Accounts: Local Accounts - RDP/SSH Access",
+    "description": "Initial access via compromised local account credentials through RDP (Windows) or SSH (Linux)",
+    "expected_detection": "MEDIUM",
+    "kill_chain_phase": "initial-access",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Windows Security Event 4624 - Local account RDP logon from external IP",
+      "sequence": 1,
+      "timestamp": "2026-02-10T21:10:00.000Z",
+      "log": {
+        "timestamp": "2026-02-10T21:10:00.000Z",
+        "rule": {
+          "level": 10,
+          "description": "Windows - Local Account RDP Logon from External IP",
+          "id": "100001",
+          "mitre": {
+            "id": [
+              "T1078.003",
+              "T1021.001"
+            ],
+            "tactic": [
+              "Initial Access",
+              "Lateral Movement"
+            ],
+            "technique": [
+              "Valid Accounts: Local Accounts",
+              "Remote Desktop Protocol"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "windows",
+            "authentication",
+            "rdp"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1710000006.000001",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "4624",
+              "channel": "Security",
+              "providerName": "Microsoft-Windows-Security-Auditing",
+              "computer": "WS01.corp.local",
+              "level": "0",
+              "task": "12544",
+              "severityValue": "AUDIT_SUCCESS"
+            },
+            "eventdata": {
+              "subjectUserSid": "S-1-5-18",
+              "subjectUserName": "WS01$",
+              "subjectDomainName": "WORKGROUP",
+              "subjectLogonId": "0x3e7",
+              "targetUserSid": "S-1-5-21-9876543210-9876543210-9876543210-1001",
+              "targetUserName": "admin2",
+              "targetDomainName": "WS01",
+              "targetLogonId": "0x7b4f2a",
+              "logonType": "10",
+              "logonProcessName": "User32",
+              "authenticationPackageName": "Negotiate",
+              "workstationName": "WS01",
+              "logonGuid": "{00000000-0000-0000-0000-000000000000}",
+              "transmittedServices": "-",
+              "lmPackageName": "-",
+              "keyLength": "0",
+              "processId": "0x3e8",
+              "processName": "C:\\Windows\\System32\\winlogon.exe",
+              "ipAddress": "185.220.101.50",
+              "ipPort": "52341"
+            }
+          }
+        },
+        "_fomorian_test": true,
+        "fomorian_campaign": 31,
+        "fomorian_batch": 12
+      }
+    },
+    {
+      "_comment": "Linux auth.log - SSH successful login with local account from external IP",
+      "sequence": 2,
+      "timestamp": "2026-02-10T21:10:30.000Z",
+      "log": {
+        "timestamp": "2026-02-10T21:10:30.000Z",
+        "rule": {
+          "level": 10,
+          "description": "Linux - SSH Successful Login from External IP",
+          "id": "100001",
+          "mitre": {
+            "id": [
+              "T1078.003",
+              "T1021.004"
+            ],
+            "tactic": [
+              "Initial Access",
+              "Lateral Movement"
+            ],
+            "technique": [
+              "Valid Accounts: Local Accounts",
+              "SSH"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "linux",
+            "authentication",
+            "ssh"
+          ]
+        },
+        "agent": {
+          "id": "001",
+          "name": "GW01",
+          "ip": "198.51.100.1"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1710000006.000002",
+        "decoder": {
+          "name": "sshd"
+        },
+        "location": "/var/log/auth.log",
+        "data": {
+          "srcip": "185.220.101.50",
+          "srcport": "45678",
+          "dstuser": "admin2",
+          "authentication_method": "password",
+          "status": "success"
+        },
+        "_fomorian_test": true,
+        "fomorian_campaign": 31,
+        "fomorian_batch": 12
+      }
+    }
+  ]
+}

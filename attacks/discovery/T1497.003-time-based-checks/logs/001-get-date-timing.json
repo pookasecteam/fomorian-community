@@ -1,0 +1,91 @@
+{
+  "_metadata": {
+    "attack_id": "T1497.003",
+    "variation": "001",
+    "name": "Time Based Checks - Get-Date Timing Analysis",
+    "description": "Using PowerShell Get-Date for timing-based sandbox detection by measuring execution delays",
+    "expected_detection": "LOW",
+    "kill_chain_phase": "discovery",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Sysmon Event 1 - PowerShell timing check",
+      "sequence": 1,
+      "timestamp": "2026-02-08T10:10:00.000Z",
+      "log": {
+        "timestamp": "2026-02-08T10:10:00.000+0000",
+        "rule": {
+          "level": 8,
+          "description": "Sysmon - Event 1: Process Create",
+          "id": "100916",
+          "mitre": {
+            "id": [
+              "T1497.003"
+            ],
+            "tactic": [
+              "Discovery",
+              "Defense Evasion"
+            ],
+            "technique": [
+              "Time Based Evasion"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1707400000.200012",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-08 10:10:00.000",
+              "processGuid": "{A1B2C3D4-DISC-1497-0003-000000000001}",
+              "processId": "9024",
+              "image": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+              "commandLine": "powershell.exe -c \"$t1=Get-Date; Start-Sleep -Milliseconds 1000; $t2=Get-Date; if(($t2-$t1).TotalMilliseconds -lt 900){exit 1}\"",
+              "currentDirectory": "C:\\Users\\attacker\\",
+              "user": "CORP\\admin.user",
+              "integrityLevel": "Medium",
+              "hashes": "SHA256=DE96A6E69944335375DC1AC238336066889D9FFC7D73628EF4FE1B1B160AB32C",
+              "parentProcessGuid": "{A1B2C3D4-DISC-1497-0003-PARENT000001}",
+              "parentProcessId": "7244",
+              "parentImage": "C:\\Users\\attacker\\payload.exe",
+              "parentCommandLine": "payload.exe"
+            }
+          }
+        },
+        "_fomorian_batch": "PT-2026-003-batch1-discovery",
+        "_fomorian_test": true,
+        "_fomorian_attack_id": "T1497.003",
+        "_fomorian_expected_detection": "Sigma: Time-Based Sandbox Evasion (T1497.003)"
+      }
+    }
+  ]
+}

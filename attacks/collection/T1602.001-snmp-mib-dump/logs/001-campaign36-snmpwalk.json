@@ -1,0 +1,195 @@
+{
+  "_metadata": {
+    "attack_id": "T1602.001",
+    "variation": "001",
+    "name": "SNMP MIB Dump - Network Device Configuration Extraction",
+    "description": "Use snmpwalk to extract router configuration and device information via SNMP queries",
+    "expected_detection": "LOW",
+    "kill_chain_phase": "collection",
+    "format": "wazuh-native",
+    "format_version": "1.0",
+    "os": "Ubuntu 24.04 (Linux Sysmon)"
+  },
+  "logs": [
+    {
+      "_comment": "Linux Sysmon Event 1 - Process Create: snmpwalk execution",
+      "sequence": 1,
+      "timestamp": "2026-02-10T18:54:00.000Z",
+      "log": {
+        "timestamp": "2026-02-10T18:54:00.000+0000",
+        "rule": {
+          "level": 10,
+          "description": "Sysmon - Event 1: SNMP Walk of Network Device",
+          "id": "100101",
+          "mitre": {
+            "id": [
+              "T1602.001"
+            ],
+            "tactic": [
+              "Collection"
+            ],
+            "technique": [
+              "SNMP (MIB Dump)"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "linux"
+          ]
+        },
+        "agent": {
+          "id": "001",
+          "name": "GW01",
+          "ip": "198.51.100.1"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000001.000028",
+        "decoder": {
+          "name": "sysmon"
+        },
+        "location": "sysmon",
+        "data": {
+          "eventdata": {
+            "utcTime": "2026-02-10 18:54:00.000",
+            "processGuid": "{33333333-AAAA-BBBB-CCCC-DDDDEEEEEEEE}",
+            "processId": "34567",
+            "image": "/usr/bin/snmpwalk",
+            "commandLine": "snmpwalk -v2c -c public 198.51.100.1 iso > /tmp/device_configs.txt",
+            "currentDirectory": "/home/admin2",
+            "user": "admin2",
+            "logonGuid": "{33333333-0000-0000-0000-000000000000}",
+            "logonId": "1001",
+            "terminalSessionId": "4",
+            "integrityLevel": "no level",
+            "hashes": "SHA256=FEDCBA9876543210FEDCBA9876543210FEDCBA9876543210FEDCBA9876543210",
+            "parentProcessGuid": "{33333333-FFFF-EEEE-DDDD-CCCCBBBBAAAA}",
+            "parentProcessId": "33333",
+            "parentImage": "/bin/bash",
+            "parentCommandLine": "/bin/bash"
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Linux Sysmon Event 3 - Network Connection: SNMP UDP to router",
+      "sequence": 2,
+      "timestamp": "2026-02-10T18:56:00.000Z",
+      "log": {
+        "timestamp": "2026-02-10T18:56:00.000+0000",
+        "rule": {
+          "level": 9,
+          "description": "Sysmon - Event 3: SNMP Query to Network Device",
+          "id": "100103",
+          "mitre": {
+            "id": [
+              "T1602.001"
+            ],
+            "tactic": [
+              "Collection"
+            ],
+            "technique": [
+              "SNMP (MIB Dump)"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event3",
+            "linux"
+          ]
+        },
+        "agent": {
+          "id": "001",
+          "name": "GW01",
+          "ip": "198.51.100.1"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000001.000029",
+        "decoder": {
+          "name": "sysmon"
+        },
+        "location": "sysmon",
+        "data": {
+          "eventdata": {
+            "utcTime": "2026-02-10 18:56:00.000",
+            "processGuid": "{33333333-AAAA-BBBB-CCCC-DDDDEEEEEEEE}",
+            "processId": "34567",
+            "image": "/usr/bin/snmpwalk",
+            "user": "admin2",
+            "protocol": "udp",
+            "initiated": "true",
+            "sourceIsIpv6": "false",
+            "sourceIp": "198.51.100.1",
+            "sourcePort": "54789",
+            "destinationIsIpv6": "false",
+            "destinationIp": "198.51.100.1",
+            "destinationPort": "161"
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Linux Sysmon Event 11 - File Create: device_configs.txt created",
+      "sequence": 3,
+      "timestamp": "2026-02-10T18:58:00.000Z",
+      "log": {
+        "timestamp": "2026-02-10T18:58:00.000+0000",
+        "rule": {
+          "level": 10,
+          "description": "Sysmon - Event 11: Network Device Configuration File Created",
+          "id": "100111",
+          "mitre": {
+            "id": [
+              "T1602.001"
+            ],
+            "tactic": [
+              "Collection"
+            ],
+            "technique": [
+              "SNMP (MIB Dump)"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event11",
+            "linux"
+          ]
+        },
+        "agent": {
+          "id": "001",
+          "name": "GW01",
+          "ip": "198.51.100.1"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000001.000030",
+        "decoder": {
+          "name": "sysmon"
+        },
+        "location": "sysmon",
+        "data": {
+          "eventdata": {
+            "utcTime": "2026-02-10 18:58:00.000",
+            "processGuid": "{33333333-1111-2222-3333-444455556666}",
+            "processId": "33333",
+            "image": "/bin/bash",
+            "targetFilename": "/tmp/device_configs.txt",
+            "creationUtcTime": "2026-02-10 18:58:00.000",
+            "user": "admin2"
+          }
+        }
+      }
+    }
+  ]
+}

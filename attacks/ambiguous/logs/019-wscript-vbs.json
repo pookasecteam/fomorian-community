@@ -1,0 +1,161 @@
+{
+  "_metadata": {
+    "attack_id": "T1059.005",
+    "variation": "AMB-019",
+    "name": "wscript Executing VBScript from Network Share",
+    "description": "wscript.exe executing VBS from NETLOGON share - could be legitimate GPO login script or weaponized VBScript",
+    "ground_truth": "AMBIGUOUS",
+    "legitimate_explanation": "The logon.vbs script is a Group Policy login script that maps network drives and sets user environment variables. It has been deployed via NETLOGON share for years and is maintained by the AD team.",
+    "suspicious_explanation": "VBScript files hosted on network shares can be modified by attackers who compromise the domain controller or SYSVOL. A weaponized logon.vbs would execute on every user login, providing persistence and code execution across the domain.",
+    "expected_detection": "MEDIUM",
+    "kill_chain_phase": "execution",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Sysmon Event 1 - wscript.exe executing VBS from NETLOGON share",
+      "sequence": 1,
+      "timestamp": "2026-02-08T08:01:15.000Z",
+      "log": {
+        "rule": {
+          "level": 8,
+          "description": "Sysmon - Event 1: wscript executing VBScript from network share",
+          "id": "100100",
+          "mitre": {
+            "id": [
+              "T1059.005"
+            ],
+            "tactic": [
+              "Execution"
+            ],
+            "technique": [
+              "Visual Basic"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1707400005.282842712",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "opcode": "0",
+              "keywords": "0x8000000000000000",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-08 08:01:15.000",
+              "processGuid": "{AMB-019-0001-0001-000000000001}",
+              "processId": "2456",
+              "image": "C:\\Windows\\System32\\wscript.exe",
+              "commandLine": "wscript.exe \\\\DC01\\NETLOGON\\logon.vbs",
+              "currentDirectory": "C:\\Windows\\System32\\",
+              "user": "CORP\\sarah.jones",
+              "integrityLevel": "Medium",
+              "parentProcessGuid": "{AMB-019-0001-0001-000000000000}",
+              "parentProcessId": "1100",
+              "parentImage": "C:\\Windows\\System32\\userinit.exe",
+              "parentCommandLine": "C:\\Windows\\System32\\userinit.exe"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Sysmon Event 3 - wscript.exe connecting to DC01 for SMB share access",
+      "sequence": 2,
+      "timestamp": "2026-02-08T08:01:16.000Z",
+      "log": {
+        "rule": {
+          "level": 4,
+          "description": "Sysmon - Event 3: wscript SMB connection to domain controller",
+          "id": "100100",
+          "mitre": {
+            "id": [
+              "T1059.005"
+            ],
+            "tactic": [
+              "Execution"
+            ],
+            "technique": [
+              "Visual Basic"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event3",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1707400005.316227766",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "3",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "opcode": "0",
+              "keywords": "0x8000000000000000",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-08 08:01:16.000",
+              "processGuid": "{AMB-019-0001-0001-000000000001}",
+              "processId": "2456",
+              "image": "C:\\Windows\\System32\\wscript.exe",
+              "user": "CORP\\sarah.jones",
+              "protocol": "tcp",
+              "initiated": "true",
+              "sourceIp": "198.51.100.20",
+              "sourcePort": "49670",
+              "destinationIp": "198.51.100.10",
+              "destinationHostname": "DC01.corp.local",
+              "destinationPort": "445"
+            }
+          }
+        }
+      }
+    }
+  ]
+}

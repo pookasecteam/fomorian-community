@@ -1,0 +1,221 @@
+{
+  "_metadata": {
+    "attack_id": "T1574.002",
+    "variation": "002",
+    "name": "Lotus Blossom Chrysalis - Bitdefender DLL Sideloading",
+    "description": "Simulates Chrysalis backdoor deployment via renamed Bitdefender BluetoothService.exe DLL sideloading",
+    "expected_detection": "HIGH",
+    "kill_chain_phase": "defense-evasion",
+    "source_url": "https://thehackernews.com/2026/02/notepad-hosting-breach-attributed-to.html",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Sysmon Event 1 - Malicious Notepad++ update installer",
+      "sequence": 1,
+      "timestamp": "2026-02-03T10:10:00.000Z",
+      "log": {
+        "timestamp": "2026-02-03T10:10:00.000Z",
+        "rule": {
+          "level": 10,
+          "description": "Sysmon - Event 1: NSIS installer execution",
+          "id": "100916",
+          "mitre": {
+            "id": [
+              "T1204.002"
+            ],
+            "tactic": [
+              "Execution"
+            ],
+            "technique": [
+              "User Execution: Malicious File"
+            ]
+          },
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1706950600.000007",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-03 10:10:00.000",
+              "processGuid": "{12345678-1234-1234-1234-123456789020}",
+              "processId": "7452",
+              "image": "C:\\Users\\victim\\AppData\\Local\\Temp\\npp.8.7.3.Installer.x64.exe",
+              "commandLine": "\"C:\\Users\\victim\\AppData\\Local\\Temp\\npp.8.7.3.Installer.x64.exe\" /S",
+              "currentDirectory": "C:\\Users\\victim\\Downloads\\",
+              "user": "CORP\\victim",
+              "integrityLevel": "High",
+              "parentProcessGuid": "{12345678-1234-1234-1234-123456789019}",
+              "parentProcessId": "1234",
+              "parentImage": "C:\\Program Files\\Notepad++\\GUP.exe",
+              "parentCommandLine": "\"C:\\Program Files\\Notepad++\\GUP.exe\" -check"
+            }
+          }
+        },
+        "_fomorian_test": true,
+        "_fomorian_attack_id": "T1574.002",
+        "_fomorian_batch": "morning-intel-20260203"
+      }
+    },
+    {
+      "_comment": "Sysmon Event 1 - BluetoothService.exe DLL sideloading",
+      "sequence": 2,
+      "timestamp": "2026-02-03T10:10:15.000Z",
+      "log": {
+        "timestamp": "2026-02-03T10:10:15.000Z",
+        "rule": {
+          "level": 14,
+          "description": "Sysmon - Event 1: Chrysalis backdoor via DLL sideloading",
+          "id": "100916",
+          "mitre": {
+            "id": [
+              "T1574.002"
+            ],
+            "tactic": [
+              "Defense Evasion",
+              "Persistence"
+            ],
+            "technique": [
+              "Hijack Execution Flow: DLL Side-Loading"
+            ]
+          },
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1706950615.000008",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-03 10:10:15.000",
+              "processGuid": "{12345678-1234-1234-1234-123456789021}",
+              "processId": "8124",
+              "image": "C:\\Users\\victim\\AppData\\Roaming\\BluetoothService.exe",
+              "commandLine": "\"C:\\Users\\victim\\AppData\\Roaming\\BluetoothService.exe\"",
+              "currentDirectory": "C:\\Users\\victim\\AppData\\Roaming\\",
+              "user": "CORP\\victim",
+              "integrityLevel": "Medium",
+              "parentProcessGuid": "{12345678-1234-1234-1234-123456789020}",
+              "parentProcessId": "7452",
+              "parentImage": "C:\\Users\\victim\\AppData\\Local\\Temp\\npp.8.7.3.Installer.x64.exe"
+            }
+          }
+        },
+        "_fomorian_test": true,
+        "_fomorian_attack_id": "T1574.002",
+        "_fomorian_batch": "morning-intel-20260203"
+      }
+    },
+    {
+      "_comment": "Sysmon Event 3 - Chrysalis C2 communication",
+      "sequence": 3,
+      "timestamp": "2026-02-03T10:10:30.000Z",
+      "log": {
+        "timestamp": "2026-02-03T10:10:30.000Z",
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 3: Chrysalis C2 connection",
+          "id": "100917",
+          "mitre": {
+            "id": [
+              "T1041"
+            ],
+            "tactic": [
+              "Exfiltration"
+            ],
+            "technique": [
+              "Exfiltration Over C2 Channel"
+            ]
+          },
+          "groups": [
+            "sysmon",
+            "sysmon_event3",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1706950630.000009",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "3",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-03 10:10:30.000",
+              "processGuid": "{12345678-1234-1234-1234-123456789021}",
+              "processId": "8124",
+              "image": "C:\\Users\\victim\\AppData\\Roaming\\BluetoothService.exe",
+              "user": "CORP\\victim",
+              "protocol": "tcp",
+              "initiated": "true",
+              "sourceIp": "198.51.100.20",
+              "sourcePort": "49856",
+              "destinationIp": "95.179.213.0",
+              "destinationPort": "443"
+            }
+          }
+        },
+        "_fomorian_test": true,
+        "_fomorian_attack_id": "T1574.002",
+        "_fomorian_batch": "morning-intel-20260203"
+      }
+    }
+  ]
+}

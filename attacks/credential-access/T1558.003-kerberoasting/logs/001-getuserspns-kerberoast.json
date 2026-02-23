@@ -7,8 +7,7 @@
     "expected_detection": "HIGH",
     "kill_chain_phase": "credential-access",
     "format": "wazuh-native",
-    "format_version": "1.0",
-    "campaign": "attack-simulation-campaign-1"
+    "format_version": "1.0"
   },
   "logs": [
     {
@@ -23,12 +22,23 @@
           "id": "100648",
           "firedtimes": 1,
           "mail": false,
-          "groups": ["windows", "kerberos"]
+          "groups": [
+            "windows",
+            "kerberos"
+          ]
         },
-        "agent": {"id": "003", "name": "DC01", "ip": "10.0.10.10"},
-        "manager": {"name": "wazuh.manager"},
+        "agent": {
+          "id": "010",
+          "name": "DC01",
+          "ip": "198.51.100.10"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
         "id": "1706890002.000001",
-        "decoder": {"name": "windows_eventchannel"},
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
         "location": "EventChannel",
         "data": {
           "win": {
@@ -44,7 +54,7 @@
               "serviceName": "MSSQLSvc/db01.pooka.local:1433",
               "ticketEncryptionType": "0x17",
               "ticketOptions": "0x40810000",
-              "ipAddress": "::ffff:10.0.10.50",
+              "ipAddress": "::ffff:198.51.100.50",
               "ipPort": "54321",
               "status": "0x0",
               "logonGuid": "{00000000-0000-0000-0000-000000000000}"
@@ -65,12 +75,23 @@
           "id": "100648",
           "firedtimes": 2,
           "mail": false,
-          "groups": ["windows", "kerberos"]
+          "groups": [
+            "windows",
+            "kerberos"
+          ]
         },
-        "agent": {"id": "003", "name": "DC01", "ip": "10.0.10.10"},
-        "manager": {"name": "wazuh.manager"},
+        "agent": {
+          "id": "010",
+          "name": "DC01",
+          "ip": "198.51.100.10"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
         "id": "1706890002.000002",
-        "decoder": {"name": "windows_eventchannel"},
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
         "location": "EventChannel",
         "data": {
           "win": {
@@ -86,7 +107,7 @@
               "serviceName": "backup/dc01.pooka.local",
               "ticketEncryptionType": "0x17",
               "ticketOptions": "0x40810000",
-              "ipAddress": "::ffff:10.0.10.50",
+              "ipAddress": "::ffff:198.51.100.50",
               "ipPort": "54322",
               "status": "0x0"
             }

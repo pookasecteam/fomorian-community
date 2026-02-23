@@ -1,0 +1,222 @@
+{
+  "_metadata": {
+    "attack_id": "T1055.002",
+    "variation": "001",
+    "name": "Process Hollowing",
+    "description": "Injecting malicious code by hollowing out a legitimate process",
+    "expected_detection": "HIGH",
+    "kill_chain_phase": "defense-evasion",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Sysmon Event 1 - Suspended process creation",
+      "sequence": 1,
+      "timestamp": "2026-01-30T04:00:00.000Z",
+      "log": {
+        "rule": {
+          "level": 14,
+          "description": "Sysmon - Event 1: Suspicious Process Creation in Suspended State",
+          "id": "100100",
+          "mitre": {
+            "id": [
+              "T1055.002"
+            ],
+            "tactic": [
+              "Defense Evasion",
+              "Privilege Escalation"
+            ],
+            "technique": [
+              "Process Hollowing"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000030.100001",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-01-30 04:00:00.000",
+              "processGuid": "{HOLLOW-001-0001-000000000001}",
+              "processId": "50100",
+              "image": "C:\\Windows\\System32\\svchost.exe",
+              "commandLine": "C:\\Windows\\System32\\svchost.exe -k netsvcs",
+              "currentDirectory": "C:\\Windows\\System32\\",
+              "user": "CORP\\attacker",
+              "integrityLevel": "Medium",
+              "hashes": "SHA256=HOLLOWED_SVCHOST_HASH_1234567890ABCDEF12345678901234",
+              "parentProcessGuid": "{HOLLOW-001-0001-000000000000}",
+              "parentProcessId": "50000",
+              "parentImage": "C:\\Users\\attacker\\malware\\hollower.exe",
+              "parentCommandLine": "hollower.exe -target svchost.exe -payload beacon.bin"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Sysmon Event 10 - Process access for hollowing",
+      "sequence": 2,
+      "timestamp": "2026-01-30T04:00:01.000Z",
+      "log": {
+        "rule": {
+          "level": 14,
+          "description": "Sysmon - Event 10: Process Hollowing Memory Write",
+          "id": "100100",
+          "mitre": {
+            "id": [
+              "T1055.002"
+            ],
+            "tactic": [
+              "Defense Evasion"
+            ],
+            "technique": [
+              "Process Hollowing"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event10",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000030.100002",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "10",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "10",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-01-30 04:00:01.000",
+              "sourceProcessGuid": "{HOLLOW-001-0001-000000000000}",
+              "sourceProcessId": "50000",
+              "sourceImage": "C:\\Users\\attacker\\malware\\hollower.exe",
+              "targetProcessGuid": "{HOLLOW-001-0001-000000000001}",
+              "targetProcessId": "50100",
+              "targetImage": "C:\\Windows\\System32\\svchost.exe",
+              "grantedAccess": "0x1FFFFF",
+              "callTrace": "C:\\Windows\\SYSTEM32\\ntdll.dll+9c524|C:\\Windows\\System32\\KERNELBASE.dll+2c0e5|UNKNOWN(0000000000000000)"
+            }
+          }
+        }
+      }
+    },
+    {
+      "_comment": "Sysmon Event 8 - CreateRemoteThread for hollowing",
+      "sequence": 3,
+      "timestamp": "2026-01-30T04:00:02.000Z",
+      "log": {
+        "rule": {
+          "level": 14,
+          "description": "Sysmon - Event 8: CreateRemoteThread for Process Hollowing",
+          "id": "100100",
+          "mitre": {
+            "id": [
+              "T1055.002"
+            ],
+            "tactic": [
+              "Defense Evasion"
+            ],
+            "technique": [
+              "Process Hollowing"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event8",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1700000030.100003",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "8",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "8",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-01-30 04:00:02.000",
+              "sourceProcessGuid": "{HOLLOW-001-0001-000000000000}",
+              "sourceProcessId": "50000",
+              "sourceImage": "C:\\Users\\attacker\\malware\\hollower.exe",
+              "targetProcessGuid": "{HOLLOW-001-0001-000000000001}",
+              "targetProcessId": "50100",
+              "targetImage": "C:\\Windows\\System32\\svchost.exe",
+              "newThreadId": "50101",
+              "startAddress": "0x00007FF600000000",
+              "startModule": "",
+              "startFunction": ""
+            }
+          }
+        }
+      }
+    }
+  ]
+}

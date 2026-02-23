@@ -5,9 +5,7 @@
     "name": "fodhelper.exe UAC Bypass",
     "description": "UAC bypass using fodhelper.exe registry hijack",
     "expected_detection": "HIGH",
-    "expected_soar": "privilege-escalation-detection",
     "kill_chain_phase": "privilege-escalation",
-    "notes": "Classic UAC bypass - registry modification followed by auto-elevated binary execution",
     "format": "wazuh-native",
     "format_version": "1.0"
   },
@@ -17,7 +15,6 @@
       "sequence": 1,
       "timestamp": "2026-01-29T13:30:00.000Z",
       "log": {
-        "timestamp": "",
         "rule": {
           "level": 12,
           "description": "Sysmon - Event 1: fodhelper.exe UAC Bypass",
@@ -42,9 +39,9 @@
           ]
         },
         "agent": {
-          "id": "007",
+          "id": "020",
           "name": "WS01",
-          "ip": "10.1.0.20"
+          "ip": "198.51.100.20"
         },
         "manager": {
           "name": "wazuh.manager"
@@ -90,7 +87,6 @@
       "sequence": 2,
       "timestamp": "2026-01-29T13:30:01.000Z",
       "log": {
-        "timestamp": "",
         "rule": {
           "level": 12,
           "description": "Sysmon - Event 13: fodhelper.exe UAC Bypass",
@@ -115,9 +111,9 @@
           ]
         },
         "agent": {
-          "id": "007",
+          "id": "020",
           "name": "WS01",
-          "ip": "10.1.0.20"
+          "ip": "198.51.100.20"
         },
         "manager": {
           "name": "wazuh.manager"
@@ -159,7 +155,6 @@
       "sequence": 3,
       "timestamp": "2026-01-29T13:30:02.000Z",
       "log": {
-        "timestamp": "",
         "rule": {
           "level": 12,
           "description": "Sysmon - Event 1: fodhelper.exe UAC Bypass",
@@ -184,9 +179,9 @@
           ]
         },
         "agent": {
-          "id": "007",
+          "id": "020",
           "name": "WS01",
-          "ip": "10.1.0.20"
+          "ip": "198.51.100.20"
         },
         "manager": {
           "name": "wazuh.manager"
@@ -232,7 +227,6 @@
       "sequence": 4,
       "timestamp": "2026-01-29T13:30:03.000Z",
       "log": {
-        "timestamp": "",
         "rule": {
           "level": 12,
           "description": "Sysmon - Event 1: fodhelper.exe UAC Bypass",
@@ -257,9 +251,9 @@
           ]
         },
         "agent": {
-          "id": "007",
+          "id": "020",
           "name": "WS01",
-          "ip": "10.1.0.20"
+          "ip": "198.51.100.20"
         },
         "manager": {
           "name": "wazuh.manager"
@@ -305,7 +299,6 @@
       "sequence": 5,
       "timestamp": "2026-01-29T13:30:04.000Z",
       "log": {
-        "timestamp": "",
         "rule": {
           "level": 12,
           "description": "Sysmon - Event 1: fodhelper.exe UAC Bypass",
@@ -330,9 +323,9 @@
           ]
         },
         "agent": {
-          "id": "007",
+          "id": "020",
           "name": "WS01",
-          "ip": "10.1.0.20"
+          "ip": "198.51.100.20"
         },
         "manager": {
           "name": "wazuh.manager"

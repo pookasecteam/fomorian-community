@@ -7,9 +7,7 @@
     "expected_detection": "HIGH",
     "kill_chain_phase": "persistence",
     "format": "wazuh-native",
-    "format_version": "1.0",
-    "campaign": "Campaign 21",
-    "date_executed": "2026-02-09"
+    "format_version": "1.0"
   },
   "logs": [
     {
@@ -17,24 +15,42 @@
       "sequence": 1,
       "timestamp": "2026-02-09T10:42:00.000Z",
       "log": {
-        "timestamp": "",
         "rule": {
           "level": 12,
           "description": "Sysmon - Event 1: Process creation",
           "id": "100101",
           "mitre": {
-            "id": ["T1547.001"],
-            "tactic": ["Persistence", "Privilege Escalation"],
-            "technique": ["Boot or Logon Autostart Execution: Registry Run Keys / Startup Folder"]
+            "id": [
+              "T1547.001"
+            ],
+            "tactic": [
+              "Persistence",
+              "Privilege Escalation"
+            ],
+            "technique": [
+              "Boot or Logon Autostart Execution: Registry Run Keys / Startup Folder"
+            ]
           },
           "firedtimes": 1,
           "mail": false,
-          "groups": ["sysmon", "sysmon_event1", "windows"]
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
         },
-        "agent": {"id": "014", "name": "WS01", "ip": "10.1.0.20"},
-        "manager": {"name": "wazuh.manager"},
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
         "id": "1709000106.000001",
-        "decoder": {"name": "windows_eventchannel"},
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
         "location": "EventChannel",
         "data": {
           "win": {
@@ -42,7 +58,7 @@
               "eventID": "1",
               "channel": "Microsoft-Windows-Sysmon/Operational",
               "providerName": "Microsoft-Windows-Sysmon",
-              "computer": "WS01.yourcompany.local",
+              "computer": "WS01.corp.local",
               "level": "4",
               "task": "1",
               "severityValue": "INFORMATION"
@@ -54,7 +70,7 @@
               "image": "C:\\Windows\\System32\\reg.exe",
               "commandLine": "reg  add \"HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\Run\" /v Campaign21 /t REG_SZ /d \"C:\\Windows\\System32\\cmd.exe /c echo persistence\" /f",
               "currentDirectory": "C:\\Windows\\System32\\",
-              "user": "YOURCOMPANY\\Administrator",
+              "user": "CORP\\Administrator",
               "integrityLevel": "High",
               "hashes": "SHA256=B8C9D0E1F2A3B4C5D6E7F8A9B0C1D2E3F4A5B6C7D8E9F0A1B2C3D4E5F6A7B8C9",
               "parentProcessGuid": "{12345678-1234-1234-1234-000000106000}",
@@ -71,24 +87,42 @@
       "sequence": 2,
       "timestamp": "2026-02-09T10:42:01.000Z",
       "log": {
-        "timestamp": "",
         "rule": {
           "level": 12,
           "description": "Sysmon - Event 13: Registry value set",
           "id": "100107",
           "mitre": {
-            "id": ["T1547.001"],
-            "tactic": ["Persistence", "Privilege Escalation"],
-            "technique": ["Boot or Logon Autostart Execution: Registry Run Keys / Startup Folder"]
+            "id": [
+              "T1547.001"
+            ],
+            "tactic": [
+              "Persistence",
+              "Privilege Escalation"
+            ],
+            "technique": [
+              "Boot or Logon Autostart Execution: Registry Run Keys / Startup Folder"
+            ]
           },
           "firedtimes": 1,
           "mail": false,
-          "groups": ["sysmon", "sysmon_event13", "windows"]
+          "groups": [
+            "sysmon",
+            "sysmon_event13",
+            "windows"
+          ]
         },
-        "agent": {"id": "014", "name": "WS01", "ip": "10.1.0.20"},
-        "manager": {"name": "wazuh.manager"},
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
         "id": "1709000106.000002",
-        "decoder": {"name": "windows_eventchannel"},
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
         "location": "EventChannel",
         "data": {
           "win": {
@@ -96,7 +130,7 @@
               "eventID": "13",
               "channel": "Microsoft-Windows-Sysmon/Operational",
               "providerName": "Microsoft-Windows-Sysmon",
-              "computer": "WS01.yourcompany.local",
+              "computer": "WS01.corp.local",
               "level": "4",
               "task": "13",
               "severityValue": "INFORMATION"

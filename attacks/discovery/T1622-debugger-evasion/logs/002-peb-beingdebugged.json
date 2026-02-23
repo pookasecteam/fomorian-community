@@ -1,0 +1,91 @@
+{
+  "_metadata": {
+    "attack_id": "T1622",
+    "variation": "002",
+    "name": "Debugger Evasion - PEB BeingDebugged Flag",
+    "description": "Malware reading PEB.BeingDebugged flag directly to detect debugger attachment",
+    "expected_detection": "LOW",
+    "kill_chain_phase": "discovery",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Sysmon Event 1 - Suspicious packed/obfuscated binary",
+      "sequence": 1,
+      "timestamp": "2026-02-08T10:26:00.000Z",
+      "log": {
+        "timestamp": "2026-02-08T10:26:00.000+0000",
+        "rule": {
+          "level": 12,
+          "description": "Sysmon - Event 1: Process Create",
+          "id": "100916",
+          "mitre": {
+            "id": [
+              "T1622"
+            ],
+            "tactic": [
+              "Discovery",
+              "Defense Evasion"
+            ],
+            "technique": [
+              "Debugger Evasion"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "sysmon",
+            "sysmon_event1",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "020",
+          "name": "WS01",
+          "ip": "198.51.100.20"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1707400000.200029",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "1",
+              "channel": "Microsoft-Windows-Sysmon/Operational",
+              "providerName": "Microsoft-Windows-Sysmon",
+              "computer": "WS01.corp.local",
+              "level": "4",
+              "task": "1",
+              "severityValue": "INFORMATION"
+            },
+            "eventdata": {
+              "utcTime": "2026-02-08 10:26:00.000",
+              "processGuid": "{A1B2C3D4-DISC-1622-0002-000000000001}",
+              "processId": "8456",
+              "image": "C:\\Users\\attacker\\pafish.exe",
+              "commandLine": "pafish.exe --all",
+              "currentDirectory": "C:\\Users\\attacker\\",
+              "user": "CORP\\admin.user",
+              "integrityLevel": "Medium",
+              "hashes": "SHA256=F3A4B5C6D7E8F9A0B1C2D3E4F5A6B7C8D9E0F1A2B3C4D5E6F7A8B9C0D1E2F3A4",
+              "parentProcessGuid": "{A1B2C3D4-DISC-1622-0002-PARENT000001}",
+              "parentProcessId": "3200",
+              "parentImage": "C:\\Windows\\explorer.exe",
+              "parentCommandLine": "C:\\Windows\\explorer.exe"
+            }
+          }
+        },
+        "_fomorian_batch": "PT-2026-003-batch1-discovery",
+        "_fomorian_test": true,
+        "_fomorian_attack_id": "T1622",
+        "_fomorian_expected_detection": "Sigma: Debugger Evasion via PEB Access (T1622)"
+      }
+    }
+  ]
+}

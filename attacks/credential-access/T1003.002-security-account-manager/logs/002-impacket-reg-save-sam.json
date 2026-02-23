@@ -1,0 +1,67 @@
+{
+  "_metadata": {
+    "attack_id": "T1003.002",
+    "variation": "002",
+    "name": "Remote SAM Registry Dump - impacket-reg save",
+    "description": "Attacker uses impacket-reg to remotely save SAM, SYSTEM, and SECURITY registry hives",
+    "expected_detection": "CRITICAL",
+    "kill_chain_phase": "credential-access",
+    "tool": "impacket-reg",
+    "format": "wazuh-native",
+    "format_version": "1.0"
+  },
+  "logs": [
+    {
+      "_comment": "Event 4656 - Registry handle requested for SAM hive",
+      "sequence": 1,
+      "timestamp": "2026-02-11T04:00:00.000Z",
+      "log": {
+        "timestamp": "2026-02-11T04:00:00.000Z",
+        "rule": {
+          "level": 3,
+          "description": "Windows Eventchannel event",
+          "id": "100600",
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "windows",
+            "eventchannel"
+          ]
+        },
+        "agent": {
+          "id": "010",
+          "name": "DC01",
+          "ip": "198.51.100.12"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1707629000.500001",
+        "decoder": {
+          "name": "windows_eventchannel"
+        },
+        "location": "EventChannel",
+        "data": {
+          "win": {
+            "system": {
+              "eventID": "4656",
+              "channel": "Security",
+              "providerName": "Microsoft-Windows-Security-Auditing",
+              "computer": "DC01.corp.local",
+              "level": "0",
+              "keywords": "0x8020000000000000",
+              "severityValue": "AUDIT_SUCCESS"
+            },
+            "eventdata": {
+              "subjectUserName": "SYSTEM",
+              "objectName": "\\REGISTRY\\MACHINE\\SAM",
+              "objectType": "Key",
+              "accessMask": "0x20019",
+              "processName": "C:\\Windows\\System32\\svchost.exe"
+            }
+          }
+        }
+      }
+    }
+  ]
+}

@@ -203,6 +203,170 @@ class ScenarioBuilder:
             hours = (total_seconds % 86400) // 3600
             return f"{days}d {hours}h"
 
+    # Wazuh rule ID mappings for Sysmon events
+    _SYSMON_RULE_IDS = {
+        "1": "200151", "3": "200153", "5": "200155",
+        "7": "200157", "8": "200158", "10": "200160",
+        "11": "200161", "13": "200163", "17": "200167",
+        "22": "200172", "23": "200173",
+    }
+
+    # Wazuh rule ID mappings for Windows Security events
+    _SECURITY_RULE_IDS = {
+        "4624": "60106", "4625": "60122", "4648": "60144",
+        "4663": "60155", "4672": "60110", "4688": "60104",
+        "4720": "60132", "4724": "60136", "4738": "60140",
+    }
+
+    # Sysmon event type descriptions
+    _SYSMON_EVENT_NAMES = {
+        "1": "Process creation", "3": "Network connection detected",
+        "5": "Process terminated", "7": "Image loaded",
+        "8": "CreateRemoteThread detected", "10": "ProcessAccess",
+        "11": "FileCreate", "13": "RegistryEvent (Value Set)",
+        "17": "PipeEvent (Pipe Created)", "22": "DNSEvent (DNS query)",
+        "23": "FileDelete (File Delete archived)",
+    }
+
+    def _to_native_wazuh(
+        self,
+        log_data: Dict[str, Any],
+        technique: str,
+        phase: str,
+    ) -> Dict[str, Any]:
+        """Convert winlog/azure_ad/office365 format to native Wazuh alert format.
+
+        If the log is already in native Wazuh format (has 'rule' with 'id' and 'data'),
+        return it unchanged.
+        """
+        agent = log_data.get("agent", {})
+        agent_id = agent.get("id", "007")
+        agent_name = agent.get("name", "WS01")
+        agent_ip = agent.get("ip", "10.0.10.20")
+
+        if "winlog" in log_data:
+            winlog = log_data["winlog"]
+            channel = winlog.get("channel", "")
+            event_id = str(winlog.get("event_id", ""))
+            provider = winlog.get("provider_name", "")
+            computer = winlog.get("computer_name", "")
+            event_data = winlog.get("event_data", {})
+
+            # Convert PascalCase keys to camelCase for native Wazuh format
+            eventdata = {}
+            for k, v in event_data.items():
+                camel = k[0].lower() + k[1:] if k else k
+                eventdata[camel] = v
+
+            if "Sysmon" in channel:
+                rule_id = self._SYSMON_RULE_IDS.get(event_id, "200151")
+                event_name = self._SYSMON_EVENT_NAMES.get(event_id, "Unknown")
+                groups = ["sysmon", f"sysmon_event{event_id}", "windows"]
+                rule_desc = f"Sysmon - Event {event_id}: {event_name}"
+                rule_level = 12 if event_id in ("1", "10", "13") else 6
+            elif "PowerShell" in channel:
+                rule_id = "91801"
+                groups = ["windows", "powershell"]
+                rule_desc = f"PowerShell ScriptBlock logging (Event {event_id})"
+                rule_level = 12
+            else:
+                # Windows Security events
+                rule_id = self._SECURITY_RULE_IDS.get(event_id, "60000")
+                groups = ["windows", "windows_security"]
+                rule_desc = f"Windows Security Event {event_id}"
+                rule_level = 10
+
+            return {
+                "rule": {
+                    "level": rule_level,
+                    "description": rule_desc,
+                    "id": rule_id,
+                    "mitre": {
+                        "id": [technique],
+                        "tactic": [phase.replace("-", " ").title()],
+                        "technique": [technique],
+                    },
+                    "firedtimes": 1,
+                    "mail": False,
+                    "groups": groups,
+                },
+                "agent": {"id": agent_id, "name": agent_name, "ip": agent_ip},
+                "manager": {"name": "wazuh.manager"},
+                "decoder": {"name": "windows_eventchannel"},
+                "location": "EventChannel",
+                "data": {
+                    "win": {
+                        "system": {
+                            "eventID": event_id,
+                            "channel": channel,
+                            "providerName": provider,
+                            "computer": computer,
+                            "level": "4",
+                            "task": event_id,
+                            "severityValue": "INFORMATION",
+                        },
+                        "eventdata": eventdata,
+                    },
+                },
+            }
+
+        elif "azure_ad" in log_data or "azure_ad_signin" in log_data:
+            azure_key = "azure_ad" if "azure_ad" in log_data else "azure_ad_signin"
+            azure_data = log_data[azure_key]
+            activity = azure_data.get(
+                "activity_display_name",
+                azure_data.get("operation_name", "Azure AD Event"),
+            )
+
+            return {
+                "rule": {
+                    "level": 8,
+                    "description": f"Azure AD: {activity}",
+                    "id": "100405",
+                    "mitre": {
+                        "id": [technique],
+                        "tactic": [phase.replace("-", " ").title()],
+                        "technique": [technique],
+                    },
+                    "firedtimes": 1,
+                    "mail": False,
+                    "groups": ["azure", "azure_ad"],
+                },
+                "agent": {"id": agent_id, "name": agent_name, "ip": agent_ip},
+                "manager": {"name": "wazuh.manager"},
+                "decoder": {"name": "azure-ad"},
+                "location": "azure-logs",
+                "data": {azure_key: azure_data},
+            }
+
+        elif "office365" in log_data:
+            o365_data = log_data["office365"]
+            operation = o365_data.get("operation", "Office 365 Event")
+
+            return {
+                "rule": {
+                    "level": 8,
+                    "description": f"Office 365: {operation}",
+                    "id": "91550",
+                    "mitre": {
+                        "id": [technique],
+                        "tactic": [phase.replace("-", " ").title()],
+                        "technique": [technique],
+                    },
+                    "firedtimes": 1,
+                    "mail": False,
+                    "groups": ["office365"],
+                },
+                "agent": {"id": agent_id, "name": agent_name, "ip": agent_ip},
+                "manager": {"name": "wazuh.manager"},
+                "decoder": {"name": "office365"},
+                "location": "office365",
+                "data": {"office365": o365_data},
+            }
+
+        # Already native or unknown format, return as-is
+        return log_data
+
     def _add_log(
         self,
         phase: str,
@@ -211,7 +375,14 @@ class ScenarioBuilder:
         log_data: Dict[str, Any],
         comment: str,
     ) -> None:
-        """Add a log entry to the scenario."""
+        """Add a log entry to the scenario.
+
+        Automatically converts winlog/azure_ad/office365 format to native
+        Wazuh alert format before storing.
+        """
+        # Convert non-native formats to native Wazuh alert format
+        native_log = self._to_native_wazuh(log_data, technique, phase)
+
         self._sequence += 1
         timestamp = self.timestamp_gen.current()
 
@@ -222,7 +393,7 @@ class ScenarioBuilder:
             technique=technique,
             host=host,
             comment=comment,
-            log=log_data,
+            log=native_log,
         )
 
         self._logs.append(log_entry)
